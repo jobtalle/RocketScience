@@ -1,7 +1,7 @@
-# Rocket Science
+# Rocket Science :rocket:
 A game where you connect blocks to build large contraptions.
 
-The game is written in **ES6**, **HTML5** and **CSS3**.
+The game is written in **ES6**, **HTML5** and **CSS3**. Most graphics are rendered using [Myr.js](https://github.com/jobtalle/myr.js).
 
 ## Building
 Before you do anything, run ``npm install`` in the repository root. 
