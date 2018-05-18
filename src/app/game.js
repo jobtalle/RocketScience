@@ -5,10 +5,11 @@ import World from "./world/world";
 /**
  * This class contains the game views.
  * @param {Object} myr A constructed Myriad engine.
- * @param {Object} overlay The HTML overlay div
+ * @param {Object} sprites All sprites.
+ * @param {Object} overlay The HTML overlay div.
  * @constructor
  */
-export default function Game(myr, overlay) {
+export default function Game(myr, sprites, overlay) {
     const View = function(view) {
         this.update = timeStep => view.update(timeStep);
         this.render = () => view.render();
