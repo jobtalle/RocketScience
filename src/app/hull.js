@@ -3,5 +3,79 @@
  * @constructor
  */
 export default function Hull() {
+    const HullBlock = function() {
+        let _part = null;
 
+        this.put = part => {
+            _part = part;
+        };
+
+        this.getPart = () => _part;
+    };
+
+    const _hullBlocks = [new HullBlock()];
+
+    let _layer_hull = null;
+    let _layer_parts = null;
+    let _layer_skin = null;
+    let _width = 1;
+    let _height = 1;
+
+    const getHullBlock = (x, y) => _hullBlocks[y][x];
+    const getHullBlockPosition = block => {
+        for(let row = 0; row < _hullBlocks.length; ++row) {
+            const column = _hullBlocks[row].indexOf(block);
+
+            if(column === -1)
+                continue;
+
+            return {
+                row: row,
+                column: column
+            };
+        }
+
+        return null;
+    };
+
+    /**
+     * Get the width of this hull in blocks
+     * @returns {Number} The width.
+     */
+    this.getWidth = () => _width;
+
+    /**
+     * Get the height of this hull in blocks
+     * @returns {Number} The height.
+     */
+    this.getHeight = () => _height;
+
+    /**
+     * Returns a deep copy of this hull
+     * @returns {Object} A deep copy of this hull.
+     */
+    this.copy = () => {
+        // TODO
+    };
+
+    /**
+     * Place a part in the hull, make sure it fits!
+     * @param {Object} block The hull block to place the part in.
+     * @param {Object} part A part to place.
+     */
+    this.place = (block, part) => {
+        // TODO: put the part in all hull blocks is covers.
+
+        block.put(part);
+    };
+
+    /**
+     * Extend the hull
+     * @param {Object} block A hull block to extend from.
+     * @param {Number} x The X direction to extend to.
+     * @param {Number} y The Y direction to extend to.
+     */
+    this.extend = (block, x, y) => {
+        // TODO: Mutate _width and _height here.
+    };
 };

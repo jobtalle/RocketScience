@@ -6,7 +6,11 @@
  * @constructor
  */
 export default function Editor(myr, width, height) {
-    const _surface = new myr.Surface(width, height);
+    const SCALE = 4;
+
+    const _surface = new myr.Surface(
+        Math.ceil(width / SCALE),
+        Math.ceil(height / SCALE));
 
     /**
      * Update the state of the editor.
@@ -28,6 +32,6 @@ export default function Editor(myr, width, height) {
      * Draw the editor
      */
     this.draw = () => {
-        _surface.draw(0, 0);
+        _surface.drawScaled(0, 0, SCALE, SCALE);
     };
 }
