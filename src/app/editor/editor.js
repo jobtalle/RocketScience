@@ -9,7 +9,8 @@ import PartsLibrary from "./partsLibrary";
  * @constructor
  */
 export default function Editor(myr, sprites, width, height) {
-    const SCALE = 3;
+    const SCALE = 2;
+    const LIBRARY_SCALE = 0.3;
 
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
@@ -17,8 +18,8 @@ export default function Editor(myr, sprites, width, height) {
     const _library = new PartsLibrary(
         myr,
         sprites,
-        Math.floor(_surface.getWidth() * 0.3),
-        _surface.getHeight() - 1);
+        Math.floor((_surface.getWidth() * LIBRARY_SCALE)),
+        _surface.getHeight());
 
     /**
      * Update the state of the editor.
