@@ -20,6 +20,9 @@ export default function Hull() {
     let _layer_skin = null;
     let _width = 1;
     let _height = 1;
+    let _xOrigin = 0.5;
+    let _yOrigin = 0.5;
+    let _mass = 1;
 
     const getHullBlock = (x, y) => _hullBlocks[y][x];
     const getHullBlockPosition = block => {
@@ -39,16 +42,34 @@ export default function Hull() {
     };
 
     /**
-     * Get the width of this hull in blocks
+     * Get the width of this hull in blocks.
      * @returns {Number} The width.
      */
     this.getWidth = () => _width;
 
     /**
-     * Get the height of this hull in blocks
+     * Get the height of this hull in blocks.
      * @returns {Number} The height.
      */
     this.getHeight = () => _height;
+
+    /**
+     * Get the X origin of this hull in blocks.
+     * @returns {number} The X origin.
+     */
+    this.getXOrigin = () => _xOrigin;
+
+    /**
+     * Get the Y origin of this hull in blocks.
+     * @returns {number} The Y origin.
+     */
+    this.getYOrigin = () => _yOrigin;
+
+    /**
+     * Get the mass of this hull.
+     * @returns {number} The total mass of this hull.
+     */
+    this.getMass = () => _mass;
 
     /**
      * Returns a deep copy of this hull
