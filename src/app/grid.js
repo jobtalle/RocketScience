@@ -4,6 +4,5 @@
  * @constructor
  */
 export default function Grid(hull) {
-    const _hull = hull;
     const _blocks = [];
 };

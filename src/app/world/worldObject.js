@@ -4,8 +4,6 @@
  * @constructor
  */
 export default function WorldObject(grid) {
-    const _grid = grid;
-
     /**
      * Update the state of this object.
      * @param {Number} timeStep The number of milliseconds passed after the previous update.
