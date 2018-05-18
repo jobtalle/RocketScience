@@ -6,8 +6,6 @@
  * @constructor
  */
 export default function Editor(myr, width, height) {
-    const COLOR_CLEAR = myr.Color.BLUE;
-
     const _surface = new myr.Surface(width, height);
 
     /**
@@ -28,12 +26,8 @@ export default function Editor(myr, width, height) {
 
     /**
      * Draw the editor
-     * @param {Number} x X position to draw to.
-     * @param {Number} y Y position to draw to.
      */
-    this.draw = (x, y) => {
-        _surface.draw(x, y);
+    this.draw = () => {
+        _surface.draw(0, 0);
     };
-
-    _surface.setClearColor(COLOR_CLEAR);
 }

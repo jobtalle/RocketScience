@@ -33,7 +33,7 @@ export default function Menu(game) {
         const challenge = document.createElement("button");
         challenge.appendChild(document.createTextNode("Challenge"));
         challenge.className = CLASS_BUTTON;
-        challenge.onclick = () => startChallenge;
+        challenge.onclick = () => startChallenge();
 
         parent.appendChild(create);
         parent.appendChild(challenge);

@@ -38,11 +38,9 @@ export default function World(myr, width, height) {
 
     /**
      * Draw the world
-     * @param {Number} x X position to draw to.
-     * @param {Number} y Y position to draw to.
      */
-    this.draw = (x, y) => {
-        _surface.draw(x, y);
+    this.draw = () => {
+        _surface.draw(0, 0);
     };
 
     _surface.setClearColor(COLOR_CLEAR);

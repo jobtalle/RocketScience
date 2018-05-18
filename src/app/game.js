@@ -9,10 +9,10 @@ import World from "./world/world";
  * @constructor
  */
 export default function Game(myr, overlay) {
-    const View = function(view, x, y) {
+    const View = function(view) {
         this.update = timeStep => view.update(timeStep);
         this.render = () => view.render();
-        this.draw = () => view.draw(x, y);
+        this.draw = () => view.draw();
     };
 
     let _menu = new Menu(this);
@@ -50,9 +50,8 @@ export default function Game(myr, overlay) {
      * Start free create mode.
      */
     this.startCreate = () => {
-        // TODO: Manage view dimensions properly
-        _editor = new View(new Editor(myr, 300, myr.getHeight()), 0, 0);
-        _world = new View(new World(myr, myr.getWidth() - 300, myr.getHeight()), 300, 0);
+        _world = new View(new World(myr, myr.getWidth(), myr.getHeight()), 0, 0);
+        _editor = new View(new Editor(myr, myr.getWidth(), myr.getHeight()), 0, 0);
     };
 
     /**
