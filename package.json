@@ -9,6 +9,7 @@
   "scripts": {
     "pack-dev": "webpack --mode development",
     "pack-prod": "webpack --mode production",
+    "pack-sprites" : "mkdir -p dist && aseprite -b src/assets/sprites/*.ase --data src/assets/atlas.json --sheet dist/atlas.png --sheet-pack --filename-format {title}_{frame}",
     "doc": "esdoc",
     "test": "ava **/*.test.js"
   },
