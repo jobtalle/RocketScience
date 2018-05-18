@@ -51,8 +51,8 @@ export default function Game(myr, sprites, overlay) {
      * Start free create mode.
      */
     this.startCreate = () => {
-        _world = new View(new World(myr, myr.getWidth(), myr.getHeight()), 0, 0);
-        _editor = new View(new Editor(myr, myr.getWidth(), myr.getHeight()), 0, 0);
+        _world = new View(new World(myr, sprites, myr.getWidth(), myr.getHeight()), 0, 0);
+        _editor = new View(new Editor(myr, sprites, myr.getWidth(), myr.getHeight()), 0, 0);
     };
 
     /**

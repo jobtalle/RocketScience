@@ -1,11 +1,12 @@
 /**
  * Simulates physics and behavior for all objects in the same space.
  * @param {Object} myr A Myriad instance.
+ * @param {Object} sprites An instantiated Sprites object
  * @param {Number} width The viewport width.
  * @param {Number} height The viewport height.
  * @constructor
  */
-export default function World(myr, width, height) {
+export default function World(myr, sprites, width, height) {
     const COLOR_CLEAR = myr.Color.RED;
 
     const _objects = [];

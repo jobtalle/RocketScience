@@ -31,6 +31,70 @@
     "sourceSize": { "w": 16, "h": 16 },
     "duration": 100
    },
+   "GuiLibraryBorderRT_": {
+    "frame": { "x": 16, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderRB_": {
+    "frame": { "x": 24, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderR_": {
+    "frame": { "x": 32, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderT_": {
+    "frame": { "x": 40, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderB_": {
+    "frame": { "x": 48, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderL_": {
+    "frame": { "x": 56, "y": 32, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderLB_": {
+    "frame": { "x": 16, "y": 40, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
+   "GuiLibraryBorderLT_": {
+    "frame": { "x": 24, "y": 40, "w": 8, "h": 8 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 8, "h": 8 },
+    "sourceSize": { "w": 8, "h": 8 },
+    "duration": 100
+   },
    "Man_0": {
     "frame": { "x": 0, "y": 16, "w": 16, "h": 16 },
     "rotated": false,
@@ -74,7 +138,7 @@
  },
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.8.1",
+  "version": "1.2.8-x64",
   "image": "dist/atlas.png",
   "format": "RGBA8888",
   "size": { "w": 64, "h": 64 },

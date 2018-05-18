@@ -18,12 +18,16 @@ export default function Sprites(myr) {
 
     const registerSprite = name => {
         let frameIndex = 0;
-        let frame = getFrame(name, frameIndex);
+        let frame = getFrame(name, '');
+        if (frame == null)
+            frame = getFrame(name, frameIndex);
+
         const spriteFrames = [];
         while (frame != null) {
             let spriteFrame = myr.makeSpriteFrame(_surface, frame.frame.x, frame.frame.y,
                                                   frame.frame.w, frame.frame.h, 0, 0,
                                                   frame.duration / MILLI);
+
             spriteFrames.push(spriteFrame);
             frame = getFrame(name, ++frameIndex);
         }
@@ -39,6 +43,7 @@ export default function Sprites(myr) {
     this.getSprite = name => {
         if (!myr.isRegistered(name))
             registerSprite(name);
+
         return new myr.Sprite(name);
     };
 };
