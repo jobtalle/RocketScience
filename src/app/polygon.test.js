@@ -60,3 +60,37 @@ test('A dented square is not convex.', t => {
         t.pass();
     }
 });
+
+test('A point in the middle of square is contained by it.', t => {
+    const square = [new Vector(0, 0), new Vector(1, 0),
+                    new Vector(1, 1), new Vector(0, 1)];
+    const point = new Vector(0.5, 0.5);
+    const polygon = new Polygon(square);
+    t.is(polygon.containsPoint(point), true);
+});
+
+test('A point in the just inside the square is contained by it.', t => {
+    const square = [new Vector(0, 0), new Vector(1, 0),
+        new Vector(1, 1), new Vector(0, 1)];
+    const point = new Vector(0.01, 0.99);
+    const polygon = new Polygon(square);
+    t.is(polygon.containsPoint(point), true);
+});
+
+test('A point to the left, right, top and bottom of square is outside it.', t => {
+    const square = [new Vector(0, 0), new Vector(1, 0),
+                    new Vector(1, 1), new Vector(0, 1)];
+    const polygon = new Polygon(square);
+
+    const left = new Vector(-1, 0.5);
+    t.is(polygon.containsPoint(left), false);
+
+    const right = new Vector(2, 0.5);
+    t.is(polygon.containsPoint(right), false);
+
+    const top = new Vector(0.5, 2);
+    t.is(polygon.containsPoint(top), false);
+
+    const bottom = new Vector(0.5, -1);
+    t.is(polygon.containsPoint(bottom), false);
+});
