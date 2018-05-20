@@ -6,34 +6,39 @@
  * @constructor
  */
 function Polygon(points) {
-    const isConvex = points => {
-        function getDirection(from, to) {
-            return Math.atan2(from.y - to.y, from.x - to.x);
-        }
+    const getDirection = (from, to) => {
+        return Math.atan2(from.y - to.y, from.x - to.x);
+    };
 
+    const getAngle = (fromDirection, toDirection) => {
+        let angle = fromDirection - toDirection;
+        while (angle > Math.PI)
+            angle -= 2 * Math.PI;
+        while (angle < -Math.PI)
+            angle += 2 * Math.PI;
+        return angle;
+    };
+
+    const isConvex = points => {
         if (points.length < 3)
             return false;
 
         let oldPoint = points[points.length - 2];
-        let newPoint = points[points.length - 1];
-        let newDirection = getDirection(newPoint, oldPoint);
+        let curPoint = points[points.length - 1];
+        let curDirection = getDirection(curPoint, oldPoint);
         let orientation = 0;
         let sumAngles = 0;
         for (let index = 0; index < points.length; index++) {
-            oldPoint = newPoint;
-            newPoint = points[index];
+            oldPoint = curPoint;
+            curPoint = points[index];
 
-            if (oldPoint.equals(newPoint))
+            if (oldPoint.equals(curPoint))
                 return false;
 
-            let oldDirection = newDirection;
-            newDirection = getDirection(newPoint, oldPoint);
+            let oldDirection = curDirection;
+            curDirection = getDirection(curPoint, oldPoint);
 
-            let angle = newDirection - oldDirection;
-            if (angle <= -Math.PI)
-                angle += 2 * Math.PI;
-            if (angle > Math.PI)
-                angle -= 2 * Math.PI;
+            let angle = getAngle(curDirection, oldDirection);
 
             if (index === 0) {
                 if (angle === 0)
@@ -51,6 +56,20 @@ function Polygon(points) {
         return Math.abs(Math.round(sumAngles / (2 * Math.PI))) === 1;
     };
 
+    this.containsPoint = testPoint => {
+        let curPoint = points[points.length - 1];
+        let curDirection = getDirection(curPoint, testPoint);
+        let sumAngles = 0;
+        for (let index = 0; index < points.length; index++) {
+            let oldDirection = curDirection;
+            curPoint = points[index];
+            curDirection = getDirection(curPoint, testPoint);
+            sumAngles += getAngle(curDirection, oldDirection);
+        }
+
+        return Math.abs(Math.round(sumAngles)) >= Math.PI;
+    };
+    
     if (!isConvex(points))
         throw Polygon.NOT_CONVEX;
 }
