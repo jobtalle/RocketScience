@@ -2,8 +2,8 @@
  * Defines a convex hull.
  * @constructor
  */
-export default function Hull() {
-    const HullBlock = function() {
+export default function PCB() {
+    const Point = function() {
         let _part = null;
 
         this.put = part => {
@@ -13,7 +13,7 @@ export default function Hull() {
         this.getPart = () => _part;
     };
 
-    const _hullBlocks = [new HullBlock()];
+    const _points = [new Point()];
 
     let _layer_hull = null;
     let _layer_parts = null;
@@ -24,10 +24,10 @@ export default function Hull() {
     let _yOrigin = 0.5;
     let _mass = 1;
 
-    const getHullBlock = (x, y) => _hullBlocks[y][x];
+    const getHullBlock = (x, y) => _points[y][x];
     const getHullBlockPosition = block => {
-        for(let row = 0; row < _hullBlocks.length; ++row) {
-            const column = _hullBlocks[row].indexOf(block);
+        for(let row = 0; row < _points.length; ++row) {
+            const column = _points[row].indexOf(block);
 
             if(column === -1)
                 continue;
