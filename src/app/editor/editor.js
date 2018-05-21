@@ -1,5 +1,3 @@
-import PartsLibrary from "./partsLibrary";
-
 /**
  * Provides a grid editor.
  * @param {Object} myr A Myriad instance.
@@ -10,23 +8,17 @@ import PartsLibrary from "./partsLibrary";
  */
 export default function Editor(myr, sprites, width, height) {
     const SCALE = 2;
-    const LIBRARY_SCALE = 0.3;
 
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
         Math.ceil(height / SCALE));
-    const _library = new PartsLibrary(
-        myr,
-        sprites,
-        Math.floor((_surface.getWidth() * LIBRARY_SCALE)),
-        _surface.getHeight());
 
     /**
      * Update the state of the editor.
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _library.update(timeStep);
+
     };
 
     /**
@@ -35,8 +27,6 @@ export default function Editor(myr, sprites, width, height) {
     this.render = () => {
         _surface.bind();
         _surface.clear();
-
-        _library.draw(0, 0);
     };
 
     /**
