@@ -42,5 +42,10 @@ export function PcbRenderer(myr, sprites, pcb) {
         _layerPcb.draw(x, y);
     };
 
-    updateSurfaces();
+    /**
+     * Update the pcb representation.
+     */
+    this.revalidate = () => {
+        updateSurfaces();
+    };
 }

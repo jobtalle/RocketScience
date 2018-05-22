@@ -18,7 +18,17 @@ export function PcbEditor(myr, sprites, width, height) {
 
     let _pcb = null;
     let _renderer = null;
+    let _drawX;
+    let _drawY;
 
+    const revalidate = () => {
+        if(_renderer)
+            _renderer.revalidate();
+        
+        _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5);
+        _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5);
+    };
+    
     /**
      * Start editing a pcb.
      * @param {Object} pcb A pcb instance to edit.
@@ -26,6 +36,8 @@ export function PcbEditor(myr, sprites, width, height) {
     this.edit = pcb => {
         _pcb = pcb;
         _renderer = new PcbRenderer(myr, sprites, pcb);
+
+        revalidate();
     };
 
     /**
@@ -37,9 +49,7 @@ export function PcbEditor(myr, sprites, width, height) {
         _surface.clear();
 
         myr.push();
-        myr.translate(
-            Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5),
-            Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5));
+        myr.translate(_drawX, _drawY);
 
         _renderer.draw(0, 0);
 

@@ -15,10 +15,10 @@ export function Pcb(myr, sprites) {
         this.getPart = () => _part;
     };
 
-    const _points = [[new Point()]];
+    const _points = [[new Point(), new Point()],[new Point(), new Point()]];
 
-    let _width = 1;
-    let _height = 1;
+    let _width = 2;
+    let _height = 2;
     let _xOrigin = 0.5;
     let _yOrigin = 0.5;
     let _mass = 1;
