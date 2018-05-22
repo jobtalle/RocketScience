@@ -1,8 +1,8 @@
 /**
- * Defines a convex hull.
+ * Defines a PCB.
  * @constructor
  */
-export function PCB() {
+export function Pcb() {
     const Point = function() {
         let _part = null;
 
@@ -39,46 +39,46 @@ export function PCB() {
     };
 
     /**
-     * Get the width of this PCB in blocks.
+     * Get the width of this Pcb in blocks.
      * @returns {Number} The width.
      */
     this.getWidth = () => _width;
 
     /**
-     * Get the height of this PCB in blocks.
+     * Get the height of this Pcb in blocks.
      * @returns {Number} The height.
      */
     this.getHeight = () => _height;
 
     /**
-     * Get the X origin of this PCB in blocks.
+     * Get the X origin of this Pcb in blocks.
      * @returns {number} The X origin.
      */
     this.getXOrigin = () => _xOrigin;
 
     /**
-     * Get the Y origin of this PCB in blocks.
+     * Get the Y origin of this Pcb in blocks.
      * @returns {number} The Y origin.
      */
     this.getYOrigin = () => _yOrigin;
 
     /**
      * Get the mass of this hull.
-     * @returns {number} The total mass of this PCB and its parts.
+     * @returns {number} The total mass of this Pcb and its parts.
      */
     this.getMass = () => _mass;
 
     /**
      * Returns a deep copy of this hull
-     * @returns {Object} A deep copy of this PCB.
+     * @returns {Object} A deep copy of this Pcb.
      */
     this.copy = () => {
         // TODO
     };
 
     /**
-     * Place a part in the PCB, make sure it fits!
-     * @param {Object} point The PCB to place the part in.
+     * Place a part in the Pcb, make sure it fits!
+     * @param {Object} point The Pcb to place the part in.
      * @param {Object} part A part to place.
      */
     this.place = (point, part) => {
@@ -88,8 +88,8 @@ export function PCB() {
     };
 
     /**
-     * Extend the PCB
-     * @param {Object} point A PCB point to extend from.
+     * Extend the Pcb
+     * @param {Object} point A Pcb point to extend from.
      * @param {Number} x The X direction to extend to.
      * @param {Number} y The Y direction to extend to.
      */

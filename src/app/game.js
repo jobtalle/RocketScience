@@ -11,8 +11,10 @@ import {World} from "./world/world";
  */
 export function Game(myr, sprites, overlay) {
     const View = function(view) {
-        this.update = timeStep => view.update(timeStep);
-        this.render = () => view.render();
+        this.update = timeStep => {
+            view.update(timeStep);
+        };
+
         this.draw = () => view.draw();
     };
 
@@ -29,12 +31,6 @@ export function Game(myr, sprites, overlay) {
     };
 
     const render = () => {
-        if(_world)
-            _world.render();
-
-        if(_editor)
-            _editor.render();
-
         myr.bind();
         myr.clear();
 

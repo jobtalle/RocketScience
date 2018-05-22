@@ -27,12 +27,7 @@ export function World(myr, sprites, width, height) {
     this.update = timeStep => {
         for (let index = 0; index < _objects.length; index++)
             _objects[index].update(timeStep);
-    };
 
-    /**
-     * Render the world.
-     */
-    this.render = () => {
         _surface.bind();
         _surface.clear();
     };

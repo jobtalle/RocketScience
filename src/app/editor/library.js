@@ -1,7 +1,8 @@
 /**
  * An HTML based parts library.
+ * @param {Object} editor A PcbEditor which places selected objects.
  * @constructor
  */
-export function Library() {
+export function Library(editor) {
 
 }
