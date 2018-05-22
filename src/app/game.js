@@ -79,6 +79,24 @@ export function Game(myr, sprites, overlay) {
 
     };
 
+    /**
+     * The mouse enters.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseEnter = (x, y) => {
+
+    };
+
+    /**
+     * The mouse leaves.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseLeave = (x, y) => {
+
+    };
+
     myr.utils.loop(function(timeStep) {
         update(timeStep);
         render();
