@@ -20,6 +20,8 @@ export function PcbEditor(myr, sprites, width, height) {
     let _renderer = null;
     let _drawX;
     let _drawY;
+    let _cursorX = -1;
+    let _cursorY = -1;
 
     const revalidate = () => {
         if(_renderer)
@@ -61,6 +63,13 @@ export function PcbEditor(myr, sprites, width, height) {
      */
     this.draw = x => {
         _surface.drawScaled(x, 0, SCALE, SCALE);
+
+        myr.primitives.fillRectangle(
+            myr.Color.RED,
+            _cursorX * Pcb.POINT_SIZE,
+            _cursorY * Pcb.POINT_SIZE,
+            Pcb.POINT_SIZE,
+            Pcb.POINT_SIZE);
     };
 
     /**
@@ -68,4 +77,14 @@ export function PcbEditor(myr, sprites, width, height) {
      * @returns {Number} The width of the editor in pixels.
      */
     this.getWidth = () => width;
+
+    /**
+     * Move the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseMove = (x, y) => {
+        _cursorX = Math.floor((x / SCALE - _drawX) / Pcb.POINT_SIZE);
+        _cursorY = Math.floor((y / SCALE - _drawY) / Pcb.POINT_SIZE);
+    };
 }

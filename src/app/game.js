@@ -76,7 +76,8 @@ export function Game(myr, sprites, overlay) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-
+        if(_editor)
+            _editor.onMouseMove(x, y);
     };
 
     /**

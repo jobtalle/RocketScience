@@ -37,4 +37,13 @@ export function Editor(myr, sprites, width, height) {
     this.draw = () => {
         _pcbEditor.draw(_library.getWidth());
     };
+
+    /**
+     * Move the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseMove = (x, y) => {
+        _pcbEditor.onMouseMove(x - _library.getWidth(), y);
+    };
 }
