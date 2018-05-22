@@ -1,8 +1,10 @@
 /**
  * Defines a PCB.
+ * @param {Object} myr A Myriad instance.
+ * @param {Object} sprites The sprites library.
  * @constructor
  */
-export function Pcb() {
+export function Pcb(myr, sprites) {
     const Point = function() {
         let _part = null;
 
@@ -13,8 +15,15 @@ export function Pcb() {
         this.getPart = () => _part;
     };
 
-    const _points = [new Point()];
+    const SPRITE_POINT = sprites.getSprite("pcbPoint");
+    const SPRITE_EXTEND = sprites.getSprite("pcbExtend");
+    const POINT_WIDTH = SPRITE_POINT.getWidth();
+    const POINT_HEIGHT = SPRITE_POINT.getHeight();
 
+    const _points = [[new Point()]];
+
+    let _layerPcb = null;
+    let _layerParts = null;
     let _width = 1;
     let _height = 1;
     let _xOrigin = 0.5;
@@ -38,26 +47,59 @@ export function Pcb() {
         return null;
     };
 
+    const updateSurfaces = () => {
+        if(
+            _layerPcb &&
+            _layerPcb.getWidth() === POINT_WIDTH * this.getWidth() &&
+            _layerPcb.getHeight() === POINT_HEIGHT * this.getHeight())
+            return;
+
+        _layerPcb = new myr.Surface(
+            POINT_WIDTH * this.getWidth(),
+            POINT_HEIGHT * this.getHeight());
+        _layerPcb.bind();
+        _layerPcb.clear();
+
+        for(let row = 0; row < _points.length; ++row)
+            for(let column = 0; column < _points[row].length; ++column)
+                if(_points[row][column])
+                    SPRITE_POINT.draw(
+                        column * POINT_WIDTH,
+                        row * POINT_HEIGHT);
+    };
+
     /**
-     * Get the width of this Pcb in blocks.
+     * Get the width of this Pcb in points.
      * @returns {Number} The width.
      */
     this.getWidth = () => _width;
 
     /**
-     * Get the height of this Pcb in blocks.
+     * Get the height of this Pcb in points.
      * @returns {Number} The height.
      */
     this.getHeight = () => _height;
 
     /**
-     * Get the X origin of this Pcb in blocks.
+     * Get the point width;
+     * @returns {Number} The point width in pixels.
+     */
+    this.getPointWidth = () => POINT_WIDTH;
+
+    /**
+     * Get the point height.
+     * @returns {Number} The point height in pixels.
+     */
+    this.getPointHeight = () => POINT_HEIGHT;
+
+    /**
+     * Get the X origin of this Pcb in points.
      * @returns {number} The X origin.
      */
     this.getXOrigin = () => _xOrigin;
 
     /**
-     * Get the Y origin of this Pcb in blocks.
+     * Get the Y origin of this Pcb in points.
      * @returns {number} The Y origin.
      */
     this.getYOrigin = () => _yOrigin;
@@ -96,4 +138,15 @@ export function Pcb() {
     this.extend = (point, x, y) => {
         // TODO: Mutate _width and _height here.
     };
-};
+
+    /**
+     * Draws this pcb.
+     * @param {Number} x The x coordinate in pixels.
+     * @param {Number} y The y coordinate in pixels.
+     */
+    this.draw = (x, y) => {
+        _layerPcb.draw(x, y);
+    };
+
+    updateSurfaces();
+}

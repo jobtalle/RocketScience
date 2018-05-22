@@ -1,5 +1,5 @@
 { "frames": {
-   "PCBCell_": {
+   "pcbExtend_0": {
     "frame": { "x": 0, "y": 0, "w": 6, "h": 6 },
     "rotated": false,
     "trimmed": false,
@@ -7,7 +7,7 @@
     "sourceSize": { "w": 6, "h": 6 },
     "duration": 100
    },
-   "PCBExtendSingle_0": {
+   "pcbExtend_1": {
     "frame": { "x": 6, "y": 0, "w": 6, "h": 6 },
     "rotated": false,
     "trimmed": false,
@@ -15,7 +15,7 @@
     "sourceSize": { "w": 6, "h": 6 },
     "duration": 100
    },
-   "PCBExtendSingle_1": {
+   "pcbExtend_2": {
     "frame": { "x": 12, "y": 0, "w": 6, "h": 6 },
     "rotated": false,
     "trimmed": false,
@@ -23,7 +23,7 @@
     "sourceSize": { "w": 6, "h": 6 },
     "duration": 100
    },
-   "PCBExtendSingle_2": {
+   "pcbExtend_3": {
     "frame": { "x": 18, "y": 0, "w": 6, "h": 6 },
     "rotated": false,
     "trimmed": false,
@@ -31,7 +31,7 @@
     "sourceSize": { "w": 6, "h": 6 },
     "duration": 100
    },
-   "PCBExtendSingle_3": {
+   "pcbPoint_": {
     "frame": { "x": 24, "y": 0, "w": 6, "h": 6 },
     "rotated": false,
     "trimmed": false,

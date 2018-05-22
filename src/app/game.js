@@ -1,6 +1,7 @@
 import {Menu} from "./menu";
 import {Editor} from "./editor/editor";
 import {World} from "./world/world";
+import {Pcb} from "./pcb"
 
 /**
  * This class contains the game views.
@@ -10,14 +11,6 @@ import {World} from "./world/world";
  * @constructor
  */
 export function Game(myr, sprites, overlay) {
-    const View = function(view) {
-        this.update = timeStep => {
-            view.update(timeStep);
-        };
-
-        this.draw = () => view.draw();
-    };
-
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
@@ -47,8 +40,9 @@ export function Game(myr, sprites, overlay) {
      * Start free create mode.
      */
     this.startCreate = () => {
-        _world = new View(new World(myr, sprites, myr.getWidth(), myr.getHeight()), 0, 0);
-        _editor = new View(new Editor(myr, sprites, myr.getWidth(), myr.getHeight()), 0, 0);
+        _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
+        _editor = new Editor(myr, myr.getWidth(), myr.getHeight());
+        _editor.edit(new Pcb(myr, sprites));
     };
 
     /**

@@ -6,11 +6,21 @@
  * @constructor
  */
 export function PcbEditor(myr, width, height) {
-    const SCALE = 2;
+    const SCALE = 3;
 
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
         Math.ceil(height / SCALE));
+
+    let _pcb = null;
+
+    /**
+     * Start editing a pcb.
+     * @param {Object} pcb A pcb instance to edit.
+     */
+    this.edit = pcb => {
+        _pcb = pcb;
+    };
 
     /**
      * Update the state of the pcb editor.
@@ -19,6 +29,15 @@ export function PcbEditor(myr, width, height) {
     this.update = timeStep => {
         _surface.bind();
         _surface.clear();
+
+        myr.push();
+        myr.translate(
+            Math.floor((_surface.getWidth() - _pcb.getWidth() * _pcb.getPointWidth()) * 0.5),
+            Math.floor((_surface.getHeight() - _pcb.getHeight() * _pcb.getPointHeight()) * 0.5));
+
+        _pcb.draw(10, 10);
+
+        myr.pop();
     };
 
     /**
@@ -33,6 +52,4 @@ export function PcbEditor(myr, width, height) {
      * @returns {Number} The width of the editor in pixels.
      */
     this.getWidth = () => width;
-
-    _surface.setClearColor(myr.Color.BLUE);
 }
