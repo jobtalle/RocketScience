@@ -1,6 +1,6 @@
-import Menu from "./menu";
-import Editor from "./editor/editor";
-import World from "./world/world";
+import {Menu} from "./menu";
+import {Editor} from "./editor/editor";
+import {World} from "./world/world";
 
 /**
  * This class contains the game views.
@@ -9,7 +9,7 @@ import World from "./world/world";
  * @param {Object} overlay The HTML overlay div.
  * @constructor
  */
-export default function Game(myr, sprites, overlay) {
+export function Game(myr, sprites, overlay) {
     const View = function(view) {
         this.update = timeStep => view.update(timeStep);
         this.render = () => view.render();

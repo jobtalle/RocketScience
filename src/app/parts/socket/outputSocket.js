@@ -2,7 +2,7 @@
  * Sends output to an InputSocket.
  * @constructor
  */
-export default function OutputSocket() {
+export function OutputSocket() {
     let _connectedInput;
 
     /**

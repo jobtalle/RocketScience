@@ -3,7 +3,7 @@
  * @param {Object} hull The grid of the object.
  * @constructor
  */
-export default function WorldObject(myr, hull) {
+export function WorldObject(myr, hull) {
     let _position = new myr.Vector(hull.getXOrigin(), hull.getYOrigin());
     let _velocity = new myr.Vector(0, 0);
 

@@ -2,7 +2,7 @@
  * An entity with one or more inputs or outputs.
  * @constructor
  */
-export default function Block() {
+export function Block() {
     const _inputs = [];
     const _outputs = [];
 

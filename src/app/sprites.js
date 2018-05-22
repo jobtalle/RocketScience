@@ -7,7 +7,7 @@ const MILLI = 1000;
  * @param {Myr} myr Myriad object to create sprites with.
  * @constructor
  */
-export default function Sprites(myr) {
+export function Sprites(myr) {
     const _surface = new myr.Surface(ATLAS_PATH);
     const _frames = ATLAS_MAP.frames;
 

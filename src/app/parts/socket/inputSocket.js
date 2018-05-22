@@ -2,7 +2,7 @@
  * Receives input from an OutputSocket.
  * @constructor
  */
-export default function InputSocket() {
+export function InputSocket() {
     let _currentState = 0;
 
     /**

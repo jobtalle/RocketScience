@@ -5,7 +5,7 @@ import "../styles/menu.css"
  * @param {Object} game A constructed Game object to be controlled.
  * @constructor
  */
-export default function Menu(game) {
+export function Menu(game) {
     const ID_ROOT = "menu-root";
     const ID_BUTTONS = "menu-buttons";
     const CLASS_BUTTON = "menu-button";

@@ -1,7 +1,7 @@
 import "../styles/main.css"
 
-import Game from "./game"
-import Sprites from "./sprites"
+import {Game} from "./game"
+import {Sprites} from "./sprites"
 import Myr from "myr.js"
 
 const canvas = document.getElementById("renderer");

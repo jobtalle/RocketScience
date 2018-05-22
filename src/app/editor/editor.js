@@ -6,7 +6,7 @@
  * @param {Number} height The height.
  * @constructor
  */
-export default function Editor(myr, sprites, width, height) {
+export function Editor(myr, sprites, width, height) {
     const SCALE = 2;
 
     const _surface = new myr.Surface(

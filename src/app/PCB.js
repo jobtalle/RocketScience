@@ -2,7 +2,7 @@
  * Defines a convex hull.
  * @constructor
  */
-export default function PCB() {
+export function PCB() {
     const Point = function() {
         let _part = null;
 

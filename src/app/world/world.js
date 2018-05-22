@@ -6,7 +6,7 @@
  * @param {Number} height The viewport height.
  * @constructor
  */
-export default function World(myr, sprites, width, height) {
+export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.3, 0.3, 0.3);
 
     const _objects = [];
