@@ -6,18 +6,33 @@
  * @constructor
  */
 export function PcbEditor(myr, width, height) {
+    const SCALE = 2;
+
+    const _surface = new myr.Surface(
+        Math.ceil(width / SCALE),
+        Math.ceil(height / SCALE));
+
     /**
      * Update the state of the pcb editor.
      * @param timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-
+        _surface.bind();
+        _surface.clear();
     };
 
     /**
      * Draw the pcb editor.
      */
-    this.draw = () => {
-
+    this.draw = x => {
+        _surface.drawScaled(x, 0, SCALE, SCALE);
     };
+
+    /**
+     * Get the pcb editor width
+     * @returns {Number} The width of the editor in pixels.
+     */
+    this.getWidth = () => width;
+
+    _surface.setClearColor(myr.Color.BLUE);
 }

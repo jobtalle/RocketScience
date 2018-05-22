@@ -1,4 +1,5 @@
 import {PcbEditor} from "./pcbEditor";
+import {Library} from "./library";
 
 /**
  * Provides a grid editor.
@@ -9,7 +10,10 @@ import {PcbEditor} from "./pcbEditor";
  * @constructor
  */
 export function Editor(myr, sprites, width, height) {
-    const _pcbEditor = new PcbEditor(myr, width, height);
+    const EDITOR_WIDTH = 0.7;
+
+    const _pcbEditor = new PcbEditor(myr, Math.floor(width * EDITOR_WIDTH), height);
+    const _library = new Library(_pcbEditor, width - _pcbEditor.getWidth());
 
     /**
      * Update the state of the editor.
@@ -23,6 +27,6 @@ export function Editor(myr, sprites, width, height) {
      * Render the editor.
      */
     this.draw = () => {
-        _pcbEditor.draw();
+        _pcbEditor.draw(_library.getWidth());
     };
 }
