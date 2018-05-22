@@ -1,11 +1,15 @@
+import {Pcb} from "../pcb/pcb";
+import {PcbRenderer} from "../pcb/pcbRenderer";
+
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
  * @param {Object} myr An instance of the Myriad engine.
+ * @param {Object} sprites All sprites.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @constructor
  */
-export function PcbEditor(myr, width, height) {
+export function PcbEditor(myr, sprites, width, height) {
     const SCALE = 3;
 
     const _surface = new myr.Surface(
@@ -13,6 +17,7 @@ export function PcbEditor(myr, width, height) {
         Math.ceil(height / SCALE));
 
     let _pcb = null;
+    let _renderer = null;
 
     /**
      * Start editing a pcb.
@@ -20,6 +25,7 @@ export function PcbEditor(myr, width, height) {
      */
     this.edit = pcb => {
         _pcb = pcb;
+        _renderer = new PcbRenderer(myr, sprites, pcb);
     };
 
     /**
@@ -32,10 +38,10 @@ export function PcbEditor(myr, width, height) {
 
         myr.push();
         myr.translate(
-            Math.floor((_surface.getWidth() - _pcb.getWidth() * _pcb.getPointWidth()) * 0.5),
-            Math.floor((_surface.getHeight() - _pcb.getHeight() * _pcb.getPointHeight()) * 0.5));
+            Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5),
+            Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5));
 
-        _pcb.draw(10, 10);
+        _renderer.draw(0, 0);
 
         myr.pop();
     };

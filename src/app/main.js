@@ -1,8 +1,8 @@
 import "../styles/main.css"
 
+import Myr from "myr.js"
 import {Game} from "./game"
 import {Sprites} from "./sprites"
-import Myr from "myr.js"
 
 const canvas = document.getElementById("renderer");
 const overlay = document.getElementById("overlay");

@@ -1,7 +1,7 @@
 import {Menu} from "./menu";
 import {Editor} from "./editor/editor";
 import {World} from "./world/world";
-import {Pcb} from "./pcb"
+import {Pcb} from "./pcb/pcb"
 
 /**
  * This class contains the game views.
@@ -41,7 +41,7 @@ export function Game(myr, sprites, overlay) {
      */
     this.startCreate = () => {
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
-        _editor = new Editor(myr, myr.getWidth(), myr.getHeight());
+        _editor = new Editor(myr, sprites, myr.getWidth(), myr.getHeight());
         _editor.edit(new Pcb(myr, sprites));
     };
 
