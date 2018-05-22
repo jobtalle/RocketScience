@@ -21,8 +21,8 @@ export default function PCB() {
     let _yOrigin = 0.5;
     let _mass = 1;
 
-    const getHullPoint = (x, y) => _points[y][x];
-    const getHullPointPosition = block => {
+    const getPoint = (x, y) => _points[y][x];
+    const getPointPosition = block => {
         for(let row = 0; row < _points.length; ++row) {
             const column = _points[row].indexOf(block);
 
