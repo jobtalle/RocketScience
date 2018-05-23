@@ -10,30 +10,45 @@ const myr = new Myr(canvas);
 const sprites = new Sprites(myr);
 const game = new Game(myr, sprites, overlay);
 
-const canvasRect = canvas.getBoundingClientRect();
+const canvasRect = overlay.getBoundingClientRect();
 let mouseDown = false;
 
-window.addEventListener("mousemove", function(event) {
+overlay.addEventListener("mousemove", function(event) {
+    if(event.target !== overlay)
+        return;
+
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
-window.addEventListener("mousedown", function(event) {
+overlay.addEventListener("mousedown", function(event) {
+    if(event.target !== overlay)
+        return;
+
     game.onMousePress(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 
     mouseDown = true;
 });
 
-window.addEventListener("mouseup", function(event) {
+overlay.addEventListener("mouseup", function(event) {
+    if(event.target !== overlay)
+        return;
+
     game.onMouseRelease(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 
     mouseDown = false;
 });
 
-window.addEventListener("mouseenter", function(event) {
+overlay.addEventListener("mouseenter", function(event) {
+    if(event.target !== overlay)
+        return;
+
     game.onMouseEnter(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
-window.addEventListener("mouseleave", function(event) {
+overlay.addEventListener("mouseleave", function(event) {
+    if(event.target !== overlay)
+        return;
+
     game.onMouseLeave(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 
     if(mouseDown) {
