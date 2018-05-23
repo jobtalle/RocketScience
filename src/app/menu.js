@@ -13,15 +13,15 @@ export function Menu(game) {
     let _parent = null;
 
     const startCreate = () => {
-        game.startCreate();
-
         this.hide();
+
+        game.startCreate();
     };
 
     const startChallenge = () => {
-        game.startChallenge();
-
         this.hide();
+
+        game.startChallenge();
     };
 
     const buildButtons = parent => {

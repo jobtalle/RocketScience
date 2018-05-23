@@ -10,7 +10,8 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
  * @constructor
  */
 export function PcbEditor(myr, sprites, width, height) {
-    const SCALE = 3;
+    const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
+    const SCALE = 4;
 
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
@@ -55,6 +56,8 @@ export function PcbEditor(myr, sprites, width, height) {
 
         _renderer.draw(0, 0);
 
+        SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+
         myr.pop();
     };
 
@@ -63,13 +66,6 @@ export function PcbEditor(myr, sprites, width, height) {
      */
     this.draw = x => {
         _surface.drawScaled(x, 0, SCALE, SCALE);
-
-        myr.primitives.fillRectangle(
-            myr.Color.RED,
-            _cursorX * Pcb.POINT_SIZE,
-            _cursorY * Pcb.POINT_SIZE,
-            Pcb.POINT_SIZE,
-            Pcb.POINT_SIZE);
     };
 
     /**

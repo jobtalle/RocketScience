@@ -41,7 +41,7 @@ export function Game(myr, sprites, overlay) {
      */
     this.startCreate = () => {
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
-        _editor = new Editor(myr, sprites, myr.getWidth(), myr.getHeight());
+        _editor = new Editor(myr, sprites, overlay, myr.getWidth(), myr.getHeight());
         _editor.edit(new Pcb(myr, sprites));
     };
 
@@ -106,4 +106,4 @@ export function Game(myr, sprites, overlay) {
     });
 
     _menu.show(overlay);
-};
+}

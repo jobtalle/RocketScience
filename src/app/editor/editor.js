@@ -5,15 +5,16 @@ import {Library} from "./library";
  * Provides a grid editor.
  * @param {Object} myr A Myriad instance.
  * @param {Object} sprites All sprites.
+ * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} width The width.
  * @param {Number} height The height.
  * @constructor
  */
-export function Editor(myr, sprites, width, height) {
+export function Editor(myr, sprites, overlay, width, height) {
     const EDITOR_WIDTH = 0.7;
 
     const _pcbEditor = new PcbEditor(myr, sprites, Math.floor(width * EDITOR_WIDTH), height);
-    const _library = new Library(_pcbEditor, width - _pcbEditor.getWidth());
+    const _library = new Library(_pcbEditor, overlay, width - _pcbEditor.getWidth());
 
     /**
      * Start editing a pcb.
