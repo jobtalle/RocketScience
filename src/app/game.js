@@ -58,7 +58,7 @@ export function Game(myr, sprites, overlay) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMousePress = (x, y) => {
-        console.log("click " + x);
+
     };
 
     /**

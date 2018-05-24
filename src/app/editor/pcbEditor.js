@@ -31,7 +31,11 @@ export function PcbEditor(myr, sprites, width, height) {
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5);
     };
-    
+
+    const moveCursor = () => {
+
+    };
+
     /**
      * Start editing a pcb.
      * @param {Object} pcb A pcb instance to edit.
@@ -80,7 +84,13 @@ export function PcbEditor(myr, sprites, width, height) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
+        const oldX = _cursorX;
+        const oldY = _cursorY;
+
         _cursorX = Math.floor((x / SCALE - _drawX) / Pcb.POINT_SIZE);
         _cursorY = Math.floor((y / SCALE - _drawY) / Pcb.POINT_SIZE);
+
+        if(_cursorX !== oldX || _cursorY !== oldY)
+            moveCursor();
     };
 }
