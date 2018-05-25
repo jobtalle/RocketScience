@@ -1,0 +1,16 @@
+{
+  "Display": {
+    "Light": {
+      "label": "Light Emitting Diode",
+      "description": "Emits a small amount of light when receiving a signal.",
+      "sprite": "led"
+    }
+  },
+  "Control": {
+    "Button": {
+      "label": "Push Button",
+      "description": "Generates a signal when pressed.",
+      "sprite": "button"
+    }
+  }
+}
