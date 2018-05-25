@@ -146,7 +146,13 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const dragCellsErase = () => {
+        for(const cell of _cursorDragCells)
+            _pcb.erase(cell.x, cell.y);
 
+        _pcb.pack();
+
+        revalidate();
+        moveCursor();
     };
 
     const stopDrag = () => {

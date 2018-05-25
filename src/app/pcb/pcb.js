@@ -38,6 +38,81 @@ export function Pcb(myr, sprites) {
         return null;
     };
 
+    const trimRowsTop = () => {
+        let empty = true;
+
+        while (empty) {
+            for (let column = 0; column < _points[0].length; ++column) {
+                if (this.getPoint(column, 0)) {
+                    empty = false;
+
+                    break;
+                }
+            }
+
+            if (empty)
+                _points.splice(0, 1);
+        }
+    };
+
+    const trimRowsBottom = () => {
+        let empty = true;
+
+        while (empty) {
+            for (let column = 0; column < _points[this.getHeight() - 1].length; ++column) {
+                if (this.getPoint(column, this.getHeight() - 1)) {
+                    empty = false;
+
+                    break;
+                }
+            }
+
+            if (empty)
+                _points.pop();
+        }
+    };
+
+    const trimColumnsLeft = () => {
+        let empty = true;
+
+        while(empty) {
+            for (let row = 0; row < this.getHeight(); ++row) {
+                if (this.getPoint(0, row)) {
+                    empty = false;
+
+                    break;
+                }
+            }
+
+            if (empty) {
+                for (let row = 0; row < this.getHeight(); ++row)
+                    _points[row].splice(0, 1);
+
+                _width--;
+            }
+        }
+    };
+
+    const trimColumnsRight = () => {
+        let width = 0;
+
+        for (let row = 0; row < this.getHeight(); ++row) {
+            let column = _points[row].length;
+
+            while (column-- > 0)
+                if(this.getPoint(column, row))
+                    break;
+
+            if (column >= width)
+                width = column + 1;
+
+            if (++column > _points[row].length)
+                _points[row].splice(column, _points[row].length - column);
+        }
+
+        _width = width;
+    };
+
     /**
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
@@ -119,6 +194,16 @@ export function Pcb(myr, sprites) {
     };
 
     /**
+     * Erase a Pcb cell. You'll need to pack afterwards to prevent sparse pcb's.
+     * The cell must exist. Never erase all cells!
+     * @param {Number} x The X position of the point.
+     * @param {Number} y The Y position of the point.
+     */
+    this.erase = (x, y) => {
+        _points[y][x] = null;
+    };
+
+    /**
      * Shift the Pcb points with respect to the origin.
      * @param x The X shift in points.
      * @param y The Y shift in points.
@@ -132,6 +217,17 @@ export function Pcb(myr, sprites) {
             _points.splice(0, 0, []);
 
         _width += x;
+    };
+
+    /**
+     * Remove empty rows and columns from the sides.
+     * Use this after erasing points.
+     */
+    this.pack = () => {
+        trimRowsTop();
+        trimRowsBottom();
+        trimColumnsLeft();
+        trimColumnsRight();
     };
 }
 
