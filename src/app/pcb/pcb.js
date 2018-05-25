@@ -18,7 +18,6 @@ export function Pcb(myr, sprites) {
     const _points = [[new Point(), new Point()],[new Point(), new Point()]];
 
     let _width = 2;
-    let _height = 2;
     let _xOrigin = 0.5;
     let _yOrigin = 0.5;
     let _mass = 1;
@@ -57,7 +56,7 @@ export function Pcb(myr, sprites) {
      * Get the height of this Pcb in points.
      * @returns {Number} The height.
      */
-    this.getHeight = () => _height;
+    this.getHeight = () => _points.length;
 
     /**
      * Get the X origin of this Pcb in points.
@@ -72,13 +71,13 @@ export function Pcb(myr, sprites) {
     this.getYOrigin = () => _yOrigin;
 
     /**
-     * Get the mass of this hull.
+     * Get the mass of this pcb.
      * @returns {number} The total mass of this Pcb and its parts.
      */
     this.getMass = () => _mass;
 
     /**
-     * Returns a deep copy of this hull
+     * Returns a deep copy of this pcb.
      * @returns {Object} A deep copy of this Pcb.
      */
     this.copy = () => {
@@ -97,13 +96,42 @@ export function Pcb(myr, sprites) {
     };
 
     /**
-     * Extend the Pcb
-     * @param {Object} point A Pcb point to extend from.
-     * @param {Number} x The X direction to extend to.
-     * @param {Number} y The Y direction to extend to.
+     * Extend the Pcb. This should always result in a non-split shape!
+     * A Pcb cannot be extended into negative coordinates; shift before doing this.
+     * @param {Number} x The X position of the new point.
+     * @param {Number} y The Y position of the new point.
      */
-    this.extend = (point, x, y) => {
-        // TODO: Mutate _width and _height here.
+    this.extend = (x, y) => {
+        while(this.getHeight() <= y)
+            _points.push([]);
+
+        if(x < _points[y].length)
+            _points[y][x] = new Point();
+        else {
+            while(_points[y].length < x)
+                _points[y].push(null);
+
+            _points[y].push(new Point());
+        }
+
+        if(x >= _width)
+            _width = x + 1;
+    };
+
+    /**
+     * Shift the Pcb points with respect to the origin.
+     * @param x The X shift in points.
+     * @param y The Y shift in points.
+     */
+    this.shift = (x, y) => {
+        for(let row = 0; row < this.getHeight(); ++row)
+            for(let i = 0; i < x; ++i)
+                _points[row].splice(0, 0, null);
+
+        for(let i = 0; i < y; ++i)
+            _points.splice(0, 0, []);
+
+        _width += x;
     };
 }
 

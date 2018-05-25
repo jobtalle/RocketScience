@@ -40,6 +40,24 @@ export function Editor(myr, sprites, overlay, width, height) {
     };
 
     /**
+     * Press the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMousePress = (x, y) => {
+        _pcbEditor.onMousePress(x -_library.getWidth(), y);
+    };
+
+    /**
+     * Release the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseRelease = (x, y) => {
+        _pcbEditor.onMouseRelease(x - _library.getWidth(), y);
+    };
+
+    /**
      * Move the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.

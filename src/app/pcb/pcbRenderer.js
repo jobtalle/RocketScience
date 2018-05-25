@@ -13,12 +13,6 @@ export function PcbRenderer(myr, sprites, pcb) {
     let _layerPcb = null;
 
     const updateSurfaces = () => {
-        if(
-            _layerPcb &&
-            _layerPcb.getWidth() === Pcb.POINT_SIZE * pcb.getWidth() &&
-            _layerPcb.getHeight() === Pcb.POINT_SIZE * pcb.getHeight())
-            return;
-
         _layerPcb = new myr.Surface(
             Pcb.POINT_SIZE * pcb.getWidth(),
             Pcb.POINT_SIZE * pcb.getHeight());

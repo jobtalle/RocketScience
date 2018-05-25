@@ -11,7 +11,6 @@ const sprites = new Sprites(myr);
 const game = new Game(myr, sprites, overlay);
 
 const canvasRect = overlay.getBoundingClientRect();
-let mouseDown = false;
 
 overlay.addEventListener("mousemove", function(event) {
     if(event.target !== overlay)
@@ -25,8 +24,6 @@ overlay.addEventListener("mousedown", function(event) {
         return;
 
     game.onMousePress(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
-
-    mouseDown = true;
 });
 
 overlay.addEventListener("mouseup", function(event) {
@@ -34,8 +31,6 @@ overlay.addEventListener("mouseup", function(event) {
         return;
 
     game.onMouseRelease(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
-
-    mouseDown = false;
 });
 
 overlay.addEventListener("mouseenter", function(event) {
@@ -50,10 +45,4 @@ overlay.addEventListener("mouseleave", function(event) {
         return;
 
     game.onMouseLeave(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
-
-    if(mouseDown) {
-        game.onMouseRelease(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
-
-        mouseDown = false;
-    }
 });

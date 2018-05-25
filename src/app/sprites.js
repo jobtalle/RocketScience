@@ -46,4 +46,4 @@ export function Sprites(myr) {
 
         return new myr.Sprite(name);
     };
-};
+}
