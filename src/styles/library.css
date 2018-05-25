@@ -1,4 +1,44 @@
 #library {
     height: 100%;
-    background-color: darkred;
+
+    background-color: #dee5ef;
+}
+
+#library .title {
+    padding: 0.2em;
+
+    background-color: #6f747c;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+}
+
+#library .part-list {
+    padding-left: 1em;
+
+    color: black;
+}
+
+#library .part-list.closed {
+    display:none;
+}
+
+
+#library .part-list .part {
+    margin: 1em;
+    padding: 0.5em;
+
+    background-color: #ced5e0;
+    border: 1px solid darkgray;
+}
+
+#library .part-list .part.selected {
+    color: white;
+    background-color: #3a3f47;
+    border: 1px solid black;
+}
+
+#library .part-list .part .description {
+    font-style: italic;
+    font-size: small;
 }
