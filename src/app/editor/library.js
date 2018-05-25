@@ -13,7 +13,8 @@ export function Library(editor, overlay, width) {
           CLASS_CATEGORY_PART_LIST = "part-list",
           CLASS_PART = "part",
           CLASS_DESCRIPTION = "description",
-          CLASS_SELECTED = "selected";
+          CLASS_SELECTED = "selected",
+          CLASS_CLOSED = "closed";
 
     let _parts = require('../../assets/parts.json');
     let _container = null;
@@ -21,6 +22,14 @@ export function Library(editor, overlay, width) {
     const buildPart = (category, part) => {
         const partElement = document.createElement("div");
         partElement.className = CLASS_PART;
+        partElement.onclick = () => {
+            console.log("Selected: " + part);
+
+            const selected = document.getElementsByClassName(CLASS_SELECTED)[0];
+            if (selected)
+                selected.classList.remove(CLASS_SELECTED);
+            partElement.classList.add(CLASS_SELECTED);
+        };
 
         let labelElement = document.createElement("div");
         labelElement.innerText = _parts[category][part].label;
@@ -30,15 +39,6 @@ export function Library(editor, overlay, width) {
         descriptionElement.innerText = _parts[category][part].description;
         descriptionElement.className = CLASS_DESCRIPTION;
         partElement.appendChild(descriptionElement);
-
-        partElement.onclick = () => {
-            console.log("Selected: " + part);
-
-            const selected = document.getElementsByClassName(CLASS_SELECTED)[0];
-            if (selected)
-                selected.classList.remove(CLASS_SELECTED);
-            partElement.classList.add(CLASS_SELECTED);
-        };
 
         return partElement;
     };
@@ -50,6 +50,9 @@ export function Library(editor, overlay, width) {
         const titleElement = document.createElement("div");
         titleElement.className = CLASS_CATEGORY_TITLE;
         titleElement.textContent = category;
+        titleElement.onclick = () => {
+            partListElement.classList.toggle(CLASS_CLOSED);
+        };
         categoryContainer.appendChild(titleElement);
 
         const partListElement = document.createElement("div");

@@ -19,6 +19,11 @@
     color: black;
 }
 
+#library .part-list.closed {
+    display:none;
+}
+
+
 #library .part-list .part {
     margin: 1em;
     padding: 0.5em;
@@ -27,10 +32,10 @@
     border: 1px solid darkgray;
 }
 
-.selected {
-    color: white !important;
-    background-color: #3a3f47 !important;
-    border: 1px solid black !important;
+#library .part-list .part.selected {
+    color: white;
+    background-color: #3a3f47;
+    border: 1px solid black;
 }
 
 #library .part-list .part .description {
