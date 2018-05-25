@@ -23,6 +23,7 @@ export function PcbEditor(myr, sprites, width, height) {
     let _drawY;
     let _cursorX = -1;
     let _cursorY = -1;
+    let _cursorPoint = null;
 
     const revalidate = () => {
         if(_renderer)
@@ -33,7 +34,12 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const moveCursor = () => {
+        if(_cursorX >= 0 && _cursorY >= 0)
+            _cursorPoint = _pcb.getPoint(_cursorX, _cursorY);
+        else
+            _cursorPoint = null;
 
+        console.log(_cursorPoint);
     };
 
     /**

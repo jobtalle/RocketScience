@@ -45,7 +45,7 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The y position on the board
      * @returns {null} A pcb point, or null if no point is placed here.
      */
-    this.getPoint = (x, y) => x < _points[y].length?_points[y][x]:null;
+    this.getPoint = (x, y) => y < _points.length && x < _points[y].length?_points[y][x]:null;
 
     /**
      * Get the width of this Pcb in points.
