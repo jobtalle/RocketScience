@@ -11,6 +11,7 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
  */
 export function PcbEditor(myr, sprites, width, height) {
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
+    const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SCALE = 4;
 
     const _surface = new myr.Surface(
@@ -24,6 +25,7 @@ export function PcbEditor(myr, sprites, width, height) {
     let _cursorX = -1;
     let _cursorY = -1;
     let _cursorPoint = null;
+    let _cursorExtendable = false;
 
     const revalidate = () => {
         if(_renderer)
@@ -34,12 +36,21 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const moveCursor = () => {
-        if(_cursorX >= 0 && _cursorY >= 0)
+        if(_cursorX >= 0 && _cursorY >= 0) {
             _cursorPoint = _pcb.getPoint(_cursorX, _cursorY);
-        else
-            _cursorPoint = null;
 
-        console.log(_cursorPoint);
+            if(!_cursorPoint)
+                _cursorExtendable =
+                    _pcb.getPoint(_cursorX + 1, _cursorY) ||
+                    _pcb.getPoint(_cursorX, _cursorY + 1) ||
+                    (_cursorX > 0 && _pcb.getPoint(_cursorX - 1, _cursorY)) ||
+                    (_cursorY > 0 && _pcb.getPoint(_cursorX, _cursorY - 1));
+        } else {
+            _cursorPoint = null;
+            _cursorExtendable =
+                (_cursorX === -1 && _cursorY >= 0 && _pcb.getPoint(0, _cursorY)) ||
+                (_cursorY === -1 && _cursorX >= 0 && _pcb.getPoint(_cursorX, 0));
+        }
     };
 
     /**
@@ -66,7 +77,10 @@ export function PcbEditor(myr, sprites, width, height) {
 
         _renderer.draw(0, 0);
 
-        SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+        if(_cursorPoint)
+            SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+        else if(_cursorExtendable)
+            SPRITE_HOVER_EXTEND.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
 
         myr.pop();
     };
