@@ -15,10 +15,14 @@ export function PcbEditor(myr, sprites, width, height) {
         this.y = y;
     };
 
+    const KEY_TOGGLE_DELETE = "Delete";
     const DRAG_MODE_NONE = 0;
-    const DRAG_MODE_EXTEND = 1;
+    const DRAG_MODE_AREA = 1;
+    const EDIT_MODE_SELECT = 0;
+    const EDIT_MODE_DELETE = 1;
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
+    const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const SCALE = 4;
 
     const _surface = new myr.Surface(
@@ -27,6 +31,7 @@ export function PcbEditor(myr, sprites, width, height) {
 
     let _pcb = null;
     let _renderer = null;
+    let _editMode = EDIT_MODE_SELECT;
     let _drawX;
     let _drawY;
     let _cursorX = -1;
@@ -44,6 +49,15 @@ export function PcbEditor(myr, sprites, width, height) {
         
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5);
+    };
+
+    const dragCellAcceptable = (x, y) => {
+        switch(_editMode) {
+            case EDIT_MODE_SELECT:
+                return !(x >= 0 && y>= 0 && _pcb.getPoint(x, y));
+            case EDIT_MODE_DELETE:
+                return x >= 0 && y >= 0 && _pcb.getPoint(x, y);
+        }
     };
 
     const moveCursor = () => {
@@ -64,7 +78,7 @@ export function PcbEditor(myr, sprites, width, height) {
         }
 
         switch(_cursorDragMode) {
-            case DRAG_MODE_EXTEND:
+            case DRAG_MODE_AREA:
                 const xFrom = Math.min(_cursorX, _cursorDragX);
                 const xTo = Math.max(_cursorX, _cursorDragX);
                 const yFrom = Math.min(_cursorY, _cursorDragY);
@@ -74,65 +88,114 @@ export function PcbEditor(myr, sprites, width, height) {
 
                 for(let y = yFrom; y <= yTo; ++y)
                     for(let x = xFrom; x <= xTo; ++x)
-                        if(!(x >= 0 && y>= 0 && _pcb.getPoint(x, y)))
+                        if(dragCellAcceptable(x, y))
                             _cursorDragCells.push(new Cell(x, y));
                 break;
         }
     };
 
     const startDrag = () => {
-        if(!_cursorPoint && _cursorExtendable) {
-            _cursorDragMode = DRAG_MODE_EXTEND;
-            _cursorDragX = _cursorX;
-            _cursorDragY = _cursorY;
+        switch(_editMode) {
+            case EDIT_MODE_SELECT:
+                if(!_cursorPoint && _cursorExtendable) {
+                    _cursorDragMode = DRAG_MODE_AREA;
+                    _cursorDragX = _cursorX;
+                    _cursorDragY = _cursorY;
 
-            moveCursor();
+                    moveCursor();
+                }
+                break;
+            case EDIT_MODE_DELETE:
+                if(_cursorPoint) {
+                    _cursorDragMode = DRAG_MODE_AREA;
+                    _cursorDragX = _cursorX;
+                    _cursorDragY = _cursorY;
+
+                    moveCursor();
+                }
+                break;
         }
     };
 
+    const dragCellsExtend = () => {
+        let xMin = 0;
+        let yMin = 0;
+        const negatives = [];
+
+        for(const cell of _cursorDragCells) {
+            if(cell.x < 0 || cell.y < 0) {
+                if(cell.x < xMin)
+                    xMin = cell.x;
+
+                if(cell.y < yMin)
+                    yMin = cell.y;
+
+                negatives.push(cell);
+            }
+            else
+                _pcb.extend(cell.x, cell.y);
+        }
+
+        _pcb.shift(-xMin, -yMin);
+
+        for(const cell of negatives)
+            _pcb.extend(cell.x - xMin, cell.y - yMin);
+
+        revalidate();
+        moveCursor();
+    };
+
+    const dragCellsErase = () => {
+
+    };
+
     const stopDrag = () => {
-        switch(_cursorDragMode) {
-            case DRAG_MODE_EXTEND:
-                let xMin = 0;
-                let yMin = 0;
-                const negatives = [];
-
-                for(const cell of _cursorDragCells) {
-                    if(cell.x < 0 || cell.y < 0) {
-                        if(cell.x < xMin)
-                            xMin = cell.x;
-
-                        if(cell.y < yMin)
-                            yMin = cell.y;
-
-                        negatives.push(cell);
-                    }
-                    else
-                        _pcb.extend(cell.x, cell.y);
+        switch(_editMode) {
+            case EDIT_MODE_SELECT:
+                switch(_cursorDragMode) {
+                    case DRAG_MODE_AREA:
+                        dragCellsExtend();
+                        break;
                 }
-
-                _pcb.shift(-xMin, -yMin);
-
-                for(const cell of negatives)
-                    _pcb.extend(cell.x - xMin, cell.y - yMin);
-
-                revalidate();
-
+                break;
+            case EDIT_MODE_DELETE:
+                switch(_cursorDragMode) {
+                    case DRAG_MODE_AREA:
+                        dragCellsErase();
+                        break;
+                }
                 break;
         }
 
         _cursorDragMode = DRAG_MODE_NONE;
     };
 
-    /**
-     * Start editing a pcb.
-     * @param {Object} pcb A pcb instance to edit.
-     */
-    this.edit = pcb => {
-        _pcb = pcb;
-        _renderer = new PcbRenderer(myr, sprites, pcb);
+    const drawSelect = () => {
+        switch(_cursorDragMode) {
+            case DRAG_MODE_NONE:
+                if (_cursorPoint)
+                    SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                else if (_cursorExtendable)
+                    SPRITE_HOVER_EXTEND.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                break;
+            case DRAG_MODE_AREA:
+                for(const cell of _cursorDragCells)
+                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.POINT_SIZE, cell.y * Pcb.POINT_SIZE);
+                break;
+        }
+    };
 
-        revalidate();
+    const drawDelete = () => {
+        switch(_cursorDragMode) {
+            case DRAG_MODE_NONE:
+                if (_cursorPoint)
+                    SPRITE_HOVER_DELETE.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                break;
+            case DRAG_MODE_AREA:
+                for (const cell of _cursorDragCells)
+                    SPRITE_HOVER_DELETE.draw(cell.x * Pcb.POINT_SIZE, cell.y * Pcb.POINT_SIZE);
+                break;
+        }
     };
 
     /**
@@ -148,16 +211,12 @@ export function PcbEditor(myr, sprites, width, height) {
 
         _renderer.draw(0, 0);
 
-        switch(_cursorDragMode) {
-            case DRAG_MODE_NONE:
-                if (_cursorPoint)
-                    SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
-                else if (_cursorExtendable)
-                    SPRITE_HOVER_EXTEND.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+        switch(_editMode) {
+            case EDIT_MODE_SELECT:
+                drawSelect();
                 break;
-            case DRAG_MODE_EXTEND:
-                for(const cell of _cursorDragCells)
-                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.POINT_SIZE, cell.y * Pcb.POINT_SIZE);
+            case EDIT_MODE_DELETE:
+                drawDelete();
                 break;
         }
 
@@ -169,6 +228,17 @@ export function PcbEditor(myr, sprites, width, height) {
      */
     this.draw = x => {
         _surface.drawScaled(x, 0, SCALE, SCALE);
+    };
+
+    /**
+     * Start editing a pcb.
+     * @param {Object} pcb A pcb instance to edit.
+     */
+    this.edit = pcb => {
+        _pcb = pcb;
+        _renderer = new PcbRenderer(myr, sprites, pcb);
+
+        revalidate();
     };
 
     /**
@@ -209,5 +279,24 @@ export function PcbEditor(myr, sprites, width, height) {
 
         if(_cursorX !== oldX || _cursorY !== oldY)
             moveCursor();
+    };
+
+    /**
+     * A key is pressed.
+     * @param {String} key A key.
+     */
+    this.onKeyDown = key => {
+        switch(key) {
+            case KEY_TOGGLE_DELETE:
+                switch(_editMode) {
+                    case EDIT_MODE_SELECT:
+                        _editMode = EDIT_MODE_DELETE;
+                        break;
+                    case EDIT_MODE_DELETE:
+                        _editMode = EDIT_MODE_SELECT;
+                        break;
+                }
+                break;
+        }
     };
 }

@@ -100,6 +100,23 @@ export function Game(myr, sprites, overlay) {
 
     };
 
+    /**
+     * A key is pressed.
+     * @param {String} key A key.
+     */
+    this.onKeyDown = key => {
+        if(_editor)
+            _editor.onKeyDown(key);
+    };
+
+    /**
+     * A key is released.
+     * @param {String} key A key.
+     */
+    this.onKeyUp = key => {
+
+    };
+
     myr.utils.loop(function(timeStep) {
         update(timeStep);
         render();

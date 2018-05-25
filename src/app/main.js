@@ -46,3 +46,11 @@ overlay.addEventListener("mouseleave", function(event) {
 
     game.onMouseLeave(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
+
+window.onkeydown = function(event) {
+    game.onKeyDown(event.key);
+};
+
+window.onkeyup = function(event) {
+    game.onKeyUp(event.key);
+};

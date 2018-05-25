@@ -65,4 +65,13 @@ export function Editor(myr, sprites, overlay, width, height) {
     this.onMouseMove = (x, y) => {
         _pcbEditor.onMouseMove(x - _library.getWidth(), y);
     };
+
+
+    /**
+     * A key is pressed.
+     * @param {String} key A key.
+     */
+    this.onKeyDown = key => {
+        _pcbEditor.onKeyDown(key);
+    };
 }
