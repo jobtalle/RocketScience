@@ -3,6 +3,7 @@ doc
 
 # Don't keep (intermediary) builds, DO keep the package info for dist.
 dist
+src/assets/atlas.json
 
 # Editor files.
 .idea
