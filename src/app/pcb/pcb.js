@@ -6,37 +6,17 @@
  */
 export function Pcb(myr, sprites) {
     const Point = function() {
-        let _part = null;
 
-        this.put = part => {
-            _part = part;
-        };
-
-        this.getPart = () => _part;
     };
 
-    const _points = [[new Point(), new Point()],[new Point(), new Point()]];
+    const DEFAULT_WIDTH = 6;
+    const DEFAULT_HEIGHT = 6;
+    const _points = [];
 
-    let _width = 2;
-    let _xOrigin = 0.5;
-    let _yOrigin = 0.5;
+    let _width = DEFAULT_WIDTH;
+    let _xOrigin = DEFAULT_WIDTH * 0.5;
+    let _yOrigin = DEFAULT_HEIGHT * 0.5;
     let _mass = 1;
-
-    const getPointPosition = block => {
-        for(let row = 0; row < _points.length; ++row) {
-            const column = _points[row].indexOf(block);
-
-            if(column === -1)
-                continue;
-
-            return {
-                row: row,
-                column: column
-            };
-        }
-
-        return null;
-    };
 
     const trimRowsTop = () => {
         let empty = true;
@@ -160,17 +140,6 @@ export function Pcb(myr, sprites) {
     };
 
     /**
-     * Place a part in the Pcb, make sure it fits!
-     * @param {Object} point The Pcb to place the part in.
-     * @param {Object} part A part to place.
-     */
-    this.place = (point, part) => {
-        // TODO: put the part in all hull blocks is covers.
-
-        point.put(part);
-    };
-
-    /**
      * Extend the Pcb. This should always result in a non-split shape!
      * A Pcb cannot be extended into negative coordinates; shift before doing this.
      * @param {Number} x The X position of the new point.
@@ -229,6 +198,13 @@ export function Pcb(myr, sprites) {
         trimColumnsLeft();
         trimColumnsRight();
     };
+
+    for (let y = 0; y < DEFAULT_HEIGHT; ++y) {
+        _points.push([]);
+
+        for (let x = 0; x < DEFAULT_WIDTH; ++x)
+            _points[y].push(new Point());
+    }
 }
 
 Pcb.POINT_SIZE = 6;

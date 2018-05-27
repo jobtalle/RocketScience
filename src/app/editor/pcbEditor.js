@@ -79,18 +79,87 @@ export function PcbEditor(myr, sprites, width, height) {
 
         switch(_cursorDragMode) {
             case DRAG_MODE_AREA:
-                const xFrom = Math.min(_cursorX, _cursorDragX);
-                const xTo = Math.max(_cursorX, _cursorDragX);
-                const yFrom = Math.min(_cursorY, _cursorDragY);
-                const yTo = Math.max(_cursorY, _cursorDragY);
+                const left = Math.min(_cursorX, _cursorDragX);
+                const right = Math.max(_cursorX, _cursorDragX);
+                const top = Math.min(_cursorY, _cursorDragY);
+                const bottom = Math.max(_cursorY, _cursorDragY);
 
                 _cursorDragCells.splice(0, _cursorDragCells.length);
 
-                for(let y = yFrom; y <= yTo; ++y)
-                    for(let x = xFrom; x <= xTo; ++x)
+                for (let y = top; y <= bottom; ++y)
+                    for (let x = left; x <= right; ++x)
                         if(dragCellAcceptable(x, y))
                             _cursorDragCells.push(new Cell(x, y));
+
+                if (_editMode === EDIT_MODE_DELETE)
+                    dragPreventSplit(left, top, right, bottom);
+
                 break;
+        }
+    };
+
+    const dragPreventSplit = (left, top, right, bottom) => {
+        const groups = [];
+
+        for (let x = 0; x < _pcb.getWidth(); ++x) {
+            for (let y = 0; y < _pcb.getHeight(); ++y) {
+                if (x >= left && x <= right && y >= top && y <= bottom)
+                    continue;
+
+                if (!_pcb.getPoint(x, y))
+                    continue;
+
+                const cell = new Cell(x, y);
+                const matches = [];
+
+                for (let group = 0; group < groups.length; ++group) {
+                    for (let i = 0; i < groups[group].length; ++i) {
+                        const compareCell = groups[group][i];
+
+                        if (
+                            (compareCell.x === cell.x && (compareCell.y === cell.y - 1 || compareCell.y === cell.y + 1)) ||
+                            (compareCell.y === cell.y && (compareCell.x === cell.x - 1 || compareCell.x === cell.x + 1))) {
+                            matches.push(group);
+
+                            break;
+                        }
+                    }
+                }
+
+                if (matches.length === 0)
+                    groups.push([cell]);
+                else {
+                    matches.sort();
+                    groups[matches[0]].push(cell);
+
+                    if (matches.length > 1) {
+                        for (let i = matches.length; i-- > 1;) {
+                            groups[matches[0]] = groups[matches[0]].concat(groups[matches[i]]);
+                            groups.splice(matches[i], 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (groups.length > 1) {
+            let largestGroupSize = 0;
+            let largestGroup;
+
+            for (let group = 0; group < groups.length; ++group) {
+                if (groups[group].length > largestGroupSize) {
+                    largestGroupSize = groups[group].length;
+                    largestGroup = group;
+                }
+            }
+
+            for (let group = 0; group < groups.length; ++group) {
+                if (group === largestGroup)
+                    continue;
+
+                for (let i = 0; i < groups[group].length; ++i)
+                    _cursorDragCells.push(groups[group][i]);
+            }
         }
     };
 
