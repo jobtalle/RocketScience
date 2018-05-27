@@ -1,12 +1,11 @@
 #library {
     height: 100%;
-
+    user-select: none;
     background-color: #dee5ef;
 }
 
 #library .title {
     padding: 0.2em;
-
     background-color: #6f747c;
     color: white;
     font-weight: bold;
@@ -15,7 +14,6 @@
 
 #library .part-list {
     padding-left: 1em;
-
     color: black;
 }
 
@@ -23,11 +21,9 @@
     display:none;
 }
 
-
 #library .part-list .part {
     margin: 1em;
     padding: 0.5em;
-
     background-color: #ced5e0;
     border: 1px solid darkgray;
 }
