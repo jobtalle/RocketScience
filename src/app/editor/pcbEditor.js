@@ -101,36 +101,36 @@ export function PcbEditor(myr, sprites, width, height) {
     const dragPreventSplit = (left, top, right, bottom) => {
         const groups = [];
 
-        for (let x = 0; x < _pcb.getWidth(); ++x) {
-            for (let y = 0; y < _pcb.getHeight(); ++y) {
-                if (x >= left && x <= right && y >= top && y <= bottom)
-                    continue;
+        for (let x = 0; x < _pcb.getWidth(); ++x) for (let y = 0; y < _pcb.getHeight(); ++y) {
+            if (x >= left && x <= right && y >= top && y <= bottom)
+                continue;
 
-                if (!_pcb.getPoint(x, y))
-                    continue;
+            if (!_pcb.getPoint(x, y))
+                continue;
 
-                const cell = new Cell(x, y);
-                const matches = [];
+            const cell = new Cell(x, y);
+            const matches = [];
 
-                for (let group = 0; group < groups.length; ++group) {
-                    for (let i = 0; i < groups[group].length; ++i) {
-                        const compareCell = groups[group][i];
+            for (let group = 0; group < groups.length; ++group) {
+                for (let i = 0; i < groups[group].length; ++i) {
+                    const compareCell = groups[group][i];
 
-                        if (
-                            (compareCell.x === cell.x && (compareCell.y === cell.y - 1 || compareCell.y === cell.y + 1)) ||
-                            (compareCell.y === cell.y && (compareCell.x === cell.x - 1 || compareCell.x === cell.x + 1))) {
-                            matches.push(group);
+                    if (
+                        (compareCell.x === cell.x && compareCell.y === cell.y - 1) ||
+                        (compareCell.y === cell.y && compareCell.x === cell.x - 1)) {
+                        matches.push(group);
 
-                            break;
-                        }
+                        break;
                     }
                 }
+            }
 
-                if (matches.length === 0)
+            switch (matches.length) {
+                case 0:
                     groups.push([cell]);
-                else {
+                    break;
+                default:
                     matches.sort();
-                    groups[matches[0]].push(cell);
 
                     if (matches.length > 1) {
                         for (let i = matches.length; i-- > 1;) {
@@ -138,7 +138,9 @@ export function PcbEditor(myr, sprites, width, height) {
                             groups.splice(matches[i], 1);
                         }
                     }
-                }
+                case 1:
+                    groups[matches[0]].push(cell);
+                    break;
             }
         }
 
