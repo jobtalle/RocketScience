@@ -40,4 +40,4 @@ export function World(myr, sprites, width, height) {
     };
 
     _surface.setClearColor(COLOR_CLEAR);
-};
+}

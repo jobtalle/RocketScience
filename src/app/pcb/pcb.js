@@ -216,3 +216,4 @@ export function Pcb(myr, sprites) {
 }
 
 Pcb.POINT_SIZE = 6;
+Pcb.METERS_PER_POINT = 0.2;
