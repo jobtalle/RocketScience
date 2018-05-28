@@ -42,7 +42,11 @@ export function Game(myr, sprites, overlay) {
     this.startCreate = () => {
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
         _editor = new Editor(myr, sprites, overlay, myr.getWidth(), myr.getHeight());
-        _editor.edit(new Pcb(myr, sprites));
+
+        const pcb = new Pcb(myr, sprites);
+        pcb.initialize();
+
+        _editor.edit(pcb);
     };
 
     /**
@@ -104,9 +108,9 @@ export function Game(myr, sprites, overlay) {
      * A key is pressed.
      * @param {String} key A key.
      */
-    this.onKeyDown = key => {
+    this.onKeyDown = (key, control) => {
         if(_editor)
-            _editor.onKeyDown(key);
+            _editor.onKeyDown(key, control);
     };
 
     /**

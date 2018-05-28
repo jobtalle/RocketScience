@@ -4,6 +4,8 @@ import Myr from "myr.js"
 import {Game} from "./game"
 import {Sprites} from "./sprites"
 
+const KEY_CONTROL = "Control";
+
 const canvas = document.getElementById("renderer");
 const overlay = document.getElementById("overlay");
 const myr = new Myr(canvas);
@@ -11,6 +13,8 @@ const sprites = new Sprites(myr);
 const game = new Game(myr, sprites, overlay);
 
 const canvasRect = overlay.getBoundingClientRect();
+
+let key_control = false;
 
 overlay.addEventListener("mousemove", function(event) {
     if(event.target !== overlay)
@@ -48,9 +52,21 @@ overlay.addEventListener("mouseleave", function(event) {
 });
 
 window.onkeydown = function(event) {
-    game.onKeyDown(event.key);
+    switch (event.key) {
+        case KEY_CONTROL:
+            key_control = true;
+            break;
+        default:
+            game.onKeyDown(event.key, key_control);
+    }
 };
 
 window.onkeyup = function(event) {
-    game.onKeyUp(event.key);
+    switch (event.key) {
+        case KEY_CONTROL:
+            key_control = false;
+            break;
+        default:
+            game.onKeyUp(event.key);
+    }
 };

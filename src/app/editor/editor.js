@@ -71,7 +71,7 @@ export function Editor(myr, sprites, overlay, width, height) {
      * A key is pressed.
      * @param {String} key A key.
      */
-    this.onKeyDown = key => {
-        _pcbEditor.onKeyDown(key);
+    this.onKeyDown = (key, control) => {
+        _pcbEditor.onKeyDown(key, control);
     };
 }

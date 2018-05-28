@@ -136,7 +136,13 @@ export function Pcb(myr, sprites) {
      * @returns {Object} A deep copy of this Pcb.
      */
     this.copy = () => {
-        // TODO
+        const newPcb = new Pcb(myr, sprites);
+
+        for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x)
+            if (this.getPoint(x, y))
+                newPcb.extend(x, y);
+
+        return newPcb;
     };
 
     /**
@@ -199,12 +205,18 @@ export function Pcb(myr, sprites) {
         trimColumnsRight();
     };
 
-    for (let y = 0; y < DEFAULT_HEIGHT; ++y) {
-        _points.push([]);
+    /**
+     * Initialize this PCB with its default size.
+     * This should always happen when creating a new PCB.
+     */
+    this.initialize = () => {
+        for (let y = 0; y < DEFAULT_HEIGHT; ++y) {
+            _points.push([]);
 
-        for (let x = 0; x < DEFAULT_WIDTH; ++x)
-            _points[y].push(new Point());
-    }
+            for (let x = 0; x < DEFAULT_WIDTH; ++x)
+                _points[y].push(new Point());
+        }
+    };
 }
 
 Pcb.POINT_SIZE = 6;

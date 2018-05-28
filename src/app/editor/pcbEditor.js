@@ -63,6 +63,9 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const KEY_TOGGLE_DELETE = "Delete";
+    const KEY_CONTROL = "Control";
+    const KEY_UNDO = "z";
+    const KEY_REDO = "y";
     const DRAG_MODE_NONE = 0;
     const DRAG_MODE_AREA = 1;
     const EDIT_MODE_SELECT = 0;
@@ -70,8 +73,11 @@ export function PcbEditor(myr, sprites, width, height) {
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
-    const SCALE = 2;
+    const UNDO_COUNT = 32;
+    const SCALE = 4;
 
+    const _undoStack = [];
+    const _redoStack = [];
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
         Math.ceil(height / SCALE));
@@ -96,6 +102,39 @@ export function PcbEditor(myr, sprites, width, height) {
         
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5);
+    };
+
+    const undoPush = () => {
+        _undoStack.push(_pcb.copy());
+
+        if (_undoStack > UNDO_COUNT)
+            _undoStack.splice(0, 1);
+
+        _redoStack.length = 0;
+    };
+
+    const undoPop = () => {
+        const newPcb = _undoStack.pop();
+
+        if (newPcb) {
+            redoPush();
+
+            this.edit(newPcb);
+        }
+    };
+
+    const redoPush = () => {
+        _redoStack.push(_pcb.copy());
+    };
+
+    const redoPop = () => {
+        const newPcb = _redoStack.pop();
+
+        if (newPcb) {
+            _undoStack.push(_pcb.copy());
+
+            this.edit(newPcb);
+        }
     };
 
     const dragCellAcceptable = (x, y) => {
@@ -225,6 +264,8 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const dragCellsExtend = () => {
+        undoPush();
+
         let xMin = 0;
         let yMin = 0;
         const negatives = [];
@@ -253,6 +294,8 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const dragCellsErase = () => {
+        undoPush();
+
         for(const cell of _cursorDragCells)
             _pcb.erase(cell.x, cell.y);
 
@@ -398,7 +441,7 @@ export function PcbEditor(myr, sprites, width, height) {
      * A key is pressed.
      * @param {String} key A key.
      */
-    this.onKeyDown = key => {
+    this.onKeyDown = (key, control) => {
         switch(key) {
             case KEY_TOGGLE_DELETE:
                 switch(_editMode) {
@@ -409,6 +452,14 @@ export function PcbEditor(myr, sprites, width, height) {
                         _editMode = EDIT_MODE_SELECT;
                         break;
                 }
+                break;
+            case KEY_UNDO:
+                if (control)
+                    undoPop();
+                break;
+            case KEY_REDO:
+                if (control)
+                    redoPop();
                 break;
         }
     };
