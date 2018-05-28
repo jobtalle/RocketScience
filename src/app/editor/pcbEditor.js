@@ -15,6 +15,53 @@ export function PcbEditor(myr, sprites, width, height) {
         this.y = y;
     };
 
+    const CellGroup = function(first) {
+        this.cells = [first];
+        this.left = first.x - 1;
+        this.top = first.y - 1;
+        this.right = first.x + 1;
+        this.bottom = first.y + 1;
+
+        this.contains = cell => {
+            if (cell.x < this.left || cell.y < this.top || cell.x > this.right || cell.y > this.bottom)
+                return false;
+
+            for (let i = this.cells.length; i-- > 0;) {
+                const compareCell = this.cells[i];
+
+                if (
+                    (compareCell.x === cell.x && compareCell.y === cell.y - 1) ||
+                    (compareCell.y === cell.y && compareCell.x === cell.x - 1))
+                    return true;
+            }
+
+            return false;
+        };
+
+        this.push = cell => {
+            if (cell.x === this.left)
+                this.left = cell.x - 1;
+            else if (cell.x === this.right)
+                this.right = cell.x + 1;
+
+            if (cell.y === this.top)
+                this.top = cell.y - 1;
+            else if (cell.y === this.bottom)
+                this.bottom = cell.y + 1;
+
+            this.cells.push(cell);
+        };
+
+        this.concat = group => {
+            this.left = Math.min(this.left, group.left);
+            this.top = Math.min(this.top, group.top);
+            this.right = Math.max(this.right, group.right);
+            this.bottom = Math.max(this.bottom, group.bottom);
+
+            this.cells = this.cells.concat(group.cells);
+        };
+    };
+
     const KEY_TOGGLE_DELETE = "Delete";
     const DRAG_MODE_NONE = 0;
     const DRAG_MODE_AREA = 1;
@@ -23,7 +70,7 @@ export function PcbEditor(myr, sprites, width, height) {
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
-    const SCALE = 4;
+    const SCALE = 2;
 
     const _surface = new myr.Surface(
         Math.ceil(width / SCALE),
@@ -101,7 +148,7 @@ export function PcbEditor(myr, sprites, width, height) {
     const dragPreventSplit = (left, top, right, bottom) => {
         const groups = [];
 
-        for (let x = 0; x < _pcb.getWidth(); ++x) for (let y = 0; y < _pcb.getHeight(); ++y) {
+        for (let y = 0; y < _pcb.getHeight(); ++y) for (let x = 0; x < _pcb.getWidth(); ++x) {
             if (x >= left && x <= right && y >= top && y <= bottom)
                 continue;
 
@@ -112,31 +159,20 @@ export function PcbEditor(myr, sprites, width, height) {
             const matches = [];
 
             for (let group = 0; group < groups.length; ++group) {
-                for (let i = 0; i < groups[group].length; ++i) {
-                    const compareCell = groups[group][i];
-
-                    if (
-                        (compareCell.x === cell.x && compareCell.y === cell.y - 1) ||
-                        (compareCell.y === cell.y && compareCell.x === cell.x - 1)) {
-                        matches.push(group);
-
-                        break;
-                    }
-                }
+                if (groups[group].contains(cell))
+                    matches.push(group);
             }
 
             switch (matches.length) {
                 case 0:
-                    groups.push([cell]);
+                    groups.push(new CellGroup(cell));
                     break;
                 default:
                     matches.sort();
 
-                    if (matches.length > 1) {
-                        for (let i = matches.length; i-- > 1;) {
-                            groups[matches[0]] = groups[matches[0]].concat(groups[matches[i]]);
-                            groups.splice(matches[i], 1);
-                        }
+                    for (let i = matches.length; i-- > 1;) {
+                        groups[matches[0]].concat(groups[matches[i]]);
+                        groups.splice(matches[i], 1);
                     }
                 case 1:
                     groups[matches[0]].push(cell);
@@ -149,8 +185,8 @@ export function PcbEditor(myr, sprites, width, height) {
             let largestGroup;
 
             for (let group = 0; group < groups.length; ++group) {
-                if (groups[group].length > largestGroupSize) {
-                    largestGroupSize = groups[group].length;
+                if (groups[group].cells.length > largestGroupSize) {
+                    largestGroupSize = groups[group].cells.length;
                     largestGroup = group;
                 }
             }
@@ -159,8 +195,8 @@ export function PcbEditor(myr, sprites, width, height) {
                 if (group === largestGroup)
                     continue;
 
-                for (let i = 0; i < groups[group].length; ++i)
-                    _cursorDragCells.push(groups[group][i]);
+                for (let i = 0; i < groups[group].cells.length; ++i)
+                    _cursorDragCells.push(groups[group].cells[i]);
             }
         }
     };

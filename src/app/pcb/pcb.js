@@ -9,8 +9,8 @@ export function Pcb(myr, sprites) {
 
     };
 
-    const DEFAULT_WIDTH = 6;
-    const DEFAULT_HEIGHT = 6;
+    const DEFAULT_WIDTH = 8;
+    const DEFAULT_HEIGHT = 8;
     const _points = [];
 
     let _width = DEFAULT_WIDTH;
