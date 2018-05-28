@@ -7,7 +7,7 @@
  * @constructor
  */
 export function World(myr, sprites, width, height) {
-    const COLOR_CLEAR = new myr.Color(0.3, 0.3, 0.3);
+    const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
 
     const _objects = [];
     const _surface = new myr.Surface(width, height);

@@ -436,6 +436,7 @@ export function PcbEditor(myr, sprites, width, height) {
     /**
      * A key is pressed.
      * @param {String} key A key.
+     * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
         switch(key) {

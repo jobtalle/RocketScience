@@ -70,6 +70,7 @@ export function Editor(myr, sprites, overlay, width, height) {
     /**
      * A key is pressed.
      * @param {String} key A key.
+     * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
         _pcbEditor.onKeyDown(key, control);

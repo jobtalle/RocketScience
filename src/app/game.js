@@ -107,6 +107,7 @@ export function Game(myr, sprites, overlay) {
     /**
      * A key is pressed.
      * @param {String} key A key.
+     * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
         if(_editor)
