@@ -63,7 +63,6 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const KEY_TOGGLE_DELETE = "Delete";
-    const KEY_CONTROL = "Control";
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
     const DRAG_MODE_NONE = 0;
@@ -73,7 +72,7 @@ export function PcbEditor(myr, sprites, width, height) {
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
-    const UNDO_COUNT = 32;
+    const UNDO_COUNT = 64;
     const SCALE = 4;
 
     const _undoStack = [];
@@ -117,14 +116,10 @@ export function PcbEditor(myr, sprites, width, height) {
         const newPcb = _undoStack.pop();
 
         if (newPcb) {
-            redoPush();
+            _redoStack.push(_pcb.copy());
 
             this.edit(newPcb);
         }
-    };
-
-    const redoPush = () => {
-        _redoStack.push(_pcb.copy());
     };
 
     const redoPop = () => {
