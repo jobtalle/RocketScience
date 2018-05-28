@@ -390,6 +390,7 @@ export function PcbEditor(myr, sprites, width, height) {
         _renderer = new PcbRenderer(myr, sprites, pcb);
 
         revalidate();
+        moveCursor();
     };
 
     /**

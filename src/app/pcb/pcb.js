@@ -13,9 +13,9 @@ export function Pcb(myr, sprites) {
     const DEFAULT_HEIGHT = 8;
     const _points = [];
 
-    let _width = DEFAULT_WIDTH;
-    let _xOrigin = DEFAULT_WIDTH * 0.5;
-    let _yOrigin = DEFAULT_HEIGHT * 0.5;
+    let _width = 0;
+    let _xOrigin = 0;
+    let _yOrigin = 0;
     let _mass = 1;
 
     const trimRowsTop = () => {
@@ -210,12 +210,8 @@ export function Pcb(myr, sprites) {
      * This should always happen when creating a new PCB.
      */
     this.initialize = () => {
-        for (let y = 0; y < DEFAULT_HEIGHT; ++y) {
-            _points.push([]);
-
-            for (let x = 0; x < DEFAULT_WIDTH; ++x)
-                _points[y].push(new Point());
-        }
+        for (let y = 0; y < DEFAULT_HEIGHT; ++y) for (let x = 0; x < DEFAULT_WIDTH; ++x)
+            this.extend(x, y);
     };
 }
 
