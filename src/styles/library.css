@@ -22,19 +22,20 @@
 }
 
 #library .part-list .part {
-    margin: 1em;
-    padding: 0.5em;
-    background-color: #ced5e0;
-    border: 1px solid darkgray;
+    display: inline-flex;
+    overflow: hidden;
+}
+
+#library .part-list .part img{
+    image-rendering: pixelated;
 }
 
 #library .part-list .part.selected {
     color: white;
-    background-color: #3a3f47;
-    border: 1px solid black;
+    box-shadow: 0 0.1em 0.5em black;
 }
 
-#library .part-list .part .description {
+#info .description {
     font-style: italic;
     font-size: small;
 }

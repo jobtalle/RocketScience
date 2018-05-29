@@ -14,7 +14,7 @@ export function Editor(myr, sprites, overlay, width, height) {
     const EDITOR_WIDTH = 0.7;
 
     const _pcbEditor = new PcbEditor(myr, sprites, Math.floor(width * EDITOR_WIDTH), height);
-    const _library = new Library(_pcbEditor, overlay, width - _pcbEditor.getWidth());
+    const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
 
     /**
      * Start editing a pcb.

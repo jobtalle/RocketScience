@@ -2,13 +2,15 @@ import "../../styles/library.css"
 
 /**
  * An HTML based parts library.
+ * @param {Object} sprites All sprites.
  * @param {Object} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} width The width of the library in pixels.
  * @constructor
  */
-export function Library(editor, overlay, width) {
+export function Library(sprites, editor, overlay, width) {
     const ID_LIBRARY = "library",
+          ID_INFO_BOX = "info",
           CLASS_CATEGORY_TITLE = "title",
           CLASS_CATEGORY_PART_LIST = "part-list",
           CLASS_PART = "part",
@@ -25,21 +27,32 @@ export function Library(editor, overlay, width) {
         partElement.onclick = () => {
             console.log("Selected: " + part);
 
+            const infoBox = document.getElementById(ID_INFO_BOX);
+            infoBox.setPart(category, part);
+
             const selected = document.getElementsByClassName(CLASS_SELECTED)[0];
             if (selected)
                 selected.classList.remove(CLASS_SELECTED);
             partElement.classList.add(CLASS_SELECTED);
         };
 
-        let labelElement = document.createElement("div");
-        labelElement.innerText = _parts[category][part].label;
-        partElement.appendChild(labelElement);
+        const image = new Image();
+        image.onload = () => {
+            const sprite = sprites.getSprite(part);
+            const left = sprite.getUvLeft() * image.width;
+            const top = sprite.getUvTop() * image.height;
+            const width = sprite.getUvWidth() * image.width;
+            const height = sprite.getUvHeight() * image.height;
 
-        let descriptionElement = document.createElement("div");
-        descriptionElement.innerText = _parts[category][part].description;
-        descriptionElement.className = CLASS_DESCRIPTION;
-        partElement.appendChild(descriptionElement);
+            image.style.marginLeft = -left + "px";
+            image.style.marginTop = -top + "px";
+            partElement.style.width = width + "px";
+            partElement.style.height = height + "px";
+        };
 
+        image.src = "atlas.png";
+
+        partElement.appendChild(image);
         return partElement;
     };
 
@@ -65,6 +78,26 @@ export function Library(editor, overlay, width) {
         return categoryContainer;
     };
 
+    const buildInfoBox = () => {
+        const box = document.createElement("div");
+        box.id = ID_INFO_BOX;
+
+        const titleElement = document.createElement("div");
+        titleElement.className = CLASS_CATEGORY_TITLE;
+        box.appendChild(titleElement);
+
+        let descriptionElement = document.createElement("div");
+        descriptionElement.className = CLASS_DESCRIPTION;
+        box.appendChild(descriptionElement);
+
+        box.setPart = (category, part) => {
+            titleElement.innerText = _parts[category][part].label;
+            descriptionElement.innerText = _parts[category][part].description;
+        };
+
+        return box;
+    };
+
     const build = () => {
         if(_container)
             overlay.removeChild(_container);
@@ -76,6 +109,7 @@ export function Library(editor, overlay, width) {
         for (const category in _parts)
             if (_parts.hasOwnProperty(category))
                 _container.appendChild(buildCategory(category));
+        _container.appendChild(buildInfoBox());
 
         overlay.appendChild(_container);
     };
