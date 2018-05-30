@@ -14,8 +14,8 @@ export function PcbRenderer(myr, sprites, pcb) {
 
     const updateSurfaces = () => {
         _layerPcb = new myr.Surface(
-            Pcb.POINT_SIZE * pcb.getWidth(),
-            Pcb.POINT_SIZE * pcb.getHeight());
+            Pcb.PIXELS_PER_POINT * pcb.getWidth(),
+            Pcb.PIXELS_PER_POINT * pcb.getHeight());
         _layerPcb.bind();
         _layerPcb.clear();
 
@@ -23,8 +23,8 @@ export function PcbRenderer(myr, sprites, pcb) {
             for(let column = 0; column < pcb.getWidth(); ++column)
                 if(pcb.getPoint(column, row))
                     SPRITE_POINT.draw(
-                        column * Pcb.POINT_SIZE,
-                        row * Pcb.POINT_SIZE);
+                        column * Pcb.PIXELS_PER_POINT,
+                        row * Pcb.PIXELS_PER_POINT);
     };
 
     /**
