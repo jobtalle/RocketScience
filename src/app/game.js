@@ -11,9 +11,12 @@ import {Pcb} from "./pcb/pcb"
  * @constructor
  */
 export function Game(myr, sprites, overlay) {
+    const KEY_TOGGLE_EDIT = " ";
+
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
+    let _hiddenEditor = null;
 
     const update = timeStep => {
         if(_world)
@@ -47,6 +50,7 @@ export function Game(myr, sprites, overlay) {
         pcb.initialize();
 
         _editor.edit(pcb);
+        _editor.show();
     };
 
     /**
@@ -110,6 +114,20 @@ export function Game(myr, sprites, overlay) {
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
+        switch(key) {
+            case KEY_TOGGLE_EDIT:
+                if (_editor) {
+                    _hiddenEditor = _editor;
+                    _editor.hide();
+                    _editor = null;
+                }
+                else {
+                    _editor = _hiddenEditor;
+                    _editor.show();
+                }
+                break;
+        }
+
         if(_editor)
             _editor.onKeyDown(key, control);
     };

@@ -25,6 +25,20 @@ export function Editor(myr, sprites, overlay, width, height) {
     };
 
     /**
+     * Hide the editor
+     */
+    this.hide = () => {
+        _library.hide();
+    };
+
+    /**
+     * Show the editor.
+     */
+    this.show = () => {
+        _library.show();
+    };
+
+    /**
      * Update the state of the editor.
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */

@@ -76,8 +76,6 @@ export function Library(editor, overlay, width) {
         for (const category in _parts)
             if (_parts.hasOwnProperty(category))
                 _container.appendChild(buildCategory(category));
-
-        overlay.appendChild(_container);
     };
 
     /**
@@ -85,6 +83,21 @@ export function Library(editor, overlay, width) {
      * @returns {Number} The width in pixels.
      */
     this.getWidth = () => width;
+
+    /**
+     * Hide the library. This does not delete the library.
+     * It can be shown again later using show().
+     */
+    this.hide = () => {
+        overlay.removeChild(_container);
+    };
+
+    /**
+     * Show the library.
+     */
+    this.show = () => {
+        overlay.appendChild(_container);
+    };
 
     build();
 }
