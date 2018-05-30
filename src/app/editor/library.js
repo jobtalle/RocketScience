@@ -50,16 +50,17 @@ export function Library(editor, overlay, width) {
         const titleElement = document.createElement("div");
         titleElement.className = CLASS_CATEGORY_TITLE;
         titleElement.textContent = category;
-        titleElement.onclick = () => {
-            partListElement.classList.toggle(CLASS_CLOSED);
-        };
+        titleElement.onclick = () => partListElement.classList.toggle(CLASS_CLOSED);
+
         categoryContainer.appendChild(titleElement);
 
         const partListElement = document.createElement("div");
         partListElement.className = CLASS_CATEGORY_PART_LIST;
+
         for (const part in _parts[category])
             if (_parts[category].hasOwnProperty(part))
                 partListElement.appendChild(buildPart(category, part));
+
         categoryContainer.appendChild(partListElement);
 
         return categoryContainer;

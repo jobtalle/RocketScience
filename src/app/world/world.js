@@ -1,3 +1,5 @@
+import {Terrain} from "./terrain";
+
 /**
  * Simulates physics and behavior for all objects in the same space.
  * @param {Object} myr A Myriad instance.
@@ -10,6 +12,7 @@ export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
 
     const _objects = [];
+    const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
 
     /**
@@ -30,6 +33,8 @@ export function World(myr, sprites, width, height) {
 
         _surface.bind();
         _surface.clear();
+
+        _terrain.draw();
     };
 
     /**
