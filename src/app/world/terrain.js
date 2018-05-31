@@ -10,6 +10,12 @@ export function Terrain(myr, width) {
     const _heights = new Array(width * Terrain.SEGMENTS_PER_METER);
 
     /**
+     * Returns the width in pixels.
+     * @returns {Number} The width in pixels.
+     */
+    this.getWidth = () => width * Terrain.PIXELS_PER_METER;
+
+    /**
      * Draws the terrain.
      */
     this.draw = () => {

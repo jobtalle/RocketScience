@@ -14,6 +14,15 @@ export function World(myr, sprites, width, height) {
     const _objects = [];
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
+    let _shiftX = 0;
+    let _shiftY = 0;
+    let _zoom = 1;
+
+    const resetView = () => {
+        _shiftX = -_terrain.getWidth() * 0.5;
+        _shiftY = 0;
+        _zoom = 0.5;
+    };
 
     /**
      * Add a new object to the world.
@@ -34,7 +43,14 @@ export function World(myr, sprites, width, height) {
         _surface.bind();
         _surface.clear();
 
+        myr.push();
+        myr.translate(width * 0.5, height * 0.5);
+        myr.scale(_zoom, _zoom);
+        myr.translate(_shiftX, _shiftY);
+
         _terrain.draw();
+
+        myr.pop();
     };
 
     /**
@@ -45,4 +61,6 @@ export function World(myr, sprites, width, height) {
     };
 
     _surface.setClearColor(COLOR_CLEAR);
+
+    resetView();
 }
