@@ -86,8 +86,10 @@ export function Game(myr, sprites, overlay) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        if(_editor)
+        if (_editor)
             _editor.onMouseMove(x, y);
+        else
+            _world.onMouseMove(x, y);
     };
 
     /**
@@ -106,6 +108,22 @@ export function Game(myr, sprites, overlay) {
      */
     this.onMouseLeave = (x, y) => {
 
+    };
+
+    /**
+     * When zooming in.
+     */
+    this.onZoomIn = () => {
+        if (!_editor)
+            _world.zoomIn();
+    };
+
+    /**
+     * When zooming out.
+     */
+    this.onZoomOut = () => {
+        if (!_editor)
+            _world.zoomOut();
     };
 
     /**
