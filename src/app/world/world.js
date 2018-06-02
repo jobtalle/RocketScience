@@ -1,4 +1,5 @@
 import {Terrain} from "./terrain";
+import {View} from "./view";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -10,47 +11,11 @@ import {Terrain} from "./terrain";
  */
 export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
-    const SCALE_FACTOR = 0.25;
-    const ZOOM_MAX = 8;
-    const ZOOM_MIN = 0.25;
-    const DRAG_MODE_NONE = 0;
-    const DRAG_MODE_MOVE = 1;
 
     const _objects = [];
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    let _shiftX = 0;
-    let _shiftY = 0;
-    let _zoom = 1;
-    let _mouseX = -1;
-    let _mouseY = -1;
-    let _dragMode = DRAG_MODE_NONE;
-
-    const resetView = () => {
-        _shiftX = -_terrain.getWidth() * 0.5;
-        _shiftY = 0;
-        _zoom = 0.5;
-    };
-
-    const moveView = (x, y) => {
-        _shiftX -= x;
-        _shiftY -= y;
-    };
-
-    const zoomShift = zoomPrevious => {
-        const scaleFactor = (_zoom - zoomPrevious) / (_zoom * zoomPrevious);
-
-        _shiftX += (width * 0.5 - _mouseX) * scaleFactor;
-        _shiftY += (height * 0.5 - _mouseY) * scaleFactor;
-    };
-
-    const startDrag = () => {
-        _dragMode = DRAG_MODE_MOVE;
-    };
-
-    const stopDrag = () => {
-        _dragMode = DRAG_MODE_NONE;
-    };
+    const _view = new View(myr, _terrain.getWidth(), _terrain.getHeight(), width, height);
 
     /**
      * Add a new object to the world.
@@ -64,14 +29,14 @@ export function World(myr, sprites, width, height) {
      * Press the mouse.
      */
     this.onMousePress = () => {
-        startDrag();
+        _view.onMousePress();
     };
 
     /**
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        stopDrag();
+        _view.onMouseRelease();
     };
 
     /**
@@ -80,45 +45,21 @@ export function World(myr, sprites, width, height) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        switch (_dragMode) {
-            case DRAG_MODE_MOVE:
-                const dx = (_mouseX - x) / _zoom;
-                const dy = (_mouseY - y) / _zoom;
-
-                if (dx !== 0 || dy !== 0)
-                    moveView(dx, dy);
-
-                break;
-        }
-
-        _mouseX = x;
-        _mouseY = y;
+        _view.onMouseMove(x, y);
     };
 
     /**
      * Zoom in.
      */
     this.zoomIn = () => {
-        const zoomPrevious = _zoom;
-
-        _zoom *= 1 + SCALE_FACTOR;
-        if (_zoom > ZOOM_MAX)
-            _zoom = ZOOM_MAX;
-
-        zoomShift(zoomPrevious);
+        _view.zoomIn();
     };
 
     /**
      * Zoom out.
      */
     this.zoomOut = () => {
-        const zoomPrevious = _zoom;
-
-        _zoom *= 1 - SCALE_FACTOR;
-        if (_zoom < ZOOM_MIN)
-            _zoom = ZOOM_MIN;
-
-        zoomShift(zoomPrevious);
+        _view.zoomOut();
     };
 
     /**
@@ -133,9 +74,7 @@ export function World(myr, sprites, width, height) {
         _surface.clear();
 
         myr.push();
-        myr.translate(width * 0.5, height * 0.5);
-        myr.scale(_zoom, _zoom);
-        myr.translate(_shiftX, _shiftY);
+        myr.transform(_view.getTransform());
 
         _terrain.draw();
 
@@ -150,6 +89,4 @@ export function World(myr, sprites, width, height) {
     };
 
     _surface.setClearColor(COLOR_CLEAR);
-
-    resetView();
 }

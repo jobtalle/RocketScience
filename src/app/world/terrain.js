@@ -7,6 +7,8 @@ import {Pcb} from "../pcb/pcb";
  * @constructor
  */
 export function Terrain(myr, width) {
+    const AIR_HEIGHT = 100;
+
     const _heights = new Array(width * Terrain.SEGMENTS_PER_METER);
 
     /**
@@ -14,6 +16,12 @@ export function Terrain(myr, width) {
      * @returns {Number} The width in pixels.
      */
     this.getWidth = () => width * Terrain.PIXELS_PER_METER;
+
+    /**
+     * Returns the height in pixels.
+     * @returns {number} The height in pixels.
+     */
+    this.getHeight = () => AIR_HEIGHT;
 
     /**
      * Draws the terrain.
