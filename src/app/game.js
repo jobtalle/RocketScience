@@ -62,24 +62,20 @@ export function Game(myr, sprites, overlay) {
 
     /**
      * Press the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMousePress = (x, y) => {
+    this.onMousePress = () => {
         if(_editor)
-            _editor.onMousePress(x, y);
+            _editor.onMousePress();
         else
             _world.onMousePress();
     };
 
     /**
      * Release the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseRelease = (x, y) => {
+    this.onMouseRelease = () => {
         if(_editor)
-            _editor.onMouseRelease(x, y);
+            _editor.onMouseRelease();
         else
             _world.onMouseRelease();
     };
@@ -98,19 +94,15 @@ export function Game(myr, sprites, overlay) {
 
     /**
      * The mouse enters.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = (x, y) => {
+    this.onMouseEnter = () => {
 
     };
 
     /**
      * The mouse leaves.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseLeave = (x, y) => {
+    this.onMouseLeave = () => {
 
     };
 

@@ -415,19 +415,15 @@ export function PcbEditor(myr, sprites, width, height) {
 
     /**
      * Press the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMousePress = (x, y) => {
+    this.onMousePress = () => {
         startDrag();
     };
 
     /**
      * Release the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseRelease = (x, y) => {
+    this.onMouseRelease = () => {
         stopDrag();
     };
 

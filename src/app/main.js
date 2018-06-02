@@ -27,28 +27,28 @@ overlay.addEventListener("mousedown", function(event) {
     if (event.target !== overlay)
         return;
 
-    game.onMousePress(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+    game.onMousePress();
 });
 
 overlay.addEventListener("mouseup", function(event) {
     if (event.target !== overlay)
         return;
 
-    game.onMouseRelease(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+    game.onMouseRelease();
 });
 
 overlay.addEventListener("mouseenter", function(event) {
     if (event.target !== overlay)
         return;
 
-    game.onMouseEnter(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+    game.onMouseEnter();
 });
 
 overlay.addEventListener("mouseleave", function(event) {
     if (event.target !== overlay)
         return;
 
-    game.onMouseLeave(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
+    game.onMouseLeave();
 });
 
 overlay.addEventListener("mousewheel", function(event) {
