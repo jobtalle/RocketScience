@@ -68,6 +68,8 @@ export function Game(myr, sprites, overlay) {
     this.onMousePress = (x, y) => {
         if(_editor)
             _editor.onMousePress(x, y);
+        else
+            _world.onMousePress();
     };
 
     /**
@@ -78,6 +80,8 @@ export function Game(myr, sprites, overlay) {
     this.onMouseRelease = (x, y) => {
         if(_editor)
             _editor.onMouseRelease(x, y);
+        else
+            _world.onMouseRelease();
     };
 
     /**

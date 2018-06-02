@@ -13,6 +13,8 @@ export function World(myr, sprites, width, height) {
     const SCALE_FACTOR = 0.25;
     const ZOOM_MAX = 8;
     const ZOOM_MIN = 0.25;
+    const DRAG_MODE_NONE = 0;
+    const DRAG_MODE_MOVE = 1;
 
     const _objects = [];
     const _terrain = new Terrain(myr, 100);
@@ -22,6 +24,7 @@ export function World(myr, sprites, width, height) {
     let _zoom = 1;
     let _mouseX = -1;
     let _mouseY = -1;
+    let _dragMode = DRAG_MODE_NONE;
 
     const resetView = () => {
         _shiftX = -_terrain.getWidth() * 0.5;
@@ -29,11 +32,24 @@ export function World(myr, sprites, width, height) {
         _zoom = 0.5;
     };
 
+    const moveView = (x, y) => {
+        _shiftX -= x;
+        _shiftY -= y;
+    };
+
     const zoomShift = zoomPrevious => {
         const scaleFactor = (_zoom - zoomPrevious) / (_zoom * zoomPrevious);
 
         _shiftX += (width * 0.5 - _mouseX) * scaleFactor;
         _shiftY += (height * 0.5 - _mouseY) * scaleFactor;
+    };
+
+    const startDrag = () => {
+        _dragMode = DRAG_MODE_MOVE;
+    };
+
+    const stopDrag = () => {
+        _dragMode = DRAG_MODE_NONE;
     };
 
     /**
@@ -45,11 +61,36 @@ export function World(myr, sprites, width, height) {
     };
 
     /**
+     * Press the mouse.
+     */
+    this.onMousePress = () => {
+        startDrag();
+    };
+
+    /**
+     * Release the mouse.
+     */
+    this.onMouseRelease = () => {
+        stopDrag();
+    };
+
+    /**
      * Move the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
+        switch (_dragMode) {
+            case DRAG_MODE_MOVE:
+                const dx = (_mouseX - x) / _zoom;
+                const dy = (_mouseY - y) / _zoom;
+
+                if (dx !== 0 || dy !== 0)
+                    moveView(dx, dy);
+
+                break;
+        }
+
         _mouseX = x;
         _mouseY = y;
     };
