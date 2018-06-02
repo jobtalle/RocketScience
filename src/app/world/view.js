@@ -1,7 +1,7 @@
 /**
  * A viewport for the world.
- * @param {Number} width The world width in pixels.
  * @param {Object} myr A Myriad instance.
+ * @param {Number} width The world width in pixels.
  * @param {Number} height The world height in pixels.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.

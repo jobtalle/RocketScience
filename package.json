@@ -9,7 +9,7 @@
   "scripts": {
     "pack-dev": "webpack --mode development",
     "pack-prod": "webpack --mode production",
-    "pack-sprites" : "aseprite -b src/assets/sprites/*.aseprite --data src/assets/atlas.json --sheet dist/atlas.png --sheet-pack --filename-format {title}_{frame}",
+    "pack-sprites": "aseprite -b src/assets/sprites/*.aseprite --data src/assets/atlas.json --sheet dist/atlas.png --sheet-pack --filename-format {title}_{frame}",
     "doc": "esdoc",
     "test": "ava **/*.test.js"
   },
@@ -31,17 +31,14 @@
   "devDependencies": {
     "@babel/preset-env": "^7.0.0-beta.44",
     "@babel/register": "^7.0.0-beta.44",
-    "ava": "1.0.0-beta.4",
     "babel-polyfill": "^6.26.0",
     "browser-env": "^3.2.5",
     "css-loader": "^0.28.11",
-    "esdoc": "^1.0.3",
-    "esdoc-standard-plugin": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
-    "jquery": "^3.3.1",
     "myr.js": "^0.3.2",
     "webpack": "^4.6.0",
-    "webpack-cli": "^2.0.14"
+    "webpack-cli": "^2.0.14",
+    "matter-js": "^0.14.1"
   }
 }

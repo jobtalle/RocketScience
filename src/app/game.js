@@ -19,11 +19,11 @@ export function Game(myr, sprites, overlay) {
     let _hiddenEditor = null;
 
     const update = timeStep => {
-        if(_world)
-            _world.update(timeStep);
-
-        if(_editor)
+        if (_editor)
             _editor.update(timeStep);
+
+        if (_world)
+            _world.update(timeStep);
     };
 
     const render = () => {
