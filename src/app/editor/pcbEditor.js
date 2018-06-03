@@ -88,6 +88,8 @@ export function PcbEditor(myr, sprites, width, height) {
     let _drawY;
     let _cursorX = -1;
     let _cursorY = -1;
+    let _mouseX = -1;
+    let _mouseY = -1;
     let _cursorPoint = null;
     let _cursorExtendable = false;
     let _cursorDragMode = DRAG_MODE_NONE;
@@ -99,8 +101,8 @@ export function PcbEditor(myr, sprites, width, height) {
         if(_renderer)
             _renderer.revalidate();
         
-        _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.POINT_SIZE) * 0.5);
-        _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.POINT_SIZE) * 0.5);
+        _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.PIXELS_PER_POINT) * 0.5);
+        _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.PIXELS_PER_POINT) * 0.5);
     };
 
     const undoPush = () => {
@@ -139,6 +141,16 @@ export function PcbEditor(myr, sprites, width, height) {
             case EDIT_MODE_DELETE:
                 return x >= 0 && y >= 0 && _pcb.getPoint(x, y);
         }
+    };
+
+    const updateCursor = () => {
+        const oldX = _cursorX;
+        const oldY = _cursorY;
+
+        _cursorX = Math.floor((_mouseX / SCALE - _drawX) / Pcb.PIXELS_PER_POINT);
+        _cursorY = Math.floor((_mouseY / SCALE - _drawY) / Pcb.PIXELS_PER_POINT);
+
+        return _cursorX !== oldX || _cursorY !== oldY;
     };
 
     const moveCursor = () => {
@@ -285,6 +297,7 @@ export function PcbEditor(myr, sprites, width, height) {
             _pcb.extend(cell.x - xMin, cell.y - yMin);
 
         revalidate();
+        updateCursor();
         moveCursor();
     };
 
@@ -297,6 +310,7 @@ export function PcbEditor(myr, sprites, width, height) {
         _pcb.pack();
 
         revalidate();
+        updateCursor();
         moveCursor();
     };
 
@@ -325,13 +339,13 @@ export function PcbEditor(myr, sprites, width, height) {
         switch(_cursorDragMode) {
             case DRAG_MODE_NONE:
                 if (_cursorPoint)
-                    SPRITE_HOVER_POINT.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                    SPRITE_HOVER_POINT.draw(_cursorX * Pcb.PIXELS_PER_POINT, _cursorY * Pcb.PIXELS_PER_POINT);
                 else if (_cursorExtendable)
-                    SPRITE_HOVER_EXTEND.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                    SPRITE_HOVER_EXTEND.draw(_cursorX * Pcb.PIXELS_PER_POINT, _cursorY * Pcb.PIXELS_PER_POINT);
                 break;
             case DRAG_MODE_AREA:
                 for(const cell of _cursorDragCells)
-                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.POINT_SIZE, cell.y * Pcb.POINT_SIZE);
+                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
                 break;
         }
     };
@@ -340,11 +354,11 @@ export function PcbEditor(myr, sprites, width, height) {
         switch(_cursorDragMode) {
             case DRAG_MODE_NONE:
                 if (_cursorPoint)
-                    SPRITE_HOVER_DELETE.draw(_cursorX * Pcb.POINT_SIZE, _cursorY * Pcb.POINT_SIZE);
+                    SPRITE_HOVER_DELETE.draw(_cursorX * Pcb.PIXELS_PER_POINT, _cursorY * Pcb.PIXELS_PER_POINT);
                 break;
             case DRAG_MODE_AREA:
                 for (const cell of _cursorDragCells)
-                    SPRITE_HOVER_DELETE.draw(cell.x * Pcb.POINT_SIZE, cell.y * Pcb.POINT_SIZE);
+                    SPRITE_HOVER_DELETE.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
                 break;
         }
     };
@@ -401,19 +415,15 @@ export function PcbEditor(myr, sprites, width, height) {
 
     /**
      * Press the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMousePress = (x, y) => {
+    this.onMousePress = () => {
         startDrag();
     };
 
     /**
      * Release the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseRelease = (x, y) => {
+    this.onMouseRelease = () => {
         stopDrag();
     };
 
@@ -423,13 +433,10 @@ export function PcbEditor(myr, sprites, width, height) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        const oldX = _cursorX;
-        const oldY = _cursorY;
+        _mouseX = x;
+        _mouseY = y;
 
-        _cursorX = Math.floor((x / SCALE - _drawX) / Pcb.POINT_SIZE);
-        _cursorY = Math.floor((y / SCALE - _drawY) / Pcb.POINT_SIZE);
-
-        if(_cursorX !== oldX || _cursorY !== oldY)
+        if (updateCursor())
             moveCursor();
     };
 

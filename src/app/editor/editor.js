@@ -25,6 +25,20 @@ export function Editor(myr, sprites, overlay, width, height) {
     };
 
     /**
+     * Hide the editor
+     */
+    this.hide = () => {
+        _library.hide();
+    };
+
+    /**
+     * Show the editor.
+     */
+    this.show = () => {
+        _library.show();
+    };
+
+    /**
      * Update the state of the editor.
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
@@ -41,20 +55,16 @@ export function Editor(myr, sprites, overlay, width, height) {
 
     /**
      * Press the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMousePress = (x, y) => {
-        _pcbEditor.onMousePress(x -_library.getWidth(), y);
+    this.onMousePress = () => {
+        _pcbEditor.onMousePress();
     };
 
     /**
      * Release the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseRelease = (x, y) => {
-        _pcbEditor.onMouseRelease(x - _library.getWidth(), y);
+    this.onMouseRelease = () => {
+        _pcbEditor.onMouseRelease();
     };
 
     /**
