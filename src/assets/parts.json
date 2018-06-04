@@ -1,6 +1,6 @@
 {
   "Display": {
-    "Light": {
+    "LED": {
       "label": "Light Emitting Diode",
       "description": "Emits a small amount of light when receiving a signal.",
       "sprite": "led"
