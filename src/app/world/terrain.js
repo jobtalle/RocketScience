@@ -1,5 +1,4 @@
 import {Pcb} from "../pcb/pcb";
-import * as Matter from "matter-js";
 
 /**
  * An environment to place bots in.
@@ -20,15 +19,7 @@ export function Terrain(myr, width) {
      * @returns {Object} A matter-js physics body.
      */
     this.getBody = () => {
-        const vertices = [];
-
-        for (let i = 0; i < _heights.length; ++i)
-            vertices.push(Matter.Vector.create(i * Terrain.PIXELS_PER_SEGMENT, _heights[i]));
-
-        return Matter.Bodies.fromVertices(0, 0, [vertices],
-            {
-                isStatic: true
-            });
+        return null;
     };
 
     /**

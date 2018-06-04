@@ -1,6 +1,5 @@
 import {Terrain} from "./terrain";
 import {View} from "./view";
-import * as Matter from "matter-js";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -13,7 +12,7 @@ import * as Matter from "matter-js";
 export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
 
-    const _physics = Matter.Engine.create();
+    const _physics = null;
     const _objects = [];
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
@@ -22,7 +21,6 @@ export function World(myr, sprites, width, height) {
     let _paused = false;
 
     const initializePhysics = () => {
-        const terrain = _terrain.getBody();
 
     };
 
@@ -90,8 +88,8 @@ export function World(myr, sprites, width, height) {
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        if (!_paused)
-            Matter.Engine.update(_physics, 1 / 60);
+        //if (!_paused)
+        //    Matter.Engine.update(_physics, 1 / 60);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].update(timeStep);
