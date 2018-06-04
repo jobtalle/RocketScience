@@ -1,11 +1,12 @@
 #library {
+    position: absolute;
     height: 100%;
     user-select: none;
     background-color: #dee5ef;
 }
 
 #library .title {
-    padding: 0.2em;
+    padding: 0.2vh;
     background-color: #6f747c;
     color: white;
     font-weight: bold;
@@ -13,8 +14,9 @@
 }
 
 #library .part-list {
-    padding-left: 1em;
-    color: black;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding: 1vh;
 }
 
 #library .part-list.closed {
@@ -22,20 +24,55 @@
 }
 
 #library .part-list .part {
-    display: inline-flex;
-    overflow: hidden;
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    background-color: white;
+    border-radius: 1vh;
+    box-shadow: 0 0.2vh 0.1vh black;
 }
 
 #library .part-list .part img{
-    image-rendering: pixelated;
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 #library .part-list .part.selected {
-    color: white;
-    box-shadow: 0 0.1em 0.5em black;
+    animation: icon-selected;
+    animation-duration: 1s;
+    box-shadow: 0 0.5vh 0.2vh black;
+}
+
+#info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 20%;
+
+    border: 1px solid black;
+    border-radius: 0.5vh;
+    background-color: #f5f5f5;
+}
+
+#info .title {
+    padding: 1vh;
+    text-align: center;
+
+    font-size: 2.5vh;
+    color: black;
+    background-color: transparent;
 }
 
 #info .description {
+    padding-left: 2vh;
+    padding-right: 2vh;
+
     font-style: italic;
-    font-size: small;
+    font-size: 2vh;
+}
+
+#info .title:empty:after {
+    content: "Please select a part!";
 }

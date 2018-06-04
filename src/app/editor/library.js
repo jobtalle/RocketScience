@@ -16,7 +16,9 @@ export function Library(sprites, editor, overlay, width) {
           CLASS_PART = "part",
           CLASS_DESCRIPTION = "description",
           CLASS_SELECTED = "selected",
-          CLASS_CLOSED = "closed";
+          CLASS_CLOSED = "closed",
+          DIR_ICONS = "icons",
+          EXT_ICONS = "svg";
 
     let _parts = require('../../assets/parts.json');
     let _container = null;
@@ -37,20 +39,7 @@ export function Library(sprites, editor, overlay, width) {
         };
 
         const image = new Image();
-        image.onload = () => {
-            const sprite = sprites.getSprite(part);
-            const left = sprite.getUvLeft() * image.width;
-            const top = sprite.getUvTop() * image.height;
-            const width = sprite.getUvWidth() * image.width;
-            const height = sprite.getUvHeight() * image.height;
-
-            image.style.marginLeft = -left + "px";
-            image.style.marginTop = -top + "px";
-            partElement.style.width = width + "px";
-            partElement.style.height = height + "px";
-        };
-
-        image.src = "atlas.png";
+        image.src = DIR_ICONS + '/' + part + '.' + EXT_ICONS;
 
         partElement.appendChild(image);
         return partElement;
