@@ -1,4 +1,4 @@
-var Box2D = function(Box2D) {
+export var Box2D = function(Box2D) {
   Box2D = Box2D || {};
   var Module = Box2D;
 
