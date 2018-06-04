@@ -7,10 +7,9 @@
   "license": "UNLICENCED",
   "author": "Job Talle, Luc van den Brand",
   "scripts": {
-    "copy-assets": "cp -r src/assets/icons dist/icons/",
-    "pack-dev": "npm run copy-assets && webpack --mode development",
-    "pack-prod": "npm run copy-assets && webpack --mode production",
-    "pack-sprites": "aseprite -b src/assets/sprites/*.aseprite --data src/assets/atlas.json --sheet dist/atlas.png --sheet-pack --filename-format {title}_{frame}",
+    "prepare-assets": "python prepare-assets.py",
+    "pack-dev": "webpack --mode development",
+    "pack-prod": "webpack --mode production",
     "doc": "esdoc",
     "test": "ava **/*.test.js"
   },
