@@ -21,6 +21,11 @@ export function World(myr, sprites, width, height) {
 
     let _paused = false;
 
+    const initializePhysics = () => {
+        const terrain = _terrain.getBody();
+
+    };
+
     /**
      * Add a new object to the world.
      * @param {Object} object The object to add.
@@ -110,4 +115,6 @@ export function World(myr, sprites, width, height) {
     };
 
     _surface.setClearColor(COLOR_CLEAR);
+
+    initializePhysics();
 }

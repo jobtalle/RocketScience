@@ -1,4 +1,5 @@
 import {Pcb} from "../pcb/pcb";
+import * as Matter from "matter-js";
 
 /**
  * An environment to place bots in.
@@ -8,8 +9,27 @@ import {Pcb} from "../pcb/pcb";
  */
 export function Terrain(myr, width) {
     const AIR_HEIGHT = 100;
+    const WATER_DEPTH = 200;
+    const COLOR_WATER_TOP = new myr.Color(0.3, 0.3, 1);
+    const COLOR_WATER_BOTTOM = new myr.Color(1, 1, 1, 0);
 
-    const _heights = new Array(width * Terrain.SEGMENTS_PER_METER);
+    const _heights = new Array(width * Terrain.SEGMENTS_PER_METER + 1);
+
+    /**
+     * Make a physics body for this terrain.
+     * @returns {Object} A matter-js physics body.
+     */
+    this.getBody = () => {
+        const vertices = [];
+
+        for (let i = 0; i < _heights.length; ++i)
+            vertices.push(Matter.Vector.create(i * Terrain.PIXELS_PER_SEGMENT, _heights[i]));
+
+        return Matter.Bodies.fromVertices(0, 0, [vertices],
+            {
+                isStatic: true
+            });
+    };
 
     /**
      * Returns the width in pixels.
@@ -19,7 +39,7 @@ export function Terrain(myr, width) {
 
     /**
      * Returns the height in pixels.
-     * @returns {number} The height in pixels.
+     * @returns {Number} The height in pixels.
      */
     this.getHeight = () => AIR_HEIGHT;
 
@@ -31,6 +51,14 @@ export function Terrain(myr, width) {
             myr.primitives.drawLine(myr.Color.BLACK,
                 (i * Terrain.PIXELS_PER_SEGMENT), _heights[i],
                 (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1]);
+
+        myr.primitives.fillRectangleGradient(
+            COLOR_WATER_TOP,
+            COLOR_WATER_TOP,
+            COLOR_WATER_BOTTOM,
+            COLOR_WATER_BOTTOM,
+            0, 0,
+            this.getWidth(), WATER_DEPTH);
     };
 
     for (let i = 0; i < _heights.length; ++i)
