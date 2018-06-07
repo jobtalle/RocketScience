@@ -17,6 +17,7 @@ export function Pcb(myr, sprites) {
     let _xOrigin = 0;
     let _yOrigin = 0;
     let _mass = 1;
+    let _pointCount = 0;
 
     const trimRowsTop = () => {
         let empty = true;
@@ -102,6 +103,12 @@ export function Pcb(myr, sprites) {
     this.getPoint = (x, y) => y < _points.length && x < _points[y].length?_points[y][x]:null;
 
     /**
+     * Get the number of points in this PCB.
+     * @returns {Number} The number of points.
+     */
+    this.getPointCount = () => _pointCount;
+
+    /**
      * Get the width of this Pcb in points.
      * @returns {Number} The width.
      */
@@ -166,6 +173,8 @@ export function Pcb(myr, sprites) {
 
         if(x >= _width)
             _width = x + 1;
+
+        ++_pointCount;
     };
 
     /**
@@ -176,6 +185,7 @@ export function Pcb(myr, sprites) {
      */
     this.erase = (x, y) => {
         _points[y][x] = null;
+        --_pointCount;
     };
 
     /**

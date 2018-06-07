@@ -192,6 +192,12 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const dragPreventSplit = (left, top, right, bottom) => {
+        if (_cursorDragCells.length === _pcb.getPointCount()) {
+            _cursorDragCells.splice(0, _cursorDragCells.length);
+
+            return;
+        }
+
         const groups = [];
 
         for (let y = 0; y < _pcb.getHeight(); ++y) for (let x = 0; x < _pcb.getWidth(); ++x) {
@@ -302,9 +308,12 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const dragCellsErase = () => {
+        if (_cursorDragCells.length === _pcb.getPointCount())
+            return;
+
         undoPush();
 
-        for(const cell of _cursorDragCells)
+        for (const cell of _cursorDragCells)
             _pcb.erase(cell.x, cell.y);
 
         _pcb.pack();
