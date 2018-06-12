@@ -14,15 +14,16 @@ export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
 
     const _physics = new Box2D();
+    const _world = new _physics.b2World(new _physics.b2Vec2(0, 0));
     const _objects = [];
-    const _terrain = new Terrain(myr, 100);
+    const _terrain = new Terrain(myr, _physics, 100);
     const _surface = new myr.Surface(width, height);
     const _view = new View(myr, _terrain.getWidth(), _terrain.getHeight(), width, height);
 
     let _paused = false;
 
     const initializePhysics = () => {
-
+        _terrain.makeBody(_world);
     };
 
     /**

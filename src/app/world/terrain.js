@@ -3,10 +3,11 @@ import {Pcb} from "../pcb/pcb";
 /**
  * An environment to place bots in.
  * @param {Object} myr A Myriad instance.
+ * @param {Object} physics A Box2D physics engine instance.
  * @param {Number} width The width in meters.
  * @constructor
  */
-export function Terrain(myr, width) {
+export function Terrain(myr, physics, width) {
     const AIR_HEIGHT = 100;
     const WATER_DEPTH = 200;
     const COLOR_WATER_TOP = new myr.Color(0.3, 0.3, 1);
@@ -16,10 +17,10 @@ export function Terrain(myr, width) {
 
     /**
      * Make a physics body for this terrain.
-     * @returns {Object} A matter-js physics body.
+     * @param {Object} world A physics world.
      */
-    this.getBody = () => {
-        return null;
+    this.makeBody = world => {
+        world.CreateBody(new physics.b2BodyDef());
     };
 
     /**
