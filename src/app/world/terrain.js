@@ -3,11 +3,10 @@ import {Pcb} from "../pcb/pcb";
 /**
  * An environment to place bots in.
  * @param {Object} myr A Myriad instance.
- * @param {Object} physics A Box2D physics engine instance.
  * @param {Number} width The width in meters.
  * @constructor
  */
-export function Terrain(myr, physics, width) {
+export function Terrain(myr, width) {
     const AIR_HEIGHT = 100;
     const WATER_DEPTH = 200;
     const COLOR_WATER_TOP = new myr.Color(0.3, 0.3, 1);
@@ -15,39 +14,12 @@ export function Terrain(myr, physics, width) {
 
     const _heights = new Array(width * Terrain.SEGMENTS_PER_METER + 1);
 
-    let _body = null;
-    let _rigidBody = null;
-
     /**
      * Make a physics body for this terrain.
-     * @param {Object} world A physics world.
+     * @param {Object} physics A physics instance.
      */
-    this.makeBody = world => {
-        _body = world.CreateBody(new physics.b2BodyDef());
-
-        const buffer = physics.allocate(_heights.length * 8, 'float', physics.ALLOC_STACK);
-
-        for (let i = 0; i < _heights.length; ++i) {
-            physics.setValue(buffer + (i * 8), i / Terrain.SEGMENTS_PER_METER, 'float');
-            physics.setValue(buffer + (i * 8) + 4, _heights[i], 'float');
-        }
-
-        const shape = new physics.b2ChainShape();
-
-        shape.CreateChain(physics.wrapPointer(buffer, physics.b2Vec2), _heights.length);
-        _body.CreateFixture(shape, 0);
-
-        {
-            const shape = new physics.b2PolygonShape();
-            shape.SetAsBox(5, 5);
-
-            let body = new physics.b2BodyDef();
-            body.set_type(physics.b2_dynamicBody);
-            body.set_position(new physics.b2Vec2(_heights.length / 4 + 8, -50));
-
-            _rigidBody = world.CreateBody(body);
-            _rigidBody.CreateFixture(shape, 5.0);
-        }
+    this.makeTerrain = physics => {
+        physics.setTerrain(_heights, 1 / Terrain.SEGMENTS_PER_METER);
     };
 
     /**
@@ -78,15 +50,6 @@ export function Terrain(myr, physics, width) {
             COLOR_WATER_BOTTOM,
             0, 0,
             this.getWidth(), WATER_DEPTH);
-
-        myr.push();
-        myr.scale(Terrain.PIXELS_PER_METER, Terrain.PIXELS_PER_METER);
-        myr.translate(_rigidBody.GetPosition().get_x(), _rigidBody.GetPosition().get_y());
-        myr.rotate(-_rigidBody.GetAngle());
-
-        myr.primitives.drawRectangle(myr.Color.BLUE, -5, -5, 10, 10);
-
-        myr.pop();
     };
 
     for (let i = 0; i < _heights.length; ++i)

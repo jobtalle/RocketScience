@@ -1,6 +1,6 @@
 import {Terrain} from "./terrain";
 import {View} from "./view";
-import {Box2D} from "../../lib/box2d";
+import {Physics} from "./physics";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -13,20 +13,14 @@ import {Box2D} from "../../lib/box2d";
 export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
     const GRAVITY = 9.81;
-    const PHYSICS_ITERATIONS = 10;
 
-    const _physics = new Box2D();
-    const _world = new _physics.b2World(new _physics.b2Vec2(0, GRAVITY), true);
     const _objects = [];
-    const _terrain = new Terrain(myr, _physics, 100);
+    const _physics = new Physics(GRAVITY);
+    const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
     const _view = new View(myr, _terrain.getWidth(), _terrain.getHeight(), width, height);
 
     let _paused = false;
-
-    const initializePhysics = () => {
-        _terrain.makeBody(_world);
-    };
 
     /**
      * Add a new object to the world.
@@ -93,7 +87,7 @@ export function World(myr, sprites, width, height) {
      */
     this.update = timeStep => {
         if (!_paused)
-            _world.Step(1 / 60, PHYSICS_ITERATIONS, PHYSICS_ITERATIONS);
+            _physics.update(timeStep);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].update(timeStep);
@@ -105,6 +99,7 @@ export function World(myr, sprites, width, height) {
         myr.transform(_view.getTransform());
 
         _terrain.draw();
+        _physics.draw(myr);
 
         myr.pop();
     };
@@ -117,6 +112,5 @@ export function World(myr, sprites, width, height) {
     };
 
     _surface.setClearColor(COLOR_CLEAR);
-
-    initializePhysics();
+    _terrain.makeTerrain(_physics);
 }
