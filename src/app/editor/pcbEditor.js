@@ -1,3 +1,4 @@
+import {Terrain} from "./../world/terrain";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
 
@@ -8,9 +9,10 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
  * @param {Object} world A world instance to interact with.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
+ * @param {Number} x The X position of the editor view in pixels.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, width, height) {
+export function PcbEditor(myr, sprites, world, width, height, x) {
     const Cell = function(x, y) {
         this.x = x;
         this.y = y;
@@ -80,17 +82,18 @@ export function PcbEditor(myr, sprites, world, width, height) {
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
-    const SCALE = 4;
+    const SCALE_DEFAULT = 4;
 
     const _undoStack = [];
     const _redoStack = [];
     const _surface = new myr.Surface(
-        Math.ceil(width / SCALE),
-        Math.ceil(height / SCALE));
+        Math.ceil(width / SCALE_DEFAULT),
+        Math.ceil(height / SCALE_DEFAULT));
 
     let _pcb = null;
     let _pcbX = 0;
     let _pcbY = 0;
+    let _scale = SCALE_DEFAULT;
     let _renderer = null;
     let _editMode = EDIT_MODE_SELECT;
     let _drawX;
@@ -107,7 +110,12 @@ export function PcbEditor(myr, sprites, world, width, height) {
     let _cursorDragY;
 
     const matchWorldPosition = () => {
-        world.focus(_pcbX, _pcbY, 1);
+        world.focus(
+            _pcbX - x * Terrain.METERS_PER_PIXEL * 0.5 / _scale +
+            _pcb.getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
+            _pcbY +
+            _pcb.getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
+            _scale);
     };
 
     const revalidate = () => {
@@ -162,8 +170,8 @@ export function PcbEditor(myr, sprites, world, width, height) {
         const oldX = _cursorX;
         const oldY = _cursorY;
 
-        _cursorX = Math.floor((_mouseX / SCALE - _drawX) / Pcb.PIXELS_PER_POINT);
-        _cursorY = Math.floor((_mouseY / SCALE - _drawY) / Pcb.PIXELS_PER_POINT);
+        _cursorX = Math.floor((_mouseX / _scale - _drawX) / Pcb.PIXELS_PER_POINT);
+        _cursorY = Math.floor((_mouseY / _scale - _drawY) / Pcb.PIXELS_PER_POINT);
 
         return _cursorX !== oldX || _cursorY !== oldY;
     };
@@ -416,7 +424,7 @@ export function PcbEditor(myr, sprites, world, width, height) {
      * Draw the pcb editor.
      */
     this.draw = x => {
-        _surface.drawScaled(x, 0, SCALE, SCALE);
+        _surface.drawScaled(x, 0, _scale, _scale);
     };
 
     /**

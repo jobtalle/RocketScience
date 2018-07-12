@@ -14,7 +14,13 @@ import {Library} from "./library";
 export function Editor(myr, sprites, overlay, world, width, height) {
     const EDITOR_WIDTH = 0.7;
 
-    const _pcbEditor = new PcbEditor(myr, sprites, world, Math.floor(width * EDITOR_WIDTH), height);
+    const _pcbEditor = new PcbEditor(
+        myr,
+        sprites,
+        world,
+        Math.floor(width * EDITOR_WIDTH),
+        height,
+        width - Math.floor(width * EDITOR_WIDTH));
     const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
 
     /**

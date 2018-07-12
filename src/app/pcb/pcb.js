@@ -226,4 +226,3 @@ export function Pcb(myr, sprites) {
 }
 
 Pcb.PIXELS_PER_POINT = 6;
-Pcb.METERS_PER_POINT = 0.2;
