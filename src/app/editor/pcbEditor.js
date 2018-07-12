@@ -15,6 +15,12 @@ export function PcbEditor(myr, sprites, width, height) {
         this.y = y;
     };
 
+    const State = function(pcb, x, y) {
+        this.getPcb = () => pcb;
+        this.getX = () => x;
+        this.getY = () => y;
+    };
+
     const CellGroup = function(first) {
         this.cells = [first];
         this.left = first.x - 1;
@@ -82,6 +88,8 @@ export function PcbEditor(myr, sprites, width, height) {
         Math.ceil(height / SCALE));
 
     let _pcb = null;
+    let _pcbX = 0;
+    let _pcbY = 0;
     let _renderer = null;
     let _editMode = EDIT_MODE_SELECT;
     let _drawX;
@@ -106,7 +114,7 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const undoPush = () => {
-        _undoStack.push(_pcb.copy());
+        _undoStack.push(new State(_pcb.copy(), _pcbX, _pcbY));
 
         if (_undoStack > UNDO_COUNT)
             _undoStack.splice(0, 1);
@@ -115,22 +123,22 @@ export function PcbEditor(myr, sprites, width, height) {
     };
 
     const undoPop = () => {
-        const newPcb = _undoStack.pop();
+        const newState = _undoStack.pop();
 
-        if (newPcb) {
-            _redoStack.push(_pcb.copy());
+        if (newState) {
+            _redoStack.push(new State(_pcb.copy(), _pcbX, _pcbY));
 
-            this.edit(newPcb);
+            this.edit(newState.getPcb(), newState.getX(), newState.getY());
         }
     };
 
     const redoPop = () => {
-        const newPcb = _redoStack.pop();
+        const newState = _redoStack.pop();
 
-        if (newPcb) {
-            _undoStack.push(_pcb.copy());
+        if (newState) {
+            _undoStack.push(new State(_pcb.copy(), _pcbX, _pcbY));
 
-            this.edit(newPcb);
+            this.edit(newState.getPcb(), newState.getX(), newState.getY());
         }
     };
 
@@ -407,9 +415,13 @@ export function PcbEditor(myr, sprites, width, height) {
     /**
      * Start editing a pcb.
      * @param {Object} pcb A pcb instance to edit.
+     * @param {Number} x The X position in the world in meters.
+     * @param {Number} y The Y position in the world in meters.
      */
-    this.edit = pcb => {
+    this.edit = (pcb, x, y) => {
         _pcb = pcb;
+        _pcbX = x;
+        _pcbY = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
 
         revalidate();

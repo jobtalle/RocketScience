@@ -49,7 +49,7 @@ export function Game(myr, sprites, overlay) {
         const pcb = new Pcb(myr, sprites);
         pcb.initialize();
 
-        _editor.edit(pcb);
+        _editor.edit(pcb, 30, 0);
         _editor.show();
     };
 

@@ -19,9 +19,11 @@ export function Editor(myr, sprites, overlay, width, height) {
     /**
      * Start editing a pcb.
      * @param {Object} pcb A pcb instance to edit.
+     * @param {Number} x The X position in the world in meters.
+     * @param {Number} y The Y position in the world in meters.
      */
-    this.edit = pcb => {
-        _pcbEditor.edit(pcb);
+    this.edit = (pcb, x, y) => {
+        _pcbEditor.edit(pcb, x, y);
     };
 
     /**
