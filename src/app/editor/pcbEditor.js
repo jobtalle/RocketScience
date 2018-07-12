@@ -5,11 +5,12 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
  * @param {Object} myr An instance of the Myriad engine.
  * @param {Object} sprites All sprites.
+ * @param {Object} world A world instance to interact with.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @constructor
  */
-export function PcbEditor(myr, sprites, width, height) {
+export function PcbEditor(myr, sprites, world, width, height) {
     const Cell = function(x, y) {
         this.x = x;
         this.y = y;
@@ -105,12 +106,18 @@ export function PcbEditor(myr, sprites, width, height) {
     let _cursorDragX;
     let _cursorDragY;
 
+    const matchWorldPosition = () => {
+        world.focus(_pcbX, _pcbY, 1);
+    };
+
     const revalidate = () => {
         if(_renderer)
             _renderer.revalidate();
         
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.PIXELS_PER_POINT) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.PIXELS_PER_POINT) * 0.5);
+
+        matchWorldPosition();
     };
 
     const undoPush = () => {
@@ -410,6 +417,13 @@ export function PcbEditor(myr, sprites, width, height) {
      */
     this.draw = x => {
         _surface.drawScaled(x, 0, SCALE, SCALE);
+    };
+
+    /**
+     * Show the pcb editor.
+     */
+    this.show = () => {
+        revalidate();
     };
 
     /**

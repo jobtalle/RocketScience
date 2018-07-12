@@ -107,5 +107,22 @@ export function View(myr, width, height, viewWidth, viewHeight) {
         _mouseY = y;
     };
 
+    /**
+     * Focus the view on a specific point.
+     * @param {Number} x The x position to focus on.
+     * @param {Number} y The y position to focus on.
+     * @param {Number} zoom The zoom factor.
+     */
+    this.focus = (x, y, zoom) => {
+        const zoomPrevious = zoom;
+
+        _shiftX = -x;
+        _shiftY = -y;
+        _zoom = zoom;
+
+        zoomShift(zoomPrevious);
+        updateTransform();
+    };
+
     updateTransform();
 }

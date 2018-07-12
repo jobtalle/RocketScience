@@ -6,14 +6,15 @@ import {Library} from "./library";
  * @param {Object} myr A Myriad instance.
  * @param {Object} sprites All sprites.
  * @param {Object} overlay An overlay element for HTML GUI.
+ * @param {Object} world A world instance to interact with.
  * @param {Number} width The width.
  * @param {Number} height The height.
  * @constructor
  */
-export function Editor(myr, sprites, overlay, width, height) {
+export function Editor(myr, sprites, overlay, world, width, height) {
     const EDITOR_WIDTH = 0.7;
 
-    const _pcbEditor = new PcbEditor(myr, sprites, Math.floor(width * EDITOR_WIDTH), height);
+    const _pcbEditor = new PcbEditor(myr, sprites, world, Math.floor(width * EDITOR_WIDTH), height);
     const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
 
     /**
@@ -37,6 +38,7 @@ export function Editor(myr, sprites, overlay, width, height) {
      * Show the editor.
      */
     this.show = () => {
+        _pcbEditor.show();
         _library.show();
     };
 
