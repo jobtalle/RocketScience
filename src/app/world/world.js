@@ -19,7 +19,7 @@ export function World(myr, sprites, width, height) {
     const _physics = new Physics(GRAVITY);
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    const _view = new View(myr, _terrain.getWidth(), _terrain.getHeight(), width, height);
+    const _view = new View(myr, width, height);
 
     let _paused = false;
 
@@ -129,6 +129,7 @@ export function World(myr, sprites, width, height) {
         _surface.draw(0, 0);
     };
 
+    _view.focus(-_terrain.getWidth() * 0.5, 0, 0.5);
     _surface.setClearColor(COLOR_CLEAR);
     _terrain.makeTerrain(_physics);
 }

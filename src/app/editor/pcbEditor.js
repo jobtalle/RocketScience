@@ -1,6 +1,7 @@
 import {Terrain} from "./../world/terrain";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
+import {View} from "../world/view";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -86,9 +87,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     const _undoStack = [];
     const _redoStack = [];
-    const _surface = new myr.Surface(
-        Math.ceil(width / SCALE_DEFAULT),
-        Math.ceil(height / SCALE_DEFAULT));
+    const _surface = new myr.Surface(width, height);
+    const _view = new View(myr, width, height);
 
     let _rootState = null;
     let _pcb = null;
@@ -125,6 +125,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.PIXELS_PER_POINT) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.PIXELS_PER_POINT) * 0.5);
+
+        _view.focus(_pcb.getWidth() * Pcb.PIXELS_PER_POINT * 0.5, _pcb.getHeight() * Pcb.PIXELS_PER_POINT* 0.5, _scale);
 
         matchWorldPosition();
     };
@@ -425,7 +427,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _surface.clear();
 
         myr.push();
-        myr.translate(_drawX, _drawY);
+        myr.transform(_view.getTransform());
 
         _renderer.draw(0, 0);
 
@@ -445,7 +447,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Draw the pcb editor.
      */
     this.draw = x => {
-        _surface.drawScaled(x, 0, _scale, _scale);
+        _surface.draw(x, 0);
     };
 
     /**

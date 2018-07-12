@@ -1,22 +1,20 @@
 /**
  * A viewport for the world.
  * @param {Object} myr A Myriad instance.
- * @param {Number} width The world width in pixels.
- * @param {Number} height The world height in pixels.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.
  * @constructor
  */
-export function View(myr, width, height, viewWidth, viewHeight) {
+export function View(myr, viewWidth, viewHeight) {
     const ZOOM_MAX = 8;
     const ZOOM_MIN = 0.25;
     const ZOOM_SCALE_FACTOR = 0.25;
 
     let _transform = new myr.Transform();
     let _dragging = false;
-    let _shiftX = -width * 0.5;
+    let _shiftX = 0;
     let _shiftY = 0;
-    let _zoom = 0.5;
+    let _zoom = 1;
     let _mouseX = 0;
     let _mouseY = 0;
 
