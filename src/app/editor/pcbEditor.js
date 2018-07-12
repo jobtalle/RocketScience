@@ -1,3 +1,4 @@
+import {Terrain} from "./../world/terrain";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
 
@@ -5,11 +6,13 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
  * @param {Object} myr An instance of the Myriad engine.
  * @param {Object} sprites All sprites.
+ * @param {Object} world A world instance to interact with.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
+ * @param {Number} x The X position of the editor view in pixels.
  * @constructor
  */
-export function PcbEditor(myr, sprites, width, height) {
+export function PcbEditor(myr, sprites, world, width, height, x) {
     const Cell = function(x, y) {
         this.x = x;
         this.y = y;
@@ -79,17 +82,18 @@ export function PcbEditor(myr, sprites, width, height) {
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
-    const SCALE = 4;
+    const SCALE_DEFAULT = 4;
 
     const _undoStack = [];
     const _redoStack = [];
     const _surface = new myr.Surface(
-        Math.ceil(width / SCALE),
-        Math.ceil(height / SCALE));
+        Math.ceil(width / SCALE_DEFAULT),
+        Math.ceil(height / SCALE_DEFAULT));
 
     let _pcb = null;
     let _pcbX = 0;
     let _pcbY = 0;
+    let _scale = SCALE_DEFAULT;
     let _renderer = null;
     let _editMode = EDIT_MODE_SELECT;
     let _drawX;
@@ -105,12 +109,23 @@ export function PcbEditor(myr, sprites, width, height) {
     let _cursorDragX;
     let _cursorDragY;
 
+    const matchWorldPosition = () => {
+        world.focus(
+            _pcbX - x * Terrain.METERS_PER_PIXEL * 0.5 / _scale +
+            _pcb.getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
+            _pcbY +
+            _pcb.getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
+            _scale);
+    };
+
     const revalidate = () => {
         if(_renderer)
             _renderer.revalidate();
         
         _drawX = Math.floor((_surface.getWidth() - _pcb.getWidth() * Pcb.PIXELS_PER_POINT) * 0.5);
         _drawY = Math.floor((_surface.getHeight() - _pcb.getHeight() * Pcb.PIXELS_PER_POINT) * 0.5);
+
+        matchWorldPosition();
     };
 
     const undoPush = () => {
@@ -155,8 +170,8 @@ export function PcbEditor(myr, sprites, width, height) {
         const oldX = _cursorX;
         const oldY = _cursorY;
 
-        _cursorX = Math.floor((_mouseX / SCALE - _drawX) / Pcb.PIXELS_PER_POINT);
-        _cursorY = Math.floor((_mouseY / SCALE - _drawY) / Pcb.PIXELS_PER_POINT);
+        _cursorX = Math.floor((_mouseX / _scale - _drawX) / Pcb.PIXELS_PER_POINT);
+        _cursorY = Math.floor((_mouseY / _scale - _drawY) / Pcb.PIXELS_PER_POINT);
 
         return _cursorX !== oldX || _cursorY !== oldY;
     };
@@ -289,25 +304,33 @@ export function PcbEditor(myr, sprites, width, height) {
 
         let xMin = 0;
         let yMin = 0;
+        let yMax = _pcb.getHeight() - 1;
+        const lastHeight = yMax;
         const negatives = [];
 
-        for(const cell of _cursorDragCells) {
-            if(cell.x < 0 || cell.y < 0) {
-                if(cell.x < xMin)
+        for (const cell of _cursorDragCells) {
+            if (cell.x < 0 || cell.y < 0) {
+                if (cell.x < xMin)
                     xMin = cell.x;
 
-                if(cell.y < yMin)
+                if (cell.y < yMin)
                     yMin = cell.y;
 
                 negatives.push(cell);
             }
-            else
+            else {
+                if (cell.y > yMax)
+                    yMax = cell.y;
+
                 _pcb.extend(cell.x, cell.y);
+            }
         }
 
+        _pcbX += xMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        _pcbY += (yMin + lastHeight - yMax) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
         _pcb.shift(-xMin, -yMin);
 
-        for(const cell of negatives)
+        for (const cell of negatives)
             _pcb.extend(cell.x - xMin, cell.y - yMin);
 
         revalidate();
@@ -321,10 +344,16 @@ export function PcbEditor(myr, sprites, width, height) {
 
         undoPush();
 
+        const lastWidth = _pcb.getWidth();
+        const lastHeight = _pcb.getHeight();
+
         for (const cell of _cursorDragCells)
             _pcb.erase(cell.x, cell.y);
 
         _pcb.pack();
+
+        _pcbX -= Math.floor((_pcb.getWidth() - lastWidth) * 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        _pcbY -= (_pcb.getHeight() - lastHeight) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
 
         revalidate();
         updateCursor();
@@ -409,7 +438,14 @@ export function PcbEditor(myr, sprites, width, height) {
      * Draw the pcb editor.
      */
     this.draw = x => {
-        _surface.drawScaled(x, 0, SCALE, SCALE);
+        _surface.drawScaled(x, 0, _scale, _scale);
+    };
+
+    /**
+     * Show the pcb editor.
+     */
+    this.show = () => {
+        revalidate();
     };
 
     /**

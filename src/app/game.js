@@ -1,7 +1,8 @@
 import {Menu} from "./menu";
 import {Editor} from "./editor/editor";
 import {World} from "./world/world";
-import {Pcb} from "./pcb/pcb"
+import {Pcb} from "./pcb/pcb";
+import {Terrain} from "./world/terrain";
 
 /**
  * This class contains the game views.
@@ -44,12 +45,12 @@ export function Game(myr, sprites, overlay) {
      */
     this.startCreate = () => {
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
-        _editor = new Editor(myr, sprites, overlay, myr.getWidth(), myr.getHeight());
+        _editor = new Editor(myr, sprites, overlay, _world, myr.getWidth(), myr.getHeight());
 
         const pcb = new Pcb(myr, sprites);
         pcb.initialize();
 
-        _editor.edit(pcb, 30, 0);
+        _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
         _editor.show();
     };
 
