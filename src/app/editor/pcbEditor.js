@@ -344,10 +344,16 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         undoPush();
 
+        const lastWidth = _pcb.getWidth();
+        const lastHeight = _pcb.getHeight();
+
         for (const cell of _cursorDragCells)
             _pcb.erase(cell.x, cell.y);
 
         _pcb.pack();
+
+        _pcbX -= Math.floor((_pcb.getWidth() - lastWidth) * 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        _pcbY -= (_pcb.getHeight() - lastHeight) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
 
         revalidate();
         updateCursor();
