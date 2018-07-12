@@ -1,53 +1,23 @@
+import {PcbRenderer} from "../pcb/pcbRenderer";
+import {Terrain} from "./terrain";
+
 /**
- * A physics object to be simulated.
- * @param {Object} hull The grid of the object.
+ * An object in the world.
+ * @param {Myr} myr Myriad instance.
+ * @param {Sprites} sprites SpriteList.
+ * @param {Physics} physics Physics engine.
+ * @param {Pcb} pcb Circuit to simulate.
+ * @param {Number} x Horizontal coordinate.
+ * @param {Number} y Vertical coordinate.
  * @constructor
  */
-export function WorldObject(myr, hull) {
-    let _position = new myr.Vector(hull.getXOrigin(), hull.getYOrigin());
-    let _velocity = new myr.Vector(0, 0);
+export function WorldObject(myr, sprites, physics, pcb, x, y) {
+    let _physicsObject;
+    const _pcbRenderer = new PcbRenderer(myr, sprites, pcb);
 
-    /**
-     * Return the current position.
-     * @returns {Myr.Vector} Current position.
-     */
-    this.getPosition = () => _position;
-
-    /**
-     * Return the hull of the object.
-     * @returns {Object} The hull.
-     */
-    this.getHull = () => hull;
-
-    /**
-     * Set the current velocity of the object.
-     * @param {Myr.Vector} velocity The current velocity.
-     */
-    this.setVelocity = velocity => {
-       _velocity = velocity;
-    };
-
-    /**
-     * Add a force to the WorldObject.
-     * @param {Myr.Vector} force Force to apply.
-     */
-    this.addForce = force => {
-        _velocity.add(force);
-    };
-
-    /**
-     * Return true if the other object collides.
-     * @param {WorldObject} other Other world object to check against.
-     * @returns {boolean} If the other object overlaps.
-     */
-    this.isColliding = other => {
-        let xDistance = Math.abs(_position.x - other.getPosition().x);
-        let yDistance = Math.abs(_position.y - other.getPosition().y);
-        let otherHull = other.getHull();
-        let width  = hull.getWidth() / 2 + otherHull.getWidth() / 2;
-        let height = hull.getHeight() / 2 + otherHull.getHeight() / 2;
-
-        return xDistance > width || yDistance > height;
+    const generatePhysicsBody = () => {
+        const polygonPoints = [];
+        return physics.createObject(polygonPoints, x, y);
     };
 
     /**
@@ -55,7 +25,18 @@ export function WorldObject(myr, hull) {
      * @param {Number} timeStep The number of milliseconds passed after the previous update.
      */
     this.update = timeStep => {
-        _position.x = _velocity.x * timeStep;
-        _position.y = _velocity.y * timeStep;
+        // TODO: Update pcb.
     };
-};
+
+    /**
+     * Draw the world object in its current state.
+     */
+    this.draw = () => {
+        const x = _physicsObject.getTransform().x * Terrain.PIXELS_PER_METER;
+        const y = _physicsObject.getTransform().y * Terrain.PIXELS_PER_METER;
+        _pcbRenderer.draw(x, y);
+    };
+
+    _physicsObject = generatePhysicsBody();
+    _pcbRenderer.revalidate();
+}

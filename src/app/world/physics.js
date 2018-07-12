@@ -1,5 +1,5 @@
 import {Box2D} from "../../lib/box2d";
-import {Terrain} from "./terrain";
+import {PhysicsObject} from "./physicsObject";
 
 /**
  * An interface for the used physics engine.
@@ -13,7 +13,6 @@ export function Physics(gravity) {
     const _physics = new Box2D();
     const _world = new _physics.b2World(new _physics.b2Vec2(0, gravity), true);
 
-    let _testBody = null;
     let _terrainBody = null;
 
     /**
@@ -43,33 +42,26 @@ export function Physics(gravity) {
         shape.CreateChain(_physics.wrapPointer(buffer, _physics.b2Vec2), heights.length);
 
         _terrainBody.CreateFixture(shape, 0);
-
-        // A test object
-        {
-            const shape = new _physics.b2PolygonShape();
-            shape.SetAsBox(5, 5);
-
-            let body = new _physics.b2BodyDef();
-            body.set_type(_physics.b2_dynamicBody);
-            body.set_position(new _physics.b2Vec2(heights.length / 4 + 8, -50));
-
-            _testBody = _world.CreateBody(body);
-            _testBody.CreateFixture(shape, 5.0);
-        }
     };
 
     /**
-     * Debug drawing.
-     * @param {Object} myr A myr.js instance.
+     * Create a new Physics Object.
+     * @param polygonPoints
+     * @param {Number} x Horizontal position.
+     * @param {Number} y Vertical position.
+     * @return {PhysicsObject} The created physics object.
      */
-    this.draw = myr => {
-        myr.push();
-        myr.scale(Terrain.PIXELS_PER_METER, Terrain.PIXELS_PER_METER);
-        myr.translate(_testBody.GetPosition().get_x(), _testBody.GetPosition().get_y());
-        myr.rotate(-_testBody.GetAngle());
+    this.createObject = (polygonPoints, x, y) => {
+        const shape = new _physics.b2PolygonShape();
+        shape.SetAsBox(5, 5);
 
-        myr.primitives.drawRectangle(myr.Color.BLUE, -5, -5, 10, 10);
+        const bodyDefinition = new _physics.b2BodyDef();
+        bodyDefinition.set_type(_physics.b2_dynamicBody);
+        bodyDefinition.set_position(new _physics.b2Vec2(x, y));
 
-        myr.pop();
-    }
+        const body = _world.CreateBody(bodyDefinition);
+        body.CreateFixture(shape, 5.0);
+
+        return new PhysicsObject(_physics, body);
+    };
 }

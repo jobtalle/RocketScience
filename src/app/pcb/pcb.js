@@ -140,7 +140,7 @@ export function Pcb(myr, sprites) {
 
     /**
      * Returns a deep copy of this pcb.
-     * @returns {Object} A deep copy of this Pcb.
+     * @returns {Pcb} A deep copy of this Pcb.
      */
     this.copy = () => {
         const newPcb = new Pcb(myr, sprites);

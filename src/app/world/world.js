@@ -1,6 +1,7 @@
 import {Terrain} from "./terrain";
 import {View} from "./view";
 import {Physics} from "./physics";
+import {WorldObject} from "./worldObject";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -23,11 +24,13 @@ export function World(myr, sprites, width, height) {
     let _paused = false;
 
     /**
-     * Add a new object to the world.
-     * @param {Object} object The object to add.
+     * Add a new pcb to simulate in the world.
+     * @param {Pcb} pcb The pcb to add.
+     * @param {Number} x The x-position.
+     * @param {Number} y The y-position.
      */
-    this.addObject = object => {
-        _objects.push(object);
+    this.addPcb = (pcb, x, y) => {
+        _objects.push(new WorldObject(myr, sprites, _physics, pcb, x, y));
     };
 
     /**
@@ -99,7 +102,9 @@ export function World(myr, sprites, width, height) {
         myr.transform(_view.getTransform());
 
         _terrain.draw();
-        _physics.draw(myr);
+
+        for (let index = 0; index < _objects.length; index++)
+            _objects[index].draw(myr);
 
         myr.pop();
     };
