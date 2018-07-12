@@ -304,25 +304,33 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         let xMin = 0;
         let yMin = 0;
+        let yMax = _pcb.getHeight() - 1;
+        const lastHeight = yMax;
         const negatives = [];
 
-        for(const cell of _cursorDragCells) {
-            if(cell.x < 0 || cell.y < 0) {
-                if(cell.x < xMin)
+        for (const cell of _cursorDragCells) {
+            if (cell.x < 0 || cell.y < 0) {
+                if (cell.x < xMin)
                     xMin = cell.x;
 
-                if(cell.y < yMin)
+                if (cell.y < yMin)
                     yMin = cell.y;
 
                 negatives.push(cell);
             }
-            else
+            else {
+                if (cell.y > yMax)
+                    yMax = cell.y;
+
                 _pcb.extend(cell.x, cell.y);
+            }
         }
 
+        _pcbX += xMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        _pcbY += (yMin + lastHeight - yMax) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
         _pcb.shift(-xMin, -yMin);
 
-        for(const cell of negatives)
+        for (const cell of negatives)
             _pcb.extend(cell.x - xMin, cell.y - yMin);
 
         revalidate();
