@@ -90,6 +90,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         Math.ceil(width / SCALE_DEFAULT),
         Math.ceil(height / SCALE_DEFAULT));
 
+    let _rootState = null;
     let _pcb = null;
     let _pcbX = 0;
     let _pcbY = 0;
@@ -344,7 +345,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         undoPush();
 
-        const lastWidth = _pcb.getWidth();
+        let lastWidth = _pcb.getWidth();
         const lastHeight = _pcb.getHeight();
 
         for (const cell of _cursorDragCells)
@@ -352,7 +353,13 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         _pcb.pack();
 
-        _pcbX -= Math.floor((_pcb.getWidth() - lastWidth) * 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        while (lastWidth-- - _pcb.getWidth() > 0) {
+            if (_pcbX >= _rootState.getX())
+                _pcbX -= Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+            else
+                _pcbX += Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        }
+
         _pcbY -= (_pcb.getHeight() - lastHeight) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
 
         revalidate();
@@ -455,6 +462,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Number} y The Y position in the world in meters.
      */
     this.edit = (pcb, x, y) => {
+        _rootState = new State(pcb, x, y);
+
         _pcb = pcb;
         _pcbX = x;
         _pcbY = y;
