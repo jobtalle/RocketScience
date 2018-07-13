@@ -105,9 +105,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorDragY;
 
     const matchWorldPosition = () => {
-        world.getView().set(
-            _view.getShiftX() - _pcbX * Terrain.PIXELS_PER_METER + x * 0.5 / _view.getZoom(),
-            _view.getShiftY() - _pcbY * Terrain.PIXELS_PER_METER,
+        world.getView().focus(
+            _view.getFocusX() + _pcbX * Terrain.PIXELS_PER_METER - x * 0.5 / _view.getZoom(),
+            _view.getFocusY() + _pcbY * Terrain.PIXELS_PER_METER,
             _view.getZoom());
     };
 
