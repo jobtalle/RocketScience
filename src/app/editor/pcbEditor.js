@@ -83,6 +83,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
+    const ZOOM_DEFAULT = 4;
 
     const _undoStack = [];
     const _redoStack = [];
@@ -473,6 +474,10 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _pcbX = x;
         _pcbY = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
+        _view.focus(
+            pcb.getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
+            pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
+            ZOOM_DEFAULT);
 
         matchWorldPosition();
         revalidate();
