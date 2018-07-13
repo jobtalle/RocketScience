@@ -86,9 +86,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     const _undoStack = [];
     const _redoStack = [];
-    const _surface = new myr.Surface(width, height);
     const _view = new View(myr, width, height);
     const _cursor = new myr.Vector(-1, -1);
+    const _cursorDrag = new myr.Vector(0, 0);
     const _mouse = new myr.Vector(-1, -1);
 
     let _rootState = null;
@@ -101,8 +101,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorExtendable = false;
     let _cursorDragMode = DRAG_MODE_NONE;
     let _cursorDragCells = [];
-    let _cursorDragX;
-    let _cursorDragY;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -188,10 +186,10 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         switch(_cursorDragMode) {
             case DRAG_MODE_AREA:
-                const left = Math.min(_cursor.x, _cursorDragX);
-                const right = Math.max(_cursor.x, _cursorDragX);
-                const top = Math.min(_cursor.y, _cursorDragY);
-                const bottom = Math.max(_cursor.y, _cursorDragY);
+                const left = Math.min(_cursor.x, _cursorDrag.x);
+                const right = Math.max(_cursor.x, _cursorDrag.x);
+                const top = Math.min(_cursor.y, _cursorDrag.y);
+                const bottom = Math.max(_cursor.y, _cursorDrag.y);
 
                 _cursorDragCells.splice(0, _cursorDragCells.length);
 
@@ -274,8 +272,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             case EDIT_MODE_SELECT:
                 if(!_cursorPoint && _cursorExtendable) {
                     _cursorDragMode = DRAG_MODE_AREA;
-                    _cursorDragX = _cursor.x;
-                    _cursorDragY = _cursor.y;
+                    _cursorDrag.x = _cursor.x;
+                    _cursorDrag.y = _cursor.y;
 
                     moveCursor();
 
@@ -285,8 +283,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             case EDIT_MODE_DELETE:
                 if(_cursorPoint) {
                     _cursorDragMode = DRAG_MODE_AREA;
-                    _cursorDragX = _cursor.x;
-                    _cursorDragY = _cursor.y;
+                    _cursorDrag.x = _cursor.x;
+                    _cursorDrag.y = _cursor.y;
 
                     moveCursor();
 
@@ -421,10 +419,15 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _surface.bind();
-        _surface.clear();
 
+    };
+
+    /**
+     * Draw the pcb editor.
+     */
+    this.draw = x => {
         myr.push();
+        myr.translate(x, 0);
         myr.transform(_view.getTransform());
 
         _renderer.draw(0, 0);
@@ -439,13 +442,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         }
 
         myr.pop();
-    };
-
-    /**
-     * Draw the pcb editor.
-     */
-    this.draw = x => {
-        _surface.draw(x, 0);
     };
 
     /**
