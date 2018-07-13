@@ -10,7 +10,8 @@ export function View(myr, viewWidth, viewHeight) {
     const ZOOM_MIN = 0.25;
     const ZOOM_SCALE_FACTOR = 0.25;
 
-    let _transform = new myr.Transform();
+    const _transform = new myr.Transform();
+    const _inverse = new myr.Transform();
     let _dragging = false;
     let _shiftX = 0;
     let _shiftY = 0;
@@ -23,6 +24,9 @@ export function View(myr, viewWidth, viewHeight) {
         _transform.translate(viewWidth * 0.5, viewHeight * 0.5);
         _transform.scale(_zoom, _zoom);
         _transform.translate(_shiftX, _shiftY);
+
+        _inverse.set(_transform);
+        _inverse.invert();
     };
 
     const moveView = (x, y) => {
@@ -40,10 +44,16 @@ export function View(myr, viewWidth, viewHeight) {
     };
 
     /**
-     * Return the current transformation this viewport implies.
+     * Return the current transformation this viewport applies.
      * @returns {Myr.Transform} A Myriad transformation.
      */
     this.getTransform = () => _transform;
+
+    /**
+     * Returns the current inverse transformation this viewport applies.
+     * @returns {Myr.Transform} A Myriad transformation.
+     */
+    this.getInverse = () => _inverse;
 
     /**
      * Zoom in.
