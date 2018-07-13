@@ -98,6 +98,9 @@ export function World(myr, sprites, width, height) {
      */
     this.deactivate = () => {
         _view.onMouseRelease();
+
+        while (_objects.length > 0)
+            _objects.pop().free();
     };
 
     /**
@@ -130,6 +133,13 @@ export function World(myr, sprites, width, height) {
      */
     this.draw = () => {
         _surface.draw(0, 0);
+    };
+
+    /**
+     * Free all resources occupied by the world
+     */
+    this.free = () => {
+        this.deactivate();
     };
 
     _view.focus(-_terrain.getWidth() * 0.5, 0, 0.5);

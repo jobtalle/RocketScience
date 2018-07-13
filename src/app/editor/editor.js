@@ -109,4 +109,11 @@ export function Editor(myr, sprites, overlay, world, width, height) {
     this.onKeyDown = (key, control) => {
         _pcbEditor.onKeyDown(key, control);
     };
+
+    /**
+     * Free all resources occupied by this editor.
+     */
+    this.free = () => {
+        _pcbEditor.free();
+    };
 }

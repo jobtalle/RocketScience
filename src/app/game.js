@@ -41,9 +41,26 @@ export function Game(myr, sprites, overlay) {
     };
 
     /**
+     * Stop any running game mode.
+     */
+    this.stop = () => {
+        if (_world) {
+            _world.free();
+            _world = null;
+        }
+
+        if (_editor) {
+            _editor.free();
+            _editor = null;
+        }
+    };
+
+    /**
      * Start free create mode.
      */
     this.startCreate = () => {
+        stop();
+
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
         _editor = new Editor(myr, sprites, overlay, _world, myr.getWidth(), myr.getHeight());
 
@@ -58,7 +75,7 @@ export function Game(myr, sprites, overlay) {
      * Start a challenge.
      */
     this.startChallenge = () => {
-
+        stop();
     };
 
     /**

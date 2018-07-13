@@ -10,9 +10,12 @@ import {Pcb} from "./pcb";
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
 
+    let _initialized = false;
     let _layerPcb = null;
 
     const updateSurfaces = () => {
+        _initialized = true;
+
         _layerPcb = new myr.Surface(
             Pcb.PIXELS_PER_POINT * pcb.getWidth(),
             Pcb.PIXELS_PER_POINT * pcb.getHeight());
@@ -41,5 +44,18 @@ export function PcbRenderer(myr, sprites, pcb) {
      */
     this.revalidate = () => {
         updateSurfaces();
+    };
+
+    /**
+     * Free all resources occupied by this pcb renderer.
+     */
+    this.free = () => {
+        if (!_initialized)
+            return;
+
+        _initialized = false;
+
+        _layerPcb.free();
+        _layerPcb = null;
     };
 }

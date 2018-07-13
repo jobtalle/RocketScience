@@ -468,6 +468,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Number} y The Y position in the world in meters.
      */
     this.edit = (pcb, x, y) => {
+        if (_renderer)
+            _renderer.free();
+
         _rootState = new State(pcb, x, y);
 
         _pcb = pcb;
@@ -569,5 +572,13 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                     redoPop();
                 break;
         }
+    };
+
+    /**
+     * Free all resources occupied by this editor.
+     */
+    this.free = () => {
+        if (_renderer)
+            _renderer.free();
     };
 }
