@@ -83,7 +83,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
-    const SCALE_DEFAULT = 4;
 
     const _undoStack = [];
     const _redoStack = [];
@@ -96,7 +95,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _pcb = null;
     let _pcbX = 0;
     let _pcbY = 0;
-    let _scale = SCALE_DEFAULT;
     let _renderer = null;
     let _editMode = EDIT_MODE_SELECT;
     let _cursorPoint = null;
@@ -107,21 +105,15 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorDragY;
 
     const matchWorldPosition = () => {
-        world.focus(
-            _pcbX - x * Terrain.METERS_PER_PIXEL * 0.5 / _scale +
-            _pcb.getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
-            _pcbY +
-            _pcb.getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL * 0.5,
-            _scale);
+        world.getView().set(
+            _view.getShiftX() - _pcbX * Terrain.PIXELS_PER_METER + x * 0.5 / _view.getZoom(),
+            _view.getShiftY() - _pcbY * Terrain.PIXELS_PER_METER,
+            _view.getZoom());
     };
 
     const revalidate = () => {
         if(_renderer)
             _renderer.revalidate();
-
-        _view.focus(_pcb.getWidth() * Pcb.PIXELS_PER_POINT * 0.5, _pcb.getHeight() * Pcb.PIXELS_PER_POINT* 0.5, _scale);
-
-        matchWorldPosition();
     };
 
     const undoPush = () => {
@@ -341,8 +333,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             _pcb.extend(cell.x - xMin, cell.y - yMin);
 
         revalidate();
-        updateCursor();
+        matchWorldPosition();
         moveCursor();
+        updateCursor();
     };
 
     const dragCellsErase = () => {
@@ -369,8 +362,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _pcbY -= (_pcb.getHeight() - lastHeight) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
 
         revalidate();
-        updateCursor();
+        matchWorldPosition();
         moveCursor();
+        updateCursor();
     };
 
     const stopDrag = () => {
@@ -458,7 +452,14 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Show the pcb editor.
      */
     this.show = () => {
-        revalidate();
+        matchWorldPosition();
+    };
+
+    /**
+     * Hide the pcb editor.
+     */
+    this.hide = () => {
+        _view.onMouseRelease();
     };
 
     /**
@@ -475,6 +476,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _pcbY = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
 
+        matchWorldPosition();
         revalidate();
         moveCursor();
     };
@@ -513,6 +515,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         _view.onMouseMove(x, y);
 
+        if (_view.isDragging())
+            matchWorldPosition();
+
         if (updateCursor())
             moveCursor();
     };
@@ -522,6 +527,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.zoomIn = () => {
         _view.zoomIn();
+
+        matchWorldPosition();
     };
 
     /**
@@ -529,6 +536,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.zoomOut = () => {
         _view.zoomOut();
+
+        matchWorldPosition();
     };
 
     /**

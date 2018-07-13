@@ -37,6 +37,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
      * Hide the editor
      */
     this.hide = () => {
+        _pcbEditor.hide();
         _library.hide();
     };
 

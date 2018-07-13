@@ -33,18 +33,7 @@ export function World(myr, sprites, width, height) {
         _objects.push(new WorldObject(myr, sprites, _physics, pcb, x, y));
     };
 
-    /**
-     * Focus the view on a specific point.
-     * @param {Number} x The x position to focus on in meters.
-     * @param {Number} y The y position to focus on in meters.
-     * @param {Number} zoom The zoom factor.
-     */
-    this.focus = (x, y, zoom) => {
-        _view.focus(
-            x * Terrain.PIXELS_PER_METER,
-            y * Terrain.PIXELS_PER_METER,
-            zoom);
-    };
+    this.getView = () => _view;
 
     /**
      * Press the mouse.
@@ -95,6 +84,20 @@ export function World(myr, sprites, width, height) {
      */
     this.unpause = () => {
         _paused = false;
+    };
+
+    /**
+     * Activate the world.
+     */
+    this.activate = () => {
+
+    };
+
+    /**
+     * Deactivate the world.
+     */
+    this.deactivate = () => {
+        _view.onMouseRelease();
     };
 
     /**

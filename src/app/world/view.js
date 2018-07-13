@@ -44,10 +44,48 @@ export function View(myr, viewWidth, viewHeight) {
     };
 
     /**
+     * Returns the horizontal shift.
+     * @returns {Number} The horizontal shift.
+     */
+    this.getShiftX = () => _shiftX;
+
+    /**
+     * Returns the vertical shift.
+     * @returns {Number} The vertical shift.
+     */
+    this.getShiftY = () => _shiftY;
+
+    /**
+     * Returns the zoom factor.
+     * @returns {Number} The zoom factor.
+     */
+    this.getZoom = () => _zoom;
+
+    /**
      * Return the current transformation this viewport applies.
      * @returns {Myr.Transform} A Myriad transformation.
      */
     this.getTransform = () => _transform;
+
+    /**
+     * Sets the shift and zoom of this view
+     * @param {Number} shiftX The horizontal shift.
+     * @param {Number} shiftY The vertical shift.
+     * @param {Number} zoom The zoom.
+     */
+    this.set = (shiftX, shiftY, zoom) => {
+        _shiftX = shiftX;
+        _shiftY = shiftY;
+        _zoom = zoom;
+
+        updateTransform();
+    };
+
+    /**
+     * Returns whether the view is currently being moved.
+     * @returns {Boolean} A boolean indicating whether the view is being moved.
+     */
+    this.isDragging = () => _dragging;
 
     /**
      * Returns the current inverse transformation this viewport applies.
@@ -122,13 +160,10 @@ export function View(myr, viewWidth, viewHeight) {
      * @param {Number} zoom The zoom factor.
      */
     this.focus = (x, y, zoom) => {
-        const zoomPrevious = zoom;
-
         _shiftX = -x;
         _shiftY = -y;
         _zoom = zoom;
 
-        zoomShift(zoomPrevious);
         updateTransform();
     };
 

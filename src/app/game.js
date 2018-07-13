@@ -139,9 +139,11 @@ export function Game(myr, sprites, overlay) {
                     _hiddenEditor = _editor;
                     _editor.hide();
                     _editor = null;
+                    _world.activate();
                 }
                 else {
                     _editor = _hiddenEditor;
+                    _world.deactivate();
                     _editor.show();
                 }
                 break;
