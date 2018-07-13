@@ -8,7 +8,7 @@ export function Block() {
 
     /**
      * Add an input to this block.
-     * @param {Object} inputSocket The input.
+     * @param {InputSocket} inputSocket The input.
      */
     this.addInput = inputSocket => {
         _inputs.push(inputSocket);
@@ -16,7 +16,7 @@ export function Block() {
 
     /**
      * Add an output to this block.
-     * @param  {Object} outputSocket The output.
+     * @param  {OutputSocket} outputSocket The output.
      */
     this.addOutput = outputSocket => {
         _outputs.push(outputSocket);

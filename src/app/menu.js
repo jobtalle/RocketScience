@@ -2,7 +2,7 @@ import "../styles/menu.css"
 
 /**
  * The menu object creates an HTML menu which changes Game state.
- * @param {Object} game A constructed Game object to be controlled.
+ * @param {Game} game A constructed Game object to be controlled.
  * @constructor
  */
 export function Menu(game) {

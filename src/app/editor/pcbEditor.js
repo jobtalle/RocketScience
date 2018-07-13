@@ -5,9 +5,9 @@ import {View} from "../world/view";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
- * @param {Object} myr An instance of the Myriad engine.
- * @param {Object} sprites All sprites.
- * @param {Object} world A world instance to interact with.
+ * @param {Myr} myr An instance of the Myriad engine.
+ * @param {Sprites} sprites All sprites.
+ * @param {World} world A world instance to interact with.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
@@ -79,7 +79,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const DRAG_MODE_AREA = 1;
     const EDIT_MODE_SELECT = 0;
     const EDIT_MODE_DELETE = 1;
-    const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
+    const SPRITE_HOVER_POINT = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;

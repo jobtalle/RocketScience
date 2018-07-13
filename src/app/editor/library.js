@@ -2,8 +2,8 @@ import "../../styles/library.css"
 
 /**
  * An HTML based parts library.
- * @param {Object} sprites All sprites.
- * @param {Object} editor A PcbEditor which places selected objects.
+ * @param {Sprites} sprites All sprites.
+ * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} width The width of the library in pixels.
  * @constructor

@@ -2,9 +2,9 @@ import {Pcb} from "./pcb";
 
 /**
  * A PCB renderer
- * @param {Object} myr A Myriad instance.
- * @param {Object} sprites The sprites library.
- * @param {Object} pcb A pcb.
+ * @param {Myr} myr A Myriad instance.
+ * @param {Sprites} sprites The sprites library.
+ * @param {Pcb} pcb A pcb.
  * @constructor
  */
 export function PcbRenderer(myr, sprites, pcb) {

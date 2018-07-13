@@ -1,7 +1,7 @@
 /**
  * Defines a PCB.
- * @param {Object} myr A Myriad instance.
- * @param {Object} sprites The sprites library.
+ * @param {Myr} myr A Myriad instance.
+ * @param {Sprites} sprites The sprites library.
  * @constructor
  */
 export function Pcb(myr, sprites) {
@@ -98,7 +98,7 @@ export function Pcb(myr, sprites) {
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
      * @param {Number} y The y position on the board
-     * @returns {null} A pcb point, or null if no point is placed here.
+     * @returns {Pcb.Point} A pcb point, or null if no point is placed here.
      */
     this.getPoint = (x, y) => y < _points.length && x < _points[y].length?_points[y][x]:null;
 
@@ -119,18 +119,6 @@ export function Pcb(myr, sprites) {
      * @returns {Number} The height.
      */
     this.getHeight = () => _points.length;
-
-    /**
-     * Get the X origin of this Pcb in points.
-     * @returns {number} The X origin.
-     */
-    this.getXOrigin = () => _xOrigin;
-
-    /**
-     * Get the Y origin of this Pcb in points.
-     * @returns {number} The Y origin.
-     */
-    this.getYOrigin = () => _yOrigin;
 
     /**
      * Get the mass of this pcb.
@@ -190,8 +178,8 @@ export function Pcb(myr, sprites) {
 
     /**
      * Shift the Pcb points with respect to the origin.
-     * @param x The X shift in points.
-     * @param y The Y shift in points.
+     * @param {Number} x The X shift in points.
+     * @param {Number} y The Y shift in points.
      */
     this.shift = (x, y) => {
         for(let row = 0; row < this.getHeight(); ++row)

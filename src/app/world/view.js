@@ -1,6 +1,6 @@
 /**
  * A viewport for the world.
- * @param {Object} myr A Myriad instance.
+ * @param {Myr} myr A Myriad instance.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.
  * @constructor

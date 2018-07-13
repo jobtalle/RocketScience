@@ -7,7 +7,7 @@ export function OutputSocket() {
 
     /**
      * Connect an InputSocket to this Output.
-     * @param {Object} inputSocket Socket to receive output.
+     * @param {InputSocket} inputSocket Socket to receive output.
      */
     this.connect = inputSocket => {
         _connectedInput = inputSocket;

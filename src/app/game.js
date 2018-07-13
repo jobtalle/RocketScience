@@ -6,8 +6,8 @@ import {Terrain} from "./world/terrain";
 
 /**
  * This class contains the game views.
- * @param {Object} myr A constructed Myriad engine.
- * @param {Object} sprites All sprites.
+ * @param {Myr} myr A constructed Myriad engine.
+ * @param {Sprites} sprites All sprites.
  * @param {Object} overlay The HTML overlay div.
  * @constructor
  */

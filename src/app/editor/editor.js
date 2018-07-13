@@ -3,10 +3,10 @@ import {Library} from "./library";
 
 /**
  * Provides a grid editor.
- * @param {Object} myr A Myriad instance.
- * @param {Object} sprites All sprites.
+ * @param {Myr} myr A Myriad instance.
+ * @param {Sprites} sprites All sprites.
  * @param {Object} overlay An overlay element for HTML GUI.
- * @param {Object} world A world instance to interact with.
+ * @param {World} world A world instance to interact with.
  * @param {Number} width The width.
  * @param {Number} height The height.
  * @constructor
@@ -25,7 +25,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
 
     /**
      * Start editing a pcb.
-     * @param {Object} pcb A pcb instance to edit.
+     * @param {Pcb} pcb A pcb instance to edit.
      * @param {Number} x The X position in the world in meters.
      * @param {Number} y The Y position in the world in meters.
      */

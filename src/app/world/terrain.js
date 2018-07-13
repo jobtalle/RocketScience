@@ -2,7 +2,7 @@ import {Pcb} from "../pcb/pcb";
 
 /**
  * An environment to place bots in.
- * @param {Object} myr A Myriad instance.
+ * @param {Myr} myr A Myriad instance.
  * @param {Number} width The width in meters.
  * @constructor
  */
@@ -16,7 +16,7 @@ export function Terrain(myr, width) {
 
     /**
      * Make a physics body for this terrain.
-     * @param {Object} physics A physics instance.
+     * @param {Physics} physics A physics instance.
      */
     this.makeTerrain = physics => {
         physics.setTerrain(_heights, 1 / Terrain.SEGMENTS_PER_METER);
