@@ -456,6 +456,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.hide = () => {
         _view.onMouseRelease();
+
+        world.addPcb(_pcb, _pcbX, _pcbY);
     };
 
     /**
