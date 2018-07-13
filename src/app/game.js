@@ -113,6 +113,8 @@ export function Game(myr, sprites, overlay) {
     this.onZoomIn = () => {
         if (!_editor)
             _world.zoomIn();
+        else
+            _editor.zoomIn();
     };
 
     /**
@@ -121,6 +123,8 @@ export function Game(myr, sprites, overlay) {
     this.onZoomOut = () => {
         if (!_editor)
             _world.zoomOut();
+        else
+            _editor.zoomOut();
     };
 
     /**

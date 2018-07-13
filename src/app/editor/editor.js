@@ -86,6 +86,19 @@ export function Editor(myr, sprites, overlay, world, width, height) {
         _pcbEditor.onMouseMove(x - _library.getWidth(), y);
     };
 
+    /**
+     * Zoom in.
+     */
+    this.zoomIn = () => {
+        _pcbEditor.zoomIn();
+    };
+
+    /**
+     * Zoom out.
+     */
+    this.zoomOut = () => {
+        _pcbEditor.zoomOut();
+    };
 
     /**
      * A key is pressed.

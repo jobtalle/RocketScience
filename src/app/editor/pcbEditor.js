@@ -286,6 +286,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                     _cursorDragY = _cursor.y;
 
                     moveCursor();
+
+                    return true;
                 }
                 break;
             case EDIT_MODE_DELETE:
@@ -295,9 +297,13 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                     _cursorDragY = _cursor.y;
 
                     moveCursor();
+
+                    return true;
                 }
                 break;
         }
+
+        return false;
     };
 
     const dragCellsExtend = () => {
@@ -483,7 +489,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Press the mouse.
      */
     this.onMousePress = () => {
-        startDrag();
+        if (!startDrag())
+            _view.onMousePress();
     };
 
     /**
@@ -491,6 +498,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.onMouseRelease = () => {
         stopDrag();
+
+        _view.onMouseRelease();
     };
 
     /**
@@ -502,8 +511,24 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _mouse.x = x;
         _mouse.y = y;
 
+        _view.onMouseMove(x, y);
+
         if (updateCursor())
             moveCursor();
+    };
+
+    /**
+     * Zoom in.
+     */
+    this.zoomIn = () => {
+        _view.zoomIn();
+    };
+
+    /**
+     * Zoom out.
+     */
+    this.zoomOut = () => {
+        _view.zoomOut();
     };
 
     /**
