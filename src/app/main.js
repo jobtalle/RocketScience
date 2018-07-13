@@ -1,6 +1,6 @@
 import "../styles/main.css"
 
-import Myr from "../lib/myr.js"
+import Myr from "myr.js"
 import {Game} from "./game"
 import {Sprites} from "./sprites"
 

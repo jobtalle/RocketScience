@@ -79,7 +79,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const DRAG_MODE_AREA = 1;
     const EDIT_MODE_SELECT = 0;
     const EDIT_MODE_DELETE = 1;
-    const SPRITE_HOVER_POINT = sprites.getSprite("pcbExtend");
+    const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
@@ -460,7 +460,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     /**
      * Start editing a pcb.
-     * @param {Object} pcb A pcb instance to edit.
+     * @param {Pcb} pcb A pcb instance to edit.
      * @param {Number} x The X position in the world in meters.
      * @param {Number} y The Y position in the world in meters.
      */
