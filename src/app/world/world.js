@@ -3,6 +3,7 @@ import {View} from "../view/view";
 import {Physics} from "./physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
+import {ShiftProfile} from "../view/shiftProfile";
 import {Myr} from "../../lib/myr";
 
 /**
@@ -24,12 +25,17 @@ export function World(myr, sprites, width, height) {
     const _physics = new Physics(GRAVITY);
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    const _view = new View(width, height, new ZoomProfile(
-        ZoomProfile.TYPE_CONTINUOUS,
-        ZOOM_FACTOR,
-        1,
-        ZOOM_MIN,
-        ZOOM_MAX));
+    const _view = new View(
+        width,
+        height,
+        new ZoomProfile(
+            ZoomProfile.TYPE_CONTINUOUS,
+            ZOOM_FACTOR,
+            1,
+            ZOOM_MIN,
+            ZOOM_MAX),
+        new ShiftProfile(
+            0));
 
     let _paused = false;
 

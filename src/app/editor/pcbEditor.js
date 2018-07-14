@@ -5,6 +5,7 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
 import {Myr} from "../../lib/myr.js"
+import {ShiftProfile} from "../view/shiftProfile";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -90,12 +91,17 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const _cursor = new Myr.Vector(-1, -1);
     const _cursorDrag = new Myr.Vector(0, 0);
     const _pcbPosition = new Myr.Vector(0, 0);
-    const _view = new View(width, height, new ZoomProfile(
-        ZoomProfile.TYPE_ROUND,
-        ZOOM_FACTOR,
-        ZOOM_DEFAULT,
-        ZOOM_MIN,
-        ZOOM_MAX));
+    const _view = new View(
+        width,
+        height,
+        new ZoomProfile(
+            ZoomProfile.TYPE_ROUND,
+            ZOOM_FACTOR,
+            ZOOM_DEFAULT,
+            ZOOM_MIN,
+            ZOOM_MAX),
+        new ShiftProfile(
+            1));
 
     let _rootState = null;
     let _pcb = null;

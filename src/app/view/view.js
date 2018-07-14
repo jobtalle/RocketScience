@@ -1,17 +1,18 @@
-import {ZoomProfile} from "./zoomProfile"
-import {Myr} from "./../../lib/myr.js"
+import {ZoomProfile} from "./zoomProfile";
+import {ShiftProfile} from "./shiftProfile";
+import {Myr} from "./../../lib/myr.js";
 
 /**
  * A viewport for the world.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.
  * @param {ZoomProfile} zoomProfile A zoom profile defining zoom behavior.
+ * @param {ShiftProfile} shiftProfile A shift profile defining shift behavior.
  * @constructor
  */
-export function View(viewWidth, viewHeight, zoomProfile) {
+export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
     const _transform = new Myr.Transform();
     const _inverse = new Myr.Transform();
-    const _shift = new Myr.Vector(0, 0);
     const _mouse = new Myr.Vector(0, 0);
 
     let _dragging = false;
@@ -20,15 +21,14 @@ export function View(viewWidth, viewHeight, zoomProfile) {
         _transform.identity();
         _transform.translate(viewWidth * 0.5, viewHeight * 0.5);
         _transform.scale(zoomProfile.getZoom(), zoomProfile.getZoom());
-        _transform.translate(_shift.x, _shift.y);
+        _transform.translate(shiftProfile.getShift().x, shiftProfile.getShift().y);
 
         _inverse.set(_transform);
         _inverse.invert();
     };
 
     const moveView = (x, y) => {
-        _shift.x -= x;
-        _shift.y -= y;
+        shiftProfile.shift(-x, -y, zoomProfile.getZoom());
 
         updateTransform();
     };
@@ -45,13 +45,13 @@ export function View(viewWidth, viewHeight, zoomProfile) {
      * Returns the X focus.
      * @returns {Number} The X focus.
      */
-    this.getFocusX = () => -_shift.x;
+    this.getFocusX = () => -shiftProfile.getShift().x;
 
     /**
      * Returns the Y focus.
      * @returns {Number} The Y focus.
      */
-    this.getFocusY = () => -_shift.y;
+    this.getFocusY = () => -shiftProfile.getShift().y;
 
     /**
      * Returns the zoom factor.
@@ -144,9 +144,7 @@ export function View(viewWidth, viewHeight, zoomProfile) {
      * @param {Number} zoom The zoom factor.
      */
     this.focus = (x, y, zoom) => {
-        _shift.x = -x;
-        _shift.y = -y;
-
+        shiftProfile.setShift(-x, -y, zoom);
         zoomProfile.setZoom(zoom);
 
         updateTransform();
