@@ -1,4 +1,5 @@
 import {Terrain} from "./../world/terrain";
+import {World} from "./../world/world";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {View} from "../view/view";
@@ -79,14 +80,21 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
     const UNDO_COUNT = 64;
     const ZOOM_DEFAULT = 4;
+    const ZOOM_FACTOR = 0.15;
+    const ZOOM_MIN = 1;
+    const ZOOM_MAX = 8;
 
     const _undoStack = [];
     const _redoStack = [];
-    const _view = new View(myr, width, height, new ZoomProfile(ZoomProfile.TYPE_ROUND, 0.25, 4, 0.25, 8));
     const _cursor = new myr.Vector(-1, -1);
     const _cursorDrag = new myr.Vector(0, 0);
-    const _mouse = new myr.Vector(-1, -1);
     const _pcbPosition = new myr.Vector(0, 0);
+    const _view = new View(myr, width, height, new ZoomProfile(
+        ZoomProfile.TYPE_ROUND,
+        ZOOM_FACTOR,
+        ZOOM_DEFAULT,
+        ZOOM_MIN,
+        ZOOM_MAX));
 
     let _rootState = null;
     let _pcb = null;
@@ -151,8 +159,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         const oldX = _cursor.x;
         const oldY = _cursor.y;
 
-        _cursor.x = _mouse.x;
-        _cursor.y = _mouse.y;
+        _cursor.x = _view.getMouse().x;
+        _cursor.y = _view.getMouse().y;
 
         _view.getInverse().apply(_cursor);
 
@@ -511,9 +519,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        _mouse.x = x;
-        _mouse.y = y;
-
         _view.onMouseMove(x, y);
 
         if (_view.isDragging())

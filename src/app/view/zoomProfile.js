@@ -8,20 +8,24 @@
  * @constructor
  */
 export function ZoomProfile(type, factor, zoom, min, max) {
-    const applyZoom = delta => {
-        if (type === ZoomProfile.TYPE_ROUND) {
-            if (delta < 0)
-                delta = Math.max(-1, Math.round(delta));
-            else
-                delta = Math.min(1, Math.round(delta));
-        }
-
-        zoom += delta;
-
+    const limitZoom = () => {
         if (zoom > max)
             zoom = max;
         else if (zoom < min)
             zoom = min;
+    };
+
+    const applyZoom = delta => {
+        if (type === ZoomProfile.TYPE_ROUND) {
+            if (delta < 0)
+                delta = Math.min(-1, Math.round(delta));
+            else
+                delta = Math.max(1, Math.round(delta));
+        }
+
+        zoom += delta;
+
+        limitZoom();
     };
 
     /**
@@ -46,8 +50,13 @@ export function ZoomProfile(type, factor, zoom, min, max) {
      */
     this.setZoom = newZoom => zoom = newZoom;
 
-    if (type === ZoomProfile.TYPE_ROUND)
+    if (type === ZoomProfile.TYPE_ROUND) {
         zoom = Math.round(zoom);
+        min = Math.max(1, Math.round(min));
+        max = Math.max(min, Math.round(max));
+    }
+
+    limitZoom();
 }
 
 ZoomProfile.TYPE_CONTINUOUS = 0;

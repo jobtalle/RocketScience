@@ -14,13 +14,21 @@ import {ZoomProfile} from "../view/zoomProfile";
  */
 export function World(myr, sprites, width, height) {
     const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
+    const ZOOM_FACTOR = 0.25;
+    const ZOOM_MIN = 0.25;
+    const ZOOM_MAX = 8;
     const GRAVITY = 9.81;
 
     const _objects = [];
     const _physics = new Physics(GRAVITY);
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    const _view = new View(myr, width, height, new ZoomProfile(ZoomProfile.TYPE_CONTINUOUS, 0.25, 4, 0.25, 8));
+    const _view = new View(myr, width, height, new ZoomProfile(
+        ZoomProfile.TYPE_CONTINUOUS,
+        ZOOM_FACTOR,
+        1,
+        ZOOM_MIN,
+        ZOOM_MAX));
 
     let _paused = false;
 

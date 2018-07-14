@@ -11,25 +11,24 @@ import {ZoomProfile} from "./zoomProfile"
 export function View(myr, viewWidth, viewHeight, zoomProfile) {
     const _transform = new myr.Transform();
     const _inverse = new myr.Transform();
+    const _shift = new myr.Vector(0, 0);
+    const _mouse = new myr.Vector(0, 0);
+
     let _dragging = false;
-    let _shiftX = 0;
-    let _shiftY = 0;
-    let _mouseX = 0;
-    let _mouseY = 0;
 
     const updateTransform = () => {
         _transform.identity();
         _transform.translate(viewWidth * 0.5, viewHeight * 0.5);
         _transform.scale(zoomProfile.getZoom(), zoomProfile.getZoom());
-        _transform.translate(_shiftX, _shiftY);
+        _transform.translate(_shift.x, _shift.y);
 
         _inverse.set(_transform);
         _inverse.invert();
     };
 
     const moveView = (x, y) => {
-        _shiftX -= x;
-        _shiftY -= y;
+        _shift.x -= x;
+        _shift.y -= y;
 
         updateTransform();
     };
@@ -37,21 +36,21 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
     const zoomShift = zoomPrevious => {
         const scaleFactor = (zoomProfile.getZoom() - zoomPrevious) / (zoomProfile.getZoom() * zoomPrevious);
 
-        _shiftX += (viewWidth * 0.5 - _mouseX) * scaleFactor;
-        _shiftY += (viewHeight * 0.5 - _mouseY) * scaleFactor;
+        _shift.x += (viewWidth * 0.5 - _mouse.x) * scaleFactor;
+        _shift.y += (viewHeight * 0.5 - _mouse.y) * scaleFactor;
     };
 
     /**
      * Returns the X focus.
      * @returns {Number} The X focus.
      */
-    this.getFocusX = () => -_shiftX;
+    this.getFocusX = () => -_shift.x;
 
     /**
      * Returns the Y focus.
      * @returns {Number} The Y focus.
      */
-    this.getFocusY = () => -_shiftY;
+    this.getFocusY = () => -_shift.y;
 
     /**
      * Returns the zoom factor.
@@ -64,6 +63,12 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
      * @returns {Myr.Transform} A Myriad transformation.
      */
     this.getTransform = () => _transform;
+
+    /**
+     * Return the last mouse location known by this view.
+     * @returns {Myr.Vector} A Myriad vector.
+     */
+    this.getMouse = () => _mouse;
 
     /**
      * Returns whether the view is currently being moved.
@@ -122,15 +127,15 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
      */
     this.onMouseMove = (x, y) => {
         if (_dragging) {
-            const dx = (_mouseX - x) / zoomProfile.getZoom();
-            const dy = (_mouseY - y) / zoomProfile.getZoom();
+            const dx = (_mouse.x - x) / zoomProfile.getZoom();
+            const dy = (_mouse.y - y) / zoomProfile.getZoom();
 
             if (dx !== 0 || dy !== 0)
                 moveView(dx, dy);
         }
 
-        _mouseX = x;
-        _mouseY = y;
+        _mouse.x = x;
+        _mouse.y = y;
     };
 
     /**
@@ -140,8 +145,8 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
      * @param {Number} zoom The zoom factor.
      */
     this.focus = (x, y, zoom) => {
-        _shiftX = -x;
-        _shiftY = -y;
+        _shift.x = -x;
+        _shift.y = -y;
 
         zoomProfile.setZoom(zoom);
 
