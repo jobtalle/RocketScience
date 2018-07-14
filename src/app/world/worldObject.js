@@ -43,8 +43,6 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      */
     this.free = () => {
         _pcbRenderer.free();
-
-        console.log("Free");
     };
 
     _physicsObject = generatePhysicsBody();

@@ -1,7 +1,8 @@
 import {Terrain} from "./terrain";
-import {View} from "./view";
+import {View} from "../view/view";
 import {Physics} from "./physics";
 import {WorldObject} from "./worldObject";
+import {ZoomProfile} from "../view/zoomProfile";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -19,7 +20,7 @@ export function World(myr, sprites, width, height) {
     const _physics = new Physics(GRAVITY);
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    const _view = new View(myr, width, height);
+    const _view = new View(myr, width, height, new ZoomProfile(ZoomProfile.TYPE_CONTINUOUS, 0.25, 4, 0.25, 8));
 
     let _paused = false;
 

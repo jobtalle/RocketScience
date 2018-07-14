@@ -1,7 +1,8 @@
 import {Terrain} from "./../world/terrain";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
-import {View} from "../world/view";
+import {View} from "../view/view";
+import {ZoomProfile} from "../view/zoomProfile";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -81,7 +82,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     const _undoStack = [];
     const _redoStack = [];
-    const _view = new View(myr, width, height);
+    const _view = new View(myr, width, height, new ZoomProfile(ZoomProfile.TYPE_ROUND, 0.25, 4, 0.25, 8));
     const _cursor = new myr.Vector(-1, -1);
     const _cursorDrag = new myr.Vector(0, 0);
     const _mouse = new myr.Vector(-1, -1);
