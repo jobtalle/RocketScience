@@ -1,4 +1,5 @@
 import {ZoomProfile} from "./zoomProfile"
+import {Myr} from "./../../lib/myr.js"
 
 /**
  * A viewport for the world.
@@ -9,10 +10,10 @@ import {ZoomProfile} from "./zoomProfile"
  * @constructor
  */
 export function View(myr, viewWidth, viewHeight, zoomProfile) {
-    const _transform = new myr.Transform();
-    const _inverse = new myr.Transform();
-    const _shift = new myr.Vector(0, 0);
-    const _mouse = new myr.Vector(0, 0);
+    const _transform = new Myr.Transform();
+    const _inverse = new Myr.Transform();
+    const _shift = new Myr.Vector(0, 0);
+    const _mouse = new Myr.Vector(0, 0);
 
     let _dragging = false;
 
@@ -36,8 +37,9 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
     const zoomShift = zoomPrevious => {
         const scaleFactor = (zoomProfile.getZoom() - zoomPrevious) / (zoomProfile.getZoom() * zoomPrevious);
 
-        _shift.x += (viewWidth * 0.5 - _mouse.x) * scaleFactor;
-        _shift.y += (viewHeight * 0.5 - _mouse.y) * scaleFactor;
+        moveView(
+            (_mouse.x - viewWidth * 0.5) * scaleFactor,
+            (_mouse.y - viewHeight * 0.5) * scaleFactor);
     };
 
     /**
@@ -91,7 +93,6 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
         zoomProfile.zoomIn();
 
         zoomShift(zoomPrevious);
-        updateTransform();
     };
 
     /**
@@ -103,7 +104,6 @@ export function View(myr, viewWidth, viewHeight, zoomProfile) {
         zoomProfile.zoomOut();
 
         zoomShift(zoomPrevious);
-        updateTransform();
     };
 
     /**

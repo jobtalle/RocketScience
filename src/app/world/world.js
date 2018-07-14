@@ -3,6 +3,7 @@ import {View} from "../view/view";
 import {Physics} from "./physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
+import {Myr} from "../../lib/myr";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -13,7 +14,7 @@ import {ZoomProfile} from "../view/zoomProfile";
  * @constructor
  */
 export function World(myr, sprites, width, height) {
-    const COLOR_CLEAR = new myr.Color(0.5, 0.6, 0.7);
+    const COLOR_CLEAR = new Myr.Color(0.5, 0.6, 0.7);
     const ZOOM_FACTOR = 0.25;
     const ZOOM_MIN = 0.25;
     const ZOOM_MAX = 8;

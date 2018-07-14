@@ -1,4 +1,5 @@
 import {Pcb} from "../pcb/pcb";
+import {Myr} from "../../lib/myr";
 
 /**
  * An environment to place bots in.
@@ -9,8 +10,8 @@ import {Pcb} from "../pcb/pcb";
 export function Terrain(myr, width) {
     const AIR_HEIGHT = 100;
     const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = new myr.Color(0.3, 0.3, 1);
-    const COLOR_WATER_BOTTOM = new myr.Color(1, 1, 1, 0);
+    const COLOR_WATER_TOP = new Myr.Color(0.3, 0.3, 1);
+    const COLOR_WATER_BOTTOM = new Myr.Color(1, 1, 1, 0);
 
     const _heights = new Array(width * Terrain.SEGMENTS_PER_METER + 1);
 
@@ -39,11 +40,11 @@ export function Terrain(myr, width) {
      */
     this.draw = () => {
         for (let i = 0; i < _heights.length - 1; ++i)
-            myr.primitives.drawLine(myr.Color.BLACK,
+            myr.primitives.drawLine(Myr.Color.BLACK,
                 (i * Terrain.PIXELS_PER_SEGMENT), _heights[i] * Terrain.PIXELS_PER_METER,
                 (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Terrain.PIXELS_PER_METER);
 
-        myr.primitives.drawLine(myr.Color.MAGENTA,
+        myr.primitives.drawLine(Myr.Color.MAGENTA,
             width * 0.5 * Terrain.PIXELS_PER_METER, -100,
             width * 0.5 * Terrain.PIXELS_PER_METER, 100);
 

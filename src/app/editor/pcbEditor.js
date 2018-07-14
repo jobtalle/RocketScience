@@ -4,6 +4,7 @@ import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
+import {Myr} from "../../lib/myr.js"
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -86,9 +87,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     const _undoStack = [];
     const _redoStack = [];
-    const _cursor = new myr.Vector(-1, -1);
-    const _cursorDrag = new myr.Vector(0, 0);
-    const _pcbPosition = new myr.Vector(0, 0);
+    const _cursor = new Myr.Vector(-1, -1);
+    const _cursorDrag = new Myr.Vector(0, 0);
+    const _pcbPosition = new Myr.Vector(0, 0);
     const _view = new View(myr, width, height, new ZoomProfile(
         ZoomProfile.TYPE_ROUND,
         ZOOM_FACTOR,
@@ -199,7 +200,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 for (let y = top; y <= bottom; ++y)
                     for (let x = left; x <= right; ++x)
                         if(dragCellAcceptable(x, y))
-                            _cursorDragCells.push(new myr.Vector(x, y));
+                            _cursorDragCells.push(new Myr.Vector(x, y));
 
                 if (_editMode === EDIT_MODE_DELETE)
                     dragPreventSplit(left, top, right, bottom);
@@ -224,7 +225,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             if (!_pcb.getPoint(x, y))
                 continue;
 
-            const cell = new myr.Vector(x, y);
+            const cell = new Myr.Vector(x, y);
             const matches = [];
 
             for (let group = 0; group < groups.length; ++group) {
@@ -478,7 +479,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
                 ZOOM_DEFAULT);
 
-        _rootState = new State(pcb, new myr.Vector(x, y));
+        _rootState = new State(pcb, new Myr.Vector(x, y));
 
         _pcb = pcb;
         _pcbPosition.x = x;
