@@ -90,7 +90,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const _cursor = new Myr.Vector(-1, -1);
     const _cursorDrag = new Myr.Vector(0, 0);
     const _pcbPosition = new Myr.Vector(0, 0);
-    const _view = new View(myr, width, height, new ZoomProfile(
+    const _view = new View(width, height, new ZoomProfile(
         ZoomProfile.TYPE_ROUND,
         ZOOM_FACTOR,
         ZOOM_DEFAULT,

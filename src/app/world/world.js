@@ -24,7 +24,7 @@ export function World(myr, sprites, width, height) {
     const _physics = new Physics(GRAVITY);
     const _terrain = new Terrain(myr, 100);
     const _surface = new myr.Surface(width, height);
-    const _view = new View(myr, width, height, new ZoomProfile(
+    const _view = new View(width, height, new ZoomProfile(
         ZoomProfile.TYPE_CONTINUOUS,
         ZOOM_FACTOR,
         1,

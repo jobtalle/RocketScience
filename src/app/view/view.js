@@ -3,13 +3,12 @@ import {Myr} from "./../../lib/myr.js"
 
 /**
  * A viewport for the world.
- * @param {Myr} myr A Myriad instance.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.
  * @param {ZoomProfile} zoomProfile A zoom profile defining zoom behavior.
  * @constructor
  */
-export function View(myr, viewWidth, viewHeight, zoomProfile) {
+export function View(viewWidth, viewHeight, zoomProfile) {
     const _transform = new Myr.Transform();
     const _inverse = new Myr.Transform();
     const _shift = new Myr.Vector(0, 0);
