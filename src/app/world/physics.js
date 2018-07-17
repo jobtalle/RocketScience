@@ -1,5 +1,6 @@
 import {Box2D} from "../../lib/box2d";
-import {PhysicsObject} from "./physicsObject";
+import {Myr} from "./../../lib/myr.js"
+import {Terrain} from "./terrain";
 
 /**
  * An interface for the used physics engine.
@@ -7,11 +8,41 @@ import {PhysicsObject} from "./physicsObject";
  * @constructor
  */
 export function Physics(gravity) {
+    const Body = function(shape, bodyDefinition) {
+        const _transform = new Myr.Transform();
+        const _body = _world.CreateBody(bodyDefinition);
+
+        const updateTransform = () => {
+            _transform.identity();
+            _transform.translate(
+                _body.GetPosition().get_x() * Terrain.PIXELS_PER_METER,
+                _body.GetPosition().get_y() * Terrain.PIXELS_PER_METER);
+            _transform.rotate(_body.GetAngle());
+        };
+
+        this.update = () => {
+            updateTransform();
+        };
+
+        this.free = () => {
+            _world.DestroyBody(_body);
+        };
+
+        /**
+         * Returns the objects current transformation.
+         * @returns {Myr.Transform} A Transform object.
+         */
+        this.getTransform = () => _transform;
+
+        _body.CreateFixture(shape, 5.0);
+    };
+
     const VELOCITY_ITERATIONS = 8;
     const POSITION_ITERATIONS = 3;
 
     const _physics = new Box2D();
     const _world = new _physics.b2World(new _physics.b2Vec2(0, gravity), true);
+    const _bodies = [];
 
     let _terrainBody = null;
 
@@ -21,6 +52,9 @@ export function Physics(gravity) {
      */
     this.update = timeStep => {
         _world.Step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+
+        for (const body of _bodies)
+            body.update();
     };
 
     /**
@@ -45,13 +79,13 @@ export function Physics(gravity) {
     };
 
     /**
-     * Create a new Physics Object.
+     * Create a new physics body.
      * @param polygonPoints
      * @param {Number} x Horizontal position.
      * @param {Number} y Vertical position.
-     * @return {PhysicsObject} The created physics object.
+     * @return {Object} The created physics body.
      */
-    this.createObject = (polygonPoints, x, y) => {
+    this.createBody = (polygonPoints, x, y) => {
         const shape = new _physics.b2PolygonShape();
         shape.SetAsBox(5, 5);
 
@@ -59,9 +93,20 @@ export function Physics(gravity) {
         bodyDefinition.set_type(_physics.b2_dynamicBody);
         bodyDefinition.set_position(new _physics.b2Vec2(x, y));
 
-        const body = _world.CreateBody(bodyDefinition);
-        body.CreateFixture(shape, 5.0);
+        const body = new Body(shape, bodyDefinition);
 
-        return new PhysicsObject(_physics, body);
+        _bodies.push(body);
+
+        return body;
+    };
+
+    /**
+     * Destroy a physics body, removing it from the world.
+     * @param {Object} body The physics body to destroy.
+     */
+    this.destroyBody = body => {
+        _bodies.splice(_bodies.indexOf(body), 1);
+
+        body.free();
     };
 }

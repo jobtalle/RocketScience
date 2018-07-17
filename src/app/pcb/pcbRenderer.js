@@ -1,7 +1,7 @@
 import {Pcb} from "./pcb";
 
 /**
- * A PCB renderer
+ * A PCB renderer.
  * @param {Myr} myr A Myriad instance.
  * @param {Sprites} sprites The sprites library.
  * @param {Pcb} pcb A pcb.
@@ -35,9 +35,13 @@ export function PcbRenderer(myr, sprites, pcb) {
      * @param {Number} x The x coordinate in pixels.
      * @param {Number} y The y coordinate in pixels.
      */
-    this.draw = (x, y) => {
-        _layerPcb.draw(x, y);
-    };
+    this.draw = (x, y) => _layerPcb.draw(x, y);
+
+    /**
+     * Draws the associated pcb using a transform.
+     * @param {Myr.Transform} transform A Transform object.
+     */
+    this.drawTransformed = transform => _layerPcb.drawTransformed(transform);
 
     /**
      * Update the pcb representation.

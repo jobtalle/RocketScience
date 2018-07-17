@@ -12,13 +12,14 @@ import {Terrain} from "./terrain";
  * @constructor
  */
 export function WorldObject(myr, sprites, physics, pcb, x, y) {
-    const _pcbRenderer = new PcbRenderer(myr, sprites, pcb);
+    const _renderer = new PcbRenderer(myr, sprites, pcb);
 
-    let _physicsObject = null;
+    let _body = null;
 
     const generatePhysicsBody = () => {
         const polygonPoints = [];
-        return physics.createObject(polygonPoints, x, y);
+
+        return physics.createBody(polygonPoints, x, y);
     };
 
     /**
@@ -33,18 +34,18 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      * Draw the world object in its current state.
      */
     this.draw = () => {
-        const x = _physicsObject.getTransform().x * Terrain.PIXELS_PER_METER;
-        const y = _physicsObject.getTransform().y * Terrain.PIXELS_PER_METER;
-        _pcbRenderer.draw(x, y);
+        _renderer.drawTransformed(_body.getTransform());
     };
 
     /**
      * Free all resources occupied by this object.
      */
     this.free = () => {
-        _pcbRenderer.free();
+        physics.destroyBody(_body);
+
+        _renderer.free();
     };
 
-    _physicsObject = generatePhysicsBody();
-    _pcbRenderer.revalidate();
+    _body = generatePhysicsBody();
+    _renderer.revalidate();
 }
