@@ -1,6 +1,7 @@
 import {Box2D} from "../../lib/box2d";
 import {Myr} from "./../../lib/myr.js"
 import {Terrain} from "./terrain";
+import {Pcb} from "../pcb/pcb";
 
 /**
  * An interface for the used physics engine.
@@ -8,7 +9,7 @@ import {Terrain} from "./terrain";
  * @constructor
  */
 export function Physics(gravity) {
-    const Body = function(shape, bodyDefinition) {
+    const Body = function(shape, bodyDefinition, x, y, xOrigin, yOrigin) {
         const _transform = new Myr.Transform();
         const _body = _world.CreateBody(bodyDefinition);
 
@@ -17,7 +18,10 @@ export function Physics(gravity) {
             _transform.translate(
                 _body.GetPosition().get_x() * Terrain.PIXELS_PER_METER,
                 _body.GetPosition().get_y() * Terrain.PIXELS_PER_METER);
-            _transform.rotate(_body.GetAngle());
+            _transform.rotate(-_body.GetAngle());
+            _transform.translate(
+                -xOrigin * Terrain.PIXELS_PER_METER,
+                -yOrigin * Terrain.PIXELS_PER_METER);
         };
 
         this.update = () => {
@@ -35,6 +39,7 @@ export function Physics(gravity) {
         this.getTransform = () => _transform;
 
         _body.CreateFixture(shape, 5.0);
+        _body.SetTransform(new _physics.b2Vec2(x + xOrigin, y + yOrigin), 0);
     };
 
     const VELOCITY_ITERATIONS = 8;
@@ -87,13 +92,21 @@ export function Physics(gravity) {
      */
     this.createBody = (polygonPoints, x, y) => {
         const shape = new _physics.b2PolygonShape();
-        shape.SetAsBox(5, 5);
+        shape.SetAsBox(
+            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
 
         const bodyDefinition = new _physics.b2BodyDef();
         bodyDefinition.set_type(_physics.b2_dynamicBody);
-        bodyDefinition.set_position(new _physics.b2Vec2(x, y));
+        bodyDefinition.set_position(new _physics.b2Vec2(0, 0));
 
-        const body = new Body(shape, bodyDefinition);
+        const body = new Body(
+            shape,
+            bodyDefinition,
+            x,
+            y,
+            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
 
         _bodies.push(body);
 

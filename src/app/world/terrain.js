@@ -41,7 +41,7 @@ export function Terrain(myr, width) {
     this.draw = () => {
         for (let i = 0; i < _heights.length - 1; ++i)
             myr.primitives.drawLine(Myr.Color.BLACK,
-                (i * Terrain.PIXELS_PER_SEGMENT), _heights[i] * Terrain.PIXELS_PER_METER,
+                i * Terrain.PIXELS_PER_SEGMENT, _heights[i] * Terrain.PIXELS_PER_METER,
                 (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Terrain.PIXELS_PER_METER);
 
         myr.primitives.drawLine(Myr.Color.MAGENTA,
@@ -58,7 +58,7 @@ export function Terrain(myr, width) {
     };
 
     for (let i = 0; i < _heights.length; ++i)
-        _heights[i] = Math.cos(i / 16) * 10;
+        _heights[i] = Math.cos((i - 12) / 16) * 5;
 }
 
 Terrain.SEGMENTS_PER_METER = 2;
