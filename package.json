@@ -10,22 +10,12 @@
     "prepare-assets": "python prepare-assets.py",
     "pack-dev": "webpack --mode development",
     "pack-prod": "webpack --mode production",
-    "doc": "esdoc",
     "test": "ava **/*.test.js"
   },
   "ava": {
     "require": [
       "@babel/register",
       "babel-polyfill"
-    ]
-  },
-  "esdoc": {
-    "source": "src/",
-    "destination": "doc",
-    "plugins": [
-      {
-        "name": "esdoc-standard-plugin"
-      }
     ]
   },
   "devDependencies": {

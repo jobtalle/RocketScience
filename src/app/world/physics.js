@@ -82,15 +82,16 @@ export function Physics(gravity) {
         _terrainBody = _world.CreateBody(bodyDef);
         _physics.destroy(bodyDef);
 
-        const buffer = _physics.allocate(heights.length * 8, "float", _physics.ALLOC_STACK);
         const shape = new _physics.b2ChainShape();
+        const buffer = _physics._malloc(heights.length * 8);
 
         for (let i = 0; i < heights.length; ++i) {
-            _physics.setValue(buffer + (i << 3), i * spacing, "float");
-            _physics.setValue(buffer + (i << 3) + 4, heights[i], "float");
+            _physics.HEAPF32[(buffer >> 2) + (i << 1)] = i * spacing;
+            _physics.HEAPF32[(buffer >> 2) + (i << 1) + 1] = heights[i];
         }
 
         shape.CreateChain(_physics.wrapPointer(buffer, _physics.b2Vec2), heights.length);
+        _physics._free(buffer);
 
         _terrainBody.CreateFixture(shape, 0);
         _physics.destroy(shape);
