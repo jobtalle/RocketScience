@@ -3,6 +3,8 @@ import {Myr} from "./../../lib/myr.js"
 import {Terrain} from "./terrain";
 import {Pcb} from "../pcb/pcb";
 
+const _physics = new Box2D();
+
 /**
  * An interface for the used physics engine.
  * @param {Number} gravity The gravity constant.
@@ -39,14 +41,21 @@ export function Physics(gravity) {
         this.getTransform = () => _transform;
 
         _body.CreateFixture(shape, 5.0);
-        _body.SetTransform(new _physics.b2Vec2(x + xOrigin, y + yOrigin), 0);
+        _body.SetTransform(getTempVec(x + xOrigin, y + yOrigin), 0);
+    };
+
+    const getTempVec = (x, y) => {
+        _tempVec.set_x(x);
+        _tempVec.set_y(y);
+
+        return _tempVec;
     };
 
     const VELOCITY_ITERATIONS = 8;
     const POSITION_ITERATIONS = 3;
 
-    const _physics = new Box2D();
-    const _world = new _physics.b2World(new _physics.b2Vec2(0, gravity), true);
+    const _tempVec = new _physics.b2Vec2(0, 0);
+    const _world = new _physics.b2World(getTempVec(0, gravity), true);
     const _bodies = [];
 
     let _terrainBody = null;
@@ -68,7 +77,10 @@ export function Physics(gravity) {
      * @param {Number} spacing The spacing between each height point in meters.
      */
     this.setTerrain = (heights, spacing) => {
-        _terrainBody = _world.CreateBody(new _physics.b2BodyDef());
+        const bodyDef = new _physics.b2BodyDef();
+
+        _terrainBody = _world.CreateBody(bodyDef);
+        _physics.destroy(bodyDef);
 
         const buffer = _physics.allocate(heights.length * 8, "float", _physics.ALLOC_STACK);
         const shape = new _physics.b2ChainShape();
@@ -81,6 +93,7 @@ export function Physics(gravity) {
         shape.CreateChain(_physics.wrapPointer(buffer, _physics.b2Vec2), heights.length);
 
         _terrainBody.CreateFixture(shape, 0);
+        _physics.destroy(shape);
     };
 
     /**
@@ -98,7 +111,7 @@ export function Physics(gravity) {
 
         const bodyDefinition = new _physics.b2BodyDef();
         bodyDefinition.set_type(_physics.b2_dynamicBody);
-        bodyDefinition.set_position(new _physics.b2Vec2(0, 0));
+        bodyDefinition.set_position(getTempVec(0, 0));
 
         const body = new Body(
             shape,
@@ -121,5 +134,13 @@ export function Physics(gravity) {
         _bodies.splice(_bodies.indexOf(body), 1);
 
         body.free();
+    };
+
+    /**
+     * Free the physics object.
+     */
+    this.free = () => {
+        _physics.destroy(_tempVec);
+        _physics.destroy(_world);
     };
 }

@@ -156,6 +156,8 @@ export function World(myr, sprites, width, height) {
      */
     this.free = () => {
         this.deactivate();
+
+        _physics.free();
     };
 
     _view.focus(-_terrain.getWidth() * 0.5, 0, 0.5);
