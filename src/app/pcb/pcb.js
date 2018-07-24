@@ -5,7 +5,7 @@
  * @constructor
  */
 export function Pcb(myr, sprites) {
-    const Point = function() {
+    this.Point = function() {
 
     };
 
@@ -14,9 +14,6 @@ export function Pcb(myr, sprites) {
     const _points = [];
 
     let _width = 0;
-    let _xOrigin = 0;
-    let _yOrigin = 0;
-    let _mass = 1;
     let _pointCount = 0;
 
     const trimRowsTop = () => {
@@ -121,12 +118,6 @@ export function Pcb(myr, sprites) {
     this.getHeight = () => _points.length;
 
     /**
-     * Get the mass of this pcb.
-     * @returns {number} The total mass of this Pcb and its parts.
-     */
-    this.getMass = () => _mass;
-
-    /**
      * Returns a deep copy of this pcb.
      * @returns {Pcb} A deep copy of this Pcb.
      */
@@ -151,12 +142,12 @@ export function Pcb(myr, sprites) {
             _points.push([]);
 
         if(x < _points[y].length)
-            _points[y][x] = new Point();
+            _points[y][x] = new this.Point();
         else {
             while(_points[y].length < x)
                 _points[y].push(null);
 
-            _points[y].push(new Point());
+            _points[y].push(new this.Point());
         }
 
         if(x >= _width)
