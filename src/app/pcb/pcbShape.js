@@ -21,14 +21,39 @@ export function PcbShape(pcb) {
 
             return center;
         };
+
+        this.merge = other => {
+            for (let a = 0; a < points.length; ++a) for (let b = 0; b < other.getPoints().length; ++b) {
+                if (points[a].equals(other.getPoints()[b])) {
+                    const aNext = (a + 1) % points.length;
+                    const bPrevious = b - 1 < 0?other.getPoints().length - 1:b - 1;
+
+                    if (points[aNext].equals(other.getPoints()[bPrevious])) {
+                        const newPoints = [];
+
+                        for (let i = (b + 1) % other.getPoints().length; i !== bPrevious; i = (i + 1) % other.getPoints().length)
+                            newPoints.push(other.getPoints()[i]);
+
+                        if (aNext === 0) {
+                            points.splice(0, 1);
+                            points.splice(a - 1, 1, ...newPoints);
+                        }
+                        else
+                            points.splice(a, 2, ...newPoints);
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        };
     };
 
     const _parts = [];
     const _center = new Myr.Vector(0, 0);
 
     const partition = () => {
-        const _grid = [];
-
         for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
             const point = pcb.getPoint(x, y);
 
@@ -43,14 +68,26 @@ export function PcbShape(pcb) {
                 _center.add(part.getCenter());
 
                 _parts.push(part);
-                _grid.push(part);
             }
-            else
-                _grid.push(null);
         }
 
-        // Possibly factor in part volume here
+        // Probably factor in part volume here
         _center.divide(_parts.length);
+
+        // Try to merge parts
+        let lastPartCount = -1;
+
+        while (lastPartCount !== _parts.length) {
+            lastPartCount = _parts.length;
+
+            for (let a = 0; a < _parts.length; ++a) for (let b = a + 1; b < _parts.length; ++b) {
+                if (_parts[a].merge(_parts[b])) {
+                    _parts.splice(b, 1);
+
+                    break;
+                }
+            }
+        }
 
         // Convert to meters
         for (const part of _parts)

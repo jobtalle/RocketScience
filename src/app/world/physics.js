@@ -130,44 +130,6 @@ export function Physics(gravity) {
             shapes.push(shape);
         }
 
-        /*
-        {
-            const s = 8 * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT;
-            const points = [new Myr.Vector(-s / 2, -s / 2), new Myr.Vector(-s / 2, s / 2), new Myr.Vector(0, s / 2), new Myr.Vector(0, -s / 2)];
-            const shape = new _physics.b2PolygonShape();
-            const buffer = _physics._malloc(points.length << 3);
-
-            for (let i = 0; i < points.length; ++i) {
-                _physics.HEAPF32[(buffer >> 2) + (i << 1)] = points[i].x;
-                _physics.HEAPF32[(buffer >> 2) + (i << 1) + 1] = points[i].y;
-            }
-
-            shape.Set(_physics.wrapPointer(buffer, _physics.b2Vec2), points.length);
-
-            _physics._free(buffer);
-
-            shapes.push(shape);
-        }
-
-        {
-            const s = 8 * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT;
-            const points = [new Myr.Vector(0, -s / 2), new Myr.Vector(0, s / 2), new Myr.Vector(s / 2, s / 2), new Myr.Vector(s / 2, -s / 2)];
-            const shape = new _physics.b2PolygonShape();
-            const buffer = _physics._malloc(points.length << 3);
-
-            for (let i = 0; i < points.length; ++i) {
-                _physics.HEAPF32[(buffer >> 2) + (i << 1)] = points[i].x;
-                _physics.HEAPF32[(buffer >> 2) + (i << 1) + 1] = points[i].y;
-            }
-
-            shape.Set(_physics.wrapPointer(buffer, _physics.b2Vec2), points.length);
-
-            _physics._free(buffer);
-
-            shapes.push(shape);
-        }
-        */
-
         const bodyDefinition = new _physics.b2BodyDef();
         bodyDefinition.set_type(_physics.b2_dynamicBody);
         bodyDefinition.set_position(getTempVec(0, 0));
