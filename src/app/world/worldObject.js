@@ -1,5 +1,5 @@
 import {PcbRenderer} from "../pcb/pcbRenderer";
-import {Terrain} from "./terrain";
+import {PcbShape} from "../pcb/pcbShape";
 
 /**
  * An object in the world.
@@ -17,9 +17,9 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
     let _body = null;
 
     const generatePhysicsBody = () => {
-        const polygonPoints = [];
+        const shape = new PcbShape(pcb);
 
-        return physics.createBody(polygonPoints, x, y);
+        return physics.createBody(shape.getParts(), x, y, shape.getCenter().x, shape.getCenter().y);
     };
 
     /**

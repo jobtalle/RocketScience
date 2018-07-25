@@ -1,6 +1,6 @@
 import {ZoomProfile} from "./zoomProfile";
 import {ShiftProfile} from "./shiftProfile";
-import {Myr} from "./../../lib/myr.js";
+import Myr from "./../../lib/myr.js";
 
 /**
  * A viewport for the world.

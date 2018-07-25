@@ -1,4 +1,4 @@
-import {Myr} from "./../../lib/myr.js"
+import Myr from "./../../lib/myr.js"
 
 /**
  * A profile specifying shift behavior.

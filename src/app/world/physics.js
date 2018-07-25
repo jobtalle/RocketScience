@@ -1,5 +1,5 @@
 import {Box2D} from "../../lib/box2d";
-import {Myr} from "./../../lib/myr.js"
+import Myr from "./../../lib/myr.js"
 import {Terrain} from "./terrain";
 import {Pcb} from "../pcb/pcb";
 
@@ -99,12 +99,14 @@ export function Physics(gravity) {
 
     /**
      * Create a new physics body.
-     * @param polygonPoints
+     * @param {Array} polygons An array of polygon arrays, where each polygon point has an x and y coordinate.
      * @param {Number} x Horizontal position.
      * @param {Number} y Vertical position.
+     * @param {Number} xOrigin The X origin.
+     * @param {Number} yOrigin The Y origin.
      * @return {Object} The created physics body.
      */
-    this.createBody = (polygonPoints, x, y) => {
+    this.createBody = (polygons, x, y, xOrigin, yOrigin) => {
         const shape = new _physics.b2PolygonShape();
         shape.SetAsBox(
             4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
@@ -119,8 +121,8 @@ export function Physics(gravity) {
             bodyDefinition,
             x,
             y,
-            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            4 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
+            xOrigin,
+            yOrigin);
 
         _bodies.push(body);
 

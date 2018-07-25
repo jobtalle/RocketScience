@@ -1,6 +1,6 @@
-export function Myr(canvasElement) {
+const Myr = function(canvasElement) {
     const gl = canvasElement.getContext("webgl2", {
-        antialias: false,
+        antialias: true,
         depth: false
     });
 
@@ -1114,22 +1114,16 @@ Myr.Vector.prototype.copy = function() {
 Myr.Vector.prototype.add = function(vector) {
     this.x += vector.x;
     this.y += vector.y;
-
-    return this;
 };
 
 Myr.Vector.prototype.subtract = function(vector) {
     this.x -= vector.x;
     this.y -= vector.y;
-
-    return this;
 };
 
 Myr.Vector.prototype.negate = function() {
     this.x = -this.x;
     this.y = -this.y;
-
-    return this;
 };
 
 Myr.Vector.prototype.dot = function(vector) {
@@ -1143,21 +1137,17 @@ Myr.Vector.prototype.length = function() {
 Myr.Vector.prototype.multiply = function(scalar) {
     this.x *= scalar;
     this.y *= scalar;
-
-    return this;
 };
 
 Myr.Vector.prototype.divide = function(scalar) {
     if(scalar === 0)
         this.x = this.y = 0;
     else
-        return this.multiply(1.0 / scalar);
-
-    return this;
+        this.multiply(1.0 / scalar);
 };
 
 Myr.Vector.prototype.normalize = function() {
-    return this.divide(this.length());
+    this.divide(this.length());
 };
 
 Myr.Vector.prototype.angle = function() {
@@ -1274,3 +1264,5 @@ Myr.Transform.prototype.invert = function() {
     this._11 = s11 * d;
     this._21 = s12 * d;
 };
+
+if(typeof module !== 'undefined') module.exports = Myr;

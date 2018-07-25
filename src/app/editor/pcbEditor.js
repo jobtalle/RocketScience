@@ -4,7 +4,7 @@ import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
-import {Myr} from "../../lib/myr.js"
+import Myr from "../../lib/myr.js"
 import {ShiftProfile} from "../view/shiftProfile";
 import {PcbShape} from "../pcb/pcbShape";
 

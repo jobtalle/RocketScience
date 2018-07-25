@@ -1,5 +1,5 @@
 import {Pcb} from "../pcb/pcb";
-import {Myr} from "../../lib/myr";
+import Myr from "../../lib/myr";
 
 /**
  * An environment to place bots in.
