@@ -10,6 +10,7 @@ import {Pcb} from "./pcb";
 export function PcbShape(pcb) {
     const Part = function(points) {
         this.getPoints = () => points;
+
         this.getCenter = () => {
             const center = new Myr.Vector(0, 0);
 
