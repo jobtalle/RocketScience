@@ -27,5 +27,8 @@
     "html-webpack-plugin": "^3.2.0",
     "webpack": "^4.16.2",
     "webpack-cli": "^2.0.14"
+  },
+  "dependencies": {
+    "poly-decomp": "^0.3.0"
   }
 }

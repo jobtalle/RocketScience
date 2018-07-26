@@ -1,10 +1,8 @@
 import {Box2D} from "../../lib/box2d";
 import Myr from "./../../lib/myr.js"
 import {Terrain} from "./terrain";
-import {Pcb} from "../pcb/pcb";
 
 const _physics = new Box2D();
-
 /**
  * An interface for the used physics engine.
  * @param {Number} gravity The gravity constant.
@@ -46,6 +44,7 @@ export function Physics(gravity) {
             _physics.destroy(shape);
         }
 
+        _physics.destroy(bodyDefinition);
         _body.SetTransform(getTempVec(x + xOrigin, y + yOrigin), 0);
     };
 

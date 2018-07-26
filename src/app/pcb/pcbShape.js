@@ -21,73 +21,80 @@ export function PcbShape(pcb) {
 
             return center;
         };
-
-        this.merge = other => {
-            for (let a = 0; a < points.length; ++a) for (let b = 0; b < other.getPoints().length; ++b) {
-                if (points[a].equals(other.getPoints()[b])) {
-                    const aNext = (a + 1) % points.length;
-                    const bPrevious = b - 1 < 0?other.getPoints().length - 1:b - 1;
-
-                    if (points[aNext].equals(other.getPoints()[bPrevious])) {
-                        const newPoints = [];
-
-                        for (let i = (b + 1) % other.getPoints().length; i !== bPrevious; i = (i + 1) % other.getPoints().length)
-                            newPoints.push(other.getPoints()[i]);
-
-                        if (aNext === 0) {
-                            points.splice(0, 1);
-                            points.splice(a - 1, 1, ...newPoints);
-                        }
-                        else
-                            points.splice(a, 2, ...newPoints);
-
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        };
     };
 
     const _parts = [];
-    const _center = new Myr.Vector(0, 0);
+    let _center = null;
+
+    const getHull = () => {
+        const at = new Myr.Vector(0, -1);
+        const direction = new Myr.Vector(0, 1);
+        const edge = new Myr.Vector(1, 0);
+        const points = [];
+
+        let startPoint = null;
+
+        const turnCcw = vector => {
+            const lastY = vector.y;
+
+            vector.y = -vector.x;
+            vector.x = lastY;
+        };
+
+        const turnCw = vector => {
+            const lastX = vector.x;
+
+            vector.x = -vector.y;
+            vector.y = lastX;
+        };
+
+        const push = () => points.push(new Myr.Vector(at.x + 0.5, at.y + 0.5));
+
+        while (true) {
+            if (pcb.getPoint(at.x + edge.x, at.y + edge.y) === null && startPoint !== null) {
+                turnCcw(direction);
+                turnCcw(edge);
+
+                at.add(direction);
+
+                push();
+            }
+            else if (pcb.getPoint(at.x + direction.x, at.y + direction.y) !== null) {
+                if (startPoint === null)
+                    startPoint = at.copy();
+
+                turnCw(direction);
+                turnCw(edge);
+
+                push();
+            }
+            else {
+                at.add(direction);
+
+                if (startPoint === null)
+                    continue;
+
+                push();
+
+                if (at.equals(startPoint))
+                    break;
+            }
+        }
+
+        return new Part(points);
+    };
 
     const partition = () => {
-        for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
-            const point = pcb.getPoint(x, y);
+        const hull = getHull();
 
-            if (point !== null) {
-                const part = new Part([
-                    new Myr.Vector(x, y),
-                    new Myr.Vector(x, y + 1),
-                    new Myr.Vector(x + 1, y + 1),
-                    new Myr.Vector(x + 1, y)
-                ]);
-
-                _center.add(part.getCenter());
-
-                _parts.push(part);
-            }
-        }
+        // Debug view
+        _parts.push(hull);
 
         // Probably factor in part volume here
-        _center.divide(_parts.length);
+        _center = hull.getCenter();
 
-        // Try to merge parts
-        let lastPartCount = -1;
-
-        while (lastPartCount !== _parts.length) {
-            lastPartCount = _parts.length;
-
-            for (let a = 0; a < _parts.length; ++a) for (let b = a + 1; b < _parts.length; ++b) {
-                if (_parts[a].merge(_parts[b])) {
-                    _parts.splice(b, 1);
-
-                    break;
-                }
-            }
-        }
+        // Decompose hull into convex parts
+        // TODO
 
         // Convert to meters
         for (const part of _parts)

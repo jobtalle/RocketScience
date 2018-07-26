@@ -114,7 +114,7 @@ export function World(myr, sprites, width, height) {
      */
     this.deactivate = () => {
         _view.onMouseRelease();
-
+        return;
         while (_objects.length > 0)
             _objects.pop().free();
     };

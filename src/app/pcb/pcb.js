@@ -97,7 +97,7 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The y position on the board
      * @returns {Pcb.Point} A pcb point, or null if no point is placed here.
      */
-    this.getPoint = (x, y) => y < _points.length && x < _points[y].length?_points[y][x]:null;
+    this.getPoint = (x, y) => x < 0 || y < 0?null:y < _points.length && x < _points[y].length?_points[y][x]:null;
 
     /**
      * Get the number of points in this PCB.
