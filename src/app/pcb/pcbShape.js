@@ -28,12 +28,9 @@ export function PcbShape(pcb) {
     let _center = null;
 
     const makeHull = () => {
-        const at = new Myr.Vector(0, -1);
-        const direction = new Myr.Vector(0, 1);
-        const edge = new Myr.Vector(1, 0);
         const points = [];
-
-        let startPoint = null;
+        const at = new Myr.Vector(0, 0);
+        const direction = new Myr.Vector(1, 0);
 
         const turnCcw = vector => {
             const lastY = vector.y;
@@ -49,52 +46,55 @@ export function PcbShape(pcb) {
             vector.y = lastX;
         };
 
-        const push = point => {
-            if (points.length === 0 || (!points[points.length - 1].equals(point) && !points[0].equals(point)))
-                points.push(point);
-        };
+        while (pcb.getPoint(at.x, at.y) === null)
+            ++at.y;
 
-        while (true) {
-            if (pcb.getPoint(at.x + edge.x, at.y + edge.y) === null && startPoint !== null) {
-                if (direction.x === -1 || direction.y === -1)
-                    points.pop();
+        const origin = at.copy();
 
-                turnCcw(direction);
-                turnCcw(edge);
+        while (!at.equals(origin) || points.length === 0) {
+            let left, right;
+
+            if (direction.x === 1) {
+                // Right
+                left = pcb.getPoint(at.x, at.y - 1);
+                right = pcb.getPoint(at.x, at.y);
+            }
+            else if (direction.x === -1) {
+                // Left
+                left = pcb.getPoint(at.x - 1, at.y);
+                right = pcb.getPoint(at.x - 1, at.y - 1);
+            }
+            else if (direction.y === -1) {
+                // Up
+                left = pcb.getPoint(at.x - 1, at.y - 1);
+                right = pcb.getPoint(at.x, at.y - 1);
+            }
+            else {
+                // Down
+                left = pcb.getPoint(at.x, at.y);
+                right = pcb.getPoint(at.x - 1, at.y);
+            }
+
+            if ((left !== null && right === null) || (left === null && right !== null)) {
+                points.push(at.copy());
 
                 at.add(direction);
             }
-            else if (pcb.getPoint(at.x + direction.x, at.y + direction.y) !== null) {
-                if (startPoint === null)
-                    startPoint = at.copy();
-
-                if (direction.x === 0 && direction.y === 1)
-                    push(new Myr.Vector(at.x + 1, at.y + 1));
-
+            else if(left === null)
                 turnCw(direction);
-                turnCw(edge);
-            }
             else
-                at.add(direction);
-
-            if (startPoint !== null) {
-                if (points.length > 1 && at.equals(startPoint))
-                    break;
-
-                push(new Myr.Vector(at.x + Math.max(0, edge.x), at.y + Math.max(0, edge.y)));
-            }
+                turnCcw(direction);
         }
-
+        console.log(points);
         return new Part(points);
     };
 
     const makeParts = hull => {
         const polygon = [];
 
-        for (const point of hull.getPoints())
-            polygon.push([point.x, point.y]);
+        for (let i = hull.getPoints().length; i-- > 0;)
+            polygon.push([hull.getPoints()[i].x, hull.getPoints()[i].y]);
 
-        polyDecomp.makeCCW(polygon);
         polyDecomp.removeCollinearPoints(polygon, 0.1);
 
         const polygons = polyDecomp.quickDecomp(polygon);
@@ -105,13 +105,13 @@ export function PcbShape(pcb) {
             for (const vertex of polygon)
                 points.push(new Myr.Vector(vertex[0], vertex[1]));
 
-            _parts.push(new Part(points));
+            //_parts.push(new Part(points));
         }
     };
 
     const partition = () => {
         const hull = makeHull();
-
+        _parts.push(hull);
         // Probably factor in part volume here
         _center = hull.getCenter();
 
