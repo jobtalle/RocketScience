@@ -1,4 +1,5 @@
 import Myr from "../../lib/myr";
+import polyDecomp from "poly-decomp"
 import {Terrain} from "../world/terrain";
 import {Pcb} from "./pcb";
 
@@ -26,7 +27,7 @@ export function PcbShape(pcb) {
     const _parts = [];
     let _center = null;
 
-    const getHull = () => {
+    const makeHull = () => {
         const at = new Myr.Vector(0, -1);
         const direction = new Myr.Vector(0, 1);
         const edge = new Myr.Vector(1, 0);
@@ -48,53 +49,74 @@ export function PcbShape(pcb) {
             vector.y = lastX;
         };
 
-        const push = () => points.push(new Myr.Vector(at.x + 0.5, at.y + 0.5));
+        const push = point => {
+            if (points.length === 0 || (!points[points.length - 1].equals(point) && !points[0].equals(point)))
+                points.push(point);
+        };
 
         while (true) {
             if (pcb.getPoint(at.x + edge.x, at.y + edge.y) === null && startPoint !== null) {
+                if (direction.x === -1 || direction.y === -1)
+                    points.pop();
+
                 turnCcw(direction);
                 turnCcw(edge);
 
                 at.add(direction);
-
-                push();
             }
             else if (pcb.getPoint(at.x + direction.x, at.y + direction.y) !== null) {
                 if (startPoint === null)
                     startPoint = at.copy();
 
+                if (direction.x === 0 && direction.y === 1)
+                    push(new Myr.Vector(at.x + 1, at.y + 1));
+
                 turnCw(direction);
                 turnCw(edge);
-
-                push();
             }
-            else {
+            else
                 at.add(direction);
 
-                if (startPoint === null)
-                    continue;
-
-                push();
-
-                if (at.equals(startPoint))
+            if (startPoint !== null) {
+                if (points.length > 1 && at.equals(startPoint))
                     break;
+
+                push(new Myr.Vector(at.x + Math.max(0, edge.x), at.y + Math.max(0, edge.y)));
             }
         }
 
         return new Part(points);
     };
 
-    const partition = () => {
-        const hull = getHull();
+    const makeParts = hull => {
+        const polygon = [];
 
-        // Debug view
-        _parts.push(hull);
+        for (const point of hull.getPoints())
+            polygon.push([point.x, point.y]);
+
+        polyDecomp.makeCCW(polygon);
+        polyDecomp.removeCollinearPoints(polygon, 0.1);
+
+        const polygons = polyDecomp.quickDecomp(polygon);
+
+        for (const polygon of polygons) {
+            const points = [];
+
+            for (const vertex of polygon)
+                points.push(new Myr.Vector(vertex[0], vertex[1]));
+
+            _parts.push(new Part(points));
+        }
+    };
+
+    const partition = () => {
+        const hull = makeHull();
 
         // Probably factor in part volume here
         _center = hull.getCenter();
 
         // Decompose hull into convex parts
-        // TODO
+        makeParts(hull);
 
         // Convert to meters
         for (const part of _parts)
