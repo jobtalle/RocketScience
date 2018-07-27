@@ -1,4 +1,4 @@
-import {Terrain} from "./../world/terrain";
+import {Terrain} from "../world/terrain/terrain";
 import {World} from "./../world/world";
 import {Pcb} from "../pcb/pcb";
 import {PcbRenderer} from "../pcb/pcbRenderer";

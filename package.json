@@ -29,6 +29,7 @@
     "webpack-cli": "^2.0.14"
   },
   "dependencies": {
+    "noisejs": "^2.1.0",
     "poly-decomp": "^0.3.0"
   }
 }

@@ -1,6 +1,6 @@
 import {Box2D} from "../../lib/box2d";
 import Myr from "./../../lib/myr.js"
-import {Terrain} from "./terrain";
+import {Terrain} from "./terrain/terrain";
 
 const _physics = new Box2D();
 /**

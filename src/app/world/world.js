@@ -1,10 +1,11 @@
-import {Terrain} from "./terrain";
+import {Terrain} from "./terrain/terrain";
 import {View} from "../view/view";
 import {Physics} from "./physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
 import Myr from "../../lib/myr";
+import {TerrainRugged} from "./terrain/terrainRugged";
 
 /**
  * Simulates physics and behavior for all objects in the same space.
@@ -23,7 +24,7 @@ export function World(myr, sprites, width, height) {
 
     const _objects = [];
     const _physics = new Physics(GRAVITY);
-    const _terrain = new Terrain(myr, 100);
+    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100));
     const _surface = new myr.Surface(width, height);
     const _view = new View(
         width,

@@ -1,19 +1,19 @@
-import {Pcb} from "../pcb/pcb";
-import Myr from "../../lib/myr";
+import {Pcb} from "../../pcb/pcb";
+import Myr from "../../../lib/myr";
 
 /**
  * An environment to place bots in.
  * @param {Myr} myr A Myriad instance.
- * @param {Number} width The width in meters.
+ * @param {Object} recipe A valid recipe to generate terrain from.
  * @constructor
  */
-export function Terrain(myr, width) {
+export function Terrain(myr, recipe) {
     const AIR_HEIGHT = 100;
     const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = new Myr.Color(0.3, 0.3, 1);
+    const COLOR_WATER_TOP = new Myr.Color(0.3, 0.3, 1, 0.2);
     const COLOR_WATER_BOTTOM = new Myr.Color(1, 1, 1, 0);
 
-    const _heights = new Array(width * Terrain.SEGMENTS_PER_METER + 1);
+    const _heights = recipe.getHeights();
 
     /**
      * Make a physics body for this terrain.
@@ -27,7 +27,7 @@ export function Terrain(myr, width) {
      * Returns the width in pixels.
      * @returns {Number} The width in pixels.
      */
-    this.getWidth = () => width * Terrain.PIXELS_PER_METER;
+    this.getWidth = () => (_heights.length - 1) * Terrain.PIXELS_PER_SEGMENT;
 
     /**
      * Returns the height in pixels.
@@ -45,8 +45,8 @@ export function Terrain(myr, width) {
                 (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Terrain.PIXELS_PER_METER);
 
         myr.primitives.drawLine(Myr.Color.MAGENTA,
-            width * 0.5 * Terrain.PIXELS_PER_METER, -100,
-            width * 0.5 * Terrain.PIXELS_PER_METER, 100);
+            _heights.length * Terrain.SEGMENTS_PER_METER * 0.5 * Terrain.PIXELS_PER_METER, -100,
+            _heights.length * Terrain.SEGMENTS_PER_METER * 0.5 * Terrain.PIXELS_PER_METER, 100);
 
         myr.primitives.fillRectangleGradient(
             COLOR_WATER_TOP,
@@ -56,9 +56,6 @@ export function Terrain(myr, width) {
             0, 0,
             this.getWidth(), WATER_DEPTH);
     };
-
-    for (let i = 0; i < _heights.length; ++i)
-        _heights[i] = Math.cos((i - 12) / 16) * 5;
 }
 
 Terrain.SEGMENTS_PER_METER = 2;
@@ -66,3 +63,4 @@ Terrain.POINTS_PER_METER = 8;
 Terrain.PIXELS_PER_METER = Pcb.PIXELS_PER_POINT * Terrain.POINTS_PER_METER;
 Terrain.METERS_PER_PIXEL = 1 / Terrain.PIXELS_PER_METER;
 Terrain.PIXELS_PER_SEGMENT = Terrain.PIXELS_PER_METER / Terrain.SEGMENTS_PER_METER;
+Terrain.METERS_PER_SEGMENT = 1 / Terrain.SEGMENTS_PER_METER;

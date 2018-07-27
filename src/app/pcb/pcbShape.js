@@ -1,6 +1,6 @@
 import Myr from "../../lib/myr";
 import polyDecomp from "poly-decomp"
-import {Terrain} from "../world/terrain";
+import {Terrain} from "../world/terrain/terrain";
 import {Pcb} from "./pcb";
 
 /**

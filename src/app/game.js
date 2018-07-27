@@ -2,7 +2,7 @@ import {Menu} from "./menu";
 import {Editor} from "./editor/editor";
 import {World} from "./world/world";
 import {Pcb} from "./pcb/pcb";
-import {Terrain} from "./world/terrain";
+import {Terrain} from "./world/terrain/terrain";
 
 /**
  * This class contains the game views.
