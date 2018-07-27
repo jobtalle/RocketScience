@@ -39,24 +39,12 @@ export function PcbShape(pcb) {
         let turned = true;
 
         while (!at.equals(origin) || points.length === 0) {
-            let left, right;
-
-            if (direction.x === 1) {
-                left = pcb.getPoint(at.x, at.y - 1);
-                right = pcb.getPoint(at.x, at.y);
-            }
-            else if (direction.x === -1) {
-                left = pcb.getPoint(at.x - 1, at.y);
-                right = pcb.getPoint(at.x - 1, at.y - 1);
-            }
-            else if (direction.y === -1) {
-                left = pcb.getPoint(at.x - 1, at.y - 1);
-                right = pcb.getPoint(at.x, at.y - 1);
-            }
-            else {
-                left = pcb.getPoint(at.x, at.y);
-                right = pcb.getPoint(at.x - 1, at.y);
-            }
+            const right = pcb.getPoint(
+                at.x + Math.min(0, direction.x) + Math.min(0, -direction.y),
+                at.y + Math.min(0, direction.y) + Math.min(0, direction.x));
+            const left = pcb.getPoint(
+                at.x + Math.min(0, direction.x) + Math.min(0, direction.y),
+                at.y + Math.min(0, direction.y) + Math.min(0, -direction.x));
 
             if (left === null && right !== null)  {
                 if (turned) {
