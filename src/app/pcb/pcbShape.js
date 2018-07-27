@@ -11,17 +11,17 @@ import {Pcb} from "./pcb";
 export function PcbShape(pcb) {
     const Part = function(points) {
         this.getPoints = () => points;
+    };
 
-        this.getCenter = () => {
-            const center = new Myr.Vector(0, 0);
+    Part.prototype.getCenter = function() {
+        const center = new Myr.Vector(0, 0);
 
-            for (const point of points)
-                center.add(point);
+        for (const point of this.getPoints())
+            center.add(point);
 
-            center.divide(points.length);
+        center.divide(this.getPoints().length);
 
-            return center;
-        };
+        return center;
     };
 
     const _parts = [];
@@ -32,93 +32,108 @@ export function PcbShape(pcb) {
         const at = new Myr.Vector(0, 0);
         const direction = new Myr.Vector(1, 0);
 
-        const turnCcw = vector => {
-            const lastY = vector.y;
-
-            vector.y = -vector.x;
-            vector.x = lastY;
-        };
-
-        const turnCw = vector => {
-            const lastX = vector.x;
-
-            vector.x = -vector.y;
-            vector.y = lastX;
-        };
-
         while (pcb.getPoint(at.x, at.y) === null)
             ++at.y;
 
         const origin = at.copy();
+        let turned = true;
 
         while (!at.equals(origin) || points.length === 0) {
             let left, right;
 
             if (direction.x === 1) {
-                // Right
                 left = pcb.getPoint(at.x, at.y - 1);
                 right = pcb.getPoint(at.x, at.y);
             }
             else if (direction.x === -1) {
-                // Left
                 left = pcb.getPoint(at.x - 1, at.y);
                 right = pcb.getPoint(at.x - 1, at.y - 1);
             }
             else if (direction.y === -1) {
-                // Up
                 left = pcb.getPoint(at.x - 1, at.y - 1);
                 right = pcb.getPoint(at.x, at.y - 1);
             }
             else {
-                // Down
                 left = pcb.getPoint(at.x, at.y);
                 right = pcb.getPoint(at.x - 1, at.y);
             }
 
-            if ((left !== null && right === null) || (left === null && right !== null)) {
-                points.push(at.copy());
+            if (left === null && right !== null)  {
+                if (turned) {
+                    points.push(at.copy());
+
+                    turned = false;
+                }
 
                 at.add(direction);
             }
-            else if(left === null)
-                turnCw(direction);
-            else
-                turnCcw(direction);
+            else if(left === null) {
+                const lastX = direction.x;
+
+                direction.x= -direction.y;
+                direction.y = lastX;
+
+                turned = true;
+            }
+            else {
+                const lastY = direction.y;
+
+                direction.y = -direction.x;
+                direction.x = lastY;
+
+                turned = true;
+            }
         }
-        console.log(points);
+
         return new Part(points);
+    };
+
+    const splitPart = (part, maxPolygons) => {
+        if (part.getPoints().length <= maxPolygons)
+            return [part];
+
+        const parts = [];
+
+        for (let start = 1; start < part.getPoints().length - 1; start += maxPolygons - 2) {
+            const points = [part.getPoints()[0].copy()];
+
+            for (let i = 0; i < maxPolygons - 1 && start + i < part.getPoints().length; ++i)
+                points.push(part.getPoints()[start + i].copy());
+
+            parts.push(new Part(points));
+        }
+
+        return parts;
     };
 
     const makeParts = hull => {
         const polygon = [];
 
-        for (let i = hull.getPoints().length; i-- > 0;)
-            polygon.push([hull.getPoints()[i].x, hull.getPoints()[i].y]);
-
-        polyDecomp.removeCollinearPoints(polygon, 0.1);
+        for (const point of hull.getPoints())
+            polygon.push([point.x, point.y]);
 
         const polygons = polyDecomp.quickDecomp(polygon);
 
         for (const polygon of polygons) {
             const points = [];
 
+            polyDecomp.removeCollinearPoints(polygon, 0.1);
+
             for (const vertex of polygon)
                 points.push(new Myr.Vector(vertex[0], vertex[1]));
 
-            //_parts.push(new Part(points));
+            for (const part of splitPart(new Part(points), PcbShape.MAX_VERTICES_PER_POLYGON))
+                _parts.push(part);
         }
     };
 
     const partition = () => {
         const hull = makeHull();
-        _parts.push(hull);
-        // Probably factor in part volume here
+
         _center = hull.getCenter();
 
-        // Decompose hull into convex parts
         makeParts(hull);
 
-        // Convert to meters
         for (const part of _parts)
             for (const point of part.getPoints())
                 point.multiply(Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
@@ -131,3 +146,5 @@ export function PcbShape(pcb) {
 
     partition();
 }
+
+PcbShape.MAX_VERTICES_PER_POLYGON = 8;
