@@ -112,7 +112,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorExtendable = false;
     let _cursorDragMode = DRAG_MODE_NONE;
     let _cursorDragCells = [];
-    let _shape = null;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -124,8 +123,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const revalidate = () => {
         if(_renderer)
             _renderer.revalidate();
-
-        _shape = new PcbShape(_pcb);
     };
 
     const undoPush = () => {
@@ -453,23 +450,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             case EDIT_MODE_DELETE:
                 drawDelete();
                 break;
-        }
-
-        // Draw pcb shape parts for debugging
-        if (_shape !== null) {
-            for (const part of _shape.getParts()) {
-                let lastPoint = null;
-
-                for (const point of part.getPoints()) {
-                    if (lastPoint !== null)
-                        myr.primitives.drawLine(Myr.Color.RED, lastPoint.x * Terrain.PIXELS_PER_METER, lastPoint.y * Terrain.PIXELS_PER_METER, point.x * Terrain.PIXELS_PER_METER, point.y * Terrain.PIXELS_PER_METER);
-
-                    lastPoint = point;
-                }
-
-                if (lastPoint !== part.getPoints()[0])
-                    myr.primitives.drawLine(Myr.Color.RED, lastPoint.x * Terrain.PIXELS_PER_METER, lastPoint.y * Terrain.PIXELS_PER_METER, part.getPoints()[0].x * Terrain.PIXELS_PER_METER, part.getPoints()[0].y * Terrain.PIXELS_PER_METER);
-            }
         }
 
         myr.pop();
