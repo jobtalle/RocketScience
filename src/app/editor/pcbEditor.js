@@ -481,11 +481,20 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Start editing a pcb.
      * @param {Pcb} pcb A pcb instance to edit.
      * @param {Number} x The X position in the world in meters.
-     * @param {Number} y The Y position in the world in meters.
+     * @param {Number} y The Y position in the world in meters
      */
     this.edit = (pcb, x, y) => {
-        if (_renderer)
+        if (_renderer) {
             _renderer.free();
+
+            const dx = (x - _pcbPosition.x) * Terrain.PIXELS_PER_METER;
+            const dy = (y - _pcbPosition.y) * Terrain.PIXELS_PER_METER;
+
+            _view.focus(
+                _view.getFocusX() - dx,
+                _view.getFocusY() - dy,
+                _view.getZoom());
+        }
         else
             _view.focus(
                 pcb.getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
