@@ -7,15 +7,23 @@ import noisejs from "noisejs"
  * @constructor
  */
 import {Terrain} from "./terrain";
+import {makeOctaves} from "./octaves";
 
 export function TerrainRugged(seed, width) {
     this.getHeights = () => {
         const segments = Math.ceil(width * Terrain.SEGMENTS_PER_METER) + 1;
         const heights = [];
         const noise = new noisejs.Noise(seed);
+        const sampleDirection = Math.PI * 2 * seed;
+        const sampleX = Math.cos(sampleDirection);
+        const sampleY = Math.sin(sampleDirection);
 
         for (let i = 0; i < segments; ++i) {
-            heights.push(noise.simplex2(i * Terrain.METERS_PER_SEGMENT * 0.4, 0));
+            const sampleAt = i * Terrain.METERS_PER_SEGMENT;
+
+            heights.push(noise.simplex2(
+                sampleX * sampleAt,
+                sampleY * sampleAt));
         }
 
         return heights;
