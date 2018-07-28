@@ -67,7 +67,7 @@ export function Game(myr, sprites, overlay) {
         const pcb = new Pcb(myr, sprites);
         pcb.initialize();
 
-        _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
+        _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT - 2);
         _editor.show();
     };
 

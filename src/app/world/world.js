@@ -24,7 +24,7 @@ export function World(myr, sprites, width, height) {
 
     const _objects = [];
     const _physics = new Physics(GRAVITY);
-    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100, 0, 1));
+    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100, 0.2, 0.5));
     const _surface = new myr.Surface(width, height);
     const _view = new View(
         width,
@@ -115,7 +115,7 @@ export function World(myr, sprites, width, height) {
      */
     this.deactivate = () => {
         _view.onMouseRelease();
-        return;
+
         while (_objects.length > 0)
             _objects.pop().free();
     };

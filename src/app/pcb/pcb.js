@@ -17,6 +17,7 @@ export function Pcb(myr, sprites) {
     let _pointCount = 0;
 
     const trimRowsTop = () => {
+        const height = this.getHeight();
         let empty = true;
 
         while (empty) {
@@ -28,12 +29,16 @@ export function Pcb(myr, sprites) {
                 }
             }
 
-            if (empty)
+            if (empty) {
                 _points.splice(0, 1);
+            }
         }
+
+        return height - this.getHeight();
     };
 
     const trimRowsBottom = () => {
+        const height = this.getHeight();
         let empty = true;
 
         while (empty) {
@@ -48,9 +53,12 @@ export function Pcb(myr, sprites) {
             if (empty)
                 _points.pop();
         }
+
+        return height - this.getHeight();
     };
 
     const trimColumnsLeft = () => {
+        const width = this.getWidth();
         let empty = true;
 
         while(empty) {
@@ -66,13 +74,16 @@ export function Pcb(myr, sprites) {
                 for (let row = 0; row < this.getHeight(); ++row)
                     _points[row].splice(0, 1);
 
-                _width--;
+                --_width;
             }
         }
+
+        return width - this.getWidth();
     };
 
     const trimColumnsRight = () => {
-        let width = 0;
+        const width = this.getWidth();
+        let detectedWidth = 0;
 
         for (let row = 0; row < this.getHeight(); ++row) {
             let column = _points[row].length;
@@ -81,14 +92,16 @@ export function Pcb(myr, sprites) {
                 if(this.getPoint(column, row))
                     break;
 
-            if (column >= width)
-                width = column + 1;
+            if (column >= detectedWidth)
+                detectedWidth = column + 1;
 
             if (++column > _points[row].length)
                 _points[row].splice(column, _points[row].length - column);
         }
 
-        _width = width;
+        _width = detectedWidth;
+
+        return width - this.getWidth();
     };
 
     /**
@@ -186,12 +199,15 @@ export function Pcb(myr, sprites) {
     /**
      * Remove empty rows and columns from the sides.
      * Use this after erasing points.
+     * @returns {Object} Information about how much has been trimmed from which sides.
      */
     this.pack = () => {
-        trimRowsTop();
-        trimRowsBottom();
-        trimColumnsLeft();
-        trimColumnsRight();
+        return {
+            top: trimRowsTop(),
+            bottom: trimRowsBottom(),
+            left: trimColumnsLeft(),
+            right: trimColumnsRight()
+        };
     };
 
     /**

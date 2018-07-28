@@ -104,7 +104,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         new ShiftProfile(
             1));
 
-    let _rootState = null;
     let _pcb = null;
     let _renderer = null;
     let _editMode = EDIT_MODE_SELECT;
@@ -310,11 +309,11 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const dragCellsExtend = () => {
         undoPush();
 
+        const negatives = [];
+
         let xMin = 0;
         let yMin = 0;
         let yMax = _pcb.getHeight() - 1;
-        const lastHeight = yMax;
-        const negatives = [];
 
         for (const cell of _cursorDragCells) {
             if (cell.x < 0 || cell.y < 0) {
@@ -334,8 +333,16 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             }
         }
 
-        _pcbPosition.x += xMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
-        _pcbPosition.y += (yMin + lastHeight - yMax) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        const dx = xMin * Pcb.PIXELS_PER_POINT;
+        const dy = yMin * Pcb.PIXELS_PER_POINT;
+
+        _pcbPosition.x += dx * Terrain.METERS_PER_PIXEL;
+        _pcbPosition.y += dy * Terrain.METERS_PER_PIXEL;
+
+        _view.focus(
+            _view.getFocusX() - dx,
+            _view.getFocusY() - dy,
+            _view.getZoom());
         _pcb.shift(-xMin, -yMin);
 
         for (const cell of negatives)
@@ -353,22 +360,21 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         undoPush();
 
-        let lastWidth = _pcb.getWidth();
-        const lastHeight = _pcb.getHeight();
-
         for (const cell of _cursorDragCells)
             _pcb.erase(cell.x, cell.y);
 
-        _pcb.pack();
+        const packReport = _pcb.pack();
 
-        while (lastWidth-- - _pcb.getWidth() > 0) {
-            if (_pcbPosition.x >= _rootState.getPosition().x)
-                _pcbPosition.x -= Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
-            else
-                _pcbPosition.x += Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
-        }
+        const dx = -packReport.left * Pcb.PIXELS_PER_POINT;
+        const dy = -packReport.top * Pcb.PIXELS_PER_POINT;
 
-        _pcbPosition.y -= (_pcb.getHeight() - lastHeight) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL;
+        _pcbPosition.x -= dx * Terrain.METERS_PER_PIXEL;
+        _pcbPosition.y -= dy * Terrain.METERS_PER_PIXEL;
+
+        _view.focus(
+            _view.getFocusX() + dx,
+            _view.getFocusY() + dy,
+            _view.getZoom());
 
         revalidate();
         matchWorldPosition();
@@ -485,8 +491,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 pcb.getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
                 pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
                 ZOOM_DEFAULT);
-
-        _rootState = new State(pcb, new Myr.Vector(x, y));
 
         _pcb = pcb;
         _pcbPosition.x = x;
