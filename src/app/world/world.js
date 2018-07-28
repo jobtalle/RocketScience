@@ -24,7 +24,7 @@ export function World(myr, sprites, width, height) {
 
     const _objects = [];
     const _physics = new Physics(GRAVITY);
-    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100));
+    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100, 0, 1));
     const _surface = new myr.Surface(width, height);
     const _view = new View(
         width,
