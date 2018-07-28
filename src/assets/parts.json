@@ -1,16 +1,22 @@
 {
-  "Display": {
-    "LED": {
-      "label": "Light Emitting Diode",
-      "description": "Emits a small amount of light when receiving a signal.",
-      "sprite": "led"
+  "output": {
+    "label": "CATEGORY_OUTPUT",
+    "parts": {
+      "led": {
+        "label": "PART_LED_NAME",
+        "description": "PART_LED_DESCRIPTION",
+        "icon": "LED.svg"
+      }
     }
   },
-  "Control": {
-    "Button": {
-      "label": "Push Button",
-      "description": "Generates a signal when pressed.",
-      "sprite": "button"
+  "control": {
+    "label": "CATEGORY_CONTROL",
+    "parts": {
+      "button": {
+        "label": "PART_BUTTON_NAME",
+        "description": "PART_BUTTON_DESCRIPTION",
+        "icon": "Button.svg"
+      }
     }
   }
 }

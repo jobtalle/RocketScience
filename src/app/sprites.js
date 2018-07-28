@@ -1,6 +1,4 @@
-const ATLAS_PATH = 'atlas.png';
-const ATLAS_MAP = require('../assets/atlas');
-const MILLI = 1000;
+import atlas from "../assets/atlas"
 
 /**
  * Provides access to all sprites in the sprite atlas.
@@ -8,12 +6,11 @@ const MILLI = 1000;
  * @constructor
  */
 export function Sprites(myr) {
-    const _surface = new myr.Surface(ATLAS_PATH);
-    const _frames = ATLAS_MAP.frames;
+    const _surface = new myr.Surface(Sprites.ATLAS_PATH);
 
     const getFrame = (name, index) => {
         const frameName = name + '_' + index;
-        return _frames[frameName];
+        return atlas.frames[frameName];
     };
 
     const registerSprite = name => {
@@ -26,7 +23,7 @@ export function Sprites(myr) {
         while (frame != null) {
             let spriteFrame = myr.makeSpriteFrame(_surface, frame.frame.x, frame.frame.y,
                                                   frame.frame.w, frame.frame.h, 0, 0,
-                                                  frame.duration / MILLI);
+                                                  frame.duration / 1000);
 
             spriteFrames.push(spriteFrame);
             frame = getFrame(name, ++frameIndex);
@@ -38,7 +35,7 @@ export function Sprites(myr) {
     /**
      * Return a sprite from the atlas.
      * @param {String} name The name of the sprite.
-     * @returns {Myr.Sprite} Myriad Sprite.
+     * @returns {Myr.Sprite} Myriad sprite.
      */
     this.getSprite = name => {
         if (!myr.isRegistered(name))
@@ -47,3 +44,5 @@ export function Sprites(myr) {
         return new myr.Sprite(name);
     };
 }
+
+Sprites.ATLAS_PATH = "atlas.png";

@@ -3,6 +3,7 @@ import "../styles/main.css"
 import Myr from "../lib/myr.js"
 import {Game} from "./game"
 import {Sprites} from "./sprites"
+import {getString} from "./language";
 
 const KEY_CONTROL = "Control";
 
@@ -15,6 +16,8 @@ const game = new Game(myr, sprites, overlay);
 const canvasRect = overlay.getBoundingClientRect();
 
 let key_control = false;
+
+document.title = getString("TITLE");
 
 overlay.addEventListener("mousemove", function(event) {
     if (event.target !== overlay)

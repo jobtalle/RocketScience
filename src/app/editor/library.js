@@ -1,4 +1,6 @@
 import "../../styles/library.css"
+import parts from "../../assets/parts.json"
+import {getString} from "../language";
 
 /**
  * An HTML based parts library.
@@ -17,41 +19,40 @@ export function Library(sprites, editor, overlay, width) {
           CLASS_DESCRIPTION = "description",
           CLASS_SELECTED = "selected",
           CLASS_CLOSED = "closed",
-          DIR_ICONS = "icons",
-          EXT_ICONS = "svg";
+          DIR_ICONS = "icons";
 
-    let _parts = require('../../assets/parts.json');
     let _container = null;
 
     const buildPart = (category, part) => {
         const partElement = document.createElement("div");
+
         partElement.className = CLASS_PART;
         partElement.onclick = () => {
-            console.log("Selected: " + part);
-
             const infoBox = document.getElementById(ID_INFO_BOX);
             infoBox.setPart(category, part);
 
             const selected = document.getElementsByClassName(CLASS_SELECTED)[0];
+
             if (selected)
                 selected.classList.remove(CLASS_SELECTED);
+
             partElement.classList.add(CLASS_SELECTED);
         };
 
         const image = new Image();
-        image.src = DIR_ICONS + '/' + part + '.' + EXT_ICONS;
+        image.src = DIR_ICONS + '/' + part.icon;
 
         partElement.appendChild(image);
+
         return partElement;
     };
 
-    const buildCategory = (category) => {
+    const buildCategory = category => {
         const categoryContainer = document.createElement("div");
-        categoryContainer.id = category;
 
         const titleElement = document.createElement("div");
         titleElement.className = CLASS_CATEGORY_TITLE;
-        titleElement.textContent = category;
+        titleElement.innerText = getString(category.label);
         titleElement.onclick = () => partListElement.classList.toggle(CLASS_CLOSED);
 
         categoryContainer.appendChild(titleElement);
@@ -59,9 +60,9 @@ export function Library(sprites, editor, overlay, width) {
         const partListElement = document.createElement("div");
         partListElement.className = CLASS_CATEGORY_PART_LIST;
 
-        for (const part in _parts[category])
-            if (_parts[category].hasOwnProperty(part))
-                partListElement.appendChild(buildPart(category, part));
+        for (const part in category.parts)
+            if (category.parts.hasOwnProperty(part))
+                partListElement.appendChild(buildPart(category, category.parts[part]));
 
         categoryContainer.appendChild(partListElement);
 
@@ -70,19 +71,22 @@ export function Library(sprites, editor, overlay, width) {
 
     const buildInfoBox = () => {
         const box = document.createElement("div");
+
         box.id = ID_INFO_BOX;
 
         const titleElement = document.createElement("div");
+
         titleElement.className = CLASS_CATEGORY_TITLE;
         box.appendChild(titleElement);
 
         let descriptionElement = document.createElement("div");
+
         descriptionElement.className = CLASS_DESCRIPTION;
         box.appendChild(descriptionElement);
 
         box.setPart = (category, part) => {
-            titleElement.innerText = _parts[category][part].label;
-            descriptionElement.innerText = _parts[category][part].description;
+            titleElement.innerText = getString(part.label);
+            descriptionElement.innerHTML = getString(part.description);
         };
 
         return box;
@@ -96,9 +100,9 @@ export function Library(sprites, editor, overlay, width) {
         _container.id = ID_LIBRARY;
         _container.style.width = width + "px";
 
-        for (const category in _parts)
-            if (_parts.hasOwnProperty(category))
-                _container.appendChild(buildCategory(category));
+        for (const category in parts)
+            if (parts.hasOwnProperty(category))
+                _container.appendChild(buildCategory(parts[category]));
 
         _container.appendChild(buildInfoBox());
 
