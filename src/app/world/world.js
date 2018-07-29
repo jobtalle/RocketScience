@@ -126,7 +126,7 @@ export function World(myr, sprites, width, height) {
      */
     this.update = timeStep => {
         if (!_paused)
-            _physics.update(timeStep);
+            _physics.update(1 / 60);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].update(timeStep);
