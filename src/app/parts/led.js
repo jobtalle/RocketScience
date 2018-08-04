@@ -12,8 +12,7 @@ Led.CONFIGURATIONS = [
     new PartConfiguration(
         new Footprint(
             [
-                new Myr.Vector(0, 0),
-                new Myr.Vector(0, 1)
+                new Myr.Vector(0, 0)
             ],
             [
 
@@ -21,7 +20,7 @@ Led.CONFIGURATIONS = [
         new PinLayout(),
         new PartSprites(
             [
-                new PartSprites.Sprite(new Myr.Vector(0, 0), "partLed")
+                new PartSprites.Sprite(new Myr.Vector(0, -6), "partLed")
             ]
         )
     )

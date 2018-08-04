@@ -106,22 +106,26 @@ export function Game(myr, sprites, overlay) {
     this.onMouseMove = (x, y) => {
         if (_editor)
             _editor.onMouseMove(x, y);
-        else
+        else if (_world)
             _world.onMouseMove(x, y);
     };
 
     /**
      * The mouse enters.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = () => {
-
+    this.onMouseEnter = (x, y) => {
+        if (_editor)
+            _editor.onMouseEnter(x, y);
     };
 
     /**
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
-
+        if (_editor)
+            _editor.onMouseLeave();
     };
 
     /**

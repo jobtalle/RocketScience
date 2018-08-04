@@ -7,6 +7,7 @@ import {ZoomProfile} from "../view/zoomProfile";
 import Myr from "../../lib/myr.js"
 import {ShiftProfile} from "../view/shiftProfile";
 import {PcbShape} from "../pcb/pcbShape";
+import {PartRenderer} from "../parts/renderer/partRenderer";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -113,6 +114,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorDragMode = DRAG_MODE_NONE;
     let _cursorDragCells = [];
     let _placing = null;
+    let _placingRenderer = null;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -433,6 +435,10 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         }
     };
 
+    const drawPlace = () => {
+        _placingRenderer.draw(_cursor.x * Pcb.PIXELS_PER_POINT, _cursor.y * Pcb.PIXELS_PER_POINT);
+    };
+
     /**
      * Update the state of the pcb editor.
      * @param timeStep The number of seconds passed after the previous update.
@@ -457,6 +463,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 break;
             case EDIT_MODE_DELETE:
                 drawDelete();
+                break;
+            case EDIT_MODE_PLACE:
+                drawPlace();
                 break;
         }
 
@@ -485,6 +494,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.place = part => {
         _placing = part;
+        _placingRenderer = new PartRenderer(sprites, part.CONFIGURATIONS[0]);
         _editMode = EDIT_MODE_PLACE;
     };
 
@@ -558,6 +568,20 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         if (updateCursor())
             moveCursor();
+    };
+
+    /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+
     };
 
     /**

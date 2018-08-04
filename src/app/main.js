@@ -12,17 +12,13 @@ const overlay = document.getElementById("overlay");
 const myr = new Myr(canvas);
 const sprites = new Sprites(myr);
 const game = new Game(myr, sprites, overlay);
-
 const canvasRect = overlay.getBoundingClientRect();
 
-let key_control = false;
+let keyControl = false;
 
 document.title = getString("TITLE");
 
 overlay.addEventListener("mousemove", function(event) {
-    if (event.target !== overlay)
-        return;
-
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
@@ -44,7 +40,7 @@ overlay.addEventListener("mouseenter", function(event) {
     if (event.target !== overlay)
         return;
 
-    game.onMouseEnter();
+    game.onMouseEnter(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
 overlay.addEventListener("mouseleave", function(event) {
@@ -67,17 +63,17 @@ overlay.addEventListener("mousewheel", function(event) {
 window.onkeydown = event => {
     switch (event.key) {
         case KEY_CONTROL:
-            key_control = true;
+            keyControl = true;
             break;
         default:
-            game.onKeyDown(event.key, key_control);
+            game.onKeyDown(event.key, keyControl);
     }
 };
 
 window.onkeyup = event => {
     switch (event.key) {
         case KEY_CONTROL:
-            key_control = false;
+            keyControl = false;
             break;
         default:
             game.onKeyUp(event.key);
