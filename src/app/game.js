@@ -112,12 +112,10 @@ export function Game(myr, sprites, overlay) {
 
     /**
      * The mouse enters.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = (x, y) => {
+    this.onMouseEnter = () => {
         if (_editor)
-            _editor.onMouseEnter(x, y);
+            _editor.onMouseEnter();
     };
 
     /**

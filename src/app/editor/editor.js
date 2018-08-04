@@ -23,7 +23,6 @@ export function Editor(myr, sprites, overlay, world, width, height) {
         width - Math.floor(width * EDITOR_WIDTH));
     const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
 
-    let _mouseX = -1;
     let _editorHover = false;
 
     /**
@@ -96,27 +95,24 @@ export function Editor(myr, sprites, overlay, world, width, height) {
      */
     this.onMouseMove = (x, y) => {
         if (x <= _library.getWidth()) {
-            if (_mouseX > _library.getWidth() && _editorHover) {
+            if (_editorHover) {
                 _pcbEditor.onMouseLeave();
                 _editorHover = false;
             }
         }
-        else if (_mouseX <= _library.getWidth() && !_editorHover) {
+        else if (!_editorHover) {
             _pcbEditor.onMouseEnter();
             _editorHover = true;
         }
 
-        _mouseX = x;
         _pcbEditor.onMouseMove(x - _library.getWidth(), y);
     };
 
     /**
      * The mouse enters.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = (x, y) => {
-        if (x > _library.getWidth() && !_editorHover) {
+    this.onMouseEnter = () => {
+        if (!_editorHover) {
             _pcbEditor.onMouseEnter();
             _editorHover = true;
         }
@@ -126,7 +122,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
-        if (_mouseX > _library.getWidth() && _editorHover) {
+        if (_editorHover) {
             _pcbEditor.onMouseLeave();
             _editorHover = false;
         }
