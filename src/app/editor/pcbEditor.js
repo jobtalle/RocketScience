@@ -439,6 +439,12 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _placingRenderer.draw(_cursor.x * Pcb.PIXELS_PER_POINT, _cursor.y * Pcb.PIXELS_PER_POINT);
     };
 
+    const cancelAction = () => {
+        _editMode = EDIT_MODE_SELECT;
+        _cursorDragMode = DRAG_MODE_NONE;
+        _cursor.x = _cursor.y = -1;
+    };
+
     /**
      * Update the state of the pcb editor.
      * @param timeStep The number of seconds passed after the previous update.
@@ -484,6 +490,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.hide = () => {
         _view.onMouseRelease();
+
+        cancelAction();
 
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
     };
