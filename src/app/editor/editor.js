@@ -24,6 +24,14 @@ export function Editor(myr, sprites, overlay, world, width, height) {
     const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
 
     /**
+     * Start placing a part.
+     * @param {Object} part The part's constructor.
+     */
+    this.place = part => {
+        _pcbEditor.place(part);
+    };
+
+    /**
      * Start editing a pcb.
      * @param {Pcb} pcb A pcb instance to edit.
      * @param {Number} x The X position in the world in meters.

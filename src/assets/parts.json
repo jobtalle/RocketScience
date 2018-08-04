@@ -6,7 +6,7 @@
         "label": "PART_LED_NAME",
         "description": "PART_LED_DESCRIPTION",
         "icon": "LED.svg",
-        "class": "Led"
+        "object": "Led"
       }
     }
   },
@@ -17,7 +17,7 @@
         "label": "PART_BUTTON_NAME",
         "description": "PART_BUTTON_DESCRIPTION",
         "icon": "Button.svg",
-        "class": "Button"
+        "object": "Button"
       }
     }
   }

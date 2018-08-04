@@ -78,6 +78,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const DRAG_MODE_AREA = 1;
     const EDIT_MODE_SELECT = 0;
     const EDIT_MODE_DELETE = 1;
+    const EDIT_MODE_PLACE = 2;
     const SPRITE_HOVER_POINT = sprites.getSprite("pcbSelect");
     const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
@@ -111,6 +112,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorExtendable = false;
     let _cursorDragMode = DRAG_MODE_NONE;
     let _cursorDragCells = [];
+    let _placing = null;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -475,6 +477,15 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _view.onMouseRelease();
 
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
+    };
+
+    /**
+     * Start placing a part.
+     * @param {Object} part The part's constructor.
+     */
+    this.place = part => {
+        _placing = part;
+        _editMode = EDIT_MODE_PLACE;
     };
 
     /**

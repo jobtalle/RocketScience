@@ -1,6 +1,7 @@
 import "../../styles/library.css"
 import parts from "../../assets/parts.json"
 import {getString} from "../language";
+import {getPart} from "../parts/dictionary/dictionary";
 
 /**
  * An HTML based parts library.
@@ -29,6 +30,7 @@ export function Library(sprites, editor, overlay, width) {
         partElement.className = CLASS_PART;
         partElement.onclick = () => {
             const infoBox = document.getElementById(ID_INFO_BOX);
+
             infoBox.setPart(category, part);
 
             const selected = document.getElementsByClassName(CLASS_SELECTED)[0];
@@ -87,6 +89,8 @@ export function Library(sprites, editor, overlay, width) {
         box.setPart = (category, part) => {
             titleElement.innerText = getString(part.label);
             descriptionElement.innerHTML = getString(part.description);
+
+            editor.place(getPart(part.object));
         };
 
         return box;
