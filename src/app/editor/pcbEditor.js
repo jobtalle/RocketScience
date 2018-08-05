@@ -442,6 +442,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     const cancelAction = () => {
         _editMode = EDIT_MODE_SELECT;
         _cursorDragMode = DRAG_MODE_NONE;
+        _cursorPoint = null;
+        _cursorExtendable = false;
         _cursor.x = _cursor.y = -1;
     };
 
