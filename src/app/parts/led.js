@@ -4,7 +4,7 @@ import {PinLayout} from "./configuration/pinLayout";
 import {PartSprites} from "./configuration/partSprites";
 import * as Myr from "../../lib/myr";
 
-export function Led() {
+export function Led(configuration) {
 
 }
 
@@ -15,7 +15,7 @@ Led.CONFIGURATIONS = [
                 new Myr.Vector(0, 0)
             ],
             [
-
+                new Myr.Vector(0, -1)
             ]),
         new PinLayout(),
         new PartSprites(

@@ -115,6 +115,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _cursorDragCells = [];
     let _placing = null;
     let _placingRenderer = null;
+    let _placingConfigurationIndex = 0;
+    let _placingPossible = false;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -182,38 +184,49 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     };
 
     const moveCursor = () => {
-        if(_cursor.x >= 0 && _cursor.y >= 0) {
-            _cursorPoint = _pcb.getPoint(_cursor.x, _cursor.y);
+        _cursorPoint = _pcb.getPoint(_cursor.x, _cursor.y);
 
-            if(!_cursorPoint)
-                _cursorExtendable =
-                    _pcb.getPoint(_cursor.x + 1, _cursor.y) ||
-                    _pcb.getPoint(_cursor.x, _cursor.y + 1) ||
-                    (_cursor.x > 0 && _pcb.getPoint(_cursor.x - 1, _cursor.y)) ||
-                    (_cursor.y > 0 && _pcb.getPoint(_cursor.x, _cursor.y - 1));
-        } else {
-            _cursorPoint = null;
+        if(!_cursorPoint)
             _cursorExtendable =
-                (_cursor.x === -1 && _cursor.y >= 0 && _pcb.getPoint(0, _cursor.y)) ||
-                (_cursor.y === -1 && _cursor.x >= 0 && _pcb.getPoint(_cursor.x, 0));
-        }
+                _pcb.getPoint(_cursor.x + 1, _cursor.y) ||
+                _pcb.getPoint(_cursor.x, _cursor.y + 1) ||
+                _pcb.getPoint(_cursor.x - 1, _cursor.y) ||
+                _pcb.getPoint(_cursor.x, _cursor.y - 1);
 
-        switch(_cursorDragMode) {
-            case DRAG_MODE_AREA:
-                const left = Math.min(_cursor.x, _cursorDrag.x);
-                const right = Math.max(_cursor.x, _cursorDrag.x);
-                const top = Math.min(_cursor.y, _cursorDrag.y);
-                const bottom = Math.max(_cursor.y, _cursorDrag.y);
+        switch(_editMode) {
+            case EDIT_MODE_SELECT:
+            case EDIT_MODE_DELETE:
+                switch(_cursorDragMode) {
+                    case DRAG_MODE_AREA:
+                        const left = Math.min(_cursor.x, _cursorDrag.x);
+                        const right = Math.max(_cursor.x, _cursorDrag.x);
+                        const top = Math.min(_cursor.y, _cursorDrag.y);
+                        const bottom = Math.max(_cursor.y, _cursorDrag.y);
 
-                _cursorDragCells.splice(0, _cursorDragCells.length);
+                        _cursorDragCells.splice(0, _cursorDragCells.length);
 
-                for (let y = top; y <= bottom; ++y)
-                    for (let x = left; x <= right; ++x)
-                        if(dragCellAcceptable(x, y))
-                            _cursorDragCells.push(new Myr.Vector(x, y));
+                        for (let y = top; y <= bottom; ++y)
+                            for (let x = left; x <= right; ++x)
+                                if(dragCellAcceptable(x, y))
+                                    _cursorDragCells.push(new Myr.Vector(x, y));
 
-                if (_editMode === EDIT_MODE_DELETE)
-                    dragPreventSplit(left, top, right, bottom);
+                        if (_editMode === EDIT_MODE_DELETE)
+                            dragPreventSplit(left, top, right, bottom);
+
+                        break;
+                }
+                break;
+            case EDIT_MODE_PLACE:
+                _placingPossible = true;
+
+                // TODO: Put this in a function
+                for (const point of _placing.CONFIGURATIONS[_placingConfigurationIndex].getFootprint().getPoints())
+                    if (_pcb.getPoint(_cursor.x + point.x, _cursor.y + point.y) === null)
+                        _placingPossible = false;
+
+                for (const point of _placing.CONFIGURATIONS[_placingConfigurationIndex].getFootprint().getEmpty())
+                    if (_pcb.getPoint(_cursor.x + point.x, _cursor.y + point.y) !== null)
+                        _placingPossible = false;
 
                 break;
         }
@@ -436,7 +449,13 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     };
 
     const drawPlace = () => {
+        if (!_placingPossible)
+            myr.setColor(Myr.Color.RED);
+
         _placingRenderer.draw(_cursor.x * Pcb.PIXELS_PER_POINT, _cursor.y * Pcb.PIXELS_PER_POINT);
+
+        if (!_placingPossible)
+            myr.setColor(Myr.Color.WHITE);
     };
 
     const cancelAction = () => {
@@ -504,7 +523,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.place = part => {
         _placing = part;
-        _placingRenderer = new PartRenderer(sprites, part.CONFIGURATIONS[0]);
+        _placingConfigurationIndex = 0;
+        _placingRenderer = new PartRenderer(sprites, part.CONFIGURATIONS[_placingConfigurationIndex]);
         _editMode = EDIT_MODE_PLACE;
     };
 
