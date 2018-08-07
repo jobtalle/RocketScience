@@ -30,9 +30,6 @@ overlay.addEventListener("mousedown", function(event) {
 });
 
 overlay.addEventListener("mouseup", function(event) {
-    if (event.target !== overlay)
-        return;
-
     game.onMouseRelease();
 });
 

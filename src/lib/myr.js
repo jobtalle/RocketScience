@@ -121,9 +121,14 @@ const Myr = function(canvasElement) {
 
     this.Sprite = function(name) {
         this.animate = timeStep => {
-            for(let frameTime; frameTime = getFrame()[9], frameTime >= 0 && frameCounter > frameTime; frameCounter -= frameTime)
-                if(++frame === frames.length)
+            frameCounter += timeStep;
+
+            while (frameCounter > getFrame()[9]) {
+                frameCounter -= getFrame()[9];
+
+                if (++frame === frames.length)
                     frame = 0;
+            }
         };
 
         this._setMeshBounds = () => {

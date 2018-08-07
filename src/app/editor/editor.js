@@ -1,4 +1,4 @@
-import {PcbEditor} from "./pcbEditor";
+import {PcbEditor} from "./pcb/pcbEditor";
 import {Library} from "./library";
 
 /**

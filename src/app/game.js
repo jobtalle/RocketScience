@@ -94,7 +94,7 @@ export function Game(myr, sprites, overlay) {
     this.onMouseRelease = () => {
         if(_editor)
             _editor.onMouseRelease();
-        else
+        else if (_world)
             _world.onMouseRelease();
     };
 

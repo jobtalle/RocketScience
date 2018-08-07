@@ -171,7 +171,7 @@ export function Pcb(myr, sprites) {
 
     /**
      * Erase a Pcb cell. You'll need to pack afterwards to prevent sparse pcb's.
-     * The cell must exist. Never erase all cells!
+     * The cell must exist. Never erase all points!
      * @param {Number} x The X position of the point.
      * @param {Number} y The Y position of the point.
      */
