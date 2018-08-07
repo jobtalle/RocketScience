@@ -3,6 +3,14 @@ import * as Myr from "../../../lib/myr";
 import {Pcb} from "../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 
+/**
+ * A delete editor, able to remove pieces from a PCB.
+ * @param {Sprites} sprites A sprites instance.
+ * @param {Pcb} pcb The PCB currently being edited.
+ * @param {Myr.Vector} cursor The cursor position in cells.
+ * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @constructor
+ */
 export function PcbEditorDelete(sprites, pcb, cursor, editor) {
     const KEY_TOGGLE_DELETE = "Delete";
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
@@ -102,6 +110,9 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
         }
     };
 
+    /**
+     * Tell the editor the cursor has moved.
+     */
     this.moveCursor = () => {
         if (_dragging) {
             const left = Math.min(cursor.x, _cursorDrag.x);
@@ -122,6 +133,10 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
             _deletable = pcb.getPoint(cursor.x, cursor.y) !== null;
     };
 
+    /**
+     * Start dragging action.
+     * @returns {Boolean} A boolean indicating whether a drag event has started.
+     */
     this.startDrag = () => {
         if (_deletable) {
             _cursorDrag.x = cursor.x;
@@ -136,6 +151,9 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
         return false;
     };
 
+    /**
+     * Finish the current dragging action.
+     */
     this.stopDrag = () => {
         if (_dragging) {
             erase();
@@ -145,16 +163,26 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
         }
     };
 
+    /**
+     * Cancel any actions deviating from this editors base state.
+     */
     this.cancelAction = () => {
         _dragging = false;
 
         this.moveCursor();
     };
 
+    /**
+     * Update this editor.
+     * @param {Number} timeStep The time passed since the last update in seconds.
+     */
     this.update = timeStep => {
         SPRITE_HOVER_DELETE.animate(timeStep);
     };
 
+    /**
+     * Draw this editor.
+     */
     this.draw = () => {
         if (_dragging) {
             for (const point of _cursorDragPoints) {

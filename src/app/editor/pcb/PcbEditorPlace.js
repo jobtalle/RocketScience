@@ -2,6 +2,15 @@ import {PartRenderer} from "../../parts/renderer/partRenderer";
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 
+/**
+ * A placement editor used to place a new part on a pcb.
+ * @param {Sprites} sprites A sprites instance.
+ * @param {Pcb} pcb The PCB currently being edited.
+ * @param {Myr.Vector} cursor The cursor position in cells.
+ * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @param {Object} part A valid part class to place on the PCB.
+ * @constructor
+ */
 export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
@@ -32,26 +41,47 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
 
     };
 
+    /**
+     * Tell the editor the cursor has moved.
+     */
     this.moveCursor = () => {
         _suitable = isSuitable();
     };
 
+    /**
+     * Start dragging action.
+     * @returns {Boolean} A boolean indicating whether a drag event has started.
+     */
     this.startDrag = () => {
         return false;
     };
 
+    /**
+     * Finish the current dragging action.
+     */
     this.stopDrag = () => {
 
     };
 
+    /**
+     * Cancel any actions deviating from this editors base state.
+     */
     this.cancelAction = () => {
 
     };
 
+    /**
+     * Update this editor.
+     * @param {Number} timeStep The time passed since the last update in seconds.
+     */
     this.update = timeStep => {
 
     };
 
+    /**
+     * Draw this editor.
+     * @param {Myr} myr A myriad instance.
+     */
     this.draw = myr => {
         if (!_suitable)
             myr.setColor(COLOR_UNSUITABLE);
