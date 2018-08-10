@@ -6,8 +6,8 @@ The game is written in **ES6**, **HTML5** and **CSS3**. Most graphics are render
 ## Dependencies
 The following dependencies are required for building rocket science:
 
-* [Node.js](www.nodejs.org)
-* [Python](www.python.org) for build automation
+* [Node.js](https://www.nodejs.org)
+* [Python](https://www.python.org) for build automation
 * [Aseprite](https://github.com/aseprite/aseprite) for editing and building sprite atlases
 * Several libraries which are installed and managed by NPM
 
