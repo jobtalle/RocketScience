@@ -6,7 +6,26 @@
         "label": "PART_LED_NAME",
         "description": "PART_LED_DESCRIPTION",
         "icon": "LED.svg",
-        "object": "Led"
+        "object": "Led",
+        "pins": 1,
+        "configurations": [
+          {
+            "footprint": {
+              "points": [
+                {"x": 0, "y": 0}
+              ],
+              "air": [
+                {"x": 0, "y": -1}
+              ]
+            },
+            "io": [
+              {"type": "in", "x": 0, "y": 0}
+            ],
+            "sprites": [
+              {"name": "partLed", "x": 0, "y": -1}
+            ]
+          }
+        ]
       }
     }
   },

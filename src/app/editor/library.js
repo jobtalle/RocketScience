@@ -1,7 +1,6 @@
 import "../../styles/library.css"
 import parts from "../../assets/parts.json"
 import {getString} from "../language";
-import {getPart} from "../parts/dictionary/dictionary";
 
 /**
  * An HTML based parts library.
@@ -90,7 +89,7 @@ export function Library(sprites, editor, overlay, width) {
             titleElement.innerText = getString(part.label);
             descriptionElement.innerHTML = getString(part.description);
 
-            editor.place(getPart(part.object));
+            editor.place(part);
         };
 
         return box;

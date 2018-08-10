@@ -1,9 +1,10 @@
 import * as Myr from "../../../lib/myr";
+import {Pcb} from "../../pcb/pcb";
 
 /**
  * A part renderer.
  * @param {Sprites} sprites A sprites object to create sprites from.
- * @param {Object} source Either a PartConfiguration or a valid part.
+ * @param {Object} source A part configuration.
  * @constructor
  */
 export function PartRenderer(sprites, source) {
@@ -11,19 +12,17 @@ export function PartRenderer(sprites, source) {
     const transformInstances = [];
 
     const createFromConfiguration = configuration => {
-        for (const sprite of configuration.getPartSprites().getSprites()) {
-            spriteInstances.push(sprites.getSprite(sprite.getName()));
+        for (const sprite of configuration.sprites) {
+            spriteInstances.push(sprites.getSprite(sprite.name));
 
             const transform = new Myr.Transform();
 
-            transform.translate(sprite.getOffset().x, sprite.getOffset().y);
+            transform.translate(
+                sprite.x * Pcb.PIXELS_PER_POINT,
+                sprite.y * Pcb.PIXELS_PER_POINT);
 
             transformInstances.push(transform);
         }
-    };
-
-    const createFromPart = part => {
-        // TODO: Create from instantiated part
     };
 
     /**
@@ -36,8 +35,5 @@ export function PartRenderer(sprites, source) {
             spriteInstances[i].drawTransformedAt(x, y, transformInstances[i]);
     };
 
-    if (source.getPartSprites === undefined)
-        createFromPart(source);
-    else
-        createFromConfiguration(source);
+    createFromConfiguration(source);
 }

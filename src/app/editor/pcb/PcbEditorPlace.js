@@ -8,24 +8,27 @@ import * as Myr from "../../../lib/myr";
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
- * @param {Object} part A valid part class to place on the PCB.
+ * @param {Object} part A valid part from parts.json to place on the PCB.
  * @constructor
  */
 export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
     let _configurationIndex = 0;
-    let _renderer = new PartRenderer(sprites, part.CONFIGURATIONS[_configurationIndex]);
+    let _renderer = new PartRenderer(sprites, part.configurations[_configurationIndex]);
     let _suitable = false;
 
     const isSuitable = () => {
-        const footprint = part.CONFIGURATIONS[_configurationIndex].getFootprint();
+        const footprint = part.configurations[_configurationIndex].footprint;
 
-        for (const point of footprint.getPoints())
-            if (!pcb.getPoint(cursor.x + point.x, cursor.y + point.y))
+        for (const point of footprint.points) {
+            const pcbPoint = pcb.getPoint(cursor.x + point.x, cursor.y + point.y);
+
+            if (!pcbPoint)
                 return false;
+        }
 
-        for (const point of footprint.getEmpty())
+        for (const point of footprint.air)
             if (pcb.getPoint(cursor.x + point.x, cursor.y + point.y))
                 return false;
 
