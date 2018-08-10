@@ -4,10 +4,10 @@ import {Pcb} from "../pcb/pcb";
 /**
  * A part renderer.
  * @param {Sprites} sprites A sprites object to create sprites from.
- * @param {Object} source A part configuration.
+ * @param {Object} configuration A part configuration.
  * @constructor
  */
-export function PartRenderer(sprites, source) {
+export function PartRenderer(sprites, configuration) {
     const spriteInstances = [];
     const transformInstances = [];
 
@@ -35,5 +35,5 @@ export function PartRenderer(sprites, source) {
             spriteInstances[i].drawTransformedAt(x, y, transformInstances[i]);
     };
 
-    createFromConfiguration(source);
+    createFromConfiguration(configuration);
 }

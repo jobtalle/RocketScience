@@ -4,17 +4,29 @@
  * @param {Sprites} sprites The sprites library.
  * @constructor
  */
+import {PcbPoint} from "./pcbPoint";
+
 export function Pcb(myr, sprites) {
-    this.Point = function() {
-
-    };
-
-    const DEFAULT_WIDTH = 2;
-    const DEFAULT_HEIGHT = 2;
+    const _fixtures = [];
     const _points = [];
 
     let _width = 0;
     let _pointCount = 0;
+
+    const createFixture = (part, x, y) => {
+        return {
+            "part": part,
+            "x": x,
+            "y": y
+        };
+    };
+
+    const moveFixtures = (x, y) => {
+        for (const fixture of _fixtures) {
+            fixture.x += x;
+            fixture.y += y;
+        }
+    };
 
     const trimRowsTop = () => {
         const height = this.getHeight();
@@ -31,6 +43,8 @@ export function Pcb(myr, sprites) {
 
             if (empty) {
                 _points.splice(0, 1);
+
+                moveFixtures(0, -1);
             }
         }
 
@@ -74,6 +88,8 @@ export function Pcb(myr, sprites) {
                 for (let row = 0; row < this.getHeight(); ++row)
                     _points[row].splice(0, 1);
 
+                moveFixtures(-1, 0);
+
                 --_width;
             }
         }
@@ -108,7 +124,7 @@ export function Pcb(myr, sprites) {
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
      * @param {Number} y The y position on the board
-     * @returns {Pcb.Point} A pcb point, or null if no point is placed here.
+     * @returns {PcbPoint} A pcb point, or null if no point is placed here.
      */
     this.getPoint = (x, y) => x < 0 || y < 0?null:y < _points.length && x < _points[y].length?_points[y][x]:null;
 
@@ -141,6 +157,9 @@ export function Pcb(myr, sprites) {
             if (this.getPoint(x, y))
                 newPcb.extend(x, y);
 
+        for (const fixture of _fixtures)
+            newPcb.place(fixture.part.copy(), fixture.x, fixture.y);
+
         return newPcb;
     };
 
@@ -155,12 +174,12 @@ export function Pcb(myr, sprites) {
             _points.push([]);
 
         if(x < _points[y].length)
-            _points[y][x] = new this.Point();
+            _points[y][x] = new PcbPoint();
         else {
             while(_points[y].length < x)
                 _points[y].push(null);
 
-            _points[y].push(new this.Point());
+            _points[y].push(new PcbPoint());
         }
 
         if(x >= _width)
@@ -194,6 +213,8 @@ export function Pcb(myr, sprites) {
             _points.splice(0, 0, []);
 
         _width += x;
+
+        moveFixtures(x, y);
     };
 
     /**
@@ -211,6 +232,12 @@ export function Pcb(myr, sprites) {
     };
 
     /**
+     * Returns all the fixtures, which are all parts on this PCB at their respective positions.
+     * @returns {Array} An array containing all fixtures.
+     */
+    this.getFixtures = () => _fixtures;
+
+    /**
      * Places a part on the PCB. It is assumed the part actually fits;
      * checking this is the responsibility of the caller.
      * The given position denotes the origin of the part, it may cover more than one cell.
@@ -219,7 +246,12 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The Y cell to place the part on.
      */
     this.place = (part, x, y) => {
-        console.log(part);
+        _fixtures.push(createFixture(part, x, y));
+
+        const footprint = part.getConfiguration().footprint;
+
+        for (const point of footprint.points)
+            this.getPoint(point.x + x, point.y + y).part = part;
     };
 
     /**
@@ -227,9 +259,11 @@ export function Pcb(myr, sprites) {
      * This should always happen when creating a new PCB.
      */
     this.initialize = () => {
-        for (let y = 0; y < DEFAULT_HEIGHT; ++y) for (let x = 0; x < DEFAULT_WIDTH; ++x)
+        for (let y = 0; y < Pcb.DEFAULT_HEIGHT; ++y) for (let x = 0; x < Pcb.DEFAULT_WIDTH; ++x)
             this.extend(x, y);
     };
 }
 
 Pcb.PIXELS_PER_POINT = 6;
+Pcb.DEFAULT_WIDTH = 2;
+Pcb.DEFAULT_HEIGHT = 2;

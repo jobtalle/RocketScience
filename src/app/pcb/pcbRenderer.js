@@ -1,4 +1,6 @@
 import {Pcb} from "./pcb";
+import {PartRenderer} from "../part/partRenderer";
+import * as Myr from "../../lib/myr";
 
 /**
  * A PCB renderer.
@@ -10,6 +12,8 @@ import {Pcb} from "./pcb";
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
 
+    const _partRenderers = [];
+    const _partPositions = [];
     let _initialized = false;
     let _layerPcb = null;
 
@@ -30,24 +34,34 @@ export function PcbRenderer(myr, sprites, pcb) {
                         row * Pcb.PIXELS_PER_POINT);
     };
 
+    const updatePartRenderers = () => {
+        _partRenderers.splice(0, _partRenderers.length);
+        _partPositions.splice(0, _partPositions.length);
+
+        for (const fixture of pcb.getFixtures()) {
+            _partRenderers.push(new PartRenderer(sprites, fixture.part.getConfiguration()));
+            _partPositions.push(new Myr.Vector(fixture.x * Pcb.PIXELS_PER_POINT, fixture.y * Pcb.PIXELS_PER_POINT));
+        }
+    };
+
     /**
      * Draws the associated pcb.
      * @param {Number} x The x coordinate in pixels.
      * @param {Number} y The y coordinate in pixels.
      */
-    this.draw = (x, y) => _layerPcb.draw(x, y);
+    this.draw = (x, y) => {
+        _layerPcb.draw(x, y);
 
-    /**
-     * Draws the associated pcb using a transform.
-     * @param {Myr.Transform} transform A Transform object.
-     */
-    this.drawTransformed = transform => _layerPcb.drawTransformed(transform);
+        for (let i = 0; i < _partRenderers.length; ++i)
+            _partRenderers[i].draw(_partPositions[i].x, _partPositions[i].y);
+    };
 
     /**
      * Update the pcb representation.
      */
     this.revalidate = () => {
         updateSurfaces();
+        updatePartRenderers();
     };
 
     /**

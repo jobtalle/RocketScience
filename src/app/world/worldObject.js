@@ -32,9 +32,15 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
 
     /**
      * Draw the world object in its current state.
+     * @param {Myr} myr A Myriad instance.
      */
-    this.draw = () => {
-        _renderer.drawTransformed(_body.getTransform());
+    this.draw = myr => {
+        myr.push();
+        myr.transform(_body.getTransform());
+
+        _renderer.draw(0, 0);
+
+        myr.pop();
     };
 
     /**

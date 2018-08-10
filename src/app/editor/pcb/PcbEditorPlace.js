@@ -26,7 +26,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
         for (const point of footprint.points) {
             const pcbPoint = pcb.getPoint(cursor.x + point.x, cursor.y + point.y);
 
-            if (!pcbPoint)
+            if (!pcbPoint || pcbPoint.part !== null)
                 return false;
         }
 
@@ -59,6 +59,8 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
      */
     this.mouseDown = () => {
         if (_suitable) {
+            editor.undoPush();
+
             // TODO: Not every part is a Led!
             pcb.place(new Part(part.configurations[_configurationIndex], new Led()), cursor.x, cursor.y);
 
