@@ -1,6 +1,8 @@
-import {PartRenderer} from "../../parts/partRenderer";
+import {PartRenderer} from "../../part/partRenderer";
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
+import {Part} from "../../part/part";
+import {Led} from "../../part/behavior/led";
 
 /**
  * A placement editor used to place a new part on a pcb.
@@ -8,7 +10,7 @@ import * as Myr from "../../../lib/myr";
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
- * @param {Object} part A valid part from parts.json to place on the PCB.
+ * @param {Object} part A valid part from part.json to place on the PCB.
  * @constructor
  */
 export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
@@ -57,7 +59,10 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
      */
     this.mouseDown = () => {
         if (_suitable) {
-            pcb.place(part, cursor.x, cursor.y);
+            // TODO: Not every part is a Led!
+            pcb.place(new Part(part.configurations[_configurationIndex], new Led()), cursor.x, cursor.y);
+
+            editor.revalidate();
 
             return true;
         }

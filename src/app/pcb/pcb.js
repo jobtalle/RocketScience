@@ -211,6 +211,18 @@ export function Pcb(myr, sprites) {
     };
 
     /**
+     * Places a part on the PCB. It is assumed the part actually fits;
+     * checking this is the responsibility of the caller.
+     * The given position denotes the origin of the part, it may cover more than one cell.
+     * @param {Part} part A part to place on this PCB.
+     * @param {Number} x The X cell to place the part on.
+     * @param {Number} y The Y cell to place the part on.
+     */
+    this.place = (part, x, y) => {
+        console.log(part);
+    };
+
+    /**
      * Initialize this PCB with its default size.
      * This should always happen when creating a new PCB.
      */

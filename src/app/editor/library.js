@@ -3,7 +3,7 @@ import parts from "../../assets/parts.json"
 import {getString} from "../language";
 
 /**
- * An HTML based parts library.
+ * An HTML based part library.
  * @param {Sprites} sprites All sprites.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
