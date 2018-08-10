@@ -1,5 +1,5 @@
-import * as Myr from "../../../lib/myr";
-import {Pcb} from "../../pcb/pcb";
+import * as Myr from "../../lib/myr";
+import {Pcb} from "../pcb/pcb";
 
 /**
  * A part renderer.

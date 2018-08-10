@@ -137,7 +137,7 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
      * Start dragging action.
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
-    this.startDrag = () => {
+    this.mouseDown = () => {
         if (_deletable) {
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
@@ -154,7 +154,7 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
     /**
      * Finish the current dragging action.
      */
-    this.stopDrag = () => {
+    this.mouseUp = () => {
         if (_dragging) {
             erase();
 

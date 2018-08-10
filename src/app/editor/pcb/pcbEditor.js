@@ -139,12 +139,12 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _editor.moveCursor();
     };
 
-    const startDrag = () => {
-        return _editor.startDrag();
+    const mouseDown = () => {
+        return _editor.mouseDown();
     };
 
-    const stopDrag = () => {
-        _editor.stopDrag();
+    const mouseUp = () => {
+        _editor.mouseUp();
     };
 
     /**
@@ -244,7 +244,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Press the mouse.
      */
     this.onMousePress = () => {
-        if (!startDrag())
+        if (!mouseDown())
             _view.onMousePress();
     };
 
@@ -252,7 +252,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        stopDrag();
+        mouseUp();
 
         _view.onMouseRelease();
     };

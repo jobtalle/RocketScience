@@ -1,4 +1,4 @@
-import {PartRenderer} from "../../parts/renderer/partRenderer";
+import {PartRenderer} from "../../parts/partRenderer";
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 
@@ -55,14 +55,20 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
      * Start dragging action.
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
-    this.startDrag = () => {
+    this.mouseDown = () => {
+        if (_suitable) {
+            pcb.place(part, cursor.x, cursor.y);
+
+            return true;
+        }
+
         return false;
     };
 
     /**
      * Finish the current dragging action.
      */
-    this.stopDrag = () => {
+    this.mouseUp = () => {
 
     };
 
