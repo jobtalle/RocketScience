@@ -82,12 +82,12 @@ export function PcbEditorExtend(sprites, pcb, cursor, editor) {
 
             for (let y = top; y <= bottom; ++y)
                 for (let x = left; x <= right; ++x)
-                    if (!pcb.getPoint(x, y))
+                    if (pcb.isExtendable(x, y))
                         _cursorDragCells.push(new Myr.Vector(x, y));
         }
         else
             _extendable =
-                !pcb.getPoint(cursor.x, cursor.y) && (
+                pcb.isExtendable(cursor.x, cursor.y) && (
                 pcb.getPoint(cursor.x + 1, cursor.y) ||
                 pcb.getPoint(cursor.x, cursor.y + 1) ||
                 pcb.getPoint(cursor.x - 1, cursor.y) ||

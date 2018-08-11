@@ -241,6 +241,25 @@ export function Pcb(myr, sprites) {
     this.getFixtures = () => _fixtures;
 
     /**
+     * Check whether the PCB is extendable at a certain point.
+     * This means there is no point here yet and no part occupies the space.
+     * @param {Number} x The X coordinate.
+     * @param {Number} y The Y coordinate.
+     * @returns {Boolean} A boolean indicating whether the PCB can be extended here.
+     */
+    this.isExtendable = (x, y) => {
+        if (this.getPoint(x, y))
+            return false;
+
+        for (const fixture of _fixtures)
+            for (const point of fixture.part.getConfiguration().footprint.air)
+                if (fixture.x + point.x === x && fixture.y + point.y === y)
+                    return false;
+
+        return true;
+    };
+
+    /**
      * Places a part on the PCB. It is assumed the part actually fits;
      * checking this is the responsibility of the caller.
      * The given position denotes the origin of the part, it may cover more than one cell.
