@@ -1,23 +1,23 @@
-import {PcbEditorExtend} from "./PcbEditorExtend";
 import * as Myr from "../../../lib/myr";
 import {Pcb} from "../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 
 /**
- * A delete editor, able to remove pieces from a PCB.
+ * An extend editor, able to extend the current PCB.
  * @param {Sprites} sprites A sprites instance.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @constructor
  */
-export function PcbEditorDelete(sprites, pcb, cursor, editor) {
-    const KEY_TOGGLE_DELETE = "Delete";
+export function PcbEditorReshape(sprites, pcb, cursor, editor) {
+    const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
     const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
 
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
     let _dragging = false;
+    let _extendable = false;
     let _deletable = false;
 
     const erase = () => {
@@ -97,17 +97,49 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
         }
     };
 
+    const extend = () => {
+        editor.undoPush();
+
+        const negatives = [];
+
+        let xMin = 0;
+        let yMin = 0;
+        let yMax = pcb.getHeight() - 1;
+
+        for (const cell of _cursorDragPoints) {
+            if (cell.x < 0 || cell.y < 0) {
+                if (cell.x < xMin)
+                    xMin = cell.x;
+
+                if (cell.y < yMin)
+                    yMin = cell.y;
+
+                negatives.push(cell);
+            }
+            else {
+                if (cell.y > yMax)
+                    yMax = cell.y;
+
+                pcb.extend(cell.x, cell.y);
+            }
+        }
+
+        editor.shift(xMin * Pcb.PIXELS_PER_POINT, yMin * Pcb.PIXELS_PER_POINT);
+        pcb.shift(-xMin, -yMin);
+
+        for (const cell of negatives)
+            pcb.extend(cell.x - xMin, cell.y - yMin);
+
+        editor.revalidate();
+    };
+
     /**
      * A key is pressed.
      * @param {String} key A key.
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
-        switch (key) {
-            case KEY_TOGGLE_DELETE:
-                editor.replace(new PcbEditorExtend(sprites, pcb, cursor, editor));
-                break;
-        }
+
     };
 
     /**
@@ -122,15 +154,32 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
 
             _cursorDragPoints.splice(0, _cursorDragPoints.length);
 
-            for (let y = top; y <= bottom; ++y)
-                for (let x = left; x <= right; ++x)
+            if (_extendable) {
+                for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
+                    if (pcb.isExtendable(x, y))
+                        _cursorDragPoints.push(new Myr.Vector(x, y));
+            }
+            else {
+                for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
                     if (pcb.getPoint(x, y))
                         _cursorDragPoints.push(new Myr.Vector(x, y));
 
-            dragPreventSplit(left, top, right, bottom);
+                dragPreventSplit(left, top, right, bottom);
+            }
         }
-        else
-            _deletable = pcb.getPoint(cursor.x, cursor.y) !== null;
+        else {
+            _extendable =
+                pcb.isExtendable(cursor.x, cursor.y) && (
+                pcb.getPoint(cursor.x + 1, cursor.y) ||
+                pcb.getPoint(cursor.x, cursor.y + 1) ||
+                pcb.getPoint(cursor.x - 1, cursor.y) ||
+                pcb.getPoint(cursor.x, cursor.y - 1));
+
+            if (_extendable)
+                _deletable = false;
+            else
+                _deletable = pcb.getPoint(cursor.x, cursor.y) !== null;
+        }
     };
 
     /**
@@ -138,7 +187,7 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
     this.mouseDown = () => {
-        if (_deletable) {
+        if (_extendable || _deletable) {
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
             _dragging = true;
@@ -156,9 +205,12 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
      */
     this.mouseUp = () => {
         if (_dragging) {
-            erase();
+            if (_extendable)
+                extend();
+            else
+                erase();
 
-            _deletable = false;
+            _extendable = _deletable = false;
             _dragging = false;
         }
     };
@@ -177,7 +229,8 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
      * @param {Number} timeStep The time passed since the last update in seconds.
      */
     this.update = timeStep => {
-        SPRITE_HOVER_DELETE.animate(timeStep);
+        if (_deletable)
+            SPRITE_HOVER_DELETE.animate(timeStep);
     };
 
     /**
@@ -185,10 +238,17 @@ export function PcbEditorDelete(sprites, pcb, cursor, editor) {
      */
     this.draw = () => {
         if (_dragging) {
-            for (const point of _cursorDragPoints) {
-                SPRITE_HOVER_DELETE.draw(point.x * Pcb.PIXELS_PER_POINT, point.y * Pcb.PIXELS_PER_POINT);
+            if (_extendable) {
+                for (const cell of _cursorDragPoints)
+                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
+            }
+            else {
+                for (const cell of _cursorDragPoints)
+                    SPRITE_HOVER_DELETE.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
             }
         }
+        else if (_extendable)
+            SPRITE_HOVER_EXTEND.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
         else if (_deletable)
             SPRITE_HOVER_DELETE.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
     };
