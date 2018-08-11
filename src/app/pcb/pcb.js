@@ -195,6 +195,9 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The Y position of the point.
      */
     this.erase = (x, y) => {
+        if (_points[y][x].part !== null)
+            this.remove(_points[y][x].part);
+
         _points[y][x] = null;
         --_pointCount;
     };
@@ -252,6 +255,30 @@ export function Pcb(myr, sprites) {
 
         for (const point of footprint.points)
             this.getPoint(point.x + x, point.y + y).part = part;
+    };
+
+    /**
+     * Removes a part from the PCB.
+     * @param {Part} part A part.
+     */
+    this.remove = part => {
+        let fixture = null;
+
+        for (const f of _fixtures) {
+            if (f.part === part) {
+                fixture = f;
+
+                break;
+            }
+        }
+
+        if (fixture === null)
+            return;
+
+        for (const point of part.getConfiguration().footprint.points)
+            this.getPoint(fixture.x + point.x, fixture.y + point.y).part = null;
+
+        _fixtures.splice(_fixtures.indexOf(fixture), 1);
     };
 
     /**
