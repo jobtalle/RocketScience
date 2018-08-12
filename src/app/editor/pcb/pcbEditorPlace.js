@@ -22,12 +22,21 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
     let _suitable = false;
 
     const makeRenderers = () => {
-        for (const fixture of fixtures)
-            _renderers.push(new PartRenderer(sprites, fixture.part.configurations[_configurationIndex]));
+        for (const fixture of fixtures) {
+            if (fixture.isInstance())
+                _renderers.push(new PartRenderer(sprites, fixture.part.getConfiguration()));
+            else
+                _renderers.push(new PartRenderer(sprites, fixture.part.configurations[_configurationIndex]));
+        }
     };
 
     const isSuitable = fixture => {
-        const footprint = fixture.part.configurations[_configurationIndex].footprint;
+        let footprint = null;
+
+        if (fixture.isInstance())
+            footprint = fixture.part.getConfiguration().footprint;
+        else
+            footprint = fixture.part.configurations[_configurationIndex].footprint;
 
         for (const point of footprint.points) {
             const pcbPoint = pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y);
@@ -37,7 +46,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
         }
 
         for (const point of footprint.air)
-            if (pcb.getPoint(cursor.x + point.x, cursor.y + point.y))
+            if (pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y))
                 return false;
 
         return true;
@@ -76,11 +85,19 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
             editor.undoPush();
 
             // TODO: Not every part is a Led!
-            for (const fixture of fixtures)
-                pcb.place(new Part(
-                    fixture.part.configurations[_configurationIndex], new Led()),
+            for (const fixture of fixtures) {
+                let part = null;
+
+                if (fixture.isInstance())
+                    part = new Part(fixture.part.getConfiguration(), new Led());
+                else
+                    part = new Part(fixture.part.configurations[_configurationIndex], new Led());
+
+                pcb.place(
+                    part,
                     cursor.x + fixture.x,
                     cursor.y + fixture.y);
+            }
 
             editor.revalidate();
             editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
@@ -137,7 +154,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
 
 /**
  * A part to place with an offset.
- * @param {Object} part A part definition as defined in parts.json.
+ * @param {Object} part Either a part definition as defined in parts.json or a Part instance.
  * @param {Number} x The X offset.
  * @param {Number} y The Y offset.
  * @constructor
@@ -146,4 +163,8 @@ PcbEditorPlace.Fixture = function(part, x, y) {
     this.part = part;
     this.x = x;
     this.y = y;
+};
+
+PcbEditorPlace.Fixture.prototype.isInstance = function() {
+    return this.part.configurations === undefined;
 };

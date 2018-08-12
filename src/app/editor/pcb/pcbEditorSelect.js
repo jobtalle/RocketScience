@@ -1,5 +1,6 @@
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
+import {PcbEditorPlace} from "./pcbEditorPlace";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -37,6 +38,18 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
     let _top = 0;
     let _bottom = 0;
 
+    const copy = () => {
+        const placeFixtures = [];
+
+        for (const fixture of _selectedFixtures)
+            placeFixtures.push(new PcbEditorPlace.Fixture(
+                fixture.part.copy(),
+                fixture.x - _left,
+                fixture.y - _top));
+
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures));
+    };
+
     const isPartSelected = part => {
         return _selectedFixtures.indexOf(part) !== -1;
     };
@@ -73,6 +86,11 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
             case PcbEditorSelect.KEY_DELETE:
                 if (_selected)
                     deleteSelectedParts();
+
+                break;
+            case PcbEditorSelect.KEY_COPY:
+                if (_selected)
+                    copy();
 
                 break;
         }
@@ -193,3 +211,4 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
 }
 
 PcbEditorSelect.KEY_DELETE = "Delete";
+PcbEditorSelect.KEY_COPY = "c";
