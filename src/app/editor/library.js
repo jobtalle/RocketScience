@@ -1,6 +1,7 @@
 import "../../styles/library.css"
 import parts from "../../assets/parts.json"
 import {getString} from "../language";
+import {PcbEditorPlace} from "./pcb/pcbEditorPlace";
 
 /**
  * An HTML based part library.
@@ -89,7 +90,7 @@ export function Library(sprites, editor, overlay, width) {
             titleElement.innerText = getString(part.label);
             descriptionElement.innerHTML = getString(part.description);
 
-            editor.place(part);
+            editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
         };
 
         return box;

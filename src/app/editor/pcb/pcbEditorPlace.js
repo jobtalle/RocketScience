@@ -11,21 +11,26 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
- * @param {Object} part A valid part from part.json to place on the PCB.
+ * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
  * @constructor
  */
-export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
+export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
+    const _renderers = [];
     let _configurationIndex = 0;
-    let _renderer = new PartRenderer(sprites, part.configurations[_configurationIndex]);
     let _suitable = false;
 
-    const isSuitable = () => {
-        const footprint = part.configurations[_configurationIndex].footprint;
+    const makeRenderers = () => {
+        for (const fixture of fixtures)
+            _renderers.push(new PartRenderer(sprites, fixture.part.configurations[_configurationIndex]));
+    };
+
+    const isSuitable = fixture => {
+        const footprint = fixture.part.configurations[_configurationIndex].footprint;
 
         for (const point of footprint.points) {
-            const pcbPoint = pcb.getPoint(cursor.x + point.x, cursor.y + point.y);
+            const pcbPoint = pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y);
 
             if (!pcbPoint || pcbPoint.part !== null)
                 return false;
@@ -51,7 +56,15 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
      * Tell the editor the cursor has moved.
      */
     this.moveCursor = () => {
-        _suitable = isSuitable();
+        _suitable = true;
+
+        for (const fixture of fixtures) {
+            if (!isSuitable(fixture)) {
+                _suitable = false;
+
+                break;
+            }
+        }
     };
 
     /**
@@ -63,7 +76,11 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
             editor.undoPush();
 
             // TODO: Not every part is a Led!
-            pcb.place(new Part(part.configurations[_configurationIndex], new Led()), cursor.x, cursor.y);
+            for (const fixture of fixtures)
+                pcb.place(new Part(
+                    fixture.part.configurations[_configurationIndex], new Led()),
+                    cursor.x + fixture.x,
+                    cursor.y + fixture.y);
 
             editor.revalidate();
             editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
@@ -106,9 +123,27 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
         if (!_suitable)
             myr.setColor(COLOR_UNSUITABLE);
 
-        _renderer.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+        for (let i = 0; i < fixtures.length; ++i)
+            _renderers[i].draw(
+                (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
+                (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
 
         if (!_suitable)
             myr.setColor(Myr.Color.WHITE);
     };
+
+    makeRenderers();
 }
+
+/**
+ * A part to place with an offset.
+ * @param {Object} part A part definition as defined in parts.json.
+ * @param {Number} x The X offset.
+ * @param {Number} y The Y offset.
+ * @constructor
+ */
+PcbEditorPlace.Fixture = function(part, x, y) {
+    this.part = part;
+    this.x = x;
+    this.y = y;
+};
