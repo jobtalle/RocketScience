@@ -26,14 +26,42 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
     const SPRITE_SELECT_TB = sprites.getSprite("pcbSelectTB");
     const SPRITE_SELECT_RTB = sprites.getSprite("pcbSelectRTB");
 
+    const _selectedFixtures = [];
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
     let _selectable = false;
+    let _selected = false;
     let _dragging = false;
     let _left = 0;
     let _right = 0;
     let _top = 0;
     let _bottom = 0;
+
+    const isPartSelected = part => {
+        return _selectedFixtures.indexOf(part) !== -1;
+    };
+
+    const findSelectedParts = () => {
+        _selectedFixtures.splice(0, _selectedFixtures.length);
+
+        for (const point of _cursorDragPoints) {
+            const pcbPoint = pcb.getPoint(point.x, point.y);
+
+            if (pcbPoint !== null && pcbPoint.part !== null && !isPartSelected(pcbPoint.part))
+                _selectedFixtures.push(pcb.getFixture(pcbPoint.part));
+        }
+    };
+
+    const deleteSelectedParts = () => {
+        editor.undoPush();
+
+        for (const fixture of _selectedFixtures)
+            pcb.remove(fixture.part);
+
+        _selected = false;
+
+        editor.revalidate();
+    };
 
     /**
      * A key is pressed.
@@ -41,7 +69,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
+        switch (key) {
+            case PcbEditorSelect.KEY_DELETE:
+                if (_selected)
+                    deleteSelectedParts();
 
+                break;
+        }
     };
 
     /**
@@ -69,6 +103,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      */
     this.mouseDown = () => {
         if (_selectable) {
+            _selected = false;
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
             _dragging = true;
@@ -87,10 +122,10 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      */
     this.mouseUp = () => {
         if (_dragging) {
-            _cursorDragPoints.splice(0, _cursorDragPoints.length);
+            findSelectedParts();
 
-            _selectable = false;
             _dragging = false;
+            _selected = _selectedFixtures.length > 0;
         }
     };
 
@@ -116,7 +151,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      * @param {Myr} myr A myriad instance.
      */
     this.draw = myr => {
-        if (_dragging) {
+        if (_dragging || _selected) {
             if (_left === _right) {
                 if (_top === _bottom)
                     SPRITE_SELECT.draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
@@ -156,3 +191,5 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
             SPRITE_SELECT.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
     };
 }
+
+PcbEditorSelect.KEY_DELETE = "Delete";

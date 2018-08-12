@@ -5,6 +5,7 @@
  * @constructor
  */
 import {PcbPoint} from "./pcbPoint";
+import {Fixture} from "../part/fixture";
 
 export function Pcb(myr, sprites) {
     const _fixtures = [];
@@ -12,14 +13,6 @@ export function Pcb(myr, sprites) {
 
     let _width = 0;
     let _pointCount = 0;
-
-    const createFixture = (part, x, y) => {
-        return {
-            "part": part,
-            "x": x,
-            "y": y
-        };
-    };
 
     const moveFixtures = (x, y) => {
         for (const fixture of _fixtures) {
@@ -127,6 +120,17 @@ export function Pcb(myr, sprites) {
      * @returns {PcbPoint} A pcb point, or null if no point is placed here.
      */
     this.getPoint = (x, y) => x < 0 || y < 0?null:y < _points.length && x < _points[y].length?_points[y][x]:null;
+
+    /**
+     * Get the fixture of a part on this PCB.
+     * @param {Part} part A part which exists on this PCB.
+     * @returns {Fixture} A fixture containing the part.
+     */
+    this.getFixture = part => {
+        for (const fixture of _fixtures)
+            if (fixture.part === part)
+                return fixture;
+    };
 
     /**
      * Get the number of points in this PCB.
@@ -268,7 +272,7 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The Y cell to place the part on.
      */
     this.place = (part, x, y) => {
-        _fixtures.push(createFixture(part, x, y));
+        _fixtures.push(new Fixture(part, x, y));
 
         const footprint = part.getConfiguration().footprint;
 
@@ -311,5 +315,5 @@ export function Pcb(myr, sprites) {
 }
 
 Pcb.PIXELS_PER_POINT = 6;
-Pcb.DEFAULT_WIDTH = 2;
-Pcb.DEFAULT_HEIGHT = 2;
+Pcb.DEFAULT_WIDTH = 8;
+Pcb.DEFAULT_HEIGHT = 6;
