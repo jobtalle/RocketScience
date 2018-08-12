@@ -3,9 +3,10 @@ import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {Part} from "../../part/part";
 import {Led} from "../../part/behavior/led";
+import {PcbEditorSelect} from "./pcbEditorSelect";
 
 /**
- * A placement editor used to place a new part on a pcb.
+ * A placement editor used to place a part on a pcb.
  * @param {Sprites} sprites A sprites instance.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
@@ -65,9 +66,12 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, part) {
             pcb.place(new Part(part.configurations[_configurationIndex], new Led()), cursor.x, cursor.y);
 
             editor.revalidate();
+            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
 
             return true;
         }
+        else
+            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
 
         return false;
     };

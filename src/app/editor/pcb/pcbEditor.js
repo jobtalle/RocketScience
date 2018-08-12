@@ -6,8 +6,8 @@ import {View} from "../../view/view";
 import {ZoomProfile} from "../../view/zoomProfile";
 import Myr from "../../../lib/myr.js"
 import {ShiftProfile} from "../../view/shiftProfile";
-import {PcbEditorReshape} from "./PcbEditorReshape";
-import {PcbEditorPlace} from "./PcbEditorPlace";
+import {PcbEditorPlace} from "./pcbEditorPlace";
+import {PcbEditorSelect} from "./pcbEditorSelect";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -177,7 +177,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         _cursor.x = _cursor.y = -1;
 
-        setEditor(new PcbEditorReshape(sprites, _pcb, _cursor, makeInterface()));
+        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface()));
         moveCursor();
     };
 
@@ -227,7 +227,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _pcbPosition.y = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
 
-        setEditor(new PcbEditorReshape(sprites, _pcb, _cursor, makeInterface()));
+        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface()));
 
         matchWorldPosition();
         revalidate();

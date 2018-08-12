@@ -3,7 +3,7 @@ import {Pcb} from "../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 
 /**
- * An extend editor, able to extend the current PCB.
+ * A reshape editor used for extending or deleting portions of a PCB.
  * @param {Sprites} sprites A sprites instance.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
@@ -11,8 +11,8 @@ import {PointGroup} from "./pointGroup";
  * @constructor
  */
 export function PcbEditorReshape(sprites, pcb, cursor, editor) {
-    const SPRITE_HOVER_EXTEND = sprites.getSprite("pcbExtend");
-    const SPRITE_HOVER_DELETE = sprites.getSprite("pcbDelete");
+    const SPRITE_EXTEND = sprites.getSprite("pcbExtend");
+    const SPRITE_DELETE = sprites.getSprite("pcbDelete");
 
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
@@ -230,7 +230,7 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
      */
     this.update = timeStep => {
         if (_deletable)
-            SPRITE_HOVER_DELETE.animate(timeStep);
+            SPRITE_DELETE.animate(timeStep);
     };
 
     /**
@@ -240,16 +240,16 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
         if (_dragging) {
             if (_extendable) {
                 for (const cell of _cursorDragPoints)
-                    SPRITE_HOVER_EXTEND.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_EXTEND.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
             }
             else {
                 for (const cell of _cursorDragPoints)
-                    SPRITE_HOVER_DELETE.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_DELETE.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
             }
         }
         else if (_extendable)
-            SPRITE_HOVER_EXTEND.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+            SPRITE_EXTEND.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
         else if (_deletable)
-            SPRITE_HOVER_DELETE.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+            SPRITE_DELETE.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
     };
 }
