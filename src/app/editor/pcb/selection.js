@@ -82,6 +82,16 @@ export function Selection(sprites) {
     };
 
     /**
+     * Check if a point lies within this selection.
+     * @param {Number} x The X coordinate of the point.
+     * @param {Number} y The Y coordinate of the point.
+     * @returns {Boolean} A boolean indicating whether the point lies within this selection.
+     */
+    this.contains = (x, y) => {
+        return x >= _left && x <= _right && y >= _top && y <= _bottom;
+    };
+
+    /**
      * Get the leftmost cell of this selection.
      * @returns {Number} The leftmost cell.
      */

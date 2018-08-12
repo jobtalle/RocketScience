@@ -114,7 +114,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
      * Finish the current dragging action.
      */
     this.mouseUp = () => {
-
+        this.mouseDown();
     };
 
     /**

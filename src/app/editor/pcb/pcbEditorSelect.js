@@ -20,6 +20,20 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
     let _selected = false;
     let _dragging = false;
 
+    const move = () => {
+        const moveFixtures = [];
+
+        for (const fixture of _selectedFixtures)
+            moveFixtures.push(new PcbEditorPlace.Fixture(
+                fixture.part.copy(),
+                fixture.x - cursor.x,
+                fixture.y - cursor.y));
+
+        deleteSelectedParts();
+
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures));
+    };
+
     const copy = () => {
         const placeFixtures = [];
 
@@ -133,7 +147,12 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
     this.mouseDown = () => {
-        if (_selectable) {
+        if (_selected && _selection.contains(cursor.x, cursor.y)) {
+            move();
+
+            return true;
+        }
+        else if (_selectable) {
             _selected = false;
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
