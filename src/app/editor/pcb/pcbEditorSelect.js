@@ -76,6 +76,25 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
         editor.revalidate();
     };
 
+    const crop = () => {
+        _left = _right = _selectedFixtures[0].x;
+        _top = _bottom = _selectedFixtures[0].y;
+
+        for (const fixture of _selectedFixtures) {
+            for (const point of fixture.part.getConfiguration().footprint.points) {
+                if (point.x + fixture.x < _left)
+                    _left = point.x + fixture.x;
+                else if (point.x + fixture.x > _right)
+                    _right = point.x + fixture.x;
+
+                if (point.y + fixture.y < _top)
+                    _top = point.y + fixture.y;
+                else if (point.y + fixture.y > _bottom)
+                    _bottom = point.y + fixture.y;
+            }
+        }
+    };
+
     /**
      * A key is pressed.
      * @param {String} key A key.
@@ -144,6 +163,9 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
 
             _dragging = false;
             _selected = _selectedFixtures.length > 0;
+
+            if (_selected)
+                crop();
         }
     };
 
