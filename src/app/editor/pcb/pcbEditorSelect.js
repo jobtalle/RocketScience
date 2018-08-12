@@ -1,6 +1,7 @@
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {PcbEditorPlace} from "./pcbEditorPlace";
+import {Selection} from "./selection";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -11,32 +12,13 @@ import {PcbEditorPlace} from "./pcbEditorPlace";
  * @constructor
  */
 export function PcbEditorSelect(sprites, pcb, cursor, editor) {
-    const SPRITE_SELECT = sprites.getSprite("pcbSelect");
-    const SPRITE_SELECT_LT = sprites.getSprite("pcbSelectLT");
-    const SPRITE_SELECT_RT = sprites.getSprite("pcbSelectRT");
-    const SPRITE_SELECT_LB = sprites.getSprite("pcbSelectLB");
-    const SPRITE_SELECT_RB = sprites.getSprite("pcbSelectRB");
-    const SPRITE_SELECT_T = sprites.getSprite("pcbSelectT");
-    const SPRITE_SELECT_B = sprites.getSprite("pcbSelectB");
-    const SPRITE_SELECT_L = sprites.getSprite("pcbSelectL");
-    const SPRITE_SELECT_R = sprites.getSprite("pcbSelectR");
-    const SPRITE_SELECT_LRT = sprites.getSprite("pcbSelectLRT");
-    const SPRITE_SELECT_LR = sprites.getSprite("pcbSelectLR");
-    const SPRITE_SELECT_LRB = sprites.getSprite("pcbSelectLRB");
-    const SPRITE_SELECT_LTB = sprites.getSprite("pcbSelectLTB");
-    const SPRITE_SELECT_TB = sprites.getSprite("pcbSelectTB");
-    const SPRITE_SELECT_RTB = sprites.getSprite("pcbSelectRTB");
-
     const _selectedFixtures = [];
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
+    const _selection = new Selection(sprites);
     let _selectable = false;
     let _selected = false;
     let _dragging = false;
-    let _left = 0;
-    let _right = 0;
-    let _top = 0;
-    let _bottom = 0;
 
     const copy = () => {
         const placeFixtures = [];
@@ -44,8 +26,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
         for (const fixture of _selectedFixtures)
             placeFixtures.push(new PcbEditorPlace.Fixture(
                 fixture.part.copy(),
-                fixture.x - _left,
-                fixture.y - _top));
+                fixture.x - _selection.getLeft(),
+                fixture.y - _selection.getTop()));
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures));
     };
@@ -77,22 +59,28 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
     };
 
     const crop = () => {
-        _left = _right = _selectedFixtures[0].x;
-        _top = _bottom = _selectedFixtures[0].y;
+        let left = pcb.getWidth() - 1;
+        let top = pcb.getHeight() - 1;
+        let right = 0;
+        let bottom = 0;
 
         for (const fixture of _selectedFixtures) {
             for (const point of fixture.part.getConfiguration().footprint.points) {
-                if (point.x + fixture.x < _left)
-                    _left = point.x + fixture.x;
-                else if (point.x + fixture.x > _right)
-                    _right = point.x + fixture.x;
+                if (point.x + fixture.x < left)
+                    left = point.x + fixture.x;
 
-                if (point.y + fixture.y < _top)
-                    _top = point.y + fixture.y;
-                else if (point.y + fixture.y > _bottom)
-                    _bottom = point.y + fixture.y;
+                if (point.x + fixture.x > right)
+                    right = point.x + fixture.x;
+
+                if (point.y + fixture.y < top)
+                    top = point.y + fixture.y;
+
+                if (point.y + fixture.y > bottom)
+                    bottom = point.y + fixture.y;
             }
         }
+
+        _selection.setRegion(left, right, top, bottom);
     };
 
     /**
@@ -120,18 +108,24 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      */
     this.moveCursor = () => {
         if (_dragging) {
-            _left = Math.min(cursor.x, _cursorDrag.x);
-            _right = Math.max(cursor.x, _cursorDrag.x);
-            _top = Math.min(cursor.y, _cursorDrag.y);
-            _bottom = Math.max(cursor.y, _cursorDrag.y);
+            _selection.setRegion(
+                Math.min(cursor.x, _cursorDrag.x),
+                Math.max(cursor.x, _cursorDrag.x),
+                Math.min(cursor.y, _cursorDrag.y),
+                Math.max(cursor.y, _cursorDrag.y));
 
             _cursorDragPoints.splice(0, _cursorDragPoints.length);
 
-            for (let y = _top; y <= _bottom; ++y) for (let x = _left; x <= _right; ++x)
-                _cursorDragPoints.push(new Myr.Vector(x, y));
+            for (let y = _selection.getTop(); y <= _selection.getBottom(); ++y)
+                for (let x = _selection.getLeft(); x <= _selection.getRight(); ++x)
+                    _cursorDragPoints.push(new Myr.Vector(x, y));
         }
-        else
+        else {
             _selectable = pcb.getPoint(cursor.x, cursor.y) !== null;
+
+            if (!_selected)
+                _selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
+        }
     };
 
     /**
@@ -162,10 +156,17 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
             findSelectedParts();
 
             _dragging = false;
-            _selected = _selectedFixtures.length > 0;
 
-            if (_selected)
+            if (_selectedFixtures.length > 0) {
+                _selected = true;
+
                 crop();
+            }
+            else {
+                _selected = false;
+
+                this.moveCursor();
+            }
         }
     };
 
@@ -191,44 +192,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      * @param {Myr} myr A myriad instance.
      */
     this.draw = myr => {
-        if (_dragging || _selected) {
-            if (_left === _right) {
-                if (_top === _bottom)
-                    SPRITE_SELECT.draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                else {
-                    SPRITE_SELECT_LRT.draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                    SPRITE_SELECT_LRB.draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-
-                    for (let y = _top + 1; y < _bottom; ++y)
-                        SPRITE_SELECT_LR.draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
-                }
-            }
-            else if (_top === _bottom) {
-                SPRITE_SELECT_LTB.draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_RTB.draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-
-                for (let x = _left + 1; x < _right; ++x)
-                    SPRITE_SELECT_TB.draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            }
-            else {
-                SPRITE_SELECT_LT.draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_RT.draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_LB.draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_RB.draw(_right * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-
-                for (let x = _left + 1; x < _right; ++x) {
-                    SPRITE_SELECT_T.draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                    SPRITE_SELECT_B.draw(x * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-                }
-
-                for (let y = _top + 1; y < _bottom; ++y) {
-                    SPRITE_SELECT_L.draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
-                    SPRITE_SELECT_R.draw(_right * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
-                }
-            }
-        }
-        else if (_selectable)
-            SPRITE_SELECT.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+        if (_selectable || _selected)
+            _selection.draw();
     };
 }
 
