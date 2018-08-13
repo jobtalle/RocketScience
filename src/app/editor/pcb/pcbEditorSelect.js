@@ -176,15 +176,15 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
 
             _dragging = false;
 
-            if (_selectedFixtures.length > 0) {
-                _selected = true;
-
-                crop();
-            }
-            else {
+            if (_selectedFixtures.length === 0) {
                 _selected = false;
 
                 this.moveCursor();
+            }
+            else {
+                _selected = true;
+
+                crop();
             }
         }
     };
