@@ -114,4 +114,16 @@ export function Selection(sprites) {
      * @returns {Number} The bottommost cell.
      */
     this.getBottom = () => _bottom;
+
+    /**
+     * Move this selection.
+     * @param {Number} x The number of cells to move horizontally.
+     * @param {Number} y The number of cells to move vertically.
+     */
+    this.move = (x, y) => {
+        _left += x;
+        _right += x;
+        _top += y;
+        _bottom += y;
+    };
 }

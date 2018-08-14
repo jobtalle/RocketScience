@@ -195,7 +195,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Object} part The part's constructor.
      */
     this.place = part => {
-        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part));
+        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null));
     };
 
     /**

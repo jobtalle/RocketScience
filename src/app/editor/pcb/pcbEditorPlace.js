@@ -12,11 +12,13 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
+ * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
  * @constructor
  */
-export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
+export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
+    const _lastCursor = cursor.copy();
     const _renderers = [];
     let _configurationIndex = 0;
     let _suitable = false;
@@ -72,6 +74,15 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
                 _suitable = false;
 
                 break;
+            }
+        }
+
+        if (selection !== null) {
+            if (!_lastCursor.equals(cursor)) {
+                selection.move(cursor.x - _lastCursor.x, cursor.y - _lastCursor.y);
+
+                _lastCursor.x = cursor.x;
+                _lastCursor.y = cursor.y;
             }
         }
     };
@@ -147,6 +158,9 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures) {
 
         if (!_suitable)
             myr.setColor(Myr.Color.WHITE);
+
+        if (selection !== null)
+            selection.draw();
     };
 
     makeRenderers();

@@ -31,7 +31,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
 
         deleteSelectedParts();
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures));
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, _selection));
     };
 
     const copy = () => {
@@ -43,7 +43,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
                 fixture.x - _selection.getLeft(),
                 fixture.y - _selection.getTop()));
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures));
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, _selection));
     };
 
     const isPartSelected = part => {
