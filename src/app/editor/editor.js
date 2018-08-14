@@ -1,5 +1,5 @@
 import {PcbEditor} from "./pcb/pcbEditor";
-import {Library} from "./library";
+import {Library} from "./library/library";
 
 /**
  * Provides a grid editor.
