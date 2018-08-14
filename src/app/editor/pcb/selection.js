@@ -22,6 +22,8 @@ export function Selection(sprites) {
     const SPRITE_SELECT_TB = sprites.getSprite("pcbSelectTB");
     const SPRITE_SELECT_RTB = sprites.getSprite("pcbSelectRTB");
 
+    const _selected = [];
+
     let _left = 0;
     let _top = 0;
     let _right = 0;
@@ -126,4 +128,28 @@ export function Selection(sprites) {
         _top += y;
         _bottom += y;
     };
+
+    /**
+     * Get the selected objects.
+     * @returns {Array} An array of selected objects.
+     */
+    this.getSelected = () => _selected;
+
+    /**
+     * Clear all selected objects.
+     */
+    this.clearSelected = () => _selected.splice(0, _selected.length);
+
+    /**
+     * Add an object to the selected object list.
+     * @param {Object} object An object to select.
+     */
+    this.addSelected = object => _selected.push(object);
+
+    /**
+     * Check whether an object is currently selected.
+     * @param {Object} object An object to search for.
+     * @returns {Boolean} A boolean indicating whether the given object is selected.
+     */
+    this.isSelected = object => _selected.indexOf(object) !== -1;
 }

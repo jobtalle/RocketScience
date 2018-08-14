@@ -270,14 +270,19 @@ export function Pcb(myr, sprites) {
      * @param {Part} part A part to place on this PCB.
      * @param {Number} x The X cell to place the part on.
      * @param {Number} y The Y cell to place the part on.
+     * @returns {Fixture} The fixture of the added part.
      */
     this.place = (part, x, y) => {
-        _fixtures.push(new Fixture(part, x, y));
+        const fixture = new Fixture(part, x, y);
+
+        _fixtures.push(fixture);
 
         const footprint = part.getConfiguration().footprint;
 
         for (const point of footprint.points)
             this.getPoint(point.x + x, point.y + y).part = part;
+
+        return fixture;
     };
 
     /**

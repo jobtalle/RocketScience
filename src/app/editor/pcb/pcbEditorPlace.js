@@ -104,10 +104,13 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
                 else
                     part = new Part(fixture.part.configurations[_configurationIndex], new Led());
 
-                pcb.place(
+                const pcbFixture = pcb.place(
                     part,
                     cursor.x + fixture.x,
                     cursor.y + fixture.y);
+
+                if (selection !== null)
+                    selection.addSelected(pcbFixture);
             }
 
             editor.revalidate();

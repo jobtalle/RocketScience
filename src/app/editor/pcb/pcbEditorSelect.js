@@ -13,7 +13,6 @@ import {Selection} from "./selection";
  * @constructor
  */
 export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
-    const _selectedFixtures = [];
     const _cursorDrag = new Myr.Vector(0, 0);
     const _selection = selection || new Selection(sprites);
     let _selectable = false;
@@ -23,7 +22,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     const move = () => {
         const moveFixtures = [];
 
-        for (const fixture of _selectedFixtures)
+        for (const fixture of _selection.getSelected())
             moveFixtures.push(new PcbEditorPlace.Fixture(
                 fixture.part.copy(),
                 fixture.x - cursor.x,
@@ -31,34 +30,39 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
         deleteSelectedParts();
 
+        _selection.clearSelected();
+
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, _selection));
     };
 
     const copy = () => {
         const placeFixtures = [];
 
-        for (const fixture of _selectedFixtures)
+        for (const fixture of _selection.getSelected())
             placeFixtures.push(new PcbEditorPlace.Fixture(
                 fixture.part.copy(),
                 fixture.x - _selection.getLeft(),
                 fixture.y - _selection.getTop()));
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, null));
-    };
+        if (placeFixtures.length === 1)
+            editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, null));
+        else {
+            _selection.move(cursor.x - _selection.getLeft(), cursor.y - _selection.getTop());
+            _selection.clearSelected();
 
-    const isPartSelected = part => {
-        return _selectedFixtures.indexOf(part) !== -1;
+            editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, _selection));
+        }
     };
 
     const findSelectedParts = () => {
-        _selectedFixtures.splice(0, _selectedFixtures.length);
+        _selection.clearSelected();
 
         for (let y = _selection.getTop(); y <= _selection.getBottom(); ++y) {
             for (let x = _selection.getLeft(); x <= _selection.getRight(); ++x) {
                 const pcbPoint = pcb.getPoint(x, y);
 
-                if (pcbPoint !== null && pcbPoint.part !== null && !isPartSelected(pcbPoint.part))
-                    _selectedFixtures.push(pcb.getFixture(pcbPoint.part));
+                if (pcbPoint !== null && pcbPoint.part !== null && !_selection.isSelected(pcbPoint.part))
+                    _selection.addSelected(pcb.getFixture(pcbPoint.part));
             }
         }
     };
@@ -66,7 +70,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     const deleteSelectedParts = () => {
         editor.undoPush();
 
-        for (const fixture of _selectedFixtures)
+        for (const fixture of _selection.getSelected())
             pcb.remove(fixture.part);
 
         _selected = false;
@@ -80,7 +84,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         let right = 0;
         let bottom = 0;
 
-        for (const fixture of _selectedFixtures) {
+        for (const fixture of _selection.getSelected()) {
             for (const point of fixture.part.getConfiguration().footprint.points) {
                 if (point.x + fixture.x < left)
                     left = point.x + fixture.x;
@@ -171,7 +175,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
             _dragging = false;
 
-            if (_selectedFixtures.length === 0) {
+            if (_selection.getSelected().length === 0) {
                 _selected = false;
 
                 this.moveCursor();
@@ -209,9 +213,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         if (_selectable || _selected)
             _selection.draw();
     };
-
-    if (selection !== null)
-        findSelectedParts();
 }
 
 PcbEditorSelect.KEY_DELETE = "Delete";
