@@ -177,7 +177,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         _cursor.x = _cursor.y = -1;
 
-        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface()));
+        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), null));
         moveCursor();
     };
 
@@ -227,7 +227,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         _pcbPosition.y = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
 
-        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface()));
+        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), null));
 
         matchWorldPosition();
         revalidate();

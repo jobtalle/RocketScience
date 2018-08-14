@@ -111,12 +111,12 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             }
 
             editor.revalidate();
-            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
+            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor, selection));
 
             return true;
         }
         else
-            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor));
+            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor, null));
 
         return false;
     };

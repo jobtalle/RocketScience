@@ -9,15 +9,15 @@ import {Selection} from "./selection";
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @param {Selection} selection An initial selection, or null if no initial selection is required.
  * @constructor
  */
-export function PcbEditorSelect(sprites, pcb, cursor, editor) {
+export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     const _selectedFixtures = [];
-    const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
-    const _selection = new Selection(sprites);
+    const _selection = selection || new Selection(sprites);
     let _selectable = false;
-    let _selected = false;
+    let _selected = selection !== null;
     let _dragging = false;
 
     const move = () => {
@@ -43,7 +43,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
                 fixture.x - _selection.getLeft(),
                 fixture.y - _selection.getTop()));
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, _selection));
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, null));
     };
 
     const isPartSelected = part => {
@@ -53,11 +53,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
     const findSelectedParts = () => {
         _selectedFixtures.splice(0, _selectedFixtures.length);
 
-        for (const point of _cursorDragPoints) {
-            const pcbPoint = pcb.getPoint(point.x, point.y);
+        for (let y = _selection.getTop(); y <= _selection.getBottom(); ++y) {
+            for (let x = _selection.getLeft(); x <= _selection.getRight(); ++x) {
+                const pcbPoint = pcb.getPoint(x, y);
 
-            if (pcbPoint !== null && pcbPoint.part !== null && !isPartSelected(pcbPoint.part))
-                _selectedFixtures.push(pcb.getFixture(pcbPoint.part));
+                if (pcbPoint !== null && pcbPoint.part !== null && !isPartSelected(pcbPoint.part))
+                    _selectedFixtures.push(pcb.getFixture(pcbPoint.part));
+            }
         }
     };
 
@@ -121,19 +123,12 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
      * Tell the editor the cursor has moved.
      */
     this.moveCursor = () => {
-        if (_dragging) {
+        if (_dragging)
             _selection.setRegion(
                 Math.min(cursor.x, _cursorDrag.x),
                 Math.max(cursor.x, _cursorDrag.x),
                 Math.min(cursor.y, _cursorDrag.y),
                 Math.max(cursor.y, _cursorDrag.y));
-
-            _cursorDragPoints.splice(0, _cursorDragPoints.length);
-
-            for (let y = _selection.getTop(); y <= _selection.getBottom(); ++y)
-                for (let x = _selection.getLeft(); x <= _selection.getRight(); ++x)
-                    _cursorDragPoints.push(new Myr.Vector(x, y));
-        }
         else {
             _selectable = pcb.getPoint(cursor.x, cursor.y) !== null;
 
@@ -214,6 +209,9 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor) {
         if (_selectable || _selected)
             _selection.draw();
     };
+
+    if (selection !== null)
+        findSelectedParts();
 }
 
 PcbEditorSelect.KEY_DELETE = "Delete";
