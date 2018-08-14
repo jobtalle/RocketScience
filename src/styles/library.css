@@ -39,12 +39,6 @@
     height: 100%;
 }
 
-#library .part-list .part.selected {
-    animation: icon-selected;
-    animation-duration: 1s;
-    box-shadow: 0 0.5vh 0.2vh black;
-}
-
 #info {
     position: absolute;
     bottom: 0;
