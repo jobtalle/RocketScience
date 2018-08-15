@@ -76,6 +76,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         _selected = false;
 
         editor.revalidate();
+
+        this.moveCursor();
     };
 
     const crop = () => {
