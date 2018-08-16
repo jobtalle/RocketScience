@@ -73,11 +73,11 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         for (const fixture of _selection.getSelected())
             pcb.remove(fixture.part);
 
+        this.moveCursor();
+
         _selected = false;
 
         editor.revalidate();
-
-        this.moveCursor();
     };
 
     const crop = () => {
@@ -103,6 +103,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         }
 
         _selection.setRegion(left, right, top, bottom);
+        _selection.setMode(true);
     };
 
     /**
@@ -113,8 +114,10 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     this.onKeyDown = (key, control) => {
         switch (key) {
             case PcbEditorSelect.KEY_DELETE:
-                if (_selected)
+                if (_selected) {
                     deleteSelectedParts();
+                    _selection.setMode(false);
+                }
 
                 break;
             case PcbEditorSelect.KEY_COPY:
@@ -158,6 +161,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
             _dragging = true;
+            _selection.setMode(false);
 
             this.moveCursor();
 
