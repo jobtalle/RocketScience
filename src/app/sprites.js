@@ -23,7 +23,7 @@ export function Sprites(myr) {
         while (frame != null) {
             let spriteFrame = myr.makeSpriteFrame(_surface, frame.frame.x, frame.frame.y,
                                                   frame.frame.w, frame.frame.h, 0, 0,
-                                                  frame.duration / 1000);
+                                                  frame.duration * 0.001);
 
             spriteFrames.push(spriteFrame);
             frame = getFrame(name, ++frameIndex);
@@ -45,4 +45,4 @@ export function Sprites(myr) {
     };
 }
 
-Sprites.ATLAS_PATH = "atlas.png";
+Sprites.ATLAS_PATH = "sprites.png";

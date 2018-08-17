@@ -1,4 +1,5 @@
 import "../styles/main.css"
+import "../styles/gui.css"
 
 import Myr from "../lib/myr.js"
 import {Game} from "./game"
