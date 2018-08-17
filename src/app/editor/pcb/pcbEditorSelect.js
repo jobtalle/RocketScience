@@ -73,8 +73,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         for (const fixture of _selection.getSelected())
             pcb.remove(fixture.part);
 
-        this.moveCursor();
-
         _selected = false;
 
         editor.revalidate();
@@ -116,6 +114,9 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             case PcbEditorSelect.KEY_DELETE:
                 if (_selected) {
                     deleteSelectedParts();
+
+                    this.moveCursor();
+
                     _selection.setMode(false);
                 }
 
