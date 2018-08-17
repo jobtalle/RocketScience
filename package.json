@@ -1,13 +1,13 @@
 {
   "//": "This Manifest file describes the build environment.",
-  "name": "RocketScience",
+  "name": "rocketscience",
   "repository": {
     "type": "https://github.com/jobtalle/RocketScience"
   },
   "license": "MIT",
   "author": "Job Talle, Luc van den Brand",
   "scripts": {
-    "prepare-assets": "python prepare-assets.py",
+    "prepare-assets": "python prepare_assets.py",
     "pack-dev": "webpack --mode development",
     "pack-prod": "webpack --mode production"
   },
