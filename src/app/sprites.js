@@ -1,4 +1,4 @@
-import atlas from "../assets/atlas"
+import atlas from "../assets/sprites/atlas"
 
 /**
  * Provides access to all sprites in the sprite atlas.

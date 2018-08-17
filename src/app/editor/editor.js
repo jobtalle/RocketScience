@@ -1,5 +1,6 @@
 import {PcbEditor} from "./pcb/pcbEditor";
 import {Library} from "./library/library";
+import {Toolbar} from "./toolbar/toolbar";
 
 /**
  * Provides a grid editor.
@@ -12,16 +13,15 @@ import {Library} from "./library/library";
  * @constructor
  */
 export function Editor(myr, sprites, overlay, world, width, height) {
-    const EDITOR_WIDTH = 0.7;
-
     const _pcbEditor = new PcbEditor(
         myr,
         sprites,
         world,
-        Math.floor(width * EDITOR_WIDTH),
+        Math.floor(width * Editor.EDITOR_WIDTH),
         height,
-        width - Math.floor(width * EDITOR_WIDTH));
-    const _library = new Library(sprites, _pcbEditor, overlay, width - _pcbEditor.getWidth());
+        width - Math.floor(width * Editor.EDITOR_WIDTH));
+    const _library = new Library(_pcbEditor, overlay, width - _pcbEditor.getWidth());
+    const _toolbar = new Toolbar(_pcbEditor, overlay, _library.getWidth());
 
     let _editorHover = false;
 
@@ -49,6 +49,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
     this.hide = () => {
         _pcbEditor.hide();
         _library.hide();
+        _toolbar.hide();
     };
 
     /**
@@ -57,6 +58,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
     this.show = () => {
         _pcbEditor.show();
         _library.show();
+        _toolbar.show();
     };
 
     /**
@@ -158,3 +160,5 @@ export function Editor(myr, sprites, overlay, world, width, height) {
         _pcbEditor.free();
     };
 }
+
+Editor.EDITOR_WIDTH = 0.7;

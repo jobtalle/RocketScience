@@ -6,13 +6,12 @@ import {CategoryInfo} from "./categoryInfo";
 
 /**
  * An HTML based part library.
- * @param {Sprites} sprites All sprites.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} width The width of the library in pixels.
  * @constructor
  */
-export function Library(sprites, editor, overlay, width) {
+export function Library(editor, overlay, width) {
     let _container = null;
 
     const setPart = part => {
@@ -33,7 +32,7 @@ export function Library(sprites, editor, overlay, width) {
 
         _container.appendChild(info.getElement());
 
-        overlay.appendChild(_container);
+        this.show();
     };
 
     /**
