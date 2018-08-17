@@ -5,9 +5,10 @@ from pack_aseprites import PackAseprites
 def make_class_single(name, frame, source):
     result = ".sprite-" + name + "{"
     
-    result += "background:url(" + source + ") "
-    result += str(frame["frame"]["x"]) + " "
-    result += str(frame["frame"]["y"]) + ";"
+    result += "background:url(" + source + ");"
+    result += "background-position:"
+    result += "-" + str(frame["frame"]["x"]) + "px "
+    result += "-" + str(frame["frame"]["y"]) + "px;"
     result += "width:" + str(frame["frame"]["w"]) + "px;"
     result += "height:" + str(frame["frame"]["h"]) + "px;"
     
