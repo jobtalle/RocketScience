@@ -166,6 +166,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         if (_editor)
             _editor.updatePcb(pcb);
+
+        if (_stashedEditor)
+            _stashedEditor.updatePcb(pcb);
     };
 
     const revertEditor = () => {
