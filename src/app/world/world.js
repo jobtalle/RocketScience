@@ -4,8 +4,8 @@ import {Physics} from "./physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
-import Myr from "../../lib/myr";
 import {TerrainRugged} from "./terrain/terrainRugged";
+import Myr from "../../lib/myr";
 
 /**
  * Simulates physics and behavior for all objects in the same space.

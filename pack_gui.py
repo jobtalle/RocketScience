@@ -37,6 +37,7 @@ def make_class_multiple(name, frames, scale):
         
         if frame_press in frames:
             result += make_class_single(name + ":active", frames[frame_press], scale, False)
+            result += make_class_single(name + ".active", frames[frame_press], scale, False)
     
     return result
 

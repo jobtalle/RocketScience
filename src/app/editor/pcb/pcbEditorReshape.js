@@ -134,6 +134,14 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * Change the PCB being edited.
+     * @param {Pcb} newPcb The new PCB to edit.
+     */
+    this.updatePcb = newPcb => {
+        pcb = newPcb;
+    };
+
+    /**
      * A key is pressed.
      * @param {String} key A key.
      * @param {Boolean} control Indicates whether the control button is pressed.

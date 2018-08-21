@@ -1,5 +1,6 @@
 import "../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
+import {PcbEditor} from "../pcb/pcbEditor";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -9,6 +10,15 @@ import {ToolbarButton} from "./toolbarButton";
  * @constructor
  */
 export function Toolbar(editor, overlay, x) {
+    const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
+    const _buttonExtend = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
+        "toolbar-extend",
+        _toggleGroupSelectMode);
+    const _buttonSelect = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
+        "toolbar-select",
+        _toggleGroupSelectMode);
     let _container = null;
 
     const build = () => {
@@ -16,13 +26,17 @@ export function Toolbar(editor, overlay, x) {
         _container.id = Toolbar.ID;
         _container.style.left = x + "px";
 
-        const buttonExtend = new ToolbarButton(function(){}, "toolbar-extend");
-        const buttonSelect = new ToolbarButton(function(){}, "toolbar-select");
-
-        _container.appendChild(buttonExtend.getElement());
-        _container.appendChild(buttonSelect.getElement());
+        _container.appendChild(_buttonExtend.getElement());
+        _container.appendChild(_buttonSelect.getElement());
 
         this.show();
+    };
+
+    /**
+     * Set all buttons to their defaults. Make sure to default after the pcb editor has initialized.
+     */
+    this.default = () => {
+        _buttonSelect.getElement().click();
     };
 
     /**

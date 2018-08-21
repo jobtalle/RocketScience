@@ -8,6 +8,8 @@ import Myr from "../../../lib/myr.js"
 import {ShiftProfile} from "../../view/shiftProfile";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
+import {PcbEditorReshape} from "./pcbEditorReshape";
+import {Selection} from "./selection";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -136,15 +138,48 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     };
 
     const moveCursor = () => {
+        if (!_editor)
+            return;
+
         _editor.moveCursor();
     };
 
     const mouseDown = () => {
+        if (!_editor)
+            return false;
+
         return _editor.mouseDown();
     };
 
     const mouseUp = () => {
+        if (!_editor)
+            return;
+
         _editor.mouseUp();
+    };
+
+    const updatePcb = pcb => {
+        _pcb = pcb;
+
+        if (_editor)
+            _editor.updatePcb(pcb);
+    };
+
+    /**
+     * Set the editors edit mode. Possible options are:
+     * PcbEditor.EDIT_MODE_SELECT  for selection dragging.
+     * PcbEditor.EDIT_MODE_RESHAPE for PCB reshaping.
+     * @param {Object} mode Any of the valid edit modes.
+     */
+    this.setEditMode = mode => {
+        switch (mode) {
+            case PcbEditor.EDIT_MODE_RESHAPE:
+                setEditor(new PcbEditorReshape(sprites, _pcb, _cursor, makeInterface()));
+                break;
+            case PcbEditor.EDIT_MODE_SELECT:
+                setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), new Selection(sprites)));
+                break;
+        }
     };
 
     /**
@@ -152,6 +187,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
+        if (!_editor)
+            return;
+
         _editor.update(timeStep);
     };
 
@@ -177,7 +215,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
         _cursor.x = _cursor.y = -1;
 
-        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), null));
         moveCursor();
     };
 
@@ -195,7 +232,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Object} part The part's constructor.
      */
     this.place = part => {
-        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null));
+        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null, _editor));
     };
 
     /**
@@ -222,12 +259,11 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
                 ZOOM_DEFAULT);
 
-        _pcb = pcb;
+        updatePcb(pcb);
+
         _pcbPosition.x = x;
         _pcbPosition.y = y;
         _renderer = new PcbRenderer(myr, sprites, pcb);
-
-        setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), null));
 
         matchWorldPosition();
         revalidate();
@@ -283,6 +319,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
+        if (!_editor)
+            return;
+
         _editor.cancelAction();
         _view.onMouseRelease();
     };
@@ -333,3 +372,6 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             _renderer.free();
     };
 }
+
+PcbEditor.EDIT_MODE_SELECT = 0;
+PcbEditor.EDIT_MODE_RESHAPE = 1;

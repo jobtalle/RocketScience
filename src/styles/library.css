@@ -26,6 +26,7 @@
 #library .part-list .part {
     display: block;
 
+    cursor: pointer;
     background-color: white;
     border-radius: 1vh;
     box-shadow: 0 0.2vh 0.1vh black;

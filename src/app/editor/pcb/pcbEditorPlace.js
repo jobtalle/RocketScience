@@ -3,7 +3,6 @@ import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {Part} from "../../part/part";
 import {Led} from "../../part/behavior/led";
-import {PcbEditorSelect} from "./pcbEditorSelect";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -13,9 +12,10 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
  * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
+ * @param {Object} revertEditor An editor to revert to after the part has been placed.
  * @constructor
  */
-export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection) {
+export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection, revertEditor) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
     const _lastCursor = cursor.copy();
@@ -52,6 +52,14 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
                 return false;
 
         return true;
+    };
+
+    /**
+     * Change the PCB being edited.
+     * @param {Pcb} newPcb The new PCB to edit.
+     */
+    this.updatePcb = newPcb => {
+        pcb = newPcb;
     };
 
     /**
@@ -114,14 +122,16 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             }
 
             editor.revalidate();
-            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor, selection));
+            editor.replace(revertEditor);
 
             return true;
         }
-        else
-            editor.replace(new PcbEditorSelect(sprites, pcb, cursor, editor, null));
+        else {
+            selection.setMode(false);
+            editor.replace(revertEditor);
 
-        return false;
+            return false;
+        }
     };
 
     /**

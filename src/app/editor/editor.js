@@ -41,6 +41,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
      */
     this.edit = (pcb, x, y) => {
         _pcbEditor.edit(pcb, x, y);
+        _toolbar.default();
     };
 
     /**
