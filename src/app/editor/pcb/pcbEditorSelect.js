@@ -9,7 +9,7 @@ import {Selection} from "./selection";
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
- * @param {Selection} selection An initial selection, or null if no initial selection is required.
+ * @param {Selection} selection A selection.
  * @constructor
  */
 export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
@@ -45,7 +45,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
         selection.clearSelected();
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, null));
+        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, selection));
     };
 
     const findSelectedParts = () => {
@@ -93,7 +93,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         }
 
         selection.setRegion(left, right, top, bottom);
-        selection.setMode(true);
     };
 
     /**
@@ -101,6 +100,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      * @param {Pcb} newPcb The new PCB to edit.
      */
     this.updatePcb = newPcb => {
+        selection.clearSelected();
+
         pcb = newPcb;
     };
 
@@ -115,10 +116,9 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 if (selection.getSelected().length > 0) {
                     deleteSelectedParts();
 
-                    this.moveCursor();
-
-                    selection.setMode(false);
                     selection.clearSelected();
+
+                    this.moveCursor();
                 }
 
                 break;
@@ -162,7 +162,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
             _dragging = true;
-            selection.setMode(false);
 
             this.moveCursor();
 

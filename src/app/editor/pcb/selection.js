@@ -6,8 +6,6 @@ import {Pcb} from "../../pcb/pcb";
  * @constructor
  */
 export function Selection(sprites) {
-    const MODE_NOT_SELECTED = 0;
-    const MODE_SELECTED = 1;
     const SPRITE_SELECT = [sprites.getSprite("pcbSelect"), sprites.getSprite("pcbSelected")];
     const SPRITE_SELECT_LT = [sprites.getSprite("pcbSelectLT"), sprites.getSprite("pcbSelectedLT")];
     const SPRITE_SELECT_RT = [sprites.getSprite("pcbSelectRT"), sprites.getSprite("pcbSelectedRT")];
@@ -26,7 +24,6 @@ export function Selection(sprites) {
 
     const _selected = [];
 
-    let _mode = MODE_NOT_SELECTED;
     let _left = 0;
     let _top = 0;
     let _right = 0;
@@ -47,49 +44,48 @@ export function Selection(sprites) {
     };
 
     /**
-     * Set this selections render mode.
-     * @param {Boolean} selected A boolean indicating whether this selection should show something is selected.
-     */
-    this.setMode = selected => {
-        _mode = selected?MODE_SELECTED:MODE_NOT_SELECTED;
-    };
-
-    /**
      * Draw the selection.
      */
     this.draw = () => {
+        let mode;
+
+        if (_selected.length > 0)
+            mode = 1;
+        else
+            mode = 0;
+
         if (_left === _right) {
             if (_top === _bottom)
-                SPRITE_SELECT[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
             else {
-                SPRITE_SELECT_LRT[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_LRB[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_LRT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_LRB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
 
                 for (let y = _top + 1; y < _bottom; ++y)
-                    SPRITE_SELECT_LR[_mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_SELECT_LR[mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
             }
         }
         else if (_top === _bottom) {
-            SPRITE_SELECT_LTB[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RTB[_mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_LTB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_RTB[mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
 
             for (let x = _left + 1; x < _right; ++x)
-                SPRITE_SELECT_TB[_mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_TB[mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
         }
         else {
-            SPRITE_SELECT_LT[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RT[_mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_LB[_mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RB[_mode].draw(_right * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_LT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_RT[mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_LB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_RB[mode].draw(_right * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
 
             for (let x = _left + 1; x < _right; ++x) {
-                SPRITE_SELECT_T[_mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_B[_mode].draw(x * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_T[mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_B[mode].draw(x * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
             }
 
             for (let y = _top + 1; y < _bottom; ++y) {
-                SPRITE_SELECT_L[_mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_R[_mode].draw(_right * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_L[mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_R[mode].draw(_right * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
             }
         }
     };

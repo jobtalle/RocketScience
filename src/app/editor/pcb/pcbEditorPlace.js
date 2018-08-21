@@ -128,7 +128,6 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         else {
             if (selection !== null) {
                 selection.clearSelected();
-                selection.setMode(false);
             }
 
             editor.revert();
