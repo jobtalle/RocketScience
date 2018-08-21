@@ -5,7 +5,7 @@
       "led": {
         "label": "PART_LED_NAME",
         "description": "PART_LED_DESCRIPTION",
-        "icon": "LED.svg",
+        "icon": "part-led",
         "object": "Led",
         "pins": 1,
         "configurations": [
@@ -35,7 +35,7 @@
       "button": {
         "label": "PART_BUTTON_NAME",
         "description": "PART_BUTTON_DESCRIPTION",
-        "icon": "Button.svg",
+        "icon": "part-button",
         "object": "Button"
       }
     }

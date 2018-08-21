@@ -1,4 +1,5 @@
 import "../../../styles/toolbar.css"
+import {ToolbarButton} from "./toolbarButton";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -14,6 +15,12 @@ export function Toolbar(editor, overlay, x) {
         _container = document.createElement("div");
         _container.id = Toolbar.ID;
         _container.style.left = x + "px";
+
+        const buttonExtend = new ToolbarButton(function(){}, "toolbar-extend");
+        const buttonSelect = new ToolbarButton(function(){}, "toolbar-select");
+
+        _container.appendChild(buttonExtend.getElement());
+        _container.appendChild(buttonSelect.getElement());
 
         this.show();
     };

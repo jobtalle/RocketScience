@@ -19,17 +19,15 @@ export function CategoryPart(part, setPart, setInfo) {
      */
     this.getElement = () => {
         const element = document.createElement("div");
-        const image = new Image();
 
-        image.src = CategoryPart.DIR_ICONS + "/" + part.icon;
+        element.classList.add(CategoryPart.CLASS);
+        element.classList.add("sprite");
+        element.classList.add(part.icon);
 
-        element.className = CategoryPart.CLASS;
         element.onclick = () => onClick();
-        element.appendChild(image);
 
         return element;
     };
 }
 
 CategoryPart.CLASS = "part";
-CategoryPart.DIR_ICONS = "icons";
