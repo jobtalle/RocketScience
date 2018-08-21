@@ -54,13 +54,15 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _pcb = null;
     let _renderer = null;
     let _editor = null;
+    let _stashedEditor = null;
 
     const makeInterface = () => {
         return {
             revalidate: revalidate,
             undoPush: undoPush,
             replace: setEditor,
-            shift: shift
+            shift: shift,
+            revert: revertEditor
         };
     };
 
@@ -74,6 +76,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     };
 
     const setEditor = editor => {
+        _stashedEditor = _editor;
         _editor = editor;
 
         moveCursor();
@@ -165,6 +168,10 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             _editor.updatePcb(pcb);
     };
 
+    const revertEditor = () => {
+        setEditor(_stashedEditor);
+    };
+
     /**
      * Set the editors edit mode. Possible options are:
      * PcbEditor.EDIT_MODE_SELECT  for selection dragging.
@@ -232,7 +239,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Object} part The part's constructor.
      */
     this.place = part => {
-        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null, _editor));
+        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null));
     };
 
     /**

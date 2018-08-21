@@ -12,10 +12,9 @@ import {Led} from "../../part/behavior/led";
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
  * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
- * @param {Object} revertEditor An editor to revert to after the part has been placed.
  * @constructor
  */
-export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection, revertEditor) {
+export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection) {
     const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
 
     const _lastCursor = cursor.copy();
@@ -122,13 +121,17 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             }
 
             editor.revalidate();
-            editor.replace(revertEditor);
+            editor.revert();
 
             return true;
         }
         else {
-            selection.setMode(false);
-            editor.replace(revertEditor);
+            if (selection !== null) {
+                selection.clearSelected();
+                selection.setMode(false);
+            }
+
+            editor.revert();
 
             return false;
         }
