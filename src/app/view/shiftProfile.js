@@ -1,7 +1,7 @@
 import Myr from "./../../lib/myr.js"
 
 /**
- * A profile specifying shift behavior.
+ * A profile specifying shift led.
  * @param {Number} step The smallest amount of shift possible.
  * @constructor
  */

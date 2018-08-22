@@ -1,7 +1,7 @@
 /**
  * Constructs a part.
  * @param {Object} configuration A valid part configuration.
- * @param {Object} behavior A valid behavior object matching the configuration governing this parts behavior.
+ * @param {Object} behavior A valid led object matching the configuration governing this parts led.
  * @constructor
  */
 export function Part(configuration, behavior) {

@@ -2,7 +2,7 @@ import {PartRenderer} from "../../part/partRenderer";
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {Part} from "../../part/part";
-import {Led} from "../../part/behavior/led";
+import {LedBehavior} from "../../part/led/ledBehavior";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -102,14 +102,14 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         if (_suitable) {
             editor.undoPush();
 
-            // TODO: Not every part is a Led!
+            // TODO: Not every part is a LedBehavior!
             for (const fixture of fixtures) {
                 let part = null;
 
                 if (fixture.isInstance())
-                    part = new Part(fixture.part.getConfiguration(), new Led());
+                    part = new Part(fixture.part.getConfiguration(), new LedBehavior());
                 else
-                    part = new Part(fixture.part.configurations[_configurationIndex], new Led());
+                    part = new Part(fixture.part.configurations[_configurationIndex], new LedBehavior());
 
                 const pcbFixture = pcb.place(
                     part,

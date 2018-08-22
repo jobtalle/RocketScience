@@ -8,7 +8,7 @@ import {TerrainRugged} from "./terrain/terrainRugged";
 import Myr from "../../lib/myr";
 
 /**
- * Simulates physics and behavior for all objects in the same space.
+ * Simulates physics and led for all objects in the same space.
  * @param {Myr} myr A Myriad instance.
  * @param {Sprites} sprites An instantiated Sprites object
  * @param {Number} width The viewport width.

@@ -29,6 +29,40 @@
       }
     }
   },
+  "logic": {
+    "label": "CATEGORY_LOGIC",
+    "parts": {
+      "oscillator": {
+        "label": "PART_OSCILLATOR_NAME",
+        "description": "PART_OSCILLATOR_DESCRIPTION",
+        "icon": "part-oscillator",
+        "object": "Oscillator",
+        "pins": 2,
+        "configurations": [
+          {
+            "footprint": {
+              "points": [
+                {"x": 0, "y": 0},
+                {"x": 1, "y": 0},
+                {"x": 0, "y": 1},
+                {"x": 1, "y": 1}
+              ],
+              "air": [
+
+              ]
+            },
+            "io": [
+              {"type": "out", "x": 0, "y": 1},
+              {"type": "out", "x": 1, "y": 1}
+            ],
+            "sprites": [
+              {"name": "partOscillator", "x": 0, "y": 0}
+            ]
+          }
+        ]
+      }
+    }
+  },
   "control": {
     "label": "CATEGORY_CONTROL",
     "parts": {

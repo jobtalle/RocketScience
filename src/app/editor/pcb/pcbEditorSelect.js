@@ -203,6 +203,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
 
             findSelectedParts();
+            crop();
         }
     };
 

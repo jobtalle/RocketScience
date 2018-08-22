@@ -6,8 +6,8 @@ import Myr from "./../../lib/myr.js";
  * A viewport for the world.
  * @param {Number} viewWidth The viewport width in pixels.
  * @param {Number} viewHeight The viewport height in pixels.
- * @param {ZoomProfile} zoomProfile A zoom profile defining zoom behavior.
- * @param {ShiftProfile} shiftProfile A shift profile defining shift behavior.
+ * @param {ZoomProfile} zoomProfile A zoom profile defining zoom led.
+ * @param {ShiftProfile} shiftProfile A shift profile defining shift led.
  * @constructor
  */
 export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {

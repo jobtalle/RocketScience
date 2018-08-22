@@ -1,5 +1,5 @@
 /**
- * A profile specifying zoom behavior.
+ * A profile specifying zoom led.
  * @param {Number} type The zoom profile type.
  * @param {Number} factor The rate of change when zooming.
  * @param {Number} zoom The initial zoom value.
