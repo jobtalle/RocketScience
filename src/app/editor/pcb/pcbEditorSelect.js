@@ -16,19 +16,21 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     const _cursorDrag = new Myr.Vector(0, 0);
     let _selectable = false;
     let _dragging = false;
+    let _moveStart = null;
 
-    const move = () => {
+    const move = start => {
         const moveFixtures = [];
 
         for (const fixture of selection.getSelected())
             moveFixtures.push(new PcbEditorPlace.Fixture(
                 fixture.part.copy(),
-                fixture.x - cursor.x,
-                fixture.y - cursor.y));
+                fixture.x - start.x,
+                fixture.y - start.y));
 
         deleteSelectedParts();
 
         selection.clearSelected();
+        selection.move(cursor.x - start.x, cursor.y - start.y);
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, selection));
     };
@@ -141,10 +143,17 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 Math.min(cursor.y, _cursorDrag.y),
                 Math.max(cursor.y, _cursorDrag.y));
         else {
-            _selectable = pcb.getPoint(cursor.x, cursor.y) !== null;
+            if (_moveStart !== null) {
+                move(_moveStart);
 
-            if (selection.getSelected().length === 0)
-                selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
+                _moveStart = null;
+            }
+            else {
+                _selectable = pcb.getPoint(cursor.x, cursor.y) !== null;
+
+                if (selection.getSelected().length === 0)
+                    selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
+            }
         }
     };
 
@@ -154,11 +163,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      */
     this.mouseDown = () => {
         if (selection.getSelected().length > 0 && selection.contains(cursor.x, cursor.y)) {
-            move();
+            _moveStart = cursor.copy();
 
             return true;
         }
         else if (_selectable) {
+            selection.clearSelected();
+
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
             _dragging = true;
@@ -185,6 +196,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 this.moveCursor();
             else
                 crop();
+        }
+        else if (_moveStart !== null) {
+            _moveStart = null;
+
+            selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
+
+            findSelectedParts();
         }
     };
 
