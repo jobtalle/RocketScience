@@ -5,5 +5,5 @@ export function LedBehavior() {
      */
     this.copy = () => {
         return new LedBehavior();
-    }
+    };
 }

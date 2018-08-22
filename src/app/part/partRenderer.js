@@ -8,12 +8,12 @@ import {Pcb} from "../pcb/pcb";
  * @constructor
  */
 export function PartRenderer(sprites, configuration) {
-    const spriteInstances = [];
-    const transformInstances = [];
+    const _sprites = [];
+    const _transforms = [];
 
     const createFromConfiguration = configuration => {
         for (const sprite of configuration.sprites) {
-            spriteInstances.push(sprites.getSprite(sprite.name));
+            _sprites.push(sprites.getSprite(sprite.name));
 
             const transform = new Myr.Transform();
 
@@ -21,7 +21,7 @@ export function PartRenderer(sprites, configuration) {
                 sprite.x * Pcb.PIXELS_PER_POINT,
                 sprite.y * Pcb.PIXELS_PER_POINT);
 
-            transformInstances.push(transform);
+            _transforms.push(transform);
         }
     };
 
@@ -31,9 +31,21 @@ export function PartRenderer(sprites, configuration) {
      * @param {Number} y The Y position to draw at.
      */
     this.draw = (x, y) => {
-        for (let i = 0; i < spriteInstances.length; ++i)
-            spriteInstances[i].drawTransformedAt(x, y, transformInstances[i]);
+        for (let i = 0; i < _sprites.length; ++i)
+            _sprites[i].drawTransformedAt(x, y, _transforms[i]);
     };
+
+    /**
+     * Get the sprite instances of this renderer.
+     * @returns {Array} An array of Sprite instances.
+     */
+    this.getSprites = () => _sprites;
+
+    /**
+     * Get the transformation instances of this renderer.
+     * @returns {Array} An array of Transform instances.
+     */
+    this.getTransforms = () => _transforms;
 
     createFromConfiguration(configuration);
 }
