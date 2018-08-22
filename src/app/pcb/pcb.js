@@ -113,6 +113,22 @@ export function Pcb(myr, sprites) {
         return width - this.getWidth();
     };
 
+    const erasePartAt = (x, y) => {
+        if (_points[y][x].part !== null) {
+            this.remove(_points[y][x].part);
+
+            return;
+        }
+
+        for (const fixture of _fixtures) for (const point of fixture.part.getConfiguration().footprint.space) {
+            if (fixture.x + point.x === x && fixture.y + point.y === y) {
+                this.remove(fixture.part);
+
+                return;
+            }
+        }
+    };
+
     /**
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
@@ -199,8 +215,7 @@ export function Pcb(myr, sprites) {
      * @param {Number} y The Y position of the point.
      */
     this.erase = (x, y) => {
-        if (_points[y][x].part !== null)
-            this.remove(_points[y][x].part);
+        erasePartAt(x, y);
 
         _points[y][x] = null;
         --_pointCount;

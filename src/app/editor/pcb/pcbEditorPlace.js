@@ -47,6 +47,13 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
                 return false;
         }
 
+        for (const point of footprint.space) {
+            const pcbPoint = pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y);
+
+            if (!pcbPoint)
+                return false;
+        }
+
         for (const point of footprint.air)
             if (pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y))
                 return false;
