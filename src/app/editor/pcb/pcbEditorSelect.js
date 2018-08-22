@@ -50,6 +50,14 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, selection));
     };
 
+    const isPartSelected = part => {
+        for (const fixture of selection.getSelected())
+            if (fixture.part === part)
+                return true;
+
+        return false;
+    };
+
     const findSelectedParts = () => {
         selection.clearSelected();
 
@@ -57,7 +65,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             for (let x = selection.getLeft(); x <= selection.getRight(); ++x) {
                 const pcbPoint = pcb.getPoint(x, y);
 
-                if (pcbPoint !== null && pcbPoint.part !== null && !selection.isSelected(pcbPoint.part))
+                if (pcbPoint !== null && pcbPoint.part !== null && !isPartSelected(pcbPoint.part))
                     selection.addSelected(pcb.getFixture(pcbPoint.part));
             }
         }
@@ -181,7 +189,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
         return false;
     };
-
 
     /**
      * Finish the current dragging action.

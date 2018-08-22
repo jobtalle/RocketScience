@@ -152,11 +152,4 @@ export function Selection(sprites) {
      * @param {Object} object An object to select.
      */
     this.addSelected = object => _selected.push(object);
-
-    /**
-     * Check whether an object is currently selected.
-     * @param {Object} object An object to search for.
-     * @returns {Boolean} A boolean indicating whether the given object is selected.
-     */
-    this.isSelected = object => _selected.indexOf(object) !== -1;
 }
