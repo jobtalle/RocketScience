@@ -9,7 +9,7 @@ const _physics = new Box2D();
  * @constructor
  */
 export function Physics(gravity) {
-    const Body = function(shapes, bodyDefinition, x, y, xOrigin, yOrigin) {
+    this.Body = function(shapes, bodyDefinition, x, y, xOrigin, yOrigin) {
         const _transform = new Myr.Transform();
         const _body = _world.CreateBody(bodyDefinition);
 
