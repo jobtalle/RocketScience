@@ -39,8 +39,14 @@ export function PcbRenderer(myr, sprites, pcb) {
         _partPositions.splice(0, _partPositions.length);
 
         for (const fixture of pcb.getFixtures()) {
-            _partRenderers.push(new PartRenderer(sprites, fixture.part.getConfiguration()));
-            _partPositions.push(new Myr.Vector(fixture.x * Pcb.PIXELS_PER_POINT, fixture.y * Pcb.PIXELS_PER_POINT));
+            const position = new Myr.Vector(fixture.x * Pcb.PIXELS_PER_POINT, fixture.y * Pcb.PIXELS_PER_POINT);
+            let insertAt = 0;
+
+            while (insertAt < _partPositions.length && _partPositions[insertAt].y < position.y)
+                ++insertAt;
+
+            _partRenderers.splice(insertAt, 0, new PartRenderer(sprites, fixture.part.getConfiguration()));
+            _partPositions.splice(insertAt, 0, position);
         }
     };
 

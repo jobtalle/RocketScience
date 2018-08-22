@@ -43,20 +43,18 @@
             "footprint": {
               "points": [
                 {"x": 0, "y": 0},
-                {"x": 1, "y": 0},
-                {"x": 0, "y": 1},
-                {"x": 1, "y": 1}
+                {"x": 1, "y": 0}
               ],
               "air": [
 
               ]
             },
             "io": [
-              {"type": "out", "x": 0, "y": 1},
-              {"type": "out", "x": 1, "y": 1}
+              {"type": "out", "x": 0, "y": 0},
+              {"type": "out", "x": 1, "y": 0}
             ],
             "sprites": [
-              {"name": "partOscillator", "x": 0, "y": 0}
+              {"name": "partOscillator", "x": 0, "y": -1}
             ]
           }
         ]
