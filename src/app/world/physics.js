@@ -133,7 +133,7 @@ export function Physics(gravity) {
         bodyDefinition.set_type(_physics.b2_dynamicBody);
         bodyDefinition.set_position(getTempVec(0, 0));
 
-        const body = new Body(
+        const body = new this.Body(
             shapes,
             bodyDefinition,
             x,
