@@ -9,8 +9,5 @@
   "PART_LED_DESCRIPTION": "Emits light when electricity is supplied to it.",
 
   "PART_OSCILLATOR_NAME": "Oscillator",
-  "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output.",
-
-  "PART_BUTTON_NAME": "Push button",
-  "PART_BUTTON_DESCRIPTION": "Conducts electricity when pushed."
+  "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output."
 }

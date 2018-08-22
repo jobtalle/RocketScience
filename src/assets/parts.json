@@ -62,16 +62,5 @@
         ]
       }
     }
-  },
-  "control": {
-    "label": "CATEGORY_CONTROL",
-    "parts": {
-      "button": {
-        "label": "PART_BUTTON_NAME",
-        "description": "PART_BUTTON_DESCRIPTION",
-        "icon": "part-button",
-        "object": "Button"
-      }
-    }
   }
 }
