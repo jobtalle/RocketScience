@@ -5,8 +5,6 @@
  * @constructor
  */
 export function OscillatorState(behavior, pins, renderer) {
-    let _out = 1;
-
     /**
      * Initialize the state.
      * @param {PartRenderer} renderer A part renderer to render state to.
@@ -23,6 +21,9 @@ export function OscillatorState(behavior, pins, renderer) {
      * @param {Physics.Body} body A physics body to apply state to.
      */
     this.tick = (state, renderer, body) => {
-        _out = 1 - _out;
+        state[pins[OscillatorState.PIN_INDEX_PULSE]] = 1 - state[pins[OscillatorState.PIN_INDEX_PULSE]];
     };
 }
+
+OscillatorState.PIN_INDEX_POWER = 0;
+OscillatorState.PIN_INDEX_PULSE = 1;

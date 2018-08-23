@@ -5,8 +5,6 @@
  * @constructor
  */
 export function LedState(behavior, pins, renderer) {
-    let _on = false;
-
     /**
      * Initialize the state.
      * @param {Physics.Body} body A physics body to apply state to.
@@ -21,8 +19,11 @@ export function LedState(behavior, pins, renderer) {
      * @param {Physics.Body} body A physics body to apply state to.
      */
     this.tick = (state, body) => {
-        _on = !_on;
-
-        renderer.getSprites()[0].setFrame(_on?1:0);
+        renderer.getSprites()[LedState.SPRITE_INDEX_LIGHT].setFrame(
+            state[pins[LedState.PIN_INDEX_POWER]]
+        );
     };
 }
+
+LedState.SPRITE_INDEX_LIGHT = 0;
+LedState.PIN_INDEX_POWER = 0;

@@ -22,6 +22,7 @@ export function PcbGraph(pcb) {
                     ++inPins;
             }
 
+            // TODO: Don't add all, sort properly
             if (outPins > 0 || inPins > 0) {
                 _emitters.push(fixture.part);
 
@@ -56,7 +57,7 @@ export function PcbGraph(pcb) {
         for (const emitter of _emitters) {
             states.push(new (getPartState(emitter.getDefinition().object))(
                 emitter,
-                [],
+                [1, 1],
                 renderer.getPartRenderer(pcb.getFixture(emitter))));
         }
 
