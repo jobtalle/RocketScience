@@ -63,5 +63,4 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
 
     _body = generatePhysicsBody();
     _state = new PcbState(pcb, _renderer, _body);
-    _renderer.revalidate();
 }

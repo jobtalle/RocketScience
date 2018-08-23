@@ -50,6 +50,22 @@ export function PcbRenderer(myr, sprites, pcb) {
         }
     };
 
+    const getFixtureIndex = fixture => {
+        for (let i = 0; i < _partPositions.length; ++i) {
+            if (_partPositions[i].x === fixture.x * Pcb.PIXELS_PER_POINT &&
+                _partPositions[i].y === fixture.y * Pcb.PIXELS_PER_POINT)
+                return i;
+        }
+
+        return -1;
+    };
+
+    /**
+     * Get the part renderer of a specific part.
+     * @param {Fixture} fixture A valid fixture to get the renderer of.
+     */
+    this.getPartRenderer = fixture => _partRenderers[getFixtureIndex(fixture)];
+
     /**
      * Draws the associated pcb.
      * @param {Number} x The x coordinate in pixels.
@@ -82,4 +98,6 @@ export function PcbRenderer(myr, sprites, pcb) {
         _layerPcb.free();
         _layerPcb = null;
     };
+
+    this.revalidate();
 }

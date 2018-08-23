@@ -10,7 +10,7 @@ export function PcbGraph(pcb) {
     const _emitters = [];
     let _outPins = 0;
 
-    const build = () => {
+    const analyze = () => {
         for (const fixture of pcb.getFixtures()) {
             let outPins = 0;
             let inPins = 0;
@@ -22,7 +22,7 @@ export function PcbGraph(pcb) {
                     ++inPins;
             }
 
-            if (outPins > 0) {
+            if (outPins > 0 || inPins > 0) {
                 _emitters.push(fixture.part);
 
                 _outPins += outPins;
@@ -30,11 +30,14 @@ export function PcbGraph(pcb) {
         }
     };
 
-    /**
-     * Get all emitter parts.
-     * @returns {Array} all emitter parts.
-     */
-    this.getEmitters = () => _emitters;
+    const connect = () => {
+
+    };
+
+    const build = () => {
+        analyze();
+        connect();
+    };
 
     /**
      * Make a state graph to be used by a PcbGraph.
@@ -44,13 +47,18 @@ export function PcbGraph(pcb) {
 
     /**
      * Make an array of connected part states to update.
+     * @param {PcbRenderer} renderer A PCB renderer to assign to the states.
      * @returns {Array} an array of part states.
      */
-    this.makeStates = () => {
+    this.makeStates = renderer => {
         const states = [];
 
-        for (const emitter of _emitters)
-            states.push(new (getPartState(emitter.getDefinition().object))(emitter));
+        for (const emitter of _emitters) {
+            states.push(new (getPartState(emitter.getDefinition().object))(
+                emitter,
+                [],
+                renderer.getPartRenderer(pcb.getFixture(emitter))));
+        }
 
         return states;
     };

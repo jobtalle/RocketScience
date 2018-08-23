@@ -1,3 +1,5 @@
+import {PcbGraph} from "./pcbGraph";
+
 /**
  * An object containing the state of a PCB being run by a PcbRunner.
  * @param {Pcb} pcb A PCB.
@@ -5,8 +7,6 @@
  * @param {Physics.Body} body A physics body to apply state to.
  * @constructor
  */
-import {PcbGraph} from "./pcbGraph";
-
 export function PcbState(pcb, renderer, body) {
     let _stateArray = null;
     let _states = null;
@@ -15,7 +15,10 @@ export function PcbState(pcb, renderer, body) {
         const graph = new PcbGraph(pcb);
 
         _stateArray = graph.makeStateArray();
-        _states = graph.makeStates();
+        _states = graph.makeStates(renderer);
+
+        for (const state of _states)
+            state.initialize(body);
     };
 
     /**
@@ -23,7 +26,7 @@ export function PcbState(pcb, renderer, body) {
      */
     this.tick = () => {
         for (const state of _states)
-            state.tick(_stateArray);
+            state.tick(_stateArray, body);
     };
 
     build();
