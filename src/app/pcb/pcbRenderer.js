@@ -11,6 +11,16 @@ import * as Myr from "../../lib/myr";
  */
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
+    const SPRITES_PATHS = [
+        sprites.getSprite("pcbPathR"),
+        sprites.getSprite("pcbPathRT"),
+        sprites.getSprite("pcbPathT"),
+        sprites.getSprite("pcbPathLT"),
+        sprites.getSprite("pcbPathL"),
+        sprites.getSprite("pcbPathLB"),
+        sprites.getSprite("pcbPathB"),
+        sprites.getSprite("pcbPathRB")
+    ];
 
     const _partRenderers = [];
     const _partPositions = [];
@@ -34,7 +44,13 @@ export function PcbRenderer(myr, sprites, pcb) {
                     column * Pcb.PIXELS_PER_POINT,
                     row * Pcb.PIXELS_PER_POINT);
 
+                if (point.paths === 0)
+                    continue;
 
+                for (let bit = 0; bit < 8; ++bit) if (((point.paths >> bit) & 1) === 1)
+                    SPRITES_PATHS[bit].draw(
+                        column * Pcb.PIXELS_PER_POINT - 1,
+                        row * Pcb.PIXELS_PER_POINT - 1);
             }
         }
     };
