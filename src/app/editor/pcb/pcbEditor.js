@@ -55,6 +55,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
+    let _pressLocation = null;
 
     const makeInterface = () => {
         return {
@@ -290,15 +291,22 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Press the mouse.
      */
     this.onMousePress = () => {
-        if (!mouseDown())
+        if (!mouseDown()) {
+            _pressLocation = _view.getMouse().copy();
             _view.onMousePress();
+        }
     };
 
     /**
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        mouseUp();
+        if (_pressLocation && _pressLocation.equals(_view.getMouse()))
+            _editor.reset();
+        else
+            mouseUp();
+
+        _pressLocation = null;
 
         _view.onMouseRelease();
     };

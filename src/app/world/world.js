@@ -179,5 +179,5 @@ World.ZOOM_FACTOR = 0.25;
 World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;
 World.GRAVITY = 9.81;
-World.TPS = 6;
+World.TPS = 15;
 World.TICK_DELAY = 1 / World.TPS;

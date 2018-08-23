@@ -204,7 +204,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             else
                 crop();
         }
-        else if (_moveStart !== null) {
+        else if (_moveStart && _moveStart.equals(cursor)) {
             _moveStart = null;
 
             selection.setRegion(cursor.x, cursor.x, cursor.y, cursor.y);
@@ -221,6 +221,15 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         _dragging = false;
 
         this.moveCursor();
+    };
+
+    /**
+     * Reset the editor's current state.
+     */
+    this.reset = () => {
+        selection.clearSelected();
+
+        this.cancelAction();
     };
 
     /**

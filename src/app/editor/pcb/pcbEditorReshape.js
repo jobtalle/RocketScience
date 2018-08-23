@@ -233,6 +233,13 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * Reset the editor's current state.
+     */
+    this.reset = () => {
+        this.cancelAction();
+    };
+
+    /**
      * Update this editor.
      * @param {Number} timeStep The time passed since the last update in seconds.
      */

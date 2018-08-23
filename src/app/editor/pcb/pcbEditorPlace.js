@@ -164,6 +164,13 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
     };
 
     /**
+     * Reset the editor's current state.
+     */
+    this.reset = () => {
+        this.cancelAction();
+    };
+
+    /**
      * Update this editor.
      * @param {Number} timeStep The time passed since the last update in seconds.
      */
