@@ -60,7 +60,9 @@ def pack_gui():
     css.write(make_class(".sprite",
         "background:url(" + source + ");" +
         "background-size:" + str(width * scale) + "px " + str(height * scale) + "px;" +
-        "image-rendering:pixelated;"))
+        "image-rendering:pixelated;" +
+        "image-rendering:crisp-edges;" +
+        "image-rendering:-moz-crisp-edges;"))
     
     for frame in data["frames"]:
         name = frame.partition("_")[0]
