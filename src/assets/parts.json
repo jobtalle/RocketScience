@@ -7,7 +7,6 @@
         "description": "PART_LED_DESCRIPTION",
         "icon": "part-led",
         "object": "Led",
-        "pins": 1,
         "configurations": [
           {
             "footprint": {
@@ -40,7 +39,6 @@
         "description": "PART_OSCILLATOR_DESCRIPTION",
         "icon": "part-oscillator",
         "object": "Oscillator",
-        "pins": 2,
         "configurations": [
           {
             "footprint": {
@@ -57,7 +55,7 @@
               ]
             },
             "io": [
-              {"type": "out", "x": 0, "y": 0},
+              {"type": "in", "x": 0, "y": 0},
               {"type": "out", "x": 1, "y": 0}
             ],
             "sprites": [

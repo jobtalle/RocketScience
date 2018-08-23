@@ -1,5 +1,6 @@
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {PcbShape} from "../pcb/pcbShape";
+import {PcbState} from "../pcb/pcbState";
 
 /**
  * An object in the world.
@@ -14,6 +15,7 @@ import {PcbShape} from "../pcb/pcbShape";
 export function WorldObject(myr, sprites, physics, pcb, x, y) {
     const _renderer = new PcbRenderer(myr, sprites, pcb);
 
+    let _state = null;
     let _body = null;
 
     const generatePhysicsBody = () => {
@@ -28,6 +30,13 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      */
     this.update = timeStep => {
         // TODO: Update pcb.
+    };
+
+    /**
+     * Update the PCB for one tick.
+     */
+    this.tick = () => {
+        _state.tick();
     };
 
     /**
@@ -53,5 +62,6 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
     };
 
     _body = generatePhysicsBody();
+    _state = new PcbState(pcb, _renderer, _body);
     _renderer.revalidate();
 }
