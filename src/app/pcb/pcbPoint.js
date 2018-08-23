@@ -4,4 +4,5 @@
  */
 export function PcbPoint() {
     this.part = null;
+    this.paths = 0;
 }

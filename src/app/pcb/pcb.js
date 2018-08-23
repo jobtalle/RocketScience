@@ -1,12 +1,12 @@
+import {PcbPoint} from "./pcbPoint";
+import {Fixture} from "../part/fixture";
+
 /**
  * Defines a PCB.
  * @param {Myr} myr A Myriad instance.
  * @param {Sprites} sprites The sprites library.
  * @constructor
  */
-import {PcbPoint} from "./pcbPoint";
-import {Fixture} from "../part/fixture";
-
 export function Pcb(myr, sprites) {
     const _fixtures = [];
     const _points = [];

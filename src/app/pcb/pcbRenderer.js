@@ -26,12 +26,17 @@ export function PcbRenderer(myr, sprites, pcb) {
         _layerPcb.bind();
         _layerPcb.clear();
 
-        for(let row = 0; row < pcb.getHeight(); ++row)
-            for(let column = 0; column < pcb.getWidth(); ++column)
-                if(pcb.getPoint(column, row))
-                    SPRITE_POINT.draw(
-                        column * Pcb.PIXELS_PER_POINT,
-                        row * Pcb.PIXELS_PER_POINT);
+        for(let row = 0; row < pcb.getHeight(); ++row) for(let column = 0; column < pcb.getWidth(); ++column) {
+            const point = pcb.getPoint(column, row);
+
+            if (point) {
+                SPRITE_POINT.draw(
+                    column * Pcb.PIXELS_PER_POINT,
+                    row * Pcb.PIXELS_PER_POINT);
+
+
+            }
+        }
     };
 
     const updatePartRenderers = () => {
