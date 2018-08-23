@@ -25,8 +25,6 @@ export function PcbState(pcb, renderer, body) {
      * Update the state.
      */
     this.tick = () => {
-        console.log(_stateArray);
-
         for (const state of _states)
             state.tick(_stateArray, body);
     };
