@@ -48,7 +48,7 @@ overlay.addEventListener("mouseleave", function(event) {
     game.onMouseLeave();
 });
 
-overlay.addEventListener("mousewheel", function(event) {
+overlay.addEventListener("wheel", function(event) {
     if (event.target !== overlay)
         return;
 
