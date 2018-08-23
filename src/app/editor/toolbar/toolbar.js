@@ -19,6 +19,11 @@ export function Toolbar(editor, overlay, x) {
         () => editor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
         "toolbar-select",
         _toggleGroupSelectMode);
+    const _buttonEtch = new ToolbarButton(
+        () => {},
+        "toolbar-etch",
+        _toggleGroupSelectMode);
+
     let _container = null;
 
     const build = () => {
@@ -28,6 +33,7 @@ export function Toolbar(editor, overlay, x) {
 
         _container.appendChild(_buttonExtend.getElement());
         _container.appendChild(_buttonSelect.getElement());
+        _container.appendChild(_buttonEtch.getElement());
 
         this.show();
     };

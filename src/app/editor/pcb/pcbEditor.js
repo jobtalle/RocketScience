@@ -393,3 +393,4 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
 PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
+PcbEditor.EDIT_MODE_ETCH = 2;
