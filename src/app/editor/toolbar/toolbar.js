@@ -21,7 +21,7 @@ export function Toolbar(editor, overlay, x, game) {
         "toolbar-select",
         _toggleGroupSelectMode);
     const _buttonEtch = new ToolbarButton(
-        () => {},
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_ETCH),
         "toolbar-etch",
         _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(

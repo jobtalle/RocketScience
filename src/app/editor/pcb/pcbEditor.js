@@ -10,6 +10,7 @@ import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
+import {PcbEditorEtch} from "./pcbEditorEtch";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -189,6 +190,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
                 setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), new Selection(sprites)));
+                break;
+            case PcbEditor.EDIT_MODE_ETCH:
+                setEditor(new PcbEditorEtch(sprites, _pcb, _cursor, makeInterface()));
                 break;
         }
     };
