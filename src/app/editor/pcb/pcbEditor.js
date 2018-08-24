@@ -234,6 +234,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      */
     this.hide = () => {
         _view.onMouseRelease();
+        _editor.reset();
 
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
     };
