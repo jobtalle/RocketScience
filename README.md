@@ -24,6 +24,10 @@ To compile the program, execute ``npm run pack-dev``
 (or ``pack-prod`` for production builds) from the root of the repository.
 The resulting files will be stored in ``dist``.
 
+## Compatibility
+The game is built to be compatible with _at least_ Firefox and Chrome.
+Compatibility issues with these browsers are bugs.
+
 ## Authors
 Job Talle,
 Luc van den Brand.
