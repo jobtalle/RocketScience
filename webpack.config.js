@@ -1,7 +1,7 @@
 const path = require('path'),
       HtmlWebpackPlugin = require('html-webpack-plugin'),
       ExtractTextPlugin = require("extract-text-webpack-plugin"),
-      UglifyJsPlugin = require('uglifyjs-webpack-plugin');;
+      UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
@@ -20,7 +20,6 @@ module.exports = {
         }]
     },
     optimization: {
-        minimize: true,
         minimizer: [new UglifyJsPlugin({
             include: /\.js$/
         })]
