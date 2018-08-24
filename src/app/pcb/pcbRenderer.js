@@ -13,7 +13,7 @@ import {PcbPathRenderer} from "./pcbPathRenderer";
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
 
-    const _pathRenderer = new PcbPathRenderer(sprites);
+    const _pathRenderer = new PcbPathRenderer(sprites, false);
     const _partRenderers = [];
     const _partPositions = [];
     let _initialized = false;

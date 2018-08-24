@@ -1,4 +1,5 @@
 import {Pcb} from "../../pcb/pcb";
+import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -12,6 +13,9 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH = sprites.getSprite("pcbEtch");
     const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
+    const _pathRenderer = new PcbPathRenderer(sprites, true);
+
+    let _startPoint = null;
     let _dragging = false;
     let _etchable = false;
 
@@ -48,6 +52,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     this.mouseDown = () => {
         if (_etchable) {
             _dragging = true;
+            _startPoint = cursor.copy();
 
             return true;
         }
