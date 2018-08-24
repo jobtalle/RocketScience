@@ -129,6 +129,18 @@ export function Pcb(myr, sprites) {
         }
     };
 
+    const eraseConnectionsTo = (x, y) => {
+        for (let direction = 0; direction < 8; ++direction) {
+            const delta = PcbPoint.directionToDelta(direction);
+            const point = this.getPoint(x + delta.x, y + delta.y);
+
+            if (!point)
+                continue;
+
+            point.clearDirection((direction + 4) % 8);
+        }
+    };
+
     /**
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
@@ -224,6 +236,7 @@ export function Pcb(myr, sprites) {
      */
     this.erase = (x, y) => {
         erasePartAt(x, y);
+        eraseConnectionsTo(x, y);
 
         _points[y][x] = null;
         --_pointCount;

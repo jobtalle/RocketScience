@@ -1,5 +1,6 @@
 import {Pcb} from "../../pcb/pcb";
 import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
+import {PcbPoint} from "../../pcb/pcbPoint";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -20,13 +21,6 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     let _dragging = false;
     let _etchable = false;
 
-    const deltaToDirection = (dx, dy) => {
-        if (dx === 1)
-            return -dy - Math.min(-dy, 0) * 8;
-
-        return 4 + ((1 + dx) + 1) * dy;
-    };
-
     const makePath = () => {
         const at = _startPoint.copy();
         let lastEntry = new PcbEditorEtch.PathEntry(at.x, at.y, 0);
@@ -46,7 +40,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             }
 
             const entry = new PcbEditorEtch.PathEntry(at.x, at.y, 0);
-            const direction = deltaToDirection(lastEntry.x - entry.x, lastEntry.y - entry.y);
+            const direction = PcbPoint.deltaToDirection(lastEntry.x - entry.x, lastEntry.y - entry.y);
 
             entry.paths |= 1 << direction;
             lastEntry.paths |= 1 << ((direction + 4) % 8);
