@@ -1,6 +1,7 @@
 const path = require('path'),
       HtmlWebpackPlugin = require('html-webpack-plugin'),
-      ExtractTextPlugin = require("extract-text-webpack-plugin");
+      ExtractTextPlugin = require("extract-text-webpack-plugin"),
+      UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
@@ -14,9 +15,14 @@ module.exports = {
         rules: [{
             test: /\.css$/,
             use: ExtractTextPlugin.extract({
-                use: 'css-loader?-url'
+                use: [{ loader: 'css-loader', options: {minimize: true, url: false} }]
             })
         }]
+    },
+    optimization: {
+        minimizer: [new UglifyJsPlugin({
+            include: /\.js$/
+        })]
     },
     node: {
         fs: 'empty'
