@@ -3,7 +3,8 @@ doc
 
 # Don't keep (intermediary) builds, DO keep the package info for dist.
 dist
-src/assets/atlas.json
+src/assets/sprites/atlas.json
+src/styles/gui.css
 
 # Editor files.
 .idea
@@ -11,6 +12,10 @@ src/assets/atlas.json
 # NodeJS files
 node_modules/
 npm-debug.log
+package-lock.json
+
+# Python files
+__pycache__
 
 # OS generated files
 .DS_Store
