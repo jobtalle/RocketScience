@@ -1,6 +1,7 @@
 import {Pcb} from "./pcb";
 import {PartRenderer} from "../part/partRenderer";
 import * as Myr from "../../lib/myr";
+import {PcbPathRenderer} from "./pcbPathRenderer";
 
 /**
  * A PCB renderer.
@@ -11,17 +12,8 @@ import * as Myr from "../../lib/myr";
  */
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
-    const SPRITES_PATHS = [
-        sprites.getSprite("pcbPathR"),
-        sprites.getSprite("pcbPathRT"),
-        sprites.getSprite("pcbPathT"),
-        sprites.getSprite("pcbPathLT"),
-        sprites.getSprite("pcbPathL"),
-        sprites.getSprite("pcbPathLB"),
-        sprites.getSprite("pcbPathB"),
-        sprites.getSprite("pcbPathRB")
-    ];
 
+    const _pathRenderer = new PcbPathRenderer(sprites);
     const _partRenderers = [];
     const _partPositions = [];
     let _initialized = false;
@@ -36,6 +28,7 @@ export function PcbRenderer(myr, sprites, pcb) {
         _layerPcb.bind();
         _layerPcb.clear();
 
+        // Render board
         for(let row = 0; row < pcb.getHeight(); ++row) for(let column = 0; column < pcb.getWidth(); ++column) {
             const point = pcb.getPoint(column, row);
 
@@ -43,15 +36,17 @@ export function PcbRenderer(myr, sprites, pcb) {
                 SPRITE_POINT.draw(
                     column * Pcb.PIXELS_PER_POINT,
                     row * Pcb.PIXELS_PER_POINT);
-
-                if (point.paths === 0)
-                    continue;
-
-                for (let bit = 0; bit < 8; ++bit) if (((point.paths >> bit) & 1) === 1)
-                    SPRITES_PATHS[bit].draw(
-                        column * Pcb.PIXELS_PER_POINT - 1,
-                        row * Pcb.PIXELS_PER_POINT - 1);
             }
+        }
+
+        // Render etchings
+        for(let row = 0; row < pcb.getHeight(); ++row) for(let column = 0; column < pcb.getWidth(); ++column) {
+            const point = pcb.getPoint(column, row);
+
+            if (!point || point.paths === 0)
+                continue;
+
+            _pathRenderer.render(point.paths, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
         }
     };
 
