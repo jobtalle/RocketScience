@@ -110,6 +110,9 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         if (_suitable) {
             editor.undoPush();
 
+            if (selection)
+                selection.clearSelected();
+
             for (const fixture of fixtures) {
                 let part = null;
 
@@ -129,7 +132,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
                     cursor.x + fixture.x,
                     cursor.y + fixture.y);
 
-                if (selection !== null)
+                if (selection)
                     selection.addSelected(pcbFixture);
             }
 
@@ -139,9 +142,8 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             return true;
         }
         else {
-            if (selection !== null) {
+            if (selection !== null)
                 selection.clearSelected();
-            }
 
             editor.revert();
 

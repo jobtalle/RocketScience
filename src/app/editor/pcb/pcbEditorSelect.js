@@ -29,7 +29,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
         deleteSelectedParts();
 
-        selection.clearSelected();
         selection.move(cursor.x - start.x, cursor.y - start.y);
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, selection));
