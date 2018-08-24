@@ -20,6 +20,13 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     let _dragging = false;
     let _etchable = false;
 
+    const deltaToDirection = (dx, dy) => {
+        if (dx === 1)
+            return -dy - Math.min(-dy, 0) * 8;
+        else
+            return 4 + ((1 + dx) + 1) * dy;
+    };
+
     const makePath = () => {
         const at = _startPoint.copy();
         let lastEntry = new PcbEditorEtch.PathEntry(at.x, at.y, 0);
@@ -27,7 +34,6 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         _path.push(lastEntry);
 
         while (!at.equals(cursor)) {
-            // Move towards the cursor
             if (at.x < cursor.x)
                 ++at.x;
             else if (at.x > cursor.x)
@@ -46,60 +52,14 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
                 break;
             }
 
-            // Add new position to path
             const entry = new PcbEditorEtch.PathEntry(at.x, at.y, 0);
-
-            _path.push(entry);
-
-            // Calculate difference
-            const dx = lastEntry.x - entry.x;
-            const dy = lastEntry.y - entry.y;
-            let direction;
-
-            // Connect new entry to previous one
-            switch (dx) {
-                case -1:
-                    switch (dy) {
-                        case -1:
-                            direction = 3;
-                            break;
-                        case 0:
-                            direction = 4;
-                            break;
-                        case 1:
-                            direction = 5;
-                            break;
-                    }
-                    break;
-                case 0:
-                    switch (dy) {
-                        case -1:
-                            direction = 2;
-                            break;
-                        case 1:
-                            direction = 6;
-                            break;
-                    }
-                    break;
-                case 1:
-                    switch (dy) {
-                        case -1:
-                            direction = 1;
-                            break;
-                        case 0:
-                            direction = 0;
-                            break;
-                        case 1:
-                            direction = 7;
-                            break;
-                    }
-                    break;
-            }
+            const direction = deltaToDirection(lastEntry.x - entry.x, lastEntry.y - entry.y);
 
             entry.paths |= 1 << direction;
             lastEntry.paths |= 1 << ((direction + 4) % 8);
-
             lastEntry = entry;
+
+            _path.push(entry);
         }
     };
 
