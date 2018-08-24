@@ -7,9 +7,10 @@ import {PcbEditor} from "../pcb/pcbEditor";
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} x The X position of the toolbar in pixels.
+ * @param {Object} game An interface to interact with the game object.
  * @constructor
  */
-export function Toolbar(editor, overlay, x) {
+export function Toolbar(editor, overlay, x, game) {
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
@@ -23,8 +24,21 @@ export function Toolbar(editor, overlay, x) {
         () => {},
         "toolbar-etch",
         _toggleGroupSelectMode);
+    const _buttonLaunch = new ToolbarButton(
+        () => game.toggleEdit(),
+        "toolbar-launch");
 
     let _container = null;
+
+    const makeSpacer = () => {
+        const element = document.createElement("div");
+
+        element.classList.add("spacer");
+        element.classList.add("sprite");
+        element.classList.add("toolbar-spacer");
+
+        return element;
+    };
 
     const build = () => {
         _container = document.createElement("div");
@@ -34,6 +48,8 @@ export function Toolbar(editor, overlay, x) {
         _container.appendChild(_buttonExtend.getElement());
         _container.appendChild(_buttonSelect.getElement());
         _container.appendChild(_buttonEtch.getElement());
+        _container.appendChild(makeSpacer());
+        _container.appendChild(_buttonLaunch.getElement());
 
         this.show();
     };

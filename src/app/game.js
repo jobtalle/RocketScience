@@ -40,6 +40,26 @@ export function Game(myr, sprites, overlay) {
         myr.flush();
     };
 
+    const toggleEdit = () => {
+        if (_editor) {
+            _hiddenEditor = _editor;
+            _editor.hide();
+            _editor = null;
+            _world.activate();
+        }
+        else {
+            _editor = _hiddenEditor;
+            _world.deactivate();
+            _editor.show();
+        }
+    };
+
+    const makeInterface = () => {
+        return {
+            toggleEdit: toggleEdit
+        };
+    };
+
     /**
      * Stop any running game mode.
      */
@@ -62,7 +82,7 @@ export function Game(myr, sprites, overlay) {
         stop();
 
         _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
-        _editor = new Editor(myr, sprites, overlay, _world, myr.getWidth(), myr.getHeight());
+        _editor = new Editor(myr, sprites, overlay, _world, myr.getWidth(), myr.getHeight(), makeInterface());
 
         const pcb = new Pcb(myr, sprites);
         pcb.initialize();
@@ -154,22 +174,14 @@ export function Game(myr, sprites, overlay) {
     this.onKeyDown = (key, control) => {
         switch(key) {
             case KEY_TOGGLE_EDIT:
-                if (_editor) {
-                    _hiddenEditor = _editor;
-                    _editor.hide();
-                    _editor = null;
-                    _world.activate();
-                }
-                else {
-                    _editor = _hiddenEditor;
-                    _world.deactivate();
-                    _editor.show();
-                }
+                toggleEdit();
+                break;
+            default:
+                if(_editor)
+                    _editor.onKeyDown(key, control);
+
                 break;
         }
-
-        if(_editor)
-            _editor.onKeyDown(key, control);
     };
 
     /**

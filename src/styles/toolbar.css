@@ -4,4 +4,9 @@
 
 #toolbar .button {
     cursor: pointer;
+    float: left;
+}
+
+#toolbar .spacer {
+    float: left;
 }

@@ -10,9 +10,10 @@ import {Toolbar} from "./toolbar/toolbar";
  * @param {World} world A world instance to interact with.
  * @param {Number} width The width.
  * @param {Number} height The height.
+ * @param {Object} game An interface to interact with the game object.
  * @constructor
  */
-export function Editor(myr, sprites, overlay, world, width, height) {
+export function Editor(myr, sprites, overlay, world, width, height, game) {
     const _pcbEditor = new PcbEditor(
         myr,
         sprites,
@@ -21,7 +22,7 @@ export function Editor(myr, sprites, overlay, world, width, height) {
         height,
         width - Math.floor(width * Editor.EDITOR_WIDTH));
     const _library = new Library(_pcbEditor, overlay, width - _pcbEditor.getWidth());
-    const _toolbar = new Toolbar(_pcbEditor, overlay, _library.getWidth());
+    const _toolbar = new Toolbar(_pcbEditor, overlay, _library.getWidth(), game);
 
     let _editorHover = false;
 
