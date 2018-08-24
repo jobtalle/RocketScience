@@ -23,8 +23,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const deltaToDirection = (dx, dy) => {
         if (dx === 1)
             return -dy - Math.min(-dy, 0) * 8;
-        else
-            return 4 + ((1 + dx) + 1) * dy;
+
+        return 4 + ((1 + dx) + 1) * dy;
     };
 
     const makePath = () => {
@@ -34,15 +34,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         _path.push(lastEntry);
 
         while (!at.equals(cursor)) {
-            if (at.x < cursor.x)
-                ++at.x;
-            else if (at.x > cursor.x)
-                --at.x;
-
-            if (at.y < cursor.y)
-                ++at.y;
-            else if (at.y > cursor.y)
-                --at.y;
+            at.x += Math.sign(cursor.x - at.x);
+            at.y += Math.sign(cursor.y - at.y);
 
             const point = pcb.getPoint(at.x, at.y);
 
