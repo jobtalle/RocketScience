@@ -50,18 +50,18 @@ export function PcbPathRenderer(sprites, isPlan) {
 
     /**
      * Render an etched state.
-     * @param {Number} paths The etched state.
+     * @param {PcbPoint} point A point to render the etch state from.
      * @param {Number} x The X position.
      * @param {Number} y The Y position.
      */
-    this.render = (paths, x, y) => {
-        if (paths === 0)
+    this.render = (point, x, y) => {
+        if (point.paths === 0)
             return;
 
-        for (let bit = 0; bit < 8; ++bit) if (((paths >> bit) & 1) === 1)
+        for (let bit = 0; bit < 8; ++bit) if (((point.paths >> bit) & 1) === 1)
             SPRITES_PATHS[bit].draw(x - 1, y - 1);
 
-        if (isJunction(paths))
+        if (isJunction(point.paths))
             SPRITE_JUNCTION.draw(x, y);
         else
             SPRITE_NODE.draw(x, y);

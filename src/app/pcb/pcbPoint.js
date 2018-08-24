@@ -25,6 +25,14 @@ PcbPoint.prototype.clearDirection = function(direction) {
     this.paths &= ~(1 << direction);
 };
 
+/**
+ * Check whether this point has paths etched into it.
+ * @returns {Boolean} A boolean which is True if this point has paths etched into it.
+ */
+PcbPoint.prototype.hasPaths = function() {
+    return this.paths !== 0;
+};
+
 const directionDeltas = [
     new Myr.Vector(1, 0),
     new Myr.Vector(1, -1),
