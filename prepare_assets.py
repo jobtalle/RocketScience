@@ -5,5 +5,3 @@ from pack_sprites import pack_sprites
 
 pack_sprites()
 pack_gui()
-
-input("Done!\nPress a key to exit...")

@@ -5,10 +5,12 @@
  * @constructor
  */
 export function PcbPathRenderer(sprites, isPlan) {
+    let SPRITE_JUNCTION;
     let SPRITE_NODE;
     let SPRITES_PATHS;
 
     if (isPlan) {
+        SPRITE_JUNCTION = sprites.getSprite("pcbPathPlanJunction");
         SPRITE_NODE = sprites.getSprite("pcbPathPlan");
         SPRITES_PATHS = [
             sprites.getSprite("pcbPathPlanR"),
@@ -20,6 +22,7 @@ export function PcbPathRenderer(sprites, isPlan) {
             sprites.getSprite("pcbPathPlanB"),
             sprites.getSprite("pcbPathPlanRB")];
     } else {
+        SPRITE_JUNCTION = sprites.getSprite("pcbPathJunction");
         SPRITE_NODE = sprites.getSprite("pcbPath");
         SPRITES_PATHS = [
             sprites.getSprite("pcbPathR"),
@@ -32,19 +35,35 @@ export function PcbPathRenderer(sprites, isPlan) {
             sprites.getSprite("pcbPathRB")];
     }
 
+    const isJunction = paths => {
+        let count = 0;
+
+        for (let bit = 0; bit < 8; ++bit) {
+            count += (paths >> bit) & 1;
+
+            if (count > 2)
+                return true;
+        }
+
+        return count < 2;
+    };
+
     /**
      * Render an etched state.
-     * @param {Number} state The etched state.
+     * @param {Number} paths The etched state.
      * @param {Number} x The X position.
      * @param {Number} y The Y position.
      */
-    this.render = (state, x, y) => {
-        if (state === 0)
+    this.render = (paths, x, y) => {
+        if (paths === 0)
             return;
 
-        for (let bit = 0; bit < 8; ++bit) if (((state >> bit) & 1) === 1)
+        for (let bit = 0; bit < 8; ++bit) if (((paths >> bit) & 1) === 1)
             SPRITES_PATHS[bit].draw(x - 1, y - 1);
 
-        SPRITE_NODE.draw(x, y);
+        if (isJunction(paths))
+            SPRITE_JUNCTION.draw(x, y);
+        else
+            SPRITE_NODE.draw(x, y);
     };
 }
