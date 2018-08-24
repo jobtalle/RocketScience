@@ -153,6 +153,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      */
     this.onKeyDown = (key, control) => {
         _pcbEditor.onKeyDown(key, control);
+        _toolbar.onKeyDown(key, control);
     };
 
     /**

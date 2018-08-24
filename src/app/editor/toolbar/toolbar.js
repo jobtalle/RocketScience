@@ -76,7 +76,33 @@ export function Toolbar(editor, overlay, x, game) {
         overlay.appendChild(_container);
     };
 
+    /**
+     * A key is pressed.
+     * @param {String} key A key.
+     * @param {Boolean} control Indicates whether the control button is pressed.
+     */
+    this.onKeyDown = (key, control) => {
+        switch (key) {
+            case Toolbar.KEY_PRESS_EXTEND:
+                _buttonExtend.getElement().click();
+                break;
+            case Toolbar.KEY_PRESS_SELECT:
+                _buttonSelect.getElement().click();
+                break;
+            case Toolbar.KEY_PRESS_ETCH:
+                _buttonEtch.getElement().click();
+                break;
+            case Toolbar.KEY_PRESS_LAUNCH:
+                _buttonLaunch.getElement().click();
+                break;
+        }
+    };
+
     build();
 }
 
 Toolbar.ID = "toolbar";
+Toolbar.KEY_PRESS_EXTEND = "1";
+Toolbar.KEY_PRESS_SELECT = "2";
+Toolbar.KEY_PRESS_ETCH = "3";
+Toolbar.KEY_PRESS_LAUNCH = " ";

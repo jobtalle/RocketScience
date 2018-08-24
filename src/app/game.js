@@ -12,8 +12,6 @@ import {Terrain} from "./world/terrain/terrain";
  * @constructor
  */
 export function Game(myr, sprites, overlay) {
-    const KEY_TOGGLE_EDIT = " ";
-
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
@@ -172,15 +170,19 @@ export function Game(myr, sprites, overlay) {
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
-        switch(key) {
-            case KEY_TOGGLE_EDIT:
-                toggleEdit();
-                break;
-            default:
-                if(_editor)
-                    _editor.onKeyDown(key, control);
+        if(_editor)
+            _editor.onKeyDown(key, control);
+        else {
+            // TODO: All events must go through buttons! Key presses should always be shortcuts for buttons.
+            switch (key) {
+                case Game.KEY_TOGGLE_EDIT:
+                    toggleEdit();
+                    break;
+                default:
 
-                break;
+
+                    break;
+            }
         }
     };
 
@@ -201,3 +203,5 @@ export function Game(myr, sprites, overlay) {
 
     _menu.show(overlay);
 }
+
+Game.KEY_TOGGLE_EDIT = " ";
