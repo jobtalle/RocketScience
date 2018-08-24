@@ -173,9 +173,12 @@ export function Pcb(myr, sprites) {
     this.copy = () => {
         const newPcb = new Pcb(myr, sprites);
 
-        for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x)
-            if (this.getPoint(x, y))
-                newPcb.extend(x, y);
+        for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x) {
+            const point = this.getPoint(x, y);
+
+            if (point)
+                newPcb.extend(x, y).paths = point.paths;
+        }
 
         for (const fixture of _fixtures)
             newPcb.place(fixture.part.copy(), fixture.x, fixture.y);
@@ -188,24 +191,29 @@ export function Pcb(myr, sprites) {
      * A Pcb cannot be extended into negative coordinates; shift before doing this.
      * @param {Number} x The X position of the new point.
      * @param {Number} y The Y position of the new point.
+     * @returns {PcbPoint} The newly added PCB point.
      */
     this.extend = (x, y) => {
+        const newPoint = new PcbPoint();
+
         while(this.getHeight() <= y)
             _points.push([]);
 
         if(x < _points[y].length)
-            _points[y][x] = new PcbPoint();
+            _points[y][x] = newPoint;
         else {
             while(_points[y].length < x)
                 _points[y].push(null);
 
-            _points[y].push(new PcbPoint());
+            _points[y].push(newPoint);
         }
 
         if(x >= _width)
             _width = x + 1;
 
         ++_pointCount;
+
+        return newPoint;
     };
 
     /**
