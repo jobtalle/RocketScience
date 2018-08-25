@@ -2,6 +2,7 @@ import {Pcb} from "../../pcb/pcb";
 import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
 import {PcbPoint} from "../../pcb/pcbPoint";
 import * as Myr from "../../../lib/myr";
+import {PcbPath} from "../../pcb/pcbPath";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -16,15 +17,15 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
     const _pathRenderer = new PcbPathRenderer(sprites, true);
-    const _path = [];
-    const _points = [];
 
+    let _points = null;
+    let _path = null;
     let _startPoint = null;
     let _dragging = false;
     let _etchable = false;
 
     const makePoints = () => {
-        _points.splice(0, _points.length, new PcbPoint());
+        _points = [new PcbPoint()];
 
         for (let i = 1; i < _path.length; ++i) {
             _points.push(new PcbPoint());
@@ -39,6 +40,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const makePath = () => {
         const at = _startPoint.copy();
 
+        _path = [];
         _path.push(at.copy());
 
         while (!at.equals(cursor)) {
@@ -46,7 +48,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             at.y += Math.sign(cursor.y - at.y);
 
             if (!pcb.getPoint(at.x, at.y)) {
-                clearPath();
+                _path = null;
 
                 break;
             }
@@ -56,11 +58,14 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
         if (_path.length > 1)
             makePoints();
+        else
+            _path = null;
     };
 
     const etch = () => {
         if (_path.length < 2) {
-            clearPath();
+            _path = null;
+            _points = null;
 
             return;
         }
@@ -78,10 +83,14 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         }
 
         editor.revalidate();
+
+        _path = null;
+        _points = null;
     };
 
-    const clearPath = () => {
-        _path.splice(0, _path.length);
+    const drawPath = () => {
+        for (let i = 0; i < _path.length; ++i)
+            _pathRenderer.render(_points[i], _path[i].x * Pcb.PIXELS_PER_POINT, _path[i].y * Pcb.PIXELS_PER_POINT);
     };
 
     /**
@@ -108,13 +117,23 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         const point = pcb.getPoint(cursor.x, cursor.y);
 
         if (_dragging) {
-            clearPath();
+            _path = [];
 
             if (point)
                 makePath();
         }
-        else
+        else {
             _etchable = point !== null;
+            _path = null;
+            _points = null;
+
+            if (_etchable && point.hasPaths()) {
+                const pcbPath = new PcbPath(pcb, cursor.x, cursor.y);
+
+                _path = pcbPath.getPath();
+                _points = pcbPath.getPoints();
+            }
+        }
     };
 
     /**
@@ -139,7 +158,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         if (_dragging) {
             _dragging = false;
 
-            etch();
+            if (_path)
+                etch();
         }
     };
 
@@ -172,11 +192,15 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
      */
     this.draw = myr => {
         if (_dragging) {
-            for (let i = 0; i < _path.length; ++i)
-                _pathRenderer.render(_points[i], _path[i].x * Pcb.PIXELS_PER_POINT, _path[i].y * Pcb.PIXELS_PER_POINT);
+            if (_path)
+                drawPath();
 
             SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, (_startPoint.y - 1) * Pcb.PIXELS_PER_POINT);
-        } else if (_etchable)
-            SPRITE_ETCH_HOVER.draw(cursor.x * Pcb.PIXELS_PER_POINT, (cursor.y - 1) * Pcb.PIXELS_PER_POINT );
+        } else if (_etchable) {
+            if (_path)
+                drawPath();
+
+            SPRITE_ETCH_HOVER.draw(cursor.x * Pcb.PIXELS_PER_POINT, (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
+        }
     };
 }

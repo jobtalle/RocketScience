@@ -33,6 +33,26 @@ PcbPoint.prototype.hasPaths = function() {
     return this.paths !== 0;
 };
 
+/**
+ * Execute a function for all connected points.
+ * @param {Function} f A function taking an x and y coordinate of a connected point.
+ * @param {Number} [exclude] An optional direction to exclude from executing.
+ */
+PcbPoint.prototype.withConnected = function(f, exclude) {
+    for (let direction = 0; direction < 8; ++direction) {
+        if (exclude && exclude === direction)
+            continue;
+
+        const bit = 1 << direction;
+
+        if ((this.paths & bit) === bit) {
+            const delta = PcbPoint.directionToDelta(direction);
+
+            f(delta.x, delta.y, (direction + 4) % 8);
+        }
+    }
+};
+
 const directionDeltas = [
     new Myr.Vector(1, 0),
     new Myr.Vector(1, -1),
