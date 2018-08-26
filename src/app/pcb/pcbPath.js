@@ -15,12 +15,6 @@ export function PcbPath() {
     this.getPoints = () => _points;
 
     /**
-     * Get an array of coordinates matching the array returned from getPoints.
-     * @returns {Array} An array of Myr.Vector points.
-     */
-    this.getPath = () => _path;
-
-    /**
      * Check whether a point exists in this path.
      * @param {PcbPoint} point A PCB point.
      * @returns {Boolean} A boolean indicating whether the point exists in this path.
