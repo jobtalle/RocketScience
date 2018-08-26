@@ -34,8 +34,16 @@ PcbPoint.prototype.hasPaths = function() {
 };
 
 /**
+ * Combine this points paths with another points paths.
+ * @param {PcbPoint} point A PCB point.
+ */
+PcbPoint.prototype.flatten = function(point) {
+    this.paths |= point.paths;
+};
+
+/**
  * Execute a function for all connected points.
- * @param {Function} f A function taking an x and y coordinate of a connected point.
+ * @param {Function} f A function taking an x and y coordinate of a connected point and the direction it came from.
  * @param {Number} [exclude] An optional direction to exclude from executing.
  */
 PcbPoint.prototype.withConnected = function(f, exclude) {

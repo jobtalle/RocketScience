@@ -1,7 +1,7 @@
 import {Pcb} from "./pcb";
 import {PartRenderer} from "../part/partRenderer";
 import * as Myr from "../../lib/myr";
-import {PcbPathRenderer} from "./pcbPathRenderer";
+import {PcbPointRenderer} from "./pcbPointRenderer";
 
 /**
  * A PCB renderer.
@@ -13,7 +13,7 @@ import {PcbPathRenderer} from "./pcbPathRenderer";
 export function PcbRenderer(myr, sprites, pcb) {
     const SPRITE_POINT = sprites.getSprite("pcbPoint");
 
-    const _pathRenderer = new PcbPathRenderer(sprites, false);
+    const _pointRenderer = new PcbPointRenderer(sprites, false);
     const _partRenderers = [];
     const _partPositions = [];
     let _initialized = false;
@@ -46,7 +46,7 @@ export function PcbRenderer(myr, sprites, pcb) {
             if (!point || !point.hasPaths())
                 continue;
 
-            _pathRenderer.render(point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
+            _pointRenderer.render(point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
         }
     };
 

@@ -1,8 +1,9 @@
 import {Pcb} from "../../pcb/pcb";
-import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
+import {PcbPointRenderer} from "../../pcb/pcbPointRenderer";
 import {PcbPoint} from "../../pcb/pcbPoint";
 import * as Myr from "../../../lib/myr";
 import {PcbPath} from "../../pcb/pcbPath";
+import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -16,81 +17,58 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH = sprites.getSprite("pcbEtch");
     const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
-    const _pathRenderer = new PcbPathRenderer(sprites, true);
+    const _pathRenderer = new PcbPathRenderer(new PcbPointRenderer(sprites, true));
 
-    let _points = null;
-    let _path = null;
+    let _pathEtch = null;
+    let _pathSelected = null;
     let _startPoint = null;
     let _dragging = false;
     let _etchable = false;
 
-    const makePoints = () => {
-        _points = [new PcbPoint()];
-
-        for (let i = 1; i < _path.length; ++i) {
-            _points.push(new PcbPoint());
-
-            const direction = PcbPoint.deltaToDirection(_path[i].x - _path[i - 1].x, _path[i].y - _path[i - 1].y);
-
-            _points[i - 1].etchDirection(direction);
-            _points[i].etchDirection((direction + 4) % 8);
-        }
-    };
-
     const makePath = () => {
         const at = _startPoint.copy();
+        let previousPoint = null;
+        let point = new PcbPoint();
 
-        _path = [];
-        _path.push(at.copy());
+        _pathEtch = new PcbPath();
+        _pathEtch.push(at.x, at.y, point);
 
         while (!at.equals(cursor)) {
-            at.x += Math.sign(cursor.x - at.x);
-            at.y += Math.sign(cursor.y - at.y);
+            const dx = Math.sign(cursor.x - at.x);
+            const dy = Math.sign(cursor.y - at.y);
+
+            at.x += dx;
+            at.y += dy;
+
+            previousPoint = point;
+            point = new PcbPoint();
+
+            const direction = PcbPoint.deltaToDirection(dx, dy);
+            previousPoint.etchDirection(direction);
+            point.etchDirection((direction + 4) % 8);
 
             if (!pcb.getPoint(at.x, at.y)) {
-                _path = null;
+                _pathEtch = null;
 
                 break;
             }
 
-            _path.push(at.copy());
+            _pathEtch.push(at.x, at.y, point);
         }
 
-        if (_path.length > 1)
-            makePoints();
-        else
-            _path = null;
+        if (!_pathEtch.isValid())
+            _pathEtch = null;
     };
 
     const etch = () => {
-        if (_path.length < 2) {
-            _path = null;
-            _points = null;
-
-            return;
-        }
-
         editor.undoPush();
 
-        let previous;
-        let current = _path.pop();
-
-        while (previous = current, current = _path.pop(), current) {
-            const direction = PcbPoint.deltaToDirection(current.x - previous.x, current.y - previous.y);
-
-            pcb.getPoint(current.x, current.y).etchDirection((direction + 4) % 8);
-            pcb.getPoint(previous.x, previous.y).etchDirection(direction);
-        }
+        _pathEtch.forPoints((x, y, point) => pcb.getPoint(x, y).flatten(point));
+        _pathEtch = null;
 
         editor.revalidate();
 
-        _path = null;
-        _points = null;
-    };
-
-    const drawPath = () => {
-        for (let i = 0; i < _path.length; ++i)
-            _pathRenderer.render(_points[i], _path[i].x * Pcb.PIXELS_PER_POINT, _path[i].y * Pcb.PIXELS_PER_POINT);
+        this.moveCursor();
     };
 
     /**
@@ -117,22 +95,20 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         const point = pcb.getPoint(cursor.x, cursor.y);
 
         if (_dragging) {
-            _path = [];
+            _pathEtch = null;
 
             if (point)
                 makePath();
         }
         else {
             _etchable = point !== null;
-            _path = null;
-            _points = null;
 
             if (_etchable && point.hasPaths()) {
-                const pcbPath = new PcbPath(pcb, cursor.x, cursor.y);
-
-                _path = pcbPath.getPath();
-                _points = pcbPath.getPoints();
+                _pathSelected = new PcbPath();
+                _pathSelected.fromPcb(pcb, cursor.x, cursor.y);
             }
+            else
+                _pathSelected = null;
         }
     };
 
@@ -143,6 +119,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     this.mouseDown = () => {
         if (_etchable) {
             _dragging = true;
+            _pathSelected = null;
             _startPoint = cursor.copy();
 
             return true;
@@ -158,7 +135,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         if (_dragging) {
             _dragging = false;
 
-            if (_path)
+            if (_pathEtch)
                 etch();
         }
     };
@@ -192,13 +169,13 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
      */
     this.draw = myr => {
         if (_dragging) {
-            if (_path)
-                drawPath();
+            if (_pathEtch)
+                _pathRenderer.render(_pathEtch);
 
             SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, (_startPoint.y - 1) * Pcb.PIXELS_PER_POINT);
         } else if (_etchable) {
-            if (_path)
-                drawPath();
+            if (_pathSelected)
+                _pathRenderer.render(_pathSelected);
 
             SPRITE_ETCH_HOVER.draw(cursor.x * Pcb.PIXELS_PER_POINT, (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
         }
