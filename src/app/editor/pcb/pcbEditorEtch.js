@@ -17,13 +17,44 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH = sprites.getSprite("pcbEtch");
     const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
-    const _pathRenderer = new PcbPathRenderer(new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT));
+    const _pointRenderer = new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT);
+    const _pathRenderer = new PcbPathRenderer(_pointRenderer);
 
+    let _selectMode = null;
     let _pathEtch = null;
     let _pathSelected = null;
     let _startPoint = null;
     let _dragging = false;
     let _etchable = false;
+
+    const getSelectionType = path => {
+        let overlapped = null;
+
+        if (!path.forPoints((x, y, point) => {
+            const overlaps = pcb.getPoint(x, y).overlaps(point);
+
+            if (overlapped !== null && overlapped !== overlaps)
+                return false;
+
+            overlapped = overlaps;
+
+            return true;
+        }))
+            return PcbEditorEtch.SELECT_TYPE_INVALID;
+
+        return overlapped?PcbEditorEtch.SELECT_TYPE_DELETE:PcbEditorEtch.SELECT_TYPE_ETCH;
+    };
+
+    const setRenderMode = selectMode => {
+        switch (selectMode) {
+            case PcbEditorEtch.SELECT_TYPE_DELETE:
+                _pointRenderer.setMode(PcbPointRenderer.MODE_DELETE);
+                break;
+            case PcbEditorEtch.SELECT_TYPE_ETCH:
+                _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
+                break;
+        }
+    };
 
     const makePath = () => {
         const at = _startPoint.copy();
@@ -58,12 +89,39 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
         if (_pathEtch && !_pathEtch.isValid())
             _pathEtch = null;
+
+        if (_pathEtch) {
+            _selectMode = getSelectionType(_pathEtch);
+
+            if (_selectMode === PcbEditorEtch.SELECT_TYPE_INVALID)
+                _pathEtch = null;
+            else
+                setRenderMode(_selectMode);
+        }
     };
 
     const etch = () => {
         editor.undoPush();
 
-        _pathEtch.forPoints((x, y, point) => pcb.getPoint(x, y).flatten(point));
+        switch (_selectMode) {
+            case PcbEditorEtch.SELECT_TYPE_ETCH:
+                _pathEtch.forPoints((x, y, point) => {
+                    pcb.getPoint(x, y).flatten(point);
+
+                    return true;
+                });
+
+                break;
+            case PcbEditorEtch.SELECT_TYPE_DELETE:
+                _pathEtch.forPoints((x, y, point) => {
+                    pcb.getPoint(x, y).erase(point);
+
+                    return true;
+                });
+
+                break;
+        }
+
         _pathEtch = null;
 
         editor.revalidate();
@@ -106,6 +164,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             if (_etchable && point.hasPaths()) {
                 _pathSelected = new PcbPath();
                 _pathSelected.fromPcb(pcb, cursor.x, cursor.y);
+
+                _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
             }
             else
                 _pathSelected = null;
@@ -181,3 +241,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         }
     };
 }
+
+PcbEditorEtch.SELECT_TYPE_ETCH = 0;
+PcbEditorEtch.SELECT_TYPE_DELETE = 1;
+PcbEditorEtch.SELECT_TYPE_INVALID = 2;

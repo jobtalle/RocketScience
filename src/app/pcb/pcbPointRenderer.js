@@ -52,6 +52,12 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
     };
 
     /**
+     * Set a new render mode for this renderer.
+     * @param {Object} newMode A new render mode, one of the valid mode constants of this object.
+     */
+    this.setMode = newMode => mode = newMode;
+
+    /**
      * Render an etched state.
      * @param {Myr} myr A Myriad instance.
      * @param {PcbPoint} point A point to render the etch state from.

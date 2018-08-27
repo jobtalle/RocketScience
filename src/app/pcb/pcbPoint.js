@@ -42,6 +42,23 @@ PcbPoint.prototype.flatten = function(point) {
 };
 
 /**
+ * Check whether this point's paths overlap another point's paths.
+ * @param point
+ * @returns {Boolean} A boolean which indicates whether the points have overlapping paths.
+ */
+PcbPoint.prototype.overlaps = function(point) {
+    return (this.paths & point.paths) !== 0;
+};
+
+/**
+ * Erase this points connections overlapping with another points connections.
+ * @param {PcbPoint} point A point to erase overlapping paths from.
+ */
+PcbPoint.prototype.erase = function(point) {
+    this.paths &= ~point.paths;
+};
+
+/**
  * Execute a function for all connected points.
  * @param {Function} f A function taking an x and y coordinate of a connected point and the direction it came from.
  * @param {Number} [exclude] An optional direction to exclude from executing.

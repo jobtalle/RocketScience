@@ -35,10 +35,14 @@ export function PcbPath() {
     /**
      * Execute a function for each point in this path.
      * @param {Function} f A function taking the x and y coordinate of the point and a PcbPoint.
+     * @returns {Boolean} false if f returns false at any iteration, true otherwise.
      */
-    this.forPoints = (f) => {
+    this.forPoints = f => {
         for (let i = 0; i < _points.length; ++i)
-            f (_path[i].x, _path[i].y, _points[i]);
+            if (!f(_path[i].x, _path[i].y, _points[i]))
+                return false;
+
+        return true;
     };
 }
 

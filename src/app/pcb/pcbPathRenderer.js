@@ -8,11 +8,15 @@ import {Pcb} from "./pcb";
 export function PcbPathRenderer(pointRenderer) {
     let _myr = null;
 
-    const renderPoint = (x, y, point) => pointRenderer.render(
-        _myr,
-        point,
-        x * Pcb.PIXELS_PER_POINT,
-        y * Pcb.PIXELS_PER_POINT);
+    const renderPoint = (x, y, point) => {
+        pointRenderer.render(
+            _myr,
+            point,
+            x * Pcb.PIXELS_PER_POINT,
+            y * Pcb.PIXELS_PER_POINT);
+
+        return true;
+    };
 
     /**
      * Render a path.
