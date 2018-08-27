@@ -9,6 +9,18 @@ export function PcbPath() {
     let _points = [];
     let _path = [];
 
+    const connectLatest = () => {
+        if (_points.length < 2)
+            return;
+
+        const direction = PcbPoint.deltaToDirection(
+            _path[_path.length - 1].x - _path[_path.length - 2].x,
+            _path[_path.length - 1].y - _path[_path.length - 2].y);
+
+        _points[_points.length - 2].etchDirection(direction);
+        _points[_points.length - 1].etchDirection((direction + 4) % 8);
+    };
+
     /**
      * Get the PCB points connected to the starting point.
      * @returns {Array} An array of PCB points.
@@ -27,10 +39,14 @@ export function PcbPath() {
      * @param {Number} x The X coordinate.
      * @param {Number} y The Y coordinate.
      * @param {PcbPoint} point A PCB point.
+     * @param {Boolean} connect True if the added point should be connected to the previously added point.
      */
-    this.push = (x, y, point) => {
+    this.push = (x, y, point, connect) => {
         _path.push(new Myr.Vector(x, y));
         _points.push(point);
+
+        if (connect)
+            connectLatest();
     };
 
     /**
@@ -51,6 +67,9 @@ export function PcbPath() {
      * @param {Number} length The path will be trimmed to length. It must be smaller than or equal to the path length.
      */
     this.trim = length => {
+        if (length === _points.length)
+            return;
+
         _points[length - 1].clearDirection(PcbPoint.deltaToDirection(
             _path[length].x - _path[length - 1].x,
             _path[length].y - _path[length - 1].y));
@@ -73,7 +92,7 @@ PcbPath.prototype.fromPcb = function(pcb, x, y)  {
         if (!point || this.hasPoint(point))
             return;
 
-        this.push(x, y, point);
+        this.push(x, y, point, false);
 
         point.withConnected((dx, dy, direction) => {
             addPoint(x + dx, y + dy, direction);

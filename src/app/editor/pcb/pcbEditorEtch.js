@@ -61,49 +61,30 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         }
     };
 
-    const makePath = () => {
-        const at = _startPoint.copy();
-        let previousPoint = null;
-        let point = new PcbPoint();
+    const makePath = (start, end) => {
+        const path = new PcbPath();
+        const at = start.copy();
 
-        _pathEtch = new PcbPath();
-        _pathEtch.push(at.x, at.y, point);
+        path.push(at.x, at.y, new PcbPoint(), false);
 
-        while (!at.equals(cursor)) {
-            const dx = Math.sign(cursor.x - at.x);
-            const dy = Math.sign(cursor.y - at.y);
+        while (!at.equals(end)) {
+            const dx = Math.sign(end.x - at.x);
+            const dy = Math.sign(end.y - at.y);
 
             at.x += dx;
             at.y += dy;
 
-            previousPoint = point;
-            point = new PcbPoint();
-
-            const direction = PcbPoint.deltaToDirection(dx, dy);
-            previousPoint.etchDirection(direction);
-            point.etchDirection((direction + 4) % 8);
-
             if (!pcb.getPoint(at.x, at.y)) {
-                _pathEtch = null;
-
-                break;
+                return null;
             }
 
-            // TODO: Let PcbPath make connections
-            _pathEtch.push(at.x, at.y, point);
+            path.push(at.x, at.y, new PcbPoint(), true);
         }
 
-        if (_pathEtch && !_pathEtch.isValid())
-            _pathEtch = null;
+        if (!path.isValid())
+            return null;
 
-        if (_pathEtch) {
-            _selectMode = getSelectionType(_pathEtch);
-
-            if (_selectMode === PcbEditorEtch.SELECT_TYPE_INVALID)
-                _pathEtch = null;
-            else
-                setRenderMode(_selectMode);
-        }
+        return path;
     };
 
     const etchPath = path => {
@@ -167,10 +148,14 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         const point = pcb.getPoint(cursor.x, cursor.y);
 
         if (_dragging) {
-            _pathEtch = null;
+            if (point) {
+                _pathEtch = makePath(_startPoint, cursor);
+                _selectMode = getSelectionType(_pathEtch);
 
-            if (point)
-                makePath();
+                setRenderMode(_selectMode);
+            }
+            else
+                _pathEtch = null;
         }
         else {
             _etchable = point !== null;
@@ -258,4 +243,3 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
 PcbEditorEtch.SELECT_TYPE_ETCH = 0;
 PcbEditorEtch.SELECT_TYPE_DELETE = 1;
-PcbEditorEtch.SELECT_TYPE_INVALID = 2;
