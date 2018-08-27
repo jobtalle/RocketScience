@@ -150,9 +150,12 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         if (_dragging) {
             if (point) {
                 _pathEtch = makePath(_startPoint, cursor);
-                _selectMode = getSelectionType(_pathEtch);
 
-                setRenderMode(_selectMode);
+                if (_pathEtch) {
+                    _selectMode = getSelectionType(_pathEtch);
+
+                    setRenderMode(_selectMode);
+                }
             }
             else
                 _pathEtch = null;
