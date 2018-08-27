@@ -1,4 +1,4 @@
-import {PcbPoint} from "./pcbPoint";
+import {PcbPoint} from "./point/pcbPoint";
 import {Fixture} from "../part/fixture";
 
 /**

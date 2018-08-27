@@ -1,4 +1,4 @@
-import * as Myr from "../../lib/myr";
+import * as Myr from "../../../lib/myr";
 
 /**
  * A pcb path renderer, used for rendering etched states of PCB points.

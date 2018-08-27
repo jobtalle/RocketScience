@@ -1,4 +1,4 @@
-import * as Myr from "../../lib/myr";
+import * as Myr from "../../../lib/myr";
 
 /**
  * A point on a pcb which may contain (part of) a component.

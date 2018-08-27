@@ -1,7 +1,7 @@
 import {Pcb} from "./pcb";
 import {PartRenderer} from "../part/partRenderer";
 import * as Myr from "../../lib/myr";
-import {PcbPointRenderer} from "./pcbPointRenderer";
+import {PcbPointRenderer} from "./point/pcbPointRenderer";
 
 /**
  * A PCB renderer.

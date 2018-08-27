@@ -1,4 +1,4 @@
-import * as Myr from "../../lib/myr";
+import * as Myr from "../../../lib/myr";
 import {PcbPoint} from "./pcbPoint";
 
 /**

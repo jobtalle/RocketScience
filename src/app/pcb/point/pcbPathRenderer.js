@@ -1,4 +1,4 @@
-import {Pcb} from "./pcb";
+import {Pcb} from "../pcb";
 
 /**
  * A renderer for a PcbPath.

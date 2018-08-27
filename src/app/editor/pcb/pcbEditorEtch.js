@@ -1,9 +1,9 @@
 import {Pcb} from "../../pcb/pcb";
-import {PcbPointRenderer} from "../../pcb/pcbPointRenderer";
-import {PcbPoint} from "../../pcb/pcbPoint";
+import {PcbPointRenderer} from "../../pcb/point/pcbPointRenderer";
+import {PcbPoint} from "../../pcb/point/pcbPoint";
 import * as Myr from "../../../lib/myr";
-import {PcbPath} from "../../pcb/pcbPath";
-import {PcbPathRenderer} from "../../pcb/pcbPathRenderer";
+import {PcbPath} from "../../pcb/point/pcbPath";
+import {PcbPathRenderer} from "../../pcb/point/pcbPathRenderer";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
