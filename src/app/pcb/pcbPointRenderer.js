@@ -53,6 +53,7 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
 
     /**
      * Render an etched state.
+     * @param {Myr} myr A Myriad instance.
      * @param {PcbPoint} point A point to render the etch state from.
      * @param {Number} x The X position.
      * @param {Number} y The Y position.

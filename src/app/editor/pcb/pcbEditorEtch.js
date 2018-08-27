@@ -56,7 +56,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             _pathEtch.push(at.x, at.y, point);
         }
 
-        if (!_pathEtch.isValid())
+        if (_pathEtch && !_pathEtch.isValid())
             _pathEtch = null;
     };
 
