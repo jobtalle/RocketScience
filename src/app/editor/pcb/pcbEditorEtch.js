@@ -31,10 +31,10 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         let overlapped = null;
         let length = 0;
 
-        if (!path.forPoints((x, y, point) => {
+        path.forPoints((x, y, point) => {
             const overlaps = overlapped===null?
                 pcb.getPoint(x, y).pathOverlaps(point):
-                pcb.getPoint(x, y).pathEquals(point);
+                overlapped?pcb.getPoint(x, y).pathEquals(point):pcb.getPoint(x, y).pathOverlaps(point);
 
             ++length;
 
@@ -44,10 +44,9 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             overlapped = overlaps;
 
             return true;
-        })) if(overlapped)
-            path.trim(length);
-        else
-            path.trim(length - 1);
+        });
+
+        path.trim(length);
 
         return overlapped?PcbEditorEtch.SELECT_TYPE_DELETE:PcbEditorEtch.SELECT_TYPE_ETCH;
     };
@@ -139,7 +138,20 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
+        switch (key) {
+            case PcbEditorEtch.KEY_DELETE:
+                if (_pathSelected) {
+                    editor.undoPush();
 
+                    deletePath(_pathSelected);
+
+                    editor.revalidate();
+
+                    _pathSelected = null;
+                }
+
+                break;
+        }
     };
 
     /**
@@ -245,5 +257,6 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     };
 }
 
+PcbEditorEtch.KEY_DELETE = "Delete";
 PcbEditorEtch.SELECT_TYPE_ETCH = 0;
 PcbEditorEtch.SELECT_TYPE_DELETE = 1;
