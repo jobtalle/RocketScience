@@ -32,7 +32,7 @@ export function PcbPath() {
      * @param {PcbPoint} point A PCB point.
      * @returns {Boolean} A boolean indicating whether the point exists in this path.
      */
-    this.hasPoint = point => _points.indexOf(point) !== -1;
+    this.hasPoint = point => _points.includes(point);
 
     /**
      * Add a PcbPoint and its location to this path.
