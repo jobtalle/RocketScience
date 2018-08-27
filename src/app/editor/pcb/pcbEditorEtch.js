@@ -26,15 +26,31 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     let _startPoint = null;
     let _dragging = false;
     let _etchable = false;
+    let _deleting = false;
 
-    const getSelectionType = path => {
+    const specifyPath = () => {
+        if (_deleting &&
+            pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
+            pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths()) {
+            const routePath = new PcbPath();
+            let route;
+
+            routePath.fromPcb(pcb, _pathEtch.getStart().x, _pathEtch.getStart().y);
+
+            if (route = routePath.route(_pathEtch.getStart(), _pathEtch.getEnd())) {
+                _pathEtch = route;
+
+                return PcbEditorEtch.SELECT_TYPE_DELETE;
+            }
+        }
+
         let overlapped = null;
         let length = 0;
 
-        path.forPoints((x, y, point) => {
-            const overlaps = overlapped===null?
-                pcb.getPoint(x, y).pathOverlaps(point):
-                overlapped?pcb.getPoint(x, y).pathEquals(point):pcb.getPoint(x, y).pathOverlaps(point);
+        _pathEtch.forPoints((x, y, point) => {
+            const overlaps = overlapped===true?
+                pcb.getPoint(x, y).pathEquals(point):
+                pcb.getPoint(x, y).pathOverlaps(point);
 
             ++length;
 
@@ -46,9 +62,15 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             return true;
         });
 
-        path.trim(length);
+        _pathEtch.trim(length);
 
-        return overlapped?PcbEditorEtch.SELECT_TYPE_DELETE:PcbEditorEtch.SELECT_TYPE_ETCH;
+        if (overlapped) {
+            _deleting = true;
+
+            return PcbEditorEtch.SELECT_TYPE_DELETE;
+        }
+
+        return PcbEditorEtch.SELECT_TYPE_ETCH;
     };
 
     const setRenderMode = selectMode => {
@@ -165,7 +187,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
                 _pathEtch = makePath(_startPoint, cursor);
 
                 if (_pathEtch) {
-                    _selectMode = getSelectionType(_pathEtch);
+                    _selectMode = specifyPath();
 
                     setRenderMode(_selectMode);
                 }
@@ -196,6 +218,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             _dragging = true;
             _pathSelected = null;
             _startPoint = cursor.copy();
+            _deleting = false;
 
             return true;
         }
@@ -212,6 +235,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
             if (_pathEtch)
                 applyPath();
+
+            this.moveCursor();
         }
     };
 

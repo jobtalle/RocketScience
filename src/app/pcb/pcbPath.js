@@ -7,25 +7,49 @@ import {PcbPoint} from "./pcbPoint";
  */
 export function PcbPath() {
     let _points = [];
-    let _path = [];
+    let _positions = [];
 
     const connectLatest = () => {
         if (_points.length < 2)
             return;
 
         const direction = PcbPoint.deltaToDirection(
-            _path[_path.length - 1].x - _path[_path.length - 2].x,
-            _path[_path.length - 1].y - _path[_path.length - 2].y);
+            _positions[_positions.length - 1].x - _positions[_positions.length - 2].x,
+            _positions[_positions.length - 1].y - _positions[_positions.length - 2].y);
 
         _points[_points.length - 2].etchDirection(direction);
         _points[_points.length - 1].etchDirection((direction + 4) % 8);
     };
+
+    const positionIndex = position => {
+        for (let i = 0; i < _positions.length; ++i)
+            if (_positions[i].equals(position))
+                return i;
+
+        return -1;
+    };
+
+    const hasPosition = position => positionIndex(position) !== -1;
+
+    const getPointAt = position => _points[positionIndex(position)];
 
     /**
      * Get the PCB points connected to the starting point.
      * @returns {Array} An array of PCB points.
      */
     this.getPoints = () => _points;
+
+    /**
+     * Get the start coordinate of this path.
+     * @returns {Myr.Vector} The start position.
+     */
+    this.getStart = () => _positions[0];
+
+    /**
+     * Get the end coordinate of this path.
+     * @returns {Myr.Vector} The end position.
+     */
+    this.getEnd = () => _positions[_positions.length - 1];
 
     /**
      * Check whether a point exists in this path.
@@ -42,7 +66,7 @@ export function PcbPath() {
      * @param {Boolean} connect True if the added point should be connected to the previously added point.
      */
     this.push = (x, y, point, connect) => {
-        _path.push(new Myr.Vector(x, y));
+        _positions.push(new Myr.Vector(x, y));
         _points.push(point);
 
         if (connect)
@@ -56,7 +80,7 @@ export function PcbPath() {
      */
     this.forPoints = f => {
         for (let i = 0; i < _points.length; ++i)
-            if (!f(_path[i].x, _path[i].y, _points[i]))
+            if (!f(_positions[i].x, _positions[i].y, _points[i]))
                 return false;
 
         return true;
@@ -71,11 +95,67 @@ export function PcbPath() {
             return;
 
         _points[length - 1].clearDirection(PcbPoint.deltaToDirection(
-            _path[length].x - _path[length - 1].x,
-            _path[length].y - _path[length - 1].y));
+            _positions[length].x - _positions[length - 1].x,
+            _positions[length].y - _positions[length - 1].y));
 
         _points = _points.slice(0, length);
-        _path = _path.slice(0, length);
+        _positions = _positions.slice(0, length);
+    };
+
+    /**
+     * Calculate the shortest route from one point on this part to another.
+     * @param {Myr.Vector} start A start point which lies in this path.
+     * @param {Myr.Vector} end An end point which may or may not lie on this path.
+     * @returns {PcbPath} A new path from start to end, or null if there is no connection.
+     */
+    this.route = (start, end) => {
+        if (!hasPosition(end))
+            return null;
+
+        const visited = [];
+        const queue = [start];
+        let position;
+
+        const isVisited = position => {
+            for (const p of visited) if (p.equals(position))
+                return true;
+
+            return false;
+        };
+
+        while (queue.length > 0) {
+            position = queue.pop();
+
+            if (isVisited(position))
+                continue;
+
+            if (position.equals(end))
+                break;
+
+            visited.push(position);
+
+            getPointAt(position).withConnected((x, y) => {
+                const newPosition = new Myr.Vector(position.x + x, position.y + y);
+
+                if (!isVisited(newPosition)) {
+                    queue.unshift(newPosition);
+
+                    newPosition.from = position;
+                }
+            });
+        }
+
+        const result = new PcbPath();
+
+        while (position.from) {
+            result.push(position.x, position.y, new PcbPoint(), true);
+
+            position = position.from;
+        }
+
+        result.push(start.x, start.y, new PcbPoint(), true);
+
+        return result;
     };
 }
 
