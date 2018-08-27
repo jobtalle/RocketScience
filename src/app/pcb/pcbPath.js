@@ -113,49 +113,56 @@ export function PcbPath() {
             return null;
 
         const visited = [];
-        const queue = [start];
-        let position;
-
-        const isVisited = position => {
-            for (const p of visited) if (p.equals(position))
-                return true;
-
-            return false;
+        const Entry = function(position) {
+            this.position = position;
+            this.from = null;
         };
 
-        while (queue.length > 0) {
-            position = queue.pop();
+        Entry.prototype = {
+            visit: function() {
+                visited.push(this.position);
+            },
+            isVisited: function() {
+                for (const p of visited) if (p.equals(this.position))
+                    return true;
 
-            if (isVisited(position))
+                return false;
+            },
+            toPath: function() {
+                const path = new PcbPath();
+                let entry = this;
+
+                while(entry)
+                    path.push(entry.position.x, entry.position.y, new PcbPoint(), true), entry = entry.from;
+
+                return path;
+            }
+        };
+
+        const queue = [new Entry(start)];
+        let entry;
+
+        while (queue.length) {
+            if (entry = queue.pop(), entry.isVisited())
                 continue;
 
-            if (position.equals(end))
+            if (entry.position.equals(end))
                 break;
 
-            visited.push(position);
+            entry.visit();
 
-            getPointAt(position).withConnected((x, y) => {
-                const newPosition = new Myr.Vector(position.x + x, position.y + y);
+            getPointAt(entry.position).withConnected((x, y) => {
+                const newEntry = new Entry(new Myr.Vector(entry.position.x + x, entry.position.y + y));
 
-                if (!isVisited(newPosition)) {
-                    queue.unshift(newPosition);
+                if (!newEntry.isVisited()) {
+                    queue.unshift(newEntry);
 
-                    newPosition.from = position;
+                    newEntry.from = entry;
                 }
             });
         }
 
-        const result = new PcbPath();
-
-        while (position.from) {
-            result.push(position.x, position.y, new PcbPoint(), true);
-
-            position = position.from;
-        }
-
-        result.push(start.x, start.y, new PcbPoint(), true);
-
-        return result;
+        return entry.toPath();
     };
 }
 
