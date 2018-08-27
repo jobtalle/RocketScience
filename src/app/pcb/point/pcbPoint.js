@@ -10,6 +10,17 @@ export function PcbPoint() {
 }
 
 /**
+ * Sets whether this point is a connection to a pin.
+ * @param {Boolean} connection A boolean which is true if this point is a connection.
+ */
+PcbPoint.prototype.setConnection = function(connection) {
+    if (connection)
+        this.paths |= 256;
+    else
+        this.paths &= ~256;
+};
+
+/**
  * Etch a path in a direction onto this point.
  * @param {Number} direction A direction in the range [0, 7].
  */
@@ -26,11 +37,40 @@ PcbPoint.prototype.clearDirection = function(direction) {
 };
 
 /**
+ * Check whether the paths on this point form a junction or terminal.
+ * @returns {Boolean} A boolean indicating whether this point is a junction or terminal.
+ */
+PcbPoint.prototype.isJunction = function() {
+    if ((this.paths & 256) === 256)
+        return true;
+
+    let count = 0;
+
+    for (let bit = 0; bit < 8; ++bit) {
+        count += (this.paths >> bit) & 1;
+
+        if (count > 2)
+            return true;
+    }
+
+    return count < 2;
+};
+
+/**
+ * Check whether a certain direction has been etched onto this point.
+ * @param {Number} direction A direction in the range [0, 7].
+ * @returns {Boolean} A boolean which is true when the given direction is etched onto this point.
+ */
+PcbPoint.prototype.hasDirection = function(direction) {
+    return ((this.paths >> direction) & 1) === 1;
+};
+
+/**
  * Check whether this point has paths etched into it.
  * @returns {Boolean} A boolean which is True if this point has paths etched into it.
  */
 PcbPoint.prototype.hasPaths = function() {
-    return this.paths !== 0;
+    return (this.paths & 0xFF) !== 0;
 };
 
 /**
@@ -47,7 +87,7 @@ PcbPoint.prototype.flatten = function(point) {
  * @returns {Boolean} A boolean which indicates whether the points have overlapping paths.
  */
 PcbPoint.prototype.pathOverlaps = function(point) {
-    return (this.paths & point.paths) !==0;
+    return ((this.paths & point.paths) & 0xFF) !==0;
 };
 
 /**
@@ -56,7 +96,7 @@ PcbPoint.prototype.pathOverlaps = function(point) {
  * @returns {Boolean} A boolean which indicates whether the points have equal paths.
  */
 PcbPoint.prototype.pathEquals = function(point) {
-    return (this.paths & point.paths) === point.paths;
+    return ((this.paths & point.paths) & 0xFF) === (point.paths & 0xFF);
 };
 
 /**

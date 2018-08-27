@@ -313,10 +313,11 @@ export function Pcb(myr, sprites) {
 
         _fixtures.push(fixture);
 
-        const footprint = part.getConfiguration().footprint;
-
-        for (const point of footprint.points)
+        for (const point of part.getConfiguration().footprint.points)
             this.getPoint(point.x + x, point.y + y).part = part;
+
+        for (const pin of part.getConfiguration().io)
+            this.getPoint(pin.x + x, pin.y + y).setConnection(true);
 
         return fixture;
     };
@@ -341,6 +342,9 @@ export function Pcb(myr, sprites) {
 
         for (const point of part.getConfiguration().footprint.points)
             this.getPoint(fixture.x + point.x, fixture.y + point.y).part = null;
+
+        for (const pin of part.getConfiguration().io)
+            this.getPoint(fixture.x + pin.x, fixture.y + pin.y).setConnection(false);
 
         _fixtures.splice(_fixtures.indexOf(fixture), 1);
     };

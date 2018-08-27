@@ -38,19 +38,6 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
             sprites.getSprite("pcbPathRB")];
     }
 
-    const isJunction = paths => {
-        let count = 0;
-
-        for (let bit = 0; bit < 8; ++bit) {
-            count += (paths >> bit) & 1;
-
-            if (count > 2)
-                return true;
-        }
-
-        return count < 2;
-    };
-
     /**
      * Set a new render mode for this renderer.
      * @param {Object} newMode A new render mode, one of the valid mode constants of this object.
@@ -71,10 +58,10 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
         if (mode)
             myr.setColor(mode);
 
-        for (let bit = 0; bit < 8; ++bit) if (((point.paths >> bit) & 1) === 1)
-            SPRITES_PATHS[bit].draw(x - 1, y - 1);
+        for (let direction = 0; direction < 8; ++direction) if (point.hasDirection(direction))
+            SPRITES_PATHS[direction].draw(x - 1, y - 1);
 
-        if (isJunction(point.paths))
+        if (point.isJunction())
             SPRITE_JUNCTION.draw(x, y);
         else
             SPRITE_NODE.draw(x, y);
