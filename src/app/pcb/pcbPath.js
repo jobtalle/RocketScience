@@ -1,12 +1,13 @@
 import * as Myr from "../../lib/myr";
+import {PcbPoint} from "./pcbPoint";
 
 /**
  * A path of connected PBC points on a PCB.
  * @constructor
  */
 export function PcbPath() {
-    const _points = [];
-    const _path = [];
+    let _points = [];
+    let _path = [];
 
     /**
      * Get the PCB points connected to the starting point.
@@ -43,6 +44,19 @@ export function PcbPath() {
                 return false;
 
         return true;
+    };
+
+    /**
+     * Trim this path.
+     * @param {Number} length The path will be trimmed to length. It must be smaller than or equal to the path length.
+     */
+    this.trim = length => {
+        _points[length - 1].clearDirection(PcbPoint.deltaToDirection(
+            _path[length].x - _path[length - 1].x,
+            _path[length].y - _path[length - 1].y));
+
+        _points = _points.slice(0, length);
+        _path = _path.slice(0, length);
     };
 }
 

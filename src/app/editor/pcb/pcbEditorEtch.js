@@ -29,9 +29,12 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
     const getSelectionType = path => {
         let overlapped = null;
+        let length = 0;
 
         if (!path.forPoints((x, y, point) => {
             const overlaps = pcb.getPoint(x, y).overlaps(point);
+
+            ++length;
 
             if (overlapped !== null && overlapped !== overlaps)
                 return false;
@@ -39,8 +42,10 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             overlapped = overlaps;
 
             return true;
-        }))
-            return PcbEditorEtch.SELECT_TYPE_INVALID;
+        })) if (overlapped)
+            path.trim(length - 1);
+        else
+            path.trim(length);
 
         return overlapped?PcbEditorEtch.SELECT_TYPE_DELETE:PcbEditorEtch.SELECT_TYPE_ETCH;
     };
@@ -84,6 +89,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
                 break;
             }
 
+            // TODO: Let PcbPath make connections
             _pathEtch.push(at.x, at.y, point);
         }
 
@@ -100,24 +106,32 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         }
     };
 
-    const etch = () => {
+    const etchPath = path => {
+        path.forPoints((x, y, point) => {
+            pcb.getPoint(x, y).flatten(point);
+
+            return true;
+        });
+    };
+
+    const deletePath = path => {
+        path.forPoints((x, y, point) => {
+            pcb.getPoint(x, y).erase(point);
+
+            return true;
+        });
+    };
+
+    const applyPath = () => {
         editor.undoPush();
 
         switch (_selectMode) {
             case PcbEditorEtch.SELECT_TYPE_ETCH:
-                _pathEtch.forPoints((x, y, point) => {
-                    pcb.getPoint(x, y).flatten(point);
-
-                    return true;
-                });
+                etchPath(_pathEtch);
 
                 break;
             case PcbEditorEtch.SELECT_TYPE_DELETE:
-                _pathEtch.forPoints((x, y, point) => {
-                    pcb.getPoint(x, y).erase(point);
-
-                    return true;
-                });
+                deletePath(_pathEtch);
 
                 break;
         }
@@ -196,7 +210,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             _dragging = false;
 
             if (_pathEtch)
-                etch();
+                applyPath();
         }
     };
 
