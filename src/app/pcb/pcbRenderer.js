@@ -46,7 +46,7 @@ export function PcbRenderer(myr, sprites, pcb) {
             if (!point || !point.hasPaths())
                 continue;
 
-            _pointRenderer.render(point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
+            _pointRenderer.render(myr, point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
         }
     };
 

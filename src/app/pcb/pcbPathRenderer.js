@@ -6,14 +6,22 @@ import {Pcb} from "./pcb";
  * @constructor
  */
 export function PcbPathRenderer(pointRenderer) {
+    let _myr = null;
+
     const renderPoint = (x, y, point) => pointRenderer.render(
+        _myr,
         point,
         x * Pcb.PIXELS_PER_POINT,
         y * Pcb.PIXELS_PER_POINT);
 
     /**
      * Render a path.
+     * @param {Myr} myr A Myriad instance.
      * @param {PcbPath} path A PCB path to render.
      */
-    this.render = path => path.forPoints(renderPoint);
+    this.render = (myr, path) => {
+        _myr = myr;
+
+        path.forPoints(renderPoint);
+    };
 }

@@ -17,7 +17,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH = sprites.getSprite("pcbEtch");
     const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
-    const _pathRenderer = new PcbPathRenderer(new PcbPointRenderer(sprites, true));
+    const _pathRenderer = new PcbPathRenderer(new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT));
 
     let _pathEtch = null;
     let _pathSelected = null;
@@ -170,12 +170,12 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     this.draw = myr => {
         if (_dragging) {
             if (_pathEtch)
-                _pathRenderer.render(_pathEtch);
+                _pathRenderer.render(myr, _pathEtch);
 
             SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, (_startPoint.y - 1) * Pcb.PIXELS_PER_POINT);
         } else if (_etchable) {
             if (_pathSelected)
-                _pathRenderer.render(_pathSelected);
+                _pathRenderer.render(myr, _pathSelected);
 
             SPRITE_ETCH_HOVER.draw(cursor.x * Pcb.PIXELS_PER_POINT, (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
         }
