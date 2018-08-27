@@ -29,9 +29,14 @@ export function PcbPath() {
         return -1;
     };
 
-    const hasPosition = position => positionIndex(position) !== -1;
-
     const getPointAt = position => _points[positionIndex(position)];
+
+    /**
+     * Check whether this path contains a position.
+     * @param {Myr.Vector} position A position.
+     * @returns {Boolean} A boolean indicating whether the position exists in this path.
+     */
+    this.hasPosition = position => positionIndex(position) !== -1;
 
     /**
      * Get the PCB points connected to the starting point.
@@ -79,9 +84,8 @@ export function PcbPath() {
      * @returns {Boolean} false if f returns false at any iteration, true otherwise.
      */
     this.forPoints = f => {
-        for (let i = 0; i < _points.length; ++i)
-            if (!f(_positions[i].x, _positions[i].y, _points[i]))
-                return false;
+        for (let i = 0; i < _points.length; ++i) if (!f(_positions[i].x, _positions[i].y, _points[i]))
+            return false;
 
         return true;
     };
@@ -104,41 +108,12 @@ export function PcbPath() {
 
     /**
      * Calculate the shortest route from one point on this part to another.
-     * @param {Myr.Vector} start A start point which lies in this path.
-     * @param {Myr.Vector} end An end point which may or may not lie on this path.
-     * @returns {PcbPath} A new path from start to end, or null if there is no connection.
+     * @param {Myr.Vector} start A start point which lies on this path.
+     * @param {Myr.Vector} end An end point which lies on this path.
+     * @returns {PcbPath} A new path from start to end.
      */
     this.route = (start, end) => {
-        if (!hasPosition(end))
-            return null;
-
-        const visited = [];
-        const Entry = function(position) {
-            this.position = position;
-            this.from = null;
-        };
-
-        Entry.prototype = {
-            visit: function() {
-                visited.push(this.position);
-            },
-            isVisited: function() {
-                for (const p of visited) if (p.equals(this.position))
-                    return true;
-
-                return false;
-            },
-            toPath: function() {
-                const path = new PcbPath();
-                let entry = this;
-
-                while(entry)
-                    path.push(entry.position.x, entry.position.y, new PcbPoint(), true), entry = entry.from;
-
-                return path;
-            }
-        };
-
+        const Entry = this.makeSearchEntry();
         const queue = [new Entry(start)];
         let entry;
 
@@ -166,13 +141,43 @@ export function PcbPath() {
     };
 }
 
+PcbPath.prototype.makeSearchEntry = () => {
+    const visited = [];
+    const Entry = function(position) {
+        this.position = position;
+        this.from = null;
+    };
+
+    Entry.prototype = {
+        visit: function() {
+            visited.push(this.position);
+        },
+        isVisited: function() {
+            for (const p of visited) if (p.equals(this.position))
+                return true;
+
+            return false;
+        },
+        toPath: function() {
+            const path = new PcbPath();
+            let entry = this;
+
+            while(entry)
+                path.push(entry.position.x, entry.position.y, new PcbPoint(), true), entry = entry.from;
+
+            return path;
+        }
+    };
+
+    return Entry;
+};
+
 /**
  * Create this path from an existing etched path.
  * @param {Pcb} pcb A PCB.
- * @param {Number} x The X location to start tracing a path from.
- * @param {Number} y The Y location to start tracing a path from.
+ * @param {Myr.Vector} start A start location on the PCB to trace the path from.
  */
-PcbPath.prototype.fromPcb = function(pcb, x, y)  {
+PcbPath.prototype.fromPcb = function(pcb, start)  {
     const addPoint = (x, y, exclude) => {
         const point = pcb.getPoint(x, y);
 
@@ -186,7 +191,7 @@ PcbPath.prototype.fromPcb = function(pcb, x, y)  {
         }, exclude);
     };
 
-    addPoint(x, y);
+    addPoint(start.x, start.y);
 };
 
 /**

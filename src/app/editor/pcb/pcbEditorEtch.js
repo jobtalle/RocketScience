@@ -33,12 +33,11 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
             pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths()) {
             const routePath = new PcbPath();
-            let route;
 
-            routePath.fromPcb(pcb, _pathEtch.getStart().x, _pathEtch.getStart().y);
+            routePath.fromPcb(pcb, _pathEtch.getStart());
 
-            if (route = routePath.route(_pathEtch.getStart(), _pathEtch.getEnd())) {
-                _pathEtch = route;
+            if (routePath.hasPosition(_pathEtch.getEnd())) {
+                _pathEtch = routePath.route(_pathEtch.getStart(), _pathEtch.getEnd());
 
                 return PcbEditorEtch.SELECT_TYPE_DELETE;
             }
@@ -200,7 +199,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
             if (_etchable && point.hasPaths()) {
                 _pathSelected = new PcbPath();
-                _pathSelected.fromPcb(pcb, cursor.x, cursor.y);
+                _pathSelected.fromPcb(pcb, cursor);
 
                 _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
             }
