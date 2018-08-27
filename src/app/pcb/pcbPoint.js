@@ -43,11 +43,20 @@ PcbPoint.prototype.flatten = function(point) {
 
 /**
  * Check whether this point's paths overlap another point's paths.
- * @param point
+ * @param {PcbPoint} point A PCB point.
  * @returns {Boolean} A boolean which indicates whether the points have overlapping paths.
  */
-PcbPoint.prototype.overlaps = function(point) {
-    return (this.paths & point.paths) !== 0;
+PcbPoint.prototype.pathOverlaps = function(point) {
+    return (this.paths & point.paths) !==0;
+};
+
+/**
+ * Check whether this point's path equals another point's paths.
+ * @param {PcbPoint} point A PCB point.
+ * @returns {Boolean} A boolean which indicates whether the points have equal paths.
+ */
+PcbPoint.prototype.pathEquals = function(point) {
+    return (this.paths & point.paths) === point.paths;
 };
 
 /**

@@ -32,7 +32,9 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         let length = 0;
 
         if (!path.forPoints((x, y, point) => {
-            const overlaps = pcb.getPoint(x, y).overlaps(point);
+            const overlaps = overlapped===null?
+                pcb.getPoint(x, y).pathOverlaps(point):
+                pcb.getPoint(x, y).pathEquals(point);
 
             ++length;
 
@@ -42,10 +44,10 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             overlapped = overlaps;
 
             return true;
-        })) if (overlapped)
-            path.trim(length - 1);
-        else
+        })) if(overlapped)
             path.trim(length);
+        else
+            path.trim(length - 1);
 
         return overlapped?PcbEditorEtch.SELECT_TYPE_DELETE:PcbEditorEtch.SELECT_TYPE_ETCH;
     };
@@ -74,9 +76,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             at.x += dx;
             at.y += dy;
 
-            if (!pcb.getPoint(at.x, at.y)) {
+            if (!pcb.getPoint(at.x, at.y))
                 return null;
-            }
 
             path.push(at.x, at.y, new PcbPoint(), true);
         }
