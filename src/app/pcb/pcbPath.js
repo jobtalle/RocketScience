@@ -21,23 +21,6 @@ export function PcbPath() {
         _points[_points.length - 1].etchDirection((direction + 4) % 8);
     };
 
-    const positionIndex = position => {
-        for (let i = 0; i < _positions.length; ++i)
-            if (_positions[i].equals(position))
-                return i;
-
-        return -1;
-    };
-
-    const getPointAt = position => _points[positionIndex(position)];
-
-    /**
-     * Check whether this path contains a position.
-     * @param {Myr.Vector} position A position.
-     * @returns {Boolean} A boolean indicating whether the position exists in this path.
-     */
-    this.hasPosition = position => positionIndex(position) !== -1;
-
     /**
      * Get the PCB points connected to the starting point.
      * @returns {Array} An array of PCB points.
@@ -105,43 +88,9 @@ export function PcbPath() {
         _points = _points.slice(0, length);
         _positions = _positions.slice(0, length);
     };
-
-    /**
-     * Calculate the shortest route from one point on this part to another.
-     * @param {Myr.Vector} start A start point which lies on this path.
-     * @param {Myr.Vector} end An end point which lies on this path.
-     * @returns {PcbPath} A new path from start to end.
-     */
-    this.route = (start, end) => {
-        const Entry = this.makeSearchEntry();
-        const queue = [new Entry(start)];
-        let entry;
-
-        while (queue.length) {
-            if (entry = queue.pop(), entry.isVisited())
-                continue;
-
-            if (entry.position.equals(end))
-                break;
-
-            entry.visit();
-
-            getPointAt(entry.position).withConnected((x, y) => {
-                const newEntry = new Entry(new Myr.Vector(entry.position.x + x, entry.position.y + y));
-
-                if (!newEntry.isVisited()) {
-                    queue.unshift(newEntry);
-
-                    newEntry.from = entry;
-                }
-            });
-        }
-
-        return entry.toPath();
-    };
 }
 
-PcbPath.prototype.makeSearchEntry = () => {
+const makeSearchEntry = () => {
     const visited = [];
     const Entry = function(position) {
         this.position = position;
@@ -158,14 +107,11 @@ PcbPath.prototype.makeSearchEntry = () => {
 
             return false;
         },
-        toPath: function() {
-            const path = new PcbPath();
+        toPath: function(path) {
             let entry = this;
 
             while(entry)
                 path.push(entry.position.x, entry.position.y, new PcbPoint(), true), entry = entry.from;
-
-            return path;
         }
     };
 
@@ -173,11 +119,46 @@ PcbPath.prototype.makeSearchEntry = () => {
 };
 
 /**
+ * Create this path from a start and end point if possible.
+ * @param {Pcb} pcb A PCB.
+ * @param {Myr.Vector} start A start location on the PCB to trace the path from.
+ * @param {Myr.Vector} end An end location on the PCB to trace the path to.
+ */
+PcbPath.prototype.fromRoute = function(pcb, start, end) {
+    const Entry = makeSearchEntry();
+    const queue = [new Entry(start)];
+    let entry;
+
+    while (entry = queue.pop()) {
+        if (entry.isVisited())
+            continue;
+
+        if (entry.position.equals(end)) {
+            entry.toPath(this);
+
+            return;
+        }
+
+        entry.visit();
+
+        pcb.getPoint(entry.position.x, entry.position.y).withConnected((x, y) => {
+            const newEntry = new Entry(new Myr.Vector(entry.position.x + x, entry.position.y + y));
+
+            if (!newEntry.isVisited()) {
+                queue.unshift(newEntry);
+
+                newEntry.from = entry;
+            }
+        });
+    }
+};
+
+/**
  * Create this path from an existing etched path.
  * @param {Pcb} pcb A PCB.
  * @param {Myr.Vector} start A start location on the PCB to trace the path from.
  */
-PcbPath.prototype.fromPcb = function(pcb, start)  {
+PcbPath.prototype.fromPcb = function(pcb, start) {
     const addPoint = (x, y, exclude) => {
         const point = pcb.getPoint(x, y);
 

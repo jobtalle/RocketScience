@@ -34,10 +34,10 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths()) {
             const routePath = new PcbPath();
 
-            routePath.fromPcb(pcb, _pathEtch.getStart());
+            routePath.fromRoute(pcb, _pathEtch.getStart(), _pathEtch.getEnd());
 
-            if (routePath.hasPosition(_pathEtch.getEnd())) {
-                _pathEtch = routePath.route(_pathEtch.getStart(), _pathEtch.getEnd());
+            if (routePath.isValid()) {
+                _pathEtch = routePath;
 
                 return PcbEditorEtch.SELECT_TYPE_DELETE;
             }
