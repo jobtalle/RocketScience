@@ -1,5 +1,14 @@
 import {getString} from "../../language";
 
+const showPartInfo = (part, setInfo) => {
+    if (part)
+        setInfo(getString(part.label), getString(part.description));
+    else
+        setInfo("", "");
+};
+
+let clickedPart = null;
+
 /**
  * A part button used to instantiate a part.
  * @param {Object} part A part from parts.json.
@@ -9,9 +18,15 @@ import {getString} from "../../language";
  */
 export function CategoryPart(part, setPart, setInfo) {
     const onClick = () => {
+        clickedPart = part;
+
         setPart(part);
-        setInfo(getString(part.label), getString(part.description));
+        showPartInfo(part, setInfo);
     };
+
+    const onEnter = () => showPartInfo(part, setInfo);
+
+    const onLeave = () => showPartInfo(clickedPart, setInfo);
 
     /**
      * Get the HTML element of this category.
@@ -24,7 +39,9 @@ export function CategoryPart(part, setPart, setInfo) {
         element.classList.add("sprite");
         element.classList.add(part.icon);
 
-        element.onclick = () => onClick();
+        element.onclick = onClick;
+        element.onmouseover = onEnter;
+        element.onmouseout = onLeave;
 
         return element;
     };
