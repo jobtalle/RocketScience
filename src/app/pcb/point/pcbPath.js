@@ -61,6 +61,13 @@ export function PcbPath() {
             connectLatest();
     };
 
+    this.containsPosition = (x, y) => {
+        for (const position of _positions) if (position.x === x && position.y === y)
+            return true;
+
+        return false;
+    };
+
     /**
      * Execute a function for each point in this path.
      * @param {Function} f A function taking the x and y coordinate of the point and a PcbPoint.

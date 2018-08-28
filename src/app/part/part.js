@@ -2,7 +2,7 @@
  * Constructs a part.
  * @param {Object} definition A valid part from parts.json.
  * @param {Number} configurationIndex The index of the used configuration.
- * @param {Object} behavior A valid led object matching the configuration governing this parts led.
+ * @param {Object} behavior A valid part behavior instance.
  * @constructor
  */
 export function Part(definition, configurationIndex, behavior) {
@@ -11,6 +11,12 @@ export function Part(definition, configurationIndex, behavior) {
      * @returns {Object} A part definition.
      */
     this.getDefinition = () => definition;
+
+    /**
+     * Get this parts behavior.
+     * @returns {Object} A behavior instance matching this parts definition.
+     */
+    this.getBehavior = () => behavior;
 
     /**
      * Get the index of the parts configuration.
