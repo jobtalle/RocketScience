@@ -18,7 +18,8 @@ export function BatteryState(behavior, pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-
+        for (let pin = 0; pin < BatteryState.PIN_COUNT; ++pin)
+            state[pins[pin]] = 1;
     };
 }
 
