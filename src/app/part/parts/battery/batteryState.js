@@ -1,10 +1,10 @@
 /**
- * @param {LedBehavior} behavior A behavior object matching this state object.
+ * @param {BatteryState} behavior A behavior object matching this state object.
  * @param {Array} pins An array containing the pin indices.
  * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
  */
-export function LedState(behavior, pins, renderer) {
+export function BatteryState(behavior, pins, renderer) {
     /**
      * Initialize the state.
      * @param {Physics.Body} body A physics body to apply state to.
@@ -18,11 +18,8 @@ export function LedState(behavior, pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        renderer.getSprites()[LedState.SPRITE_INDEX_LIGHT].setFrame(
-            state[pins[LedState.PIN_INDEX_POWER]]
-        );
+
     };
 }
 
-LedState.SPRITE_INDEX_LIGHT = 0;
-LedState.PIN_INDEX_POWER = 0;
+BatteryState.PIN_COUNT = 4;

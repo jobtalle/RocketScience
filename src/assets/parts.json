@@ -31,6 +31,73 @@
       }
     }
   },
+  "power": {
+    "label": "CATEGORY_POWER",
+    "parts": {
+      "battery": {
+        "label": "PART_BATTERY_NAME",
+        "description": "PART_BATTERY_DESCRIPTION",
+        "icon": "part-battery",
+        "object": "Battery",
+        "configurations": [
+          {
+            "footprint": {
+              "points": [
+                {"x": 0, "y": 0},
+                {"x": 1, "y": 0},
+                {"x": 0, "y": 1},
+                {"x": 1, "y": 1},
+                {"x": 0, "y": 2},
+                {"x": 1, "y": 2}
+              ],
+              "space": [
+
+              ],
+              "air": [
+
+              ]
+            },
+            "io": [
+              {"type": "out", "x": 0, "y": 0},
+              {"type": "out", "x": 1, "y": 0},
+              {"type": "out", "x": 0, "y": 2},
+              {"type": "out", "x": 1, "y": 2}
+            ],
+            "sprites": [
+              {"name": "partBattery1", "x": 0, "y": 0}
+            ]
+          },
+          {
+            "footprint": {
+              "points": [
+                {"x": 0, "y": 0},
+                {"x": 1, "y": 0},
+                {"x": 2, "y": 0},
+                {"x": 0, "y": 1},
+                {"x": 1, "y": 1},
+                {"x": 2, "y": 1}
+              ],
+              "space": [
+
+              ],
+              "air": [
+
+              ]
+            },
+            "io": [
+              {"type": "out", "x": 0, "y": 0},
+              {"type": "out", "x": 0, "y": 1},
+              {"type": "out", "x": 2, "y": 0},
+              {"type": "out", "x": 2, "y": 1}
+            ],
+            "sprites": [
+              {"name": "partBattery2", "x": 0, "y": 0}
+            ]
+          }
+        ]
+      }
+    }
+  },
   "logic": {
     "label": "CATEGORY_LOGIC",
     "parts": {

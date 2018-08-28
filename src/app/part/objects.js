@@ -2,6 +2,8 @@ import {LedBehavior} from "./parts/led/ledBehavior";
 import {OscillatorBehavior} from "./parts/oscillator/oscillatorBehavior";
 import {LedState} from "./parts/led/ledState";
 import {OscillatorState} from "./parts/oscillator/oscillatorState";
+import {BatteryBehavior} from "./parts/battery/batteryBehavior";
+import {BatteryState} from "./parts/battery/batteryState";
 
 // TODO: Can this be automated? E.G.:
 /*
@@ -14,12 +16,14 @@ context.keys().forEach(function (key) {
 
 const behaviors = {
     "Led": LedBehavior,
-    "Oscillator": OscillatorBehavior
+    "Oscillator": OscillatorBehavior,
+    "Battery": BatteryBehavior
 };
 
 const states = {
     "Led": LedState,
-    "Oscillator": OscillatorState
+    "Oscillator": OscillatorState,
+    "Battery": BatteryState
 };
 
 /**
