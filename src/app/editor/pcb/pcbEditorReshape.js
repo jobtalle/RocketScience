@@ -220,6 +220,8 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
 
             _extendable = _deletable = false;
             _dragging = false;
+
+            this.moveCursor();
         }
     };
 
