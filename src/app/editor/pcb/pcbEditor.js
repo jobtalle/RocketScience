@@ -245,11 +245,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     /**
      * Start placing a part.
-     * @param {Object} part The part's constructor.
+     * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
      */
-    this.place = part => {
-        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), part, null));
-    };
+    this.place = fixtures => setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), fixtures, null));
 
     /**
      * Start editing a pcb.

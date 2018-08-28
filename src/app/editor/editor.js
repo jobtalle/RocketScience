@@ -27,14 +27,6 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
     let _editorHover = false;
 
     /**
-     * Start placing a part.
-     * @param {Object} part The part's constructor.
-     */
-    this.place = part => {
-        _pcbEditor.place(part);
-    };
-
-    /**
      * Start editing a pcb.
      * @param {Pcb} pcb A pcb instance to edit.
      * @param {Number} x The X position in the world in meters.
