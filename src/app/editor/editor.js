@@ -21,8 +21,8 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
         Math.floor(width * Editor.EDITOR_WIDTH),
         height,
         width - Math.floor(width * Editor.EDITOR_WIDTH));
-    const _library = new Library(_pcbEditor, overlay, width - _pcbEditor.getWidth());
-    const _toolbar = new Toolbar(_pcbEditor, overlay, _library.getWidth(), game);
+    const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
+    const _library = new Library(_pcbEditor, _toolbar, overlay, width - _pcbEditor.getWidth());
 
     let _editorHover = false;
 

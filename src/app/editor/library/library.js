@@ -3,18 +3,22 @@ import parts from "../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
 import {CategoryInfo} from "./categoryInfo";
+import {Toolbar} from "../toolbar/toolbar";
 
 /**
  * An HTML based part library.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
+ * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} width The width of the library in pixels.
  * @constructor
  */
-export function Library(editor, overlay, width) {
+export function Library(editor, toolbar, overlay, width) {
     let _container = null;
 
     const setPart = part => {
+        toolbar.onKeyDown(Toolbar.KEY_PRESS_SELECT, false);
+
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     };
 
