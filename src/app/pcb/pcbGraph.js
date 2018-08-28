@@ -5,14 +5,15 @@ import * as Myr from "../../lib/myr";
 const findOutput = (paths, x, y) => {
     for (const path of paths)
         if (path.contains(x, y))
-            return path.getPinIndex();
+            return path;
 
-    return 0;
+    return null;
 };
 
-const PathEntry = function(path, pinIndex) {
+const PathEntry = function(path, pinIndex, part) {
     this.contains = (x, y) => path.containsPosition(x, y);
     this.getPinIndex = () => pinIndex;
+    this.getPartEntry = () => part;
 };
 
 const PartEntry = function(fixture) {
@@ -34,7 +35,7 @@ const PartEntry = function(fixture) {
                 pointers.push(pinIndex);
 
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
-                paths.push(new PathEntry(path, pinIndex));
+                paths.push(new PathEntry(path, pinIndex, this));
             }
             else
                 pointers.push(0);
@@ -47,15 +48,40 @@ const PartEntry = function(fixture) {
         for (let i = 0; i < this.getPins().length; ++i) {
             const pin = this.getPins()[i];
 
-            if (pin.type === "in")
-                pointers[i] = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
+            if (pin.type === "in") {
+                const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
+
+                if (path)
+                    pointers[i] = path.getPinIndex();
+            }
         }
+    };
+
+    this.getInputs = paths => {
+        const inputs = [];
+
+        for (const pin of this.getPins()) if (pin.type === "in") {
+            const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
+
+            if (path)
+                inputs.push(path.getPartEntry());
+        }
+
+        return inputs;
     };
 
     this.makeState = (pcb, renderer) => new (getPartState(fixture.part.getDefinition().object))(
         this.getBehavior(),
         pointers,
         renderer.getPartRenderer(fixture));
+
+    this.hasOutputs = () => {
+        for (let pin = 0; pin < this.getPins().length; ++pin)
+            if (this.getPins()[pin] === "out" && pointers[pin] !== 0)
+                return true;
+
+        return false;
+    };
 };
 
 /**
@@ -69,7 +95,7 @@ export function PcbGraph(pcb) {
     const _parts = [];
     let _outPins = 0;
 
-    const analyze = () => {
+    const analyze = parts => {
         for (const fixture of pcb.getFixtures()) {
             const entry = new PartEntry(fixture);
             let outPins = 0;
@@ -77,32 +103,54 @@ export function PcbGraph(pcb) {
             for (const pin of entry.getPins()) if (pin.type === "out")
                 ++outPins;
 
-            _parts.push(entry);
+            parts.push(entry);
             _outPins += outPins;
         }
     };
 
-    const makeOutputs = () => {
+    const makeOutputs = parts => {
         let pinOffset = 1;
 
-        for (const part of _parts)
+        for (const part of parts)
             pinOffset += part.registerPins(_paths, pcb, pinOffset);
     };
 
-    const connectInputs = () => {
-        for (const part of _parts)
+    const connectInputs = parts => {
+        for (const part of parts)
             part.connectInputs(_paths);
     };
 
-    const order = () => {
+    const order = parts => {
+        const queue = [];
 
+        for (const part of parts) if (!part.hasOutputs())
+            queue.push(part);
+
+        for (const enqueued of queue)
+            parts.splice(parts.indexOf(enqueued), 1);
+
+        let part;
+        while (part = queue.pop()) {
+            for (const input of part.getInputs(_paths)) if (!queue.includes(input)) {
+                queue.unshift(input);
+                parts.splice(parts.indexOf(input), 1);
+            }
+
+            _parts.unshift(part);
+        }
+
+        for (const part of parts)
+            _parts.unshift(part);
     };
 
     const build = () => {
-        analyze();
-        makeOutputs();
-        connectInputs();
-        order();
+        const parts = [];
+
+        analyze(parts);
+        makeOutputs(parts);
+        connectInputs(parts);
+
+        order(parts);
     };
 
     /**
