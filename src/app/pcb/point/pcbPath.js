@@ -61,6 +61,12 @@ export function PcbPath() {
             connectLatest();
     };
 
+    /**
+     * Check whether a certain position exists in this path.
+     * @param {Number} x The X coordinate.
+     * @param {Number} y The Y coordinate.
+     * @returns {Boolean} A boolean which is true when the given position exists in this path.
+     */
     this.containsPosition = (x, y) => {
         for (const position of _positions) if (position.x === x && position.y === y)
             return true;
@@ -78,6 +84,22 @@ export function PcbPath() {
             return false;
 
         return true;
+    };
+
+    /**
+     * Check whether this path intersects with another path.
+     * @param {PcbPath} path A path to check intersection with.
+     * @returns {Boolean} A boolean which is true if this path intersects the given path.
+     */
+    this.intersects = path => {
+        if (!this.isValid())
+            return false;
+
+        for (const position of _positions)
+            if (path.containsPosition(position.x, position.y))
+                return true;
+
+        return false;
     };
 
     /**

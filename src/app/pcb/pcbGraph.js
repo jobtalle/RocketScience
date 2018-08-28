@@ -11,6 +11,7 @@ const findOutput = (paths, x, y) => {
 };
 
 const PathEntry = function(path, pinIndex, part) {
+    this.getPath = () => path;
     this.contains = (x, y) => path.containsPosition(x, y);
     this.getPinIndex = () => pinIndex;
     this.getPartEntry = () => part;
@@ -171,6 +172,33 @@ export function PcbGraph(pcb) {
             states.push(entry.makeState(pcb, renderer));
 
         return states;
+    };
+
+    /**
+     * Check whether this graph is valid.
+     * An invalid graph has multiple outputs connected to one path.
+     * @returns {Array} An array of PcbPaths containing connected to multiple outputs.
+     */
+    this.isValid = () => {
+        const duplicates = [];
+
+        for (let first = 0; first < _paths.length - 1; ++first) {
+            let isDuplicate = false;
+
+            for (let second = first + 1; second < _paths.length; ++second) {
+                if (_paths[second].getPath().intersects(_paths[first].getPath())) {
+                    _paths.splice(second, 1);
+
+                    --second;
+                    isDuplicate = true;
+                }
+            }
+
+            if (isDuplicate)
+                duplicates.push(_paths[first].getPath());
+        }
+
+        return duplicates;
     };
 
     build();
