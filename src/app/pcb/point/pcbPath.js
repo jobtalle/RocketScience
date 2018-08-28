@@ -109,7 +109,7 @@ const makeSearchEntry = () => {
             visited.push(this.position);
         },
         isVisited: function() {
-            for (const p of visited) if (p.equals(this.position))
+            for (let i = visited.length; i-- > 0;) if (visited[i].equals(this.position))
                 return true;
 
             return false;
