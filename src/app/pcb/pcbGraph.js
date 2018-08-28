@@ -193,6 +193,4 @@ export function PcbGraph(pcb) {
     this.isValid = () => _duplicatePaths;
 
     build();
-
-    console.log(this.isValid());
 }
