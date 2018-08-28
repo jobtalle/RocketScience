@@ -3,9 +3,8 @@ import {PcbPath} from "./point/pcbPath";
 import * as Myr from "../../lib/myr";
 
 const findOutput = (paths, x, y) => {
-    for (const path of paths)
-        if (path.contains(x, y))
-            return path;
+    for (const path of paths) if (path.contains(x, y))
+        return path;
 
     return null;
 };
@@ -94,12 +93,12 @@ const PartEntry = function(fixture) {
 export function PcbGraph(pcb) {
     const _paths = [];
     const _parts = [];
-    const _duplicatePaths = [];
+    const _invalidPaths = [];
     let _outPins = 0;
 
     const addPath = entry => {
         for (const path of _paths) if (path.getPath().intersects(entry.getPath())) {
-            _duplicatePaths.push(entry.getPath());
+            _invalidPaths.push(entry.getPath());
 
             return;
         }
@@ -186,11 +185,11 @@ export function PcbGraph(pcb) {
     };
 
     /**
-     * Check whether this graph is valid.
-     * An invalid graph has multiple outputs connected to one path.
-     * @returns {Array} An array of PcbPaths containing connected to multiple outputs.
+     * Get the invalid paths on this graph.
+     * An invalid path has multiple outputs connected to it.
+     * @returns {Array} An array of PcbPaths connected to multiple outputs.
      */
-    this.isValid = () => _duplicatePaths;
+    this.getInvalidPaths = () => _invalidPaths;
 
     build();
 }

@@ -22,7 +22,6 @@ export function Library(editor, toolbar, overlay, width) {
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     };
 
-
     const build = () => {
         _container = document.createElement("div");
         _container.id = Library.ID;
