@@ -13,11 +13,12 @@ const overlay = document.getElementById("overlay");
 const myr = new Myr(canvas);
 const sprites = new Sprites(myr);
 const game = new Game(myr, sprites, overlay);
-const canvasRect = overlay.getBoundingClientRect();
 
+let canvasRect = overlay.getBoundingClientRect();
 let keyControl = false;
 
 document.title = getString("TITLE");
+window.onresize = () => canvasRect = overlay.getBoundingClientRect();
 
 overlay.addEventListener("mousemove", function(event) {
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
