@@ -24,6 +24,8 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
     let _suitable = false;
 
     const makeRenderers = () => {
+        _renderers.splice(0, _renderers.length);
+
         for (const fixture of fixtures) {
             if (fixture.isInstance())
                 _renderers.push(new PartRenderer(sprites, fixture.part.getConfiguration()));
@@ -61,6 +63,35 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         return true;
     };
 
+    const getConfigurationCount = () => {
+        if (fixtures.length > 1)
+            return 1;
+
+        const fixture = fixtures[0];
+
+        if (fixture.isInstance())
+            return fixture.part.getDefinition().configurations.length;
+        else
+            return fixture.part.configurations.length;
+    };
+
+    const canReconfigure = () => !selection;
+
+    const nextConfiguration = () => {
+        _configurationIndex = (_configurationIndex + 1) % getConfigurationCount();
+
+        makeRenderers();
+        this.moveCursor();
+    };
+
+    const previousConfiguration = () => {
+        if (--_configurationIndex === -1)
+            _configurationIndex = getConfigurationCount() - 1;
+
+        makeRenderers();
+        this.moveCursor();
+    };
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -92,7 +123,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             }
         }
 
-        if (selection !== null) {
+        if (selection) {
             if (!_lastCursor.equals(cursor)) {
                 selection.move(cursor.x - _lastCursor.x, cursor.y - _lastCursor.y);
 
@@ -159,6 +190,32 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
     };
 
     /**
+     * Zoom in.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomIn = () => {
+        if (!canReconfigure())
+            return false;
+
+        nextConfiguration();
+
+        return true;
+    };
+
+    /**
+     * Zoom out.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomOut = () => {
+        if (!canReconfigure())
+            return false;
+
+        previousConfiguration();
+
+        return true;
+    };
+
+    /**
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {
@@ -199,6 +256,9 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         if (selection !== null)
             selection.draw();
     };
+
+    if (fixtures.length === 1 && fixtures[0].isInstance())
+        _configurationIndex = fixtures[0].part.getConfigurationIndex();
 
     makeRenderers();
 }

@@ -224,6 +224,18 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * Zoom in.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomIn = () => false;
+
+    /**
+     * Zoom out.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomOut = () => false;
+
+    /**
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {

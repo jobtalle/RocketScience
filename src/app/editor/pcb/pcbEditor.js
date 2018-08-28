@@ -353,6 +353,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Zoom in.
      */
     this.zoomIn = () => {
+        if (_editor.zoomIn())
+            return;
+
         _view.zoomIn();
 
         matchWorldPosition();
@@ -362,6 +365,9 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * Zoom out.
      */
     this.zoomOut = () => {
+        if (_editor.zoomOut())
+            return;
+
         _view.zoomOut();
 
         matchWorldPosition();

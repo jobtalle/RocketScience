@@ -80,23 +80,23 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     };
 
     const crop = () => {
-        let left = pcb.getWidth() - 1;
-        let top = pcb.getHeight() - 1;
-        let right = 0;
-        let bottom = 0;
+        let left = undefined;
+        let top = undefined;
+        let right = undefined;
+        let bottom = undefined;
 
         for (const fixture of selection.getSelected()) {
             for (const point of fixture.part.getConfiguration().footprint.points) {
-                if (point.x + fixture.x < left)
+                if (left === undefined || point.x + fixture.x < left)
                     left = point.x + fixture.x;
 
-                if (point.x + fixture.x > right)
+                if (right === undefined || point.x + fixture.x > right)
                     right = point.x + fixture.x;
 
-                if (point.y + fixture.y < top)
+                if (top === undefined || point.y + fixture.y < top)
                     top = point.y + fixture.y;
 
-                if (point.y + fixture.y > bottom)
+                if (bottom === undefined || point.y + fixture.y > bottom)
                     bottom = point.y + fixture.y;
             }
         }
@@ -214,6 +214,18 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 crop();
         }
     };
+
+    /**
+     * Zoom in.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomIn = () => false;
+
+    /**
+     * Zoom out.
+     * @returns {Boolean} A boolean indicating whether this editor handled the action.
+     */
+    this.zoomOut = () => false;
 
     /**
      * Cancel any actions deviating from this editors base state.
