@@ -23,7 +23,7 @@ const PartEntry = function(fixture) {
     this.getPins = () => fixture.part.getConfiguration().io;
     this.getBehavior = () => fixture.part.getBehavior();
 
-    this.registerPins = (paths, pcb, offset) => {
+    this.registerPins = (adder, pcb, offset) => {
         let used = 0;
 
         for (let i = 0; i < this.getPins().length; ++i) {
@@ -36,7 +36,7 @@ const PartEntry = function(fixture) {
                 pointers.push(pinIndex);
 
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
-                paths.push(new PathEntry(path, pinIndex, this));
+                adder(new PathEntry(path, pinIndex, this));
             }
             else
                 pointers.push(0);
@@ -94,7 +94,18 @@ const PartEntry = function(fixture) {
 export function PcbGraph(pcb) {
     const _paths = [];
     const _parts = [];
+    const _duplicatePaths = [];
     let _outPins = 0;
+
+    const addPath = entry => {
+        for (const path of _paths) if (path.getPath().intersects(entry.getPath())) {
+            _duplicatePaths.push(entry.getPath());
+
+            return;
+        }
+
+        _paths.push(entry);
+    };
 
     const analyze = parts => {
         for (const fixture of pcb.getFixtures()) {
@@ -113,7 +124,7 @@ export function PcbGraph(pcb) {
         let pinOffset = 1;
 
         for (const part of parts)
-            pinOffset += part.registerPins(_paths, pcb, pinOffset);
+            pinOffset += part.registerPins(addPath, pcb, pinOffset);
     };
 
     const connectInputs = parts => {
@@ -179,27 +190,9 @@ export function PcbGraph(pcb) {
      * An invalid graph has multiple outputs connected to one path.
      * @returns {Array} An array of PcbPaths containing connected to multiple outputs.
      */
-    this.isValid = () => {
-        const duplicates = [];
-
-        for (let first = 0; first < _paths.length - 1; ++first) {
-            let isDuplicate = false;
-
-            for (let second = first + 1; second < _paths.length; ++second) {
-                if (_paths[second].getPath().intersects(_paths[first].getPath())) {
-                    _paths.splice(second, 1);
-
-                    --second;
-                    isDuplicate = true;
-                }
-            }
-
-            if (isDuplicate)
-                duplicates.push(_paths[first].getPath());
-        }
-
-        return duplicates;
-    };
+    this.isValid = () => _duplicatePaths;
 
     build();
+
+    console.log(this.isValid());
 }
