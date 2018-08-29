@@ -108,7 +108,7 @@ export function PcbGraph(pcb) {
         _paths.push(entry);
     };
 
-    const analyze = parts => {
+    const analyze = () => {
         for (const fixture of pcb.getFixtures()) {
             const entry = new PartEntry(fixture);
             let outPins = 0;
@@ -116,29 +116,29 @@ export function PcbGraph(pcb) {
             for (const pin of entry.getPins()) if (pin.type === "out")
                 ++outPins;
 
-            parts.push(entry);
+            _parts.push(entry);
             _outPins += outPins;
         }
     };
 
-    const makeOutputs = parts => {
+    const makeOutputs = () => {
         let pinOffset = 1;
 
-        for (const part of parts)
+        for (const part of _parts)
             pinOffset += part.registerPins(pcb, addPath, pinOffset);
     };
 
-    const connectInputs = parts => {
-        for (const part of parts)
+    const connectInputs = () => {
+        for (const part of _parts)
             part.connectInputs(_paths);
     };
 
-    const orderIsolated = parts => {
+    const orderIsolated = (parts, result) => {
         for (const part of parts)
-            _parts.push(part);
+            result.push(part);
     };
 
-    const orderUnsatisfied = (parts, unsatisfied) => {
+    const orderUnsatisfied = (parts, unsatisfied, result) => {
         let newRoot = unsatisfied[0];
 
         for (let i = 1; i < unsatisfied.length; ++i) {
@@ -150,14 +150,17 @@ export function PcbGraph(pcb) {
 
         parts.splice(parts.indexOf(newRoot), 1);
 
-        order(parts, [newRoot]);
+        order(parts, [newRoot], result);
     };
 
-    const order = (parts, queue) => {
+    const order = (parts, queue, result) => {
         const unsatisfied = [];
 
-        if (!queue)
+        if (!parts) {
+            parts = _parts.slice();
             queue = [];
+            result = [];
+        }
 
         for (let i = parts.length; i-- > 0;) if (!parts[i].hasOutputs()) {
             queue.push(parts[i]);
@@ -181,23 +184,21 @@ export function PcbGraph(pcb) {
                 parts.splice(parts.indexOf(input), 1);
             }
 
-            _parts.unshift(part);
+            result.unshift(part);
         }
 
         if (unsatisfied.length > 0)
-            orderUnsatisfied(parts, unsatisfied);
+            orderUnsatisfied(parts, unsatisfied, result);
         else
-            orderIsolated(parts);
+            orderIsolated(parts, result);
+
+        return result;
     };
 
     const build = () => {
-        const parts = [];
-
-        analyze(parts);
-        makeOutputs(parts);
-        connectInputs(parts);
-
-        order(parts);
+        analyze();
+        makeOutputs();
+        connectInputs();
     };
 
     /**
@@ -212,9 +213,18 @@ export function PcbGraph(pcb) {
      * @returns {Array} an array of part states.
      */
     this.makeStates = renderer => {
+        const ordered = order();
         const states = [];
 
-        for (const entry of _parts)
+        // Debug print:
+        let log = "";
+
+        for (const part of ordered)
+            log += part.getName() + " ";
+
+        console.log("Parts: " + log);
+
+        for (const entry of ordered)
             states.push(entry.makeState(pcb, renderer));
 
         return states;
@@ -228,12 +238,4 @@ export function PcbGraph(pcb) {
     this.getInvalidPaths = () => _invalidPaths;
 
     build();
-
-    // Debug print:
-    let log = "";
-
-    for (const part of _parts)
-        log += part.getName() + ", ";
-
-    console.log("Parts: " + log);
 }
