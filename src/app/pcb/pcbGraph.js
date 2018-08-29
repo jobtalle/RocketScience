@@ -134,15 +134,14 @@ export function PcbGraph(pcb) {
     const order = parts => {
         const queue = [];
 
-        for (const part of parts) if (!part.hasOutputs())
-            queue.push(part);
-
-        for (const enqueued of queue)
-            parts.splice(parts.indexOf(enqueued), 1);
+        for (let i = parts.length; i-- > 0;) if (!parts[i].hasOutputs()) {
+            queue.push(parts[i]);
+            parts.splice(i, 1);
+        }
 
         let part;
         while (part = queue.pop()) {
-            for (const input of part.getInputs(_paths)) if (!queue.includes(input)) {
+            for (const input of part.getInputs(_paths)) if (parts.includes(input)) {
                 queue.unshift(input);
                 parts.splice(parts.indexOf(input), 1);
             }
