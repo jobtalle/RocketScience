@@ -18,27 +18,32 @@ const PathEntry = function(path, pinIndex, part) {
 
 const PartEntry = function(fixture) {
     const pointers = [];
+    let hasOutputs = false;
     let requiredOutputs = 0;
 
     this.getPins = () => fixture.part.getConfiguration().io;
     this.getBehavior = () => fixture.part.getBehavior();
-
     this.addRequiredOutput = () => ++requiredOutputs;
+    this.hasOutputs = () => hasOutputs;
+    this.connectOutput = () => --requiredOutputs === 0;
+    this.getRequiredOutputs = () => requiredOutputs;
+    this.getName = () => fixture.part.getDefinition().object;
 
-    this.registerPins = (adder, pcb, offset) => {
+    this.registerPins = (pcb, pathAdder, pinOffset) => {
         let used = 0;
 
         for (let i = 0; i < this.getPins().length; ++i) {
             const pin = this.getPins()[i];
 
             if (pin.type === "out") {
-                const pinIndex = offset + used++;
+                const pinIndex = pinOffset + used++;
                 const path = new PcbPath();
 
                 pointers.push(pinIndex);
+                hasOutputs = true;
 
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
-                adder(new PathEntry(path, pinIndex, this));
+                pathAdder(new PathEntry(path, pinIndex, this));
             }
             else
                 pointers.push(0);
@@ -79,20 +84,6 @@ const PartEntry = function(fixture) {
         this.getBehavior(),
         pointers,
         renderer.getPartRenderer(fixture));
-
-    this.hasOutputs = () => {
-        for (let pin = 0; pin < this.getPins().length; ++pin)
-            if (this.getPins()[pin].type === "out" && pointers[pin] !== 0)
-                return true;
-
-        return false;
-    };
-
-    this.connectOutput = () => --requiredOutputs === 0;
-
-    this.getRequiredInputs = () => requiredOutputs;
-
-    this.getName = () => fixture.part.getDefinition().object;
 };
 
 /**
@@ -134,7 +125,7 @@ export function PcbGraph(pcb) {
         let pinOffset = 1;
 
         for (const part of parts)
-            pinOffset += part.registerPins(addPath, pcb, pinOffset);
+            pinOffset += part.registerPins(pcb, addPath, pinOffset);
     };
 
     const connectInputs = parts => {
@@ -153,7 +144,7 @@ export function PcbGraph(pcb) {
         for (let i = 1; i < unsatisfied.length; ++i) {
             const entry = unsatisfied[i];
 
-            if (entry.getRequiredInputs() > newRoot.getRequiredInputs())
+            if (entry.getRequiredOutputs() > newRoot.getRequiredOutputs())
                 newRoot = entry;
         }
 
@@ -238,6 +229,7 @@ export function PcbGraph(pcb) {
 
     build();
 
+    // Debug print:
     let log = "";
 
     for (const part of _parts)
