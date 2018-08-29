@@ -18,9 +18,12 @@ const PathEntry = function(path, pinIndex, part) {
 
 const PartEntry = function(fixture) {
     const pointers = [];
+    let requiredOutputs = 0;
 
     this.getPins = () => fixture.part.getConfiguration().io;
     this.getBehavior = () => fixture.part.getBehavior();
+
+    this.addRequiredOutput = () => ++requiredOutputs;
 
     this.registerPins = (adder, pcb, offset) => {
         let used = 0;
@@ -51,8 +54,10 @@ const PartEntry = function(fixture) {
             if (pin.type === "in") {
                 const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
 
-                if (path)
+                if (path) {
+                    path.getPartEntry().addRequiredOutput();
                     pointers[i] = path.getPinIndex();
+                }
             }
         }
     };
@@ -77,11 +82,17 @@ const PartEntry = function(fixture) {
 
     this.hasOutputs = () => {
         for (let pin = 0; pin < this.getPins().length; ++pin)
-            if (this.getPins()[pin] === "out" && pointers[pin] !== 0)
+            if (this.getPins()[pin].type === "out" && pointers[pin] !== 0)
                 return true;
 
         return false;
     };
+
+    this.connectOutput = () => --requiredOutputs === 0;
+
+    this.getRequiredInputs = () => requiredOutputs;
+
+    this.getName = () => fixture.part.getDefinition().object;
 };
 
 /**
@@ -131,8 +142,31 @@ export function PcbGraph(pcb) {
             part.connectInputs(_paths);
     };
 
-    const order = parts => {
-        const queue = [];
+    const orderIsolated = parts => {
+        for (const part of parts)
+            _parts.push(part);
+    };
+
+    const orderUnsatisfied = (parts, unsatisfied) => {
+        let newRoot = unsatisfied[0];
+
+        for (let i = 1; i < unsatisfied.length; ++i) {
+            const entry = unsatisfied[i];
+
+            if (entry.getRequiredInputs() > newRoot.getRequiredInputs())
+                newRoot = entry;
+        }
+
+        parts.splice(parts.indexOf(newRoot), 1);
+
+        order(parts, [newRoot]);
+    };
+
+    const order = (parts, queue) => {
+        const unsatisfied = [];
+
+        if (!queue)
+            queue = [];
 
         for (let i = parts.length; i-- > 0;) if (!parts[i].hasOutputs()) {
             queue.push(parts[i]);
@@ -142,6 +176,16 @@ export function PcbGraph(pcb) {
         let part;
         while (part = queue.pop()) {
             for (const input of part.getInputs(_paths)) if (parts.includes(input)) {
+                if (!input.connectOutput()) {
+                    if (!unsatisfied.includes(input))
+                        unsatisfied.push(input);
+
+                    continue;
+                }
+
+                if (unsatisfied.includes(input))
+                    unsatisfied.splice(unsatisfied.indexOf(input), 1);
+
                 queue.unshift(input);
                 parts.splice(parts.indexOf(input), 1);
             }
@@ -149,8 +193,10 @@ export function PcbGraph(pcb) {
             _parts.unshift(part);
         }
 
-        for (const part of parts)
-            _parts.unshift(part);
+        if (unsatisfied.length > 0)
+            orderUnsatisfied(parts, unsatisfied);
+        else
+            orderIsolated(parts);
     };
 
     const build = () => {
@@ -191,4 +237,11 @@ export function PcbGraph(pcb) {
     this.getInvalidPaths = () => _invalidPaths;
 
     build();
+
+    let log = "";
+
+    for (const part of _parts)
+        log += part.getName() + ", ";
+
+    console.log("Parts: " + log);
 }

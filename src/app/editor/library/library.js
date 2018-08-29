@@ -23,11 +23,11 @@ export function Library(editor, toolbar, overlay, width) {
     };
 
     const build = () => {
+        const info = new CategoryInfo();
+
         _container = document.createElement("div");
         _container.id = Library.ID;
         _container.style.width = width + "px";
-
-        const info = new CategoryInfo();
 
         for (const category in parts)
             if (parts.hasOwnProperty(category))
