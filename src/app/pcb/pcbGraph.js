@@ -32,9 +32,7 @@ const PartEntry = function(fixture) {
     this.registerPins = (pcb, pathAdder, pinOffset) => {
         let used = 0;
 
-        for (let i = 0; i < this.getPins().length; ++i) {
-            const pin = this.getPins()[i];
-
+        for (const pin of this.getPins()) {
             if (pin.type === "out") {
                 const pinIndex = pinOffset + used++;
                 const path = new PcbPath();
@@ -141,16 +139,12 @@ export function PcbGraph(pcb) {
     const orderUnsatisfied = (parts, unsatisfied, result) => {
         let newRoot = unsatisfied[0];
 
-        for (let i = 1; i < unsatisfied.length; ++i) {
-            const entry = unsatisfied[i];
-
-            if (entry.getRequiredOutputs() > newRoot.getRequiredOutputs())
-                newRoot = entry;
-        }
+        for (const entry of unsatisfied) if (entry.getRequiredOutputs() > newRoot.getRequiredOutputs())
+            newRoot = entry;
 
         parts.splice(parts.indexOf(newRoot), 1);
 
-        order(parts, [newRoot], result);
+        return order(parts, [newRoot], result);
     };
 
     const order = (parts, queue, result) => {
@@ -188,9 +182,9 @@ export function PcbGraph(pcb) {
         }
 
         if (unsatisfied.length > 0)
-            orderUnsatisfied(parts, unsatisfied, result);
-        else
-            orderIsolated(parts, result);
+            return orderUnsatisfied(parts, unsatisfied, result);
+
+        orderIsolated(parts, result);
 
         return result;
     };
