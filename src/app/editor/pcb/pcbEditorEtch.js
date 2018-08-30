@@ -28,21 +28,37 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     let _etchable = false;
     let _deleting = false;
 
-    const specifyPath = () => {
-        if (_deleting &&
-            pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
-            pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths()) {
-            const routePath = new PcbPath();
+    const setModeDeletePath = () => {
+        const routePath = new PcbPath();
 
-            routePath.fromRoute(pcb, _pathEtch.getStart(), _pathEtch.getEnd());
+        routePath.fromRoute(pcb, _pathEtch.getStart(), _pathEtch.getEnd());
 
-            if (routePath.isValid()) {
-                _pathEtch = routePath;
+        if (routePath.isValid()) {
+            _pathEtch = routePath;
 
-                return PcbEditorEtch.SELECT_TYPE_DELETE;
-            }
+            return PcbEditorEtch.SELECT_TYPE_DELETE;
         }
+    };
 
+    const setModeExtend = () => {
+        const connectedPaths = [];
+
+        _pathEtch.forPoints((x, y, point) => {
+            let unique = true;
+
+            for (const path of connectedPaths) if (!path.containsPosition(x, y)) {
+                unique = false;
+
+                break;
+            }
+
+            return true;
+        });
+
+        return PcbEditorEtch.SELECT_TYPE_ETCH;
+    };
+
+    const setModeDrag = () => {
         let overlapped = null;
         let length = 0;
 
@@ -69,7 +85,16 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             return PcbEditorEtch.SELECT_TYPE_DELETE;
         }
 
-        return PcbEditorEtch.SELECT_TYPE_ETCH;
+        return setModeExtend();
+    };
+
+    const determineMode = () => {
+        if (_deleting &&
+            pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
+            pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths())
+            return setModeDeletePath();
+
+        return setModeDrag();
     };
 
     const setRenderMode = selectMode => {
@@ -186,7 +211,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
                 _pathEtch = makePath(_startPoint, cursor);
 
                 if (_pathEtch) {
-                    _selectMode = specifyPath();
+                    _selectMode = determineMode();
 
                     setRenderMode(_selectMode);
                 }
