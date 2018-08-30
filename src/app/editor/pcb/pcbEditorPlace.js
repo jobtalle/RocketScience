@@ -17,8 +17,6 @@ import {PcbPath} from "../../pcb/point/pcbPath";
  * @constructor
  */
 export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection) {
-    const COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
-
     const _lastCursor = cursor.copy();
     const _renderers = [];
     let _configurationIndex = 0;
@@ -273,7 +271,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
      */
     this.draw = myr => {
         if (!_suitable)
-            myr.setColor(COLOR_UNSUITABLE);
+            myr.setColor(PcbEditorPlace.COLOR_UNSUITABLE);
 
         for (let i = 0; i < fixtures.length; ++i)
             _renderers[i].draw(
@@ -309,3 +307,5 @@ PcbEditorPlace.Fixture = function(part, x, y) {
 PcbEditorPlace.Fixture.prototype.isInstance = function() {
     return this.part.configurations === undefined;
 };
+
+PcbEditorPlace.COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
