@@ -38,18 +38,31 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
             return PcbEditorEtch.SELECT_TYPE_DELETE;
         }
+
+        return PcbEditorEtch.SELECT_TYPE_ETCH;
     };
 
     const setModeExtend = () => {
         const connectedPaths = [];
 
-        _pathEtch.forPoints((x, y, point) => {
+        _pathEtch.forPoints((x, y) => {
+            if (!pcb.getPoint(x, y).hasPaths())
+                return true;
+
             let unique = true;
 
-            for (const path of connectedPaths) if (!path.containsPosition(x, y)) {
+            for (const path of connectedPaths) if (path.containsPosition(x, y)) {
                 unique = false;
 
                 break;
+            }
+
+            if (unique) {
+                const path = new PcbPath();
+
+                path.fromPcb(pcb, new Myr.Vector(x, y));
+
+                connectedPaths.push(path);
             }
 
             return true;

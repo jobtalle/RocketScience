@@ -78,7 +78,7 @@ PcbPoint.prototype.hasPaths = function() {
  * @param {PcbPoint} point A PCB point.
  */
 PcbPoint.prototype.flatten = function(point) {
-    this.paths |= point.paths;
+    this.paths |= (point.paths & 0xFF);
 };
 
 /**
@@ -104,7 +104,7 @@ PcbPoint.prototype.pathEquals = function(point) {
  * @param {PcbPoint} point A point to erase overlapping paths from.
  */
 PcbPoint.prototype.erase = function(point) {
-    this.paths &= ~point.paths;
+    this.paths &= ~(point.paths & 0xFF);
 };
 
 /**
