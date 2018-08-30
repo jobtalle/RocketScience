@@ -117,6 +117,19 @@ export function PcbPath() {
         _points = _points.slice(0, length);
         _positions = _positions.slice(0, length);
     };
+
+    /**
+     * Count the number of output pins connected to this path.
+     * @returns {Number} the number of output pins connected to this path.
+     */
+    this.countOutputs = () => {
+        let count = 0;
+
+        for (const point of _points) if (point.isOutput())
+            ++count;
+
+        return count;
+    };
 }
 
 const makeSearchEntry = () => {

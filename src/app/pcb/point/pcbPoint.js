@@ -10,14 +10,48 @@ export function PcbPoint() {
 }
 
 /**
- * Sets whether this point is a connection to a pin.
- * @param {Boolean} connection A boolean which is true if this point is a connection.
+ * Mark this point as an input connection.
  */
-PcbPoint.prototype.setConnection = function(connection) {
-    if (connection)
-        this.paths |= 256;
-    else
-        this.paths &= ~256;
+PcbPoint.prototype.connectInput = function() {
+    this.paths |= PcbPoint.CONNECTION_BIT_INPUT;
+};
+
+/**
+ * Mark this point as an output connection.
+ */
+PcbPoint.prototype.connectOutput = function() {
+    this.paths |= PcbPoint.CONNECTION_BIT_OUTPUT;
+};
+
+/**
+ * Check if an input pin is connected to this point.
+ * @returns {Boolean} A boolean which is true when this point is connected to an input pin.
+ */
+PcbPoint.prototype.isInput = function() {
+    return (this.paths & PcbPoint.CONNECTION_BIT_INPUT) === PcbPoint.CONNECTION_BIT_INPUT;
+};
+
+/**
+ * Check if an output pin is connected to this point.
+ * @returns {Boolean} A boolean which is true when this point is connected to an output pin.
+ */
+PcbPoint.prototype.isOutput = function() {
+    return (this.paths & PcbPoint.CONNECTION_BIT_OUTPUT) === PcbPoint.CONNECTION_BIT_OUTPUT;
+};
+
+/**
+ * Check if a pin is connected to this point.
+ * @returns {Boolean} A boolean which is true when this point is connected to a pin.
+ */
+PcbPoint.prototype.isConnected = function() {
+    return (this.paths & PcbPoint.CONNECTION_BITS) !== 0;
+};
+
+/**
+ * Mark this point as unconnected.
+ */
+PcbPoint.prototype.disconnect = function() {
+    this.paths &= ~PcbPoint.CONNECTION_BITS;
 };
 
 /**
@@ -41,7 +75,7 @@ PcbPoint.prototype.clearDirection = function(direction) {
  * @returns {Boolean} A boolean indicating whether this point is a junction or terminal.
  */
 PcbPoint.prototype.isJunction = function() {
-    if ((this.paths & 256) === 256)
+    if (this.isConnected())
         return true;
 
     let count = 0;
@@ -157,3 +191,7 @@ PcbPoint.deltaToDirection = (dx, dy) => {
 
     return 4 + ((1 + dx) + 1) * dy;
 };
+
+PcbPoint.CONNECTION_BIT_OUTPUT = 256;
+PcbPoint.CONNECTION_BIT_INPUT = 512;
+PcbPoint.CONNECTION_BITS = PcbPoint.CONNECTION_BIT_OUTPUT | PcbPoint.CONNECTION_BIT_INPUT;

@@ -316,8 +316,12 @@ export function Pcb(myr, sprites) {
         for (const point of part.getConfiguration().footprint.points)
             this.getPoint(point.x + x, point.y + y).part = part;
 
-        for (const pin of part.getConfiguration().io)
-            this.getPoint(pin.x + x, pin.y + y).setConnection(true);
+        for (const pin of part.getConfiguration().io) {
+            if (pin.type === "in")
+                this.getPoint(pin.x + x, pin.y + y).connectInput();
+            else
+                this.getPoint(pin.x + x, pin.y + y).connectOutput();
+        }
 
         return fixture;
     };
@@ -344,7 +348,7 @@ export function Pcb(myr, sprites) {
             this.getPoint(fixture.x + point.x, fixture.y + point.y).part = null;
 
         for (const pin of part.getConfiguration().io)
-            this.getPoint(fixture.x + pin.x, fixture.y + pin.y).setConnection(false);
+            this.getPoint(fixture.x + pin.x, fixture.y + pin.y).disconnect();
 
         _fixtures.splice(_fixtures.indexOf(fixture), 1);
     };

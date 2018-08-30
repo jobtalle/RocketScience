@@ -43,11 +43,16 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     };
 
     const setModeExtend = () => {
+        let resultingConnectedOutputs = 0;
         const connectedPaths = [];
 
-        _pathEtch.forPoints((x, y) => {
-            if (!pcb.getPoint(x, y).hasPaths())
+        _pathEtch.forPoints((x, y, point) => {
+            if (!point.hasPaths()) {
+                if (point.isOutput()) if (++resultingConnectedOutputs > 1)
+                    return false;
+
                 return true;
+            }
 
             let unique = true;
 
@@ -62,11 +67,18 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 
                 path.fromPcb(pcb, new Myr.Vector(x, y));
 
+                resultingConnectedOutputs += path.countOutputs();
+                if (resultingConnectedOutputs > 1)
+                    return false;
+
                 connectedPaths.push(path);
             }
 
             return true;
         });
+
+        if (resultingConnectedOutputs > 1)
+            return PcbEditorEtch.SELECT_TYPE_DELETE;
 
         return PcbEditorEtch.SELECT_TYPE_ETCH;
     };
