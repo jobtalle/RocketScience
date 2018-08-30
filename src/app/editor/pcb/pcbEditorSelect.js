@@ -104,6 +104,15 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         selection.setRegion(left, right, top, bottom);
     };
 
+    const selectAll = () => {
+        selection.clearSelected();
+
+        for (const fixture of pcb.getFixtures())
+            selection.addSelected(fixture);
+
+        crop();
+    };
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -134,6 +143,11 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             case PcbEditorSelect.KEY_COPY:
                 if (selection.getSelected().length > 0)
                     copy();
+
+                break;
+            case PcbEditorSelect.KEY_SELECT_ALL:
+                if (control)
+                    selectAll();
 
                 break;
         }
@@ -265,3 +279,4 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
 PcbEditorSelect.KEY_DELETE = "Delete";
 PcbEditorSelect.KEY_COPY = "c";
+PcbEditorSelect.KEY_SELECT_ALL = "a";
