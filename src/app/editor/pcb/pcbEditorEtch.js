@@ -78,7 +78,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         });
 
         if (resultingConnectedOutputs > 1)
-            return PcbEditorEtch.SELECT_TYPE_DELETE;
+            return PcbEditorEtch.SELECT_TYPE_INVALID;
 
         return PcbEditorEtch.SELECT_TYPE_ETCH;
     };
@@ -129,6 +129,9 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
                 break;
             case PcbEditorEtch.SELECT_TYPE_ETCH:
                 _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
+                break;
+            case PcbEditorEtch.SELECT_TYPE_INVALID:
+                _pointRenderer.setMode(PcbPointRenderer.MODE_INVALID);
                 break;
         }
     };
@@ -346,3 +349,4 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
 PcbEditorEtch.KEY_DELETE = "Delete";
 PcbEditorEtch.SELECT_TYPE_ETCH = 0;
 PcbEditorEtch.SELECT_TYPE_DELETE = 1;
+PcbEditorEtch.SELECT_TYPE_INVALID = 2;

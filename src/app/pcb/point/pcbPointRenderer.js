@@ -73,3 +73,4 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
 
 PcbPointRenderer.MODE_SELECT = null;
 PcbPointRenderer.MODE_DELETE = Myr.Color.RED;
+PcbPointRenderer.MODE_INVALID = Myr.Color.BLUE;
