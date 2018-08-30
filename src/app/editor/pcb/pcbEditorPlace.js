@@ -4,6 +4,7 @@ import * as Myr from "../../../lib/myr";
 import {Part} from "../../part/part";
 import {getPartBehavior} from "../../part/objects";
 import "../../part/objects"
+import {PcbPath} from "../../pcb/point/pcbPath";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -34,33 +35,62 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
         }
     };
 
-    const isSuitable = fixture => {
-        let footprint = null;
-
-        if (fixture.isInstance())
-            footprint = fixture.part.getConfiguration().footprint;
-        else
-            footprint = fixture.part.configurations[_configurationIndex].footprint;
-
+    const checkFootprint = (x, y, footprint) => {
         for (const point of footprint.points) {
-            const pcbPoint = pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y);
+            const pcbPoint = pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y);
 
             if (!pcbPoint || pcbPoint.part !== null)
                 return false;
         }
 
         for (const point of footprint.space) {
-            const pcbPoint = pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y);
+            const pcbPoint = pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y);
 
             if (!pcbPoint)
                 return false;
         }
 
         for (const point of footprint.air)
-            if (pcb.getPoint(cursor.x + point.x + fixture.x, cursor.y + point.y + fixture.y))
+            if (pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y))
                 return false;
 
         return true;
+    };
+
+    const checkPins = (x, y, io) => {
+        const paths = [];
+
+        for (const pin of io) if (pin.type === "out") {
+            const point = pcb.getPoint(cursor.x + pin.x + x, cursor.y + pin.y + y);
+
+            if (point.hasPaths()) {
+                for (const path of paths) if (path.containsPosition(cursor.x + pin.x + x, cursor.y + pin.y + y))
+                    return false;
+
+                const path = new PcbPath();
+
+                path.fromPcb(pcb, new Myr.Vector(cursor.x + pin.x + x, cursor.y + pin.y + y));
+
+                if (path.countOutputs() !== 0)
+                    return false;
+
+                paths.push(path);
+            }
+        }
+
+        return true;
+    };
+
+    const isSuitable = fixture => {
+        let configuration = null;
+
+        if (fixture.isInstance())
+            configuration = fixture.part.getConfiguration();
+        else
+            configuration = fixture.part.configurations[_configurationIndex];
+
+        return checkFootprint(fixture.x, fixture.y, configuration.footprint) &&
+            checkPins(fixture.x, fixture.y, configuration.io);
     };
 
     const getConfigurationCount = () => {

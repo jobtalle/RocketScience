@@ -39,7 +39,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             return PcbEditorEtch.SELECT_TYPE_DELETE;
         }
 
-        return PcbEditorEtch.SELECT_TYPE_ETCH;
+        return setModeExtend();
     };
 
     const setModeExtend = () => {
