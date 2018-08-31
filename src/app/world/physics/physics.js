@@ -18,17 +18,16 @@ const getVec = (x, y) => {
  * @constructor
  */
 export function Physics(gravity) {
-    this.Body = function(shapes, bodyDefinition, x, y, xOrigin, yOrigin) {
-        const _transform = new Myr.Transform();
+    const Body = function(shapes, bodyDefinition, x, y, xOrigin, yOrigin, transform) {
         const _body = _world.CreateBody(bodyDefinition);
 
         const updateTransform = () => {
-            _transform.identity();
-            _transform.translate(
+            transform.identity();
+            transform.translate(
                 _body.GetPosition().get_x() * Terrain.PIXELS_PER_METER,
                 _body.GetPosition().get_y() * Terrain.PIXELS_PER_METER);
-            _transform.rotate(-_body.GetAngle());
-            _transform.translate(
+            transform.rotate(-_body.GetAngle());
+            transform.translate(
                 -xOrigin * Terrain.PIXELS_PER_METER,
                 -yOrigin * Terrain.PIXELS_PER_METER);
         };
@@ -36,22 +35,21 @@ export function Physics(gravity) {
         /**
          * Update the body state.
          */
-        this.update = () => {
-            updateTransform();
-        };
+        this.update = () => updateTransform();
+
+        /**
+         * Get the physics object this body exists in.
+         * @returns {Physics} A physics object.
+         */
+        this.getPhysics = () => _self;
 
         /**
          * Free this body
          */
-        this.free = () => {
-            _world.DestroyBody(_body);
-        };
+        this.free = () => _world.DestroyBody(_body);
 
-        /**
-         * Returns the objects current transformation.
-         * @returns {Myr.Transform} A Transform object.
-         */
-        this.getTransform = () => _transform;
+        this.getX = () => x;
+        this.getY = () => y;
 
         for (const shape of shapes) {
             _body.CreateFixture(shape, 5.0);
@@ -65,6 +63,7 @@ export function Physics(gravity) {
 
     const _world = new _physics.b2World(getVec(0, gravity), true);
     const _bodies = [];
+    const _self = this;
 
     let _terrainBody = null;
 
@@ -86,6 +85,13 @@ export function Physics(gravity) {
 
         shape.Set(buffer.getBuffer(), polygon.length);
         buffer.free();
+
+        return shape;
+    };
+
+    const createCircleShape = radius => {
+        const shape = new _physics.b2CircleShape();
+        shape.set_m_radius(radius);
 
         return shape;
     };
@@ -134,9 +140,10 @@ export function Physics(gravity) {
      * @param {Number} y Vertical position.
      * @param {Number} xOrigin The X origin.
      * @param {Number} yOrigin The Y origin.
+     * @param {Myr.Transform} transform A transformation to write the physics location to.
      * @return {Object} The created physics body.
      */
-    this.createBody = (polygons, x, y, xOrigin, yOrigin) => {
+    this.createBody = (polygons, x, y, xOrigin, yOrigin, transform) => {
         const shapes = [];
 
         for (const polygon of polygons)
@@ -146,13 +153,35 @@ export function Physics(gravity) {
         bodyDefinition.set_type(_physics.b2_dynamicBody);
         bodyDefinition.set_position(getVec(0, 0));
 
-        const body = new this.Body(
+        const body = new Body(
             shapes,
             bodyDefinition,
             x,
             y,
             xOrigin,
-            yOrigin);
+            yOrigin,
+            transform);
+
+        _bodies.push(body);
+
+        return body;
+    };
+
+    this.createWheel = (radius, x, y, transform) => {
+        const shape = createCircleShape(radius);
+
+        const bodyDefinition = new _physics.b2BodyDef();
+        bodyDefinition.set_type(_physics.b2_dynamicBody);
+        bodyDefinition.set_position(getVec(0, 0));
+
+        const body = new Body(
+            [shape],
+            bodyDefinition,
+            x,
+            y,
+            radius,
+            radius,
+            transform);
 
         _bodies.push(body);
 

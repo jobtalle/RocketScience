@@ -106,6 +106,9 @@ export function PcbRenderer(myr, sprites, pcb) {
                 for (let i = 0; i < _partRenderers.length; ++i)
                     _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
 
+                // TODO: Obviously debug stuff, the local matrix should be a parameter or something
+                myr.pop();
+
                 for (let i = 0; i < _partRenderers.length; ++i)
                     _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
 

@@ -1,3 +1,6 @@
+import {Pcb} from "../../../pcb/pcb";
+import {Terrain} from "../../../world/terrain/terrain";
+
 /**
  * @param {OscillatorBehavior} behavior A behavior object matching this state object.
  * @param {Array} pins An array containing the pin indices.
@@ -7,11 +10,14 @@
 export function WheelState(behavior, pins, renderer) {
     /**
      * Initialize the state.
-     * @param {PartRenderer} renderer A part renderer to render state to.
-     * @param {Physics.Body} body A physics body to apply state to.
+     * @param {Object} body A physics body to apply state to.
      */
-    this.initialize = (renderer, body) => {
-
+    this.initialize = body => {
+        body.getPhysics().createWheel(
+            2.5 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            body.getX(),
+            body.getY(),
+            renderer.getTransforms()[WheelState.SPRITE_INDEX_WHEEL]);
     };
 
     /**
@@ -22,3 +28,5 @@ export function WheelState(behavior, pins, renderer) {
 
     };
 }
+
+WheelState.SPRITE_INDEX_WHEEL = 1;

@@ -50,7 +50,7 @@ export function PartRenderer(sprites, configuration) {
             return;
 
         for (let i = _externalThreshold; i < _sprites.length; ++i)
-            _sprites[i].drawTransformedAt(x, y, _transforms[i]);
+            _sprites[i].drawTransformedAt(0, 0, _transforms[i]);
     };
 
     /**

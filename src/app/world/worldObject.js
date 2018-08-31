@@ -1,6 +1,7 @@
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {PcbShape} from "../pcb/pcbShape";
 import {PcbState} from "../pcb/pcbState";
+import * as Myr from "../../lib/myr";
 
 /**
  * An object in the world.
@@ -14,6 +15,7 @@ import {PcbState} from "../pcb/pcbState";
  */
 export function WorldObject(myr, sprites, physics, pcb, x, y) {
     const _renderer = new PcbRenderer(myr, sprites, pcb);
+    const _transform = new Myr.Transform();
 
     let _state = null;
     let _body = null;
@@ -25,7 +27,7 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
         for (const part of shape.getParts())
             polygons.push(part.getPoints());
 
-        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y);
+        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y, _transform);
     };
 
     /**
@@ -49,11 +51,9 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      */
     this.draw = myr => {
         myr.push();
-        myr.transform(_body.getTransform());
+        myr.transform(_transform);
 
         _renderer.draw(0, 0);
-
-        myr.pop();
     };
 
     /**
