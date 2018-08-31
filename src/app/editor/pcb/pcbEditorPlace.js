@@ -274,7 +274,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             myr.setColor(PcbEditorPlace.COLOR_UNSUITABLE);
 
         for (let i = 0; i < fixtures.length; ++i)
-            _renderers[i].draw(
+            _renderers[i].drawInternal(
                 (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
                 (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
 
