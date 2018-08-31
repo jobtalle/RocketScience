@@ -1,8 +1,17 @@
-import {Box2D} from "../../lib/box2d";
-import Myr from "./../../lib/myr.js"
-import {Terrain} from "./terrain/terrain";
+import {Box2D} from "../../../lib/box2d";
+import Myr from "../../../lib/myr.js"
+import {Terrain} from "../terrain/terrain";
 
 const _physics = new Box2D();
+const _tempVec = new _physics.b2Vec2(0, 0);
+
+const getVec = (x, y) => {
+    _tempVec.set_x(x);
+    _tempVec.set_y(y);
+
+    return _tempVec;
+};
+
 /**
  * An interface for the used physics engine.
  * @param {Number} gravity The gravity constant.
@@ -24,10 +33,16 @@ export function Physics(gravity) {
                 -yOrigin * Terrain.PIXELS_PER_METER);
         };
 
+        /**
+         * Update the body state.
+         */
         this.update = () => {
             updateTransform();
         };
 
+        /**
+         * Free this body
+         */
         this.free = () => {
             _world.DestroyBody(_body);
         };
@@ -45,31 +60,42 @@ export function Physics(gravity) {
         }
 
         _physics.destroy(bodyDefinition);
-        _body.SetTransform(getTempVec(x + xOrigin, y + yOrigin), 0);
+        _body.SetTransform(getVec(x + xOrigin, y + yOrigin), 0);
     };
 
-    const getTempVec = (x, y) => {
-        _tempVec.set_x(x);
-        _tempVec.set_y(y);
-
-        return _tempVec;
-    };
-
-    const VELOCITY_ITERATIONS = 8;
-    const POSITION_ITERATIONS = 3;
-
-    const _tempVec = new _physics.b2Vec2(0, 0);
-    const _world = new _physics.b2World(getTempVec(0, gravity), true);
+    const _world = new _physics.b2World(getVec(0, gravity), true);
     const _bodies = [];
 
     let _terrainBody = null;
+
+    const Buffer = function(points, xOffset, yOffset) {
+        const _buffer = _physics._malloc(points.length << 3);
+
+        for (let i = 0; i < points.length; ++i) {
+            _physics.HEAPF32[(_buffer >> 2) + (i << 1)] = points[i].x + xOffset;
+            _physics.HEAPF32[(_buffer >> 2) + (i << 1) + 1] = points[i].y + yOffset;
+        }
+
+        this.getBuffer = () => _physics.wrapPointer(_buffer, _physics.b2Vec2);
+        this.free = () => _physics._free(_buffer);
+    };
+
+    const createPolygonShape = (polygon, xOrigin, yOrigin) => {
+        const shape = new _physics.b2PolygonShape();
+        const buffer = new Buffer(polygon, -xOrigin, -yOrigin);
+
+        shape.Set(buffer.getBuffer(), polygon.length);
+        buffer.free();
+
+        return shape;
+    };
 
     /**
      * Update the physics state
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _world.Step(timeStep, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
+        _world.Step(timeStep, Physics.VELOCITY_ITERATIONS, Physics.POSITION_ITERATIONS);
 
         for (const body of _bodies)
             body.update();
@@ -87,15 +113,15 @@ export function Physics(gravity) {
         _physics.destroy(bodyDef);
 
         const shape = new _physics.b2ChainShape();
-        const buffer = _physics._malloc(heights.length << 3);
+        const points = [];
 
-        for (let i = 0; i < heights.length; ++i) {
-            _physics.HEAPF32[(buffer >> 2) + (i << 1)] = i * spacing;
-            _physics.HEAPF32[(buffer >> 2) + (i << 1) + 1] = heights[i];
-        }
+        for (let i = 0; i < heights.length; ++i)
+            points.push(new Myr.Vector(i * spacing, heights[i]));
 
-        shape.CreateChain(_physics.wrapPointer(buffer, _physics.b2Vec2), heights.length);
-        _physics._free(buffer);
+        const buffer = new Buffer(points, 0, 0);
+
+        shape.CreateChain(buffer.getBuffer(), heights.length);
+        buffer.free();
 
         _terrainBody.CreateFixture(shape, 0);
         _physics.destroy(shape);
@@ -113,25 +139,12 @@ export function Physics(gravity) {
     this.createBody = (polygons, x, y, xOrigin, yOrigin) => {
         const shapes = [];
 
-        for (const polygon of polygons) {
-            const shape = new _physics.b2PolygonShape();
-            const buffer = _physics._malloc(polygon.getPoints().length << 3);
-
-            for (let i = 0; i < polygon.getPoints().length; ++i) {
-                _physics.HEAPF32[(buffer >> 2) + (i << 1)] = polygon.getPoints()[i].x - xOrigin;
-                _physics.HEAPF32[(buffer >> 2) + (i << 1) + 1] = polygon.getPoints()[i].y - yOrigin;
-            }
-
-            shape.Set(_physics.wrapPointer(buffer, _physics.b2Vec2), polygon.getPoints().length);
-
-            _physics._free(buffer);
-
-            shapes.push(shape);
-        }
+        for (const polygon of polygons)
+            shapes.push(createPolygonShape(polygon, xOrigin, yOrigin));
 
         const bodyDefinition = new _physics.b2BodyDef();
         bodyDefinition.set_type(_physics.b2_dynamicBody);
-        bodyDefinition.set_position(getTempVec(0, 0));
+        bodyDefinition.set_position(getVec(0, 0));
 
         const body = new this.Body(
             shapes,
@@ -164,3 +177,6 @@ export function Physics(gravity) {
         _physics.destroy(_world);
     };
 }
+
+Physics.VELOCITY_ITERATIONS = 8;
+Physics.POSITION_ITERATIONS = 3;

@@ -20,8 +20,12 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
 
     const generatePhysicsBody = () => {
         const shape = new PcbShape(pcb);
+        const polygons = [];
 
-        return physics.createBody(shape.getParts(), x, y, shape.getCenter().x, shape.getCenter().y);
+        for (const part of shape.getParts())
+            polygons.push(part.getPoints());
+
+        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y);
     };
 
     /**
