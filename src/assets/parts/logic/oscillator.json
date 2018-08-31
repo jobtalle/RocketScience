@@ -1,0 +1,32 @@
+{
+  "oscillator": {
+    "label": "PART_OSCILLATOR_NAME",
+    "description": "PART_OSCILLATOR_DESCRIPTION",
+    "icon": "part-oscillator",
+    "object": "Oscillator",
+    "configurations": [
+      {
+        "footprint": {
+          "points": [
+            {"x": 0, "y": 0},
+            {"x": 1, "y": 0}
+          ],
+          "space": [
+            {"x": 0, "y": -1},
+            {"x": 1, "y": -1}
+          ],
+          "air": [
+
+          ]
+        },
+        "io": [
+          {"type": "in", "x": 0, "y": 0},
+          {"type": "out", "x": 1, "y": 0}
+        ],
+        "sprites": [
+          {"name": "partOscillator", "x": 0, "y": -1}
+        ]
+      }
+    ]
+  }
+}
