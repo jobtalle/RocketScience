@@ -44,7 +44,7 @@ export function PcbRenderer(myr, sprites, pcb) {
         for(let row = 0; row < pcb.getHeight(); ++row) for(let column = 0; column < pcb.getWidth(); ++column) {
             const point = pcb.getPoint(column, row);
 
-            if (!point || !point.hasPaths())
+            if (!point)
                 continue;
 
             _pointRenderer.render(myr, point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
