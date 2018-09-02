@@ -17,7 +17,8 @@ export function WheelState(behavior, pins, renderer) {
             2.5 * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
             body.getX(),
             body.getY(),
-            renderer.getTransforms()[WheelState.SPRITE_INDEX_WHEEL]);
+            renderer.getTransforms()[WheelState.SPRITE_INDEX_WHEEL],
+            body);
     };
 
     /**

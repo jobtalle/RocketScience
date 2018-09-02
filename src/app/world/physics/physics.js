@@ -20,6 +20,7 @@ const getVec = (x, y) => {
 export function Physics(gravity) {
     const Body = function(shapes, bodyDefinition, x, y, xOrigin, yOrigin, transform) {
         const _body = _world.CreateBody(bodyDefinition);
+        const _connected = [];
 
         const updateTransform = () => {
             transform.identity();
@@ -46,7 +47,31 @@ export function Physics(gravity) {
         /**
          * Free this body
          */
-        this.free = () => _world.DestroyBody(_body);
+        this.free = () => {
+            for (const connected of _connected)
+                connected.free();
+
+            _world.DestroyBody(_body);
+        };
+
+        /**
+         * Connect another body to this one.
+         * @param {Object} body A valid physics object.
+         */
+        this.connect = (body, at, to) => {
+            _connected.push(body);
+
+            const jointDef = new _physics.b2RevoluteJointDef();
+            jointDef.set_bodyA(_body);
+            jointDef.set_bodyB(body.getBody());
+            jointDef.set_localAnchorA(getVec(at.x, at.y));
+            jointDef.set_localAnchorB(getVec(to.x, to.y));
+
+            _world.CreateJoint(jointDef);
+            _physics.destroy(jointDef);
+        };
+
+        this.getBody = () => _body;
 
         this.getX = () => x;
         this.getY = () => y;
@@ -167,7 +192,7 @@ export function Physics(gravity) {
         return body;
     };
 
-    this.createWheel = (radius, x, y, transform) => {
+    this.createWheel = (radius, x, y, transform, parent) => {
         const shape = createCircleShape(radius);
 
         const bodyDefinition = new _physics.b2BodyDef();
@@ -182,6 +207,11 @@ export function Physics(gravity) {
             radius,
             radius,
             transform);
+
+        parent.connect(
+            body,
+            new Myr.Vector(0, 0),
+            new Myr.Vector(0, 0));
 
         _bodies.push(body);
 
