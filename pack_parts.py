@@ -7,17 +7,20 @@ OUT_FILE = 'src\\assets\\parts.json'
 def merge_two_dicts(copyDict, updateDict):
     mergeDict = copyDict.copy() 
     mergeDict.update(updateDict)
+
     return mergeDict
 
 def get_category_names():
     categories = next(os.walk(PARTS_DIR))[1]
+
     return categories
 
 def get_category_parts(name):
     PART_EXTENSION = 'json'
 
-    categoryParts = {}
+    categoryParts = []
     categoryPartsDir = os.path.join(PARTS_DIR, name)
+
     for fileName in os.listdir(categoryPartsDir):
         if not fileName.endswith(PART_EXTENSION):
             continue
@@ -26,7 +29,8 @@ def get_category_parts(name):
         print("- '" + filePath + "'")
         with open(filePath, encoding='utf-8') as file:
             partData = json.loads(file.read())
-            categoryParts = merge_two_dicts(categoryParts, partData)
+            categoryParts.append(partData)
+
     return categoryParts
 
 def make_catagory(name):
@@ -44,6 +48,7 @@ def merge_parts():
     parts = {}
     for catagoryName in get_category_names():
         parts[catagoryName] = make_catagory(catagoryName)
+
     return parts
 
 def pack_parts():

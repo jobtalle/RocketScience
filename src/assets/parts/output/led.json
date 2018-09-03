@@ -1,34 +1,32 @@
 {
-  "led": {
-    "label": "PART_LED_NAME",
-    "description": "PART_LED_DESCRIPTION",
-    "icon": "part-led",
-    "object": "Led",
-    "configurations": [
-      {
-        "footprint": {
-          "points": [
-            {"x": 0, "y": 0}
-          ],
-          "space": [
-
-          ],
-          "air": [
-            {"x": 0, "y": -1}
-          ]
-        },
-        "io": [
-          {"type": "in", "x": 0, "y": 0}
+  "label": "PART_LED_NAME",
+  "description": "PART_LED_DESCRIPTION",
+  "icon": "part-led",
+  "object": "Led",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
         ],
-        "sprites": {
-          "internal": [
-            {"name": "partLed", "x": 0, "y": -1}
-          ],
-          "external": [
+        "space": [
 
-          ]
-        }
+        ],
+        "air": [
+          {"x": 0, "y": -1}
+        ]
+      },
+      "io": [
+        {"type": "in", "x": 0, "y": 0}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partLed", "x": 0, "y": -1}
+        ],
+        "external": [
+
+        ]
       }
-    ]
-  }
+    }
+  ]
 }

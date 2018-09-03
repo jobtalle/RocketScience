@@ -1,3 +1,5 @@
+import {CategoryPart} from "./categoryPart";
+
 /**
  * A list of parts.
  * @param {Object} parts The parts to place in this part list from parts.json.
@@ -5,17 +7,14 @@
  * @param {Function} setInfo The function to be called when new part info is selected.
  * @constructor
  */
-import {CategoryPart} from "./categoryPart";
-
 export function CategoryPartList(parts, setPart, setInfo) {
     const _element = document.createElement("div");
 
     const make = () => {
         _element.className = CategoryPartList.CLASS;
 
-        for (const part in parts)
-            if (parts.hasOwnProperty(part))
-                _element.appendChild(new CategoryPart(parts[part], setPart, setInfo).getElement());
+        for (const part of parts)
+            _element.appendChild(new CategoryPart(part, setPart, setInfo).getElement());
     };
 
     /**
