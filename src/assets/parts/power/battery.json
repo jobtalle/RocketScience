@@ -28,9 +28,14 @@
           {"type": "out", "x": 0, "y": 2},
           {"type": "out", "x": 1, "y": 2}
         ],
-        "sprites": [
-          {"name": "partBattery1", "x": 0, "y": 0}
-        ]
+        "sprites": {
+          "internal": [
+            {"name": "partBattery1", "x": 0, "y": 0}
+          ],
+          "external": [
+
+          ]
+        }
       },
       {
         "footprint": {
@@ -55,9 +60,14 @@
           {"type": "out", "x": 2, "y": 0},
           {"type": "out", "x": 2, "y": 1}
         ],
-        "sprites": [
-          {"name": "partBattery2", "x": 0, "y": 0}
-        ]
+        "sprites": {
+          "internal": [
+            {"name": "partBattery2", "x": 0, "y": 0}
+          ],
+          "external": [
+
+          ]
+        }
       }
     ]
   }

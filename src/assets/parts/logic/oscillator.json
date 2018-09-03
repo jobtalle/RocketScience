@@ -23,9 +23,14 @@
           {"type": "in", "x": 0, "y": 0},
           {"type": "out", "x": 1, "y": 0}
         ],
-        "sprites": [
-          {"name": "partOscillator", "x": 0, "y": -1}
-        ]
+        "sprites": {
+          "internal": [
+            {"name": "partOscillator", "x": 0, "y": -1}
+          ],
+          "external": [
+
+          ]
+        }
       }
     ]
   }
