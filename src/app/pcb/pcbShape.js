@@ -129,7 +129,16 @@ export function PcbShape(pcb) {
         _center.multiply(Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
     };
 
+    /**
+     * Get all parts of this shape.
+     * @returns {Array} An array of part objects.
+     */
     this.getParts = () => _parts;
+
+    /**
+     * Get the center of this shape.
+     * @returns {Myr.Vector} The center of this shape.
+     */
     this.getCenter = () => _center;
 
     partition();

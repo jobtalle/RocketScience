@@ -6,6 +6,8 @@ import {BatteryBehavior} from "./parts/battery/batteryBehavior";
 import {BatteryState} from "./parts/battery/batteryState";
 import {GateOrBehavior} from "./parts/or/gateOrBehavior";
 import {GateOrState} from "./parts/or/gateOrState";
+import {WheelBehavior} from "./parts/wheel/wheelBehavior";
+import {WheelState} from "./parts/wheel/wheelState";
 
 // TODO: Can this be automated? E.G.:
 /*
@@ -20,14 +22,16 @@ const behaviors = {
     "Led": LedBehavior,
     "Oscillator": OscillatorBehavior,
     "Battery": BatteryBehavior,
-    "GateOr": GateOrBehavior
+    "GateOr": GateOrBehavior,
+    "Wheel": WheelBehavior
 };
 
 const states = {
     "Led": LedState,
     "Oscillator": OscillatorState,
     "Battery": BatteryState,
-    "GateOr": GateOrState
+    "GateOr": GateOrState,
+    "Wheel": WheelState
 };
 
 /**

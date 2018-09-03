@@ -10,7 +10,7 @@ export function OscillatorState(behavior, pins, renderer) {
     /**
      * Initialize the state.
      * @param {PartRenderer} renderer A part renderer to render state to.
-     * @param {Physics.Body} body A physics body to apply state to.
+     * @param {Physics} body A physics body to apply state to.
      */
     this.initialize = (renderer, body) => {
 

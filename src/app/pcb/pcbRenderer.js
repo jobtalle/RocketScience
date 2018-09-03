@@ -18,6 +18,7 @@ export function PcbRenderer(myr, sprites, pcb) {
     const _partPositions = [];
     let _initialized = false;
     let _layerPcb = null;
+    let _level = PcbRenderer.LEVEL_DEFAULT;
 
     const updateSurfaces = () => {
         _initialized = true;
@@ -43,7 +44,7 @@ export function PcbRenderer(myr, sprites, pcb) {
         for(let row = 0; row < pcb.getHeight(); ++row) for(let column = 0; column < pcb.getWidth(); ++column) {
             const point = pcb.getPoint(column, row);
 
-            if (!point || !point.hasPaths())
+            if (!point)
                 continue;
 
             _pointRenderer.render(myr, point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
@@ -88,10 +89,39 @@ export function PcbRenderer(myr, sprites, pcb) {
      * @param {Number} y The y coordinate in pixels.
      */
     this.draw = (x, y) => {
-        _layerPcb.draw(x, y);
+        switch (_level) {
+            case PcbRenderer.LEVEL_BOARD:
+                _layerPcb.draw(x, y);
+                break;
+            case PcbRenderer.LEVEL_PARTS:
+                _layerPcb.draw(x, y);
 
-        for (let i = 0; i < _partRenderers.length; ++i)
-            _partRenderers[i].draw(_partPositions[i].x, _partPositions[i].y);
+                for (let i = 0; i < _partRenderers.length; ++i)
+                    _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
+
+                break;
+            case PcbRenderer.LEVEL_HULL:
+                _layerPcb.draw(x, y);
+
+                for (let i = 0; i < _partRenderers.length; ++i)
+                    _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
+
+                // TODO: Obviously debug stuff, the local matrix should be a parameter or something
+                myr.pop();
+
+                for (let i = 0; i < _partRenderers.length; ++i)
+                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+
+                break;
+        }
+    };
+
+    /**
+     * Sets the level to render the PCB at.
+     * @param {Object} level The level of this pcb to render, which must be a valid constant of this object.
+     */
+    this.setLevel = level => {
+        _level = level;
     };
 
     /**
@@ -117,3 +147,8 @@ export function PcbRenderer(myr, sprites, pcb) {
 
     this.revalidate();
 }
+
+PcbRenderer.LEVEL_BOARD = 0;
+PcbRenderer.LEVEL_PARTS = 1;
+PcbRenderer.LEVEL_HULL = 2;
+PcbRenderer.LEVEL_DEFAULT = PcbRenderer.LEVEL_PARTS;

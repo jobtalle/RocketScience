@@ -4,7 +4,7 @@ import * as Myr from "../../../lib/myr";
  * A pcb path renderer, used for rendering etched states of PCB points.
  * @param {Sprites} sprites The sprites library.
  * @param {Boolean} isPlan A boolean indicating whether this path is a planned path or an existing path.
- * @param {Object} mode A render mode, one of the valid mode constants of this object.
+ * @param {Object} [mode] A render mode, one of the valid mode constants of this object. Only required for plans.
  * @constructor
  */
 export function PcbPointRenderer(sprites, isPlan, mode) {
@@ -55,6 +55,7 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
         if (point.paths === 0)
             return;
 
+        // TODO: Don't change state on every point render!
         if (mode)
             myr.setColor(mode);
 

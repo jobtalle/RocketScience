@@ -7,7 +7,7 @@
 export function BatteryState(behavior, pins, renderer) {
     /**
      * Initialize the state.
-     * @param {Physics.Body} body A physics body to apply state to.
+     * @param {Physics} body A physics body to apply state to.
      */
     this.initialize = body => {
 

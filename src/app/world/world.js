@@ -1,6 +1,6 @@
 import {Terrain} from "./terrain/terrain";
 import {View} from "../view/view";
-import {Physics} from "./physics";
+import {Physics} from "./physics/physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";

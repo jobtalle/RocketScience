@@ -4,7 +4,7 @@ import {PcbGraph} from "./pcbGraph";
  * An object containing the state of a PCB being run by a PcbRunner.
  * @param {Pcb} pcb A PCB.
  * @param {PcbRenderer} renderer A pcb renderer to render state to.
- * @param {Physics.Body} body A physics body to apply state to.
+ * @param {Object} body A physics body to apply state to.
  * @constructor
  */
 export function PcbState(pcb, renderer, body) {
@@ -26,7 +26,7 @@ export function PcbState(pcb, renderer, body) {
      */
     this.tick = () => {
         for (const state of _states)
-            state.tick(_stateArray, body);
+            state.tick(_stateArray);
     };
 
     build();

@@ -1,6 +1,7 @@
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {PcbShape} from "../pcb/pcbShape";
 import {PcbState} from "../pcb/pcbState";
+import * as Myr from "../../lib/myr";
 
 /**
  * An object in the world.
@@ -14,14 +15,19 @@ import {PcbState} from "../pcb/pcbState";
  */
 export function WorldObject(myr, sprites, physics, pcb, x, y) {
     const _renderer = new PcbRenderer(myr, sprites, pcb);
+    const _transform = new Myr.Transform();
 
     let _state = null;
     let _body = null;
 
     const generatePhysicsBody = () => {
         const shape = new PcbShape(pcb);
+        const polygons = [];
 
-        return physics.createBody(shape.getParts(), x, y, shape.getCenter().x, shape.getCenter().y);
+        for (const part of shape.getParts())
+            polygons.push(part.getPoints());
+
+        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y, _transform);
     };
 
     /**
@@ -45,11 +51,9 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      */
     this.draw = myr => {
         myr.push();
-        myr.transform(_body.getTransform());
+        myr.transform(_transform);
 
         _renderer.draw(0, 0);
-
-        myr.pop();
     };
 
     /**
@@ -63,4 +67,5 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
 
     _body = generatePhysicsBody();
     _state = new PcbState(pcb, _renderer, _body);
+    _renderer.setLevel(PcbRenderer.LEVEL_HULL);
 }
