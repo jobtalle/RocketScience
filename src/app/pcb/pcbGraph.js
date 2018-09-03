@@ -81,7 +81,9 @@ const PartEntry = function(fixture) {
     this.makeState = (pcb, renderer) => new (getPartState(fixture.part.getDefinition().object))(
         this.getBehavior(),
         pointers,
-        renderer.getPartRenderer(fixture));
+        renderer.getPartRenderer(fixture),
+        fixture.x,
+        fixture.y);
 };
 
 /**

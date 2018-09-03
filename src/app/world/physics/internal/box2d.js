@@ -1,7 +1,7 @@
-import {Box2D} from "../../../lib/box2d";
+import {Box2D} from "../../../../lib/box2d";
 
 export const box2d = new Box2D();
-export const getVec = (x, y) => {
+export const getb2Vec2 = (x, y) => {
     _tempVec.set_x(x);
     _tempVec.set_y(y);
 
