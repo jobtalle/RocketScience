@@ -24,6 +24,13 @@ PcbPoint.prototype.connectOutput = function() {
 };
 
 /**
+ * Mark this point as a structural connection.
+ */
+PcbPoint.prototype.connectStructural = function() {
+    this.paths |= PcbPoint.CONNECTION_BIT_STRUCTURAL;
+};
+
+/**
  * Check if an input pin is connected to this point.
  * @returns {Boolean} A boolean which is true when this point is connected to an input pin.
  */
@@ -194,4 +201,8 @@ PcbPoint.deltaToDirection = (dx, dy) => {
 
 PcbPoint.CONNECTION_BIT_OUTPUT = 256;
 PcbPoint.CONNECTION_BIT_INPUT = 512;
-PcbPoint.CONNECTION_BITS = PcbPoint.CONNECTION_BIT_OUTPUT | PcbPoint.CONNECTION_BIT_INPUT;
+PcbPoint.CONNECTION_BIT_STRUCTURAL = 1024;
+PcbPoint.CONNECTION_BITS =
+    PcbPoint.CONNECTION_BIT_OUTPUT |
+    PcbPoint.CONNECTION_BIT_INPUT |
+    PcbPoint.CONNECTION_BIT_STRUCTURAL;

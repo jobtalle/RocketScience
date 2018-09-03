@@ -120,11 +120,13 @@ export function Pcb(myr, sprites) {
             return;
         }
 
-        for (const fixture of _fixtures) for (const point of fixture.part.getConfiguration().footprint.space) {
-            if (fixture.x + point.x === x && fixture.y + point.y === y) {
-                this.remove(fixture.part);
+        for (const fixture of _fixtures) if (fixture.part.getConfiguration().footprint.space) {
+            for (const point of fixture.part.getConfiguration().footprint.space) {
+                if (fixture.x + point.x === x && fixture.y + point.y === y) {
+                    this.remove(fixture.part);
 
-                return;
+                    return;
+                }
             }
         }
     };
@@ -291,7 +293,7 @@ export function Pcb(myr, sprites) {
         if (this.getPoint(x, y))
             return false;
 
-        for (const fixture of _fixtures)
+        for (const fixture of _fixtures) if (fixture.part.getConfiguration().footprint.air)
             for (const point of fixture.part.getConfiguration().footprint.air)
                 if (fixture.x + point.x === x && fixture.y + point.y === y)
                     return false;
@@ -317,10 +319,17 @@ export function Pcb(myr, sprites) {
             this.getPoint(point.x + x, point.y + y).part = part;
 
         for (const pin of part.getConfiguration().io) {
-            if (pin.type === "in")
-                this.getPoint(pin.x + x, pin.y + y).connectInput();
-            else
-                this.getPoint(pin.x + x, pin.y + y).connectOutput();
+            switch (pin.type) {
+                case "in":
+                    this.getPoint(pin.x + x, pin.y + y).connectInput();
+                    break;
+                case "out":
+                    this.getPoint(pin.x + x, pin.y + y).connectOutput();
+                    break;
+                case "structural":
+                    this.getPoint(pin.x + x, pin.y + y).connectStructural();
+                    break;
+            }
         }
 
         return fixture;
