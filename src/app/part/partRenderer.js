@@ -46,9 +46,6 @@ export function PartRenderer(sprites, configuration) {
      * @param {Number} y The Y position to draw at.
      */
     this.drawExternal = (x, y) => {
-        if (_externalThreshold === _sprites.length)
-            return;
-
         for (let i = _externalThreshold; i < _sprites.length; ++i)
             _sprites[i].drawTransformedAt(0, 0, _transforms[i]);
     };
