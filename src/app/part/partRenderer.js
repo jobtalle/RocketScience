@@ -23,10 +23,10 @@ export function PartRenderer(sprites, configuration) {
     };
 
     const createFromConfiguration = configuration => {
-        for (const sprite of configuration.sprites.internal)
+        if (configuration.sprites.internal) for (const sprite of configuration.sprites.internal)
             readSprite(sprite);
 
-        for (const sprite of configuration.sprites.external)
+        if (configuration.sprites.external) for (const sprite of configuration.sprites.external)
             readSprite(sprite);
     };
 

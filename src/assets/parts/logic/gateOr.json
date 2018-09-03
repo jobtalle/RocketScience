@@ -13,12 +13,6 @@
           {"x": 1, "y": 1},
           {"x": 0, "y": 2},
           {"x": 1, "y": 2}
-        ],
-        "space": [
-
-        ],
-        "air": [
-
         ]
       },
       "io": [
@@ -30,9 +24,6 @@
       "sprites": {
         "internal": [
           {"name": "partGateOr", "x": 0, "y": 0}
-        ],
-        "external": [
-
         ]
       }
     }
