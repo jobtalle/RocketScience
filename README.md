@@ -19,7 +19,7 @@ Before you do anything, run ``npm install`` in the repository root.
 This command will install all required dependencies managed by NPM.
 
 To prepare the assets, run ``prepare_assets.py``. This must be done before the game is built.
-Atlas files for both the GUI and in-game sprites will be generated.
+Atlas files for both the GUI and in-game sprites will be generated, in addition to the part data file.
 
 To compile the program, execute ``npm run pack-dev``
 (or ``pack-prod`` for production builds) from the root of the repository.

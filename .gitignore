@@ -5,6 +5,7 @@ doc
 dist
 src/assets/sprites/atlas.json
 src/styles/gui.css
+src/assets/parts.json
 
 # Editor files.
 .idea
