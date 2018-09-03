@@ -3,6 +3,7 @@ import {getb2Vec2, box2d} from "./internal/box2d";
 import {createCircleShape} from "./internal/shapes/circle";
 import {BodyDefinition} from "./internal/bodyDefinition";
 import * as Myr from "../../../lib/myr";
+import {WheelJoint} from "./joints/wheelJoint";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -47,7 +48,7 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @param {Number} xOffset The wheel X offset in meters.
      * @param {Number} yOffset The wheel Y offset in meters.
      * @param {Myr.Transform} transform A transformation to capture this object's position.
-     * @returns {Body} A new body representing the wheel.
+     * @returns {WheelJoint} A new body representing the wheel.
      */
     this.createWheel = (radius, xOffset, yOffset, transform) => {
         const shape = createCircleShape(radius);
@@ -64,16 +65,7 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
 
         _connected.push(body);
 
-        const jointDef = new box2d.b2RevoluteJointDef();
-        jointDef.set_bodyA(_body);
-        jointDef.set_bodyB(body._getBody());
-        jointDef.set_localAnchorA(getb2Vec2(offset.x , offset.y));
-        jointDef.set_localAnchorB(getb2Vec2(0, 0));
-
-        world.CreateJoint(jointDef);
-        box2d.destroy(jointDef);
-
-        return body;
+        return new WheelJoint(world, this, body, offset, new Myr.Vector(0, 0));
     };
 
     this._getBody = () => _body;

@@ -3,6 +3,7 @@ import {getb2Vec2, box2d} from "./internal/box2d";
 import {Body} from "./body";
 import {Buffer} from "./internal/buffer";
 import {createPolygonShape} from "./internal/shapes/polygon";
+import {createChainShape} from "./internal/shapes/chain";
 
 /**
  * An interface for the used physics engine.
@@ -37,16 +38,12 @@ export function Physics(gravity) {
         _terrainBody = _world.CreateBody(bodyDef);
         box2d.destroy(bodyDef);
 
-        const shape = new box2d.b2ChainShape();
         const points = [];
 
         for (let i = 0; i < heights.length; ++i)
             points.push(new Myr.Vector(i * spacing, heights[i]));
 
-        const buffer = new Buffer(points, 0, 0);
-
-        shape.CreateChain(buffer.getBuffer(), heights.length);
-        buffer.free();
+        const shape = createChainShape(points);
 
         _terrainBody.CreateFixture(shape, 0);
         box2d.destroy(shape);
@@ -97,7 +94,6 @@ export function Physics(gravity) {
      * Free the physics object.
      */
     this.free = () => {
-        box2d.destroy(_tempVec);
         box2d.destroy(_world);
     };
 }

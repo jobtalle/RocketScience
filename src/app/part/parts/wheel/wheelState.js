@@ -14,7 +14,7 @@ export function WheelState(behavior, pins, renderer, x, y) {
      * Initialize the state.
      * @param {Object} body A physics body to apply state to.
      */
-    this.initialize = (body) => {
+    this.initialize = body => {
         body.createWheel(
             WheelState.RADIUS * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
             (x + WheelState.ANCHOR_X) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
