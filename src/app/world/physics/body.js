@@ -51,12 +51,11 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @returns {WheelJoint} A new body representing the wheel.
      */
     this.createWheel = (radius, xOffset, yOffset, transform) => {
-        const shape = createCircleShape(radius);
         const offset = new Myr.Vector(xOffset - xOrigin, yOffset - yOrigin);
         const body = new Body(
             physics,
             world,
-            [shape],
+            [createCircleShape(radius)],
             x + offset.x,
             y + offset.y,
             radius,

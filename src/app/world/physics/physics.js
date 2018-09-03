@@ -1,7 +1,6 @@
 import Myr from "../../../lib/myr.js";
 import {getb2Vec2, box2d} from "./internal/box2d";
 import {Body} from "./body";
-import {Buffer} from "./internal/buffer";
 import {createPolygonShape} from "./internal/shapes/polygon";
 import {createChainShape} from "./internal/shapes/chain";
 
@@ -34,11 +33,10 @@ export function Physics(gravity) {
      */
     this.setTerrain = (heights, spacing) => {
         const bodyDef = new box2d.b2BodyDef();
+        const points = [];
 
         _terrainBody = _world.CreateBody(bodyDef);
         box2d.destroy(bodyDef);
-
-        const points = [];
 
         for (let i = 0; i < heights.length; ++i)
             points.push(new Myr.Vector(i * spacing, heights[i]));
