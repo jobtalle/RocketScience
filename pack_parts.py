@@ -1,8 +1,8 @@
 import os
 import json
 
-PARTS_DIR = 'src\\assets\\parts'
-OUT_FILE = 'src\\assets\\parts.json'
+PARTS_DIR = 'src/assets/parts'
+OUT_FILE = 'src/assets/parts.json'
 
 def merge_two_dicts(copyDict, updateDict):
     mergeDict = copyDict.copy() 

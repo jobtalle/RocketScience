@@ -12,8 +12,14 @@
   "PART_OSCILLATOR_NAME": "Oscillator",
   "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output.",
 
-  "PART_GATE_OR_NAME": "Or gate",
+  "PART_GATE_OR_NAME": "OR gate",
   "PART_GATE_OR_DESCRIPTION": "An OR gate. Its output will be on when at least one of its two inputs is on.",
+
+  "PART_GATE_AND_NAME": "AND gate",
+  "PART_GATE_AND_DESCRIPTION": "An AND gate. Its output will be on, if and only if its two inputs are on.",
+
+  "PART_GATE_NOT_NAME": "NOT gate",
+  "PART_GATE_NOT_DESCRIPTION": "A NOT gate. Its output will be on when its input is off.",
 
   "PART_BATTERY_NAME": "Battery",
   "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a positive signal. Many parts need to be powered to function.",

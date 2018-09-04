@@ -37,7 +37,7 @@ class PackAseprites():
                 if len(directories) > 1:
                     directories += " "
                 
-                directories += dir_path + "\\*" + PackAseprites.EXTENSION
+                directories += dir_path + "/*" + PackAseprites.EXTENSION
                 
                 print("- '" + dir_path + "'")
         

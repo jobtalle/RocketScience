@@ -43,12 +43,12 @@ def make_class_multiple(name, frames, scale):
 
 def pack_gui():
     atlas_file = "atlas-gui.json"
-    css_file = "src\\styles\\gui.css"
+    css_file = "src/styles/gui.css"
     source = "gui.png"
     scale = 2
     
-    packer = PackAseprites("src\\assets\\gui");
-    packer.pack(atlas_file, "dist\\" + source)
+    packer = PackAseprites("src/assets/gui");
+    packer.pack(atlas_file, "dist/" + source)
     
     atlas = open(atlas_file)
     data = json.load(atlas)
