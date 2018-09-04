@@ -43,23 +43,24 @@ const PartEntry = function(fixture) {
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
                 pathAdder(new PathEntry(path, pinIndex, this));
             }
-            else
+            else if (pin.type === "in") {
                 pointers.push(0);
+
+                ++used;
+            }
         }
 
         return used;
     };
 
     this.connectInputs = paths => {
-        for (let i = 0; i < this.getPins().length; ++i) {
-            const pin = this.getPins()[i];
-
+        for (const pin of this.getPins()) {
             if (pin.type === "in") {
                 const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
 
                 if (path) {
                     path.getPartEntry().addRequiredOutput();
-                    pointers[i] = path.getPinIndex();
+                    pointers[this.getPins().indexOf(pin)] = path.getPinIndex();
                 }
             }
         }
