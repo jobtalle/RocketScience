@@ -8,6 +8,8 @@ import {GateOrBehavior} from "./parts/or/gateOrBehavior";
 import {GateOrState} from "./parts/or/gateOrState";
 import {GateAndBehavior} from "./parts/and/gateAndBehavior";
 import {GateAndState} from "./parts/and/gateAndState";
+import {GateNotBehavior} from "./parts/not/gateNotBehavior";
+import {GateNotState} from "./parts/not/gateNotState";
 import {WheelBehavior} from "./parts/wheel/wheelBehavior";
 import {WheelState} from "./parts/wheel/wheelState";
 
@@ -26,6 +28,7 @@ const behaviors = {
     "Battery": BatteryBehavior,
     "GateOr": GateOrBehavior,
     "GateAnd": GateAndBehavior,
+    "GateNot": GateNotBehavior,
     "Wheel": WheelBehavior
 };
 
@@ -35,6 +38,7 @@ const states = {
     "Battery": BatteryState,
     "GateOr": GateOrState,
     "GateAnd": GateAndState,
+    "GateNot": GateNotState,
     "Wheel": WheelState
 };
 
