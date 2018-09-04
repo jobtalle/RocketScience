@@ -6,6 +6,8 @@ import {BatteryBehavior} from "./parts/battery/batteryBehavior";
 import {BatteryState} from "./parts/battery/batteryState";
 import {GateOrBehavior} from "./parts/or/gateOrBehavior";
 import {GateOrState} from "./parts/or/gateOrState";
+import {GateAndBehavior} from "./parts/and/gateAndBehavior";
+import {GateAndState} from "./parts/and/gateAndState";
 import {WheelBehavior} from "./parts/wheel/wheelBehavior";
 import {WheelState} from "./parts/wheel/wheelState";
 
@@ -23,6 +25,7 @@ const behaviors = {
     "Oscillator": OscillatorBehavior,
     "Battery": BatteryBehavior,
     "GateOr": GateOrBehavior,
+    "GateAnd": GateAndBehavior,
     "Wheel": WheelBehavior
 };
 
@@ -31,6 +34,7 @@ const states = {
     "Oscillator": OscillatorState,
     "Battery": BatteryState,
     "GateOr": GateOrState,
+    "GateAnd": GateAndState,
     "Wheel": WheelState
 };
 
