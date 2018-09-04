@@ -1,4 +1,4 @@
-import {getPartState} from "../part/objects";
+import {getPartObject} from "../part/objects";
 import {PcbPath} from "./point/pcbPath";
 import * as Myr from "../../lib/myr";
 
@@ -22,7 +22,6 @@ const PartEntry = function(fixture) {
     let requiredOutputs = 0;
 
     this.getPins = () => fixture.part.getConfiguration().io;
-    this.getBehavior = () => fixture.part.getBehavior();
     this.addRequiredOutput = () => ++requiredOutputs;
     this.hasOutputs = () => hasOutputs;
     this.connectOutput = () => --requiredOutputs === 0;
@@ -79,8 +78,7 @@ const PartEntry = function(fixture) {
         return inputs;
     };
 
-    this.makeState = (pcb, renderer) => new (getPartState(fixture.part.getDefinition().object))(
-        this.getBehavior(),
+    this.makeState = (pcb, renderer) => new (getPartObject(fixture.part.getDefinition().object))(
         pointers,
         renderer.getPartRenderer(fixture),
         fixture.x,

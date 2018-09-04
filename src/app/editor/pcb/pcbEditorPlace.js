@@ -178,13 +178,11 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
                 if (fixture.isInstance())
                     part = new Part(
                         fixture.part.getDefinition(),
-                        fixture.part.getConfigurationIndex(),
-                        new (getPartBehavior(fixture.part.getDefinition().object))());
+                        fixture.part.getConfigurationIndex());
                 else
                     part = new Part(
                         fixture.part,
-                        _configurationIndex,
-                        new (getPartBehavior(fixture.part.object))());
+                        _configurationIndex);
 
                 const pcbFixture = pcb.place(
                     part,

@@ -1,17 +1,10 @@
-import {LedBehavior} from "./parts/led/ledBehavior";
-import {OscillatorBehavior} from "./parts/oscillator/oscillatorBehavior";
-import {LedState} from "./parts/led/ledState";
-import {OscillatorState} from "./parts/oscillator/oscillatorState";
-import {BatteryBehavior} from "./parts/battery/batteryBehavior";
-import {BatteryState} from "./parts/battery/batteryState";
-import {GateOrBehavior} from "./parts/or/gateOrBehavior";
-import {GateOrState} from "./parts/or/gateOrState";
-import {GateAndBehavior} from "./parts/and/gateAndBehavior";
-import {GateAndState} from "./parts/and/gateAndState";
-import {GateNotBehavior} from "./parts/not/gateNotBehavior";
-import {GateNotState} from "./parts/not/gateNotState";
-import {WheelBehavior} from "./parts/wheel/wheelBehavior";
-import {WheelState} from "./parts/wheel/wheelState";
+import {Led} from "./parts/led";
+import {Oscillator} from "./parts/oscillator";
+import {Battery} from "./parts/battery";
+import {GateOr} from "./parts/gateOr";
+import {GateAnd} from "./parts/gateAnd";
+import {GateNot} from "./parts/gateNot";
+import {Wheel} from "./parts/wheel";
 
 // TODO: Can this be automated? E.G.:
 /*
@@ -22,40 +15,21 @@ context.keys().forEach(function (key) {
 });
  */
 
-const behaviors = {
-    "Led": LedBehavior,
-    "Oscillator": OscillatorBehavior,
-    "Battery": BatteryBehavior,
-    "GateOr": GateOrBehavior,
-    "GateAnd": GateAndBehavior,
-    "GateNot": GateNotBehavior,
-    "Wheel": WheelBehavior
-};
-
 const states = {
-    "Led": LedState,
-    "Oscillator": OscillatorState,
-    "Battery": BatteryState,
-    "GateOr": GateOrState,
-    "GateAnd": GateAndState,
-    "GateNot": GateNotState,
-    "Wheel": WheelState
+    "Led": Led,
+    "Oscillator": Oscillator,
+    "Battery": Battery,
+    "GateOr": GateOr,
+    "GateAnd": GateAnd,
+    "GateNot": GateNot,
+    "Wheel": Wheel
 };
-
-/**
- * Get part behavior from its name.
- * @param {String} name The part name.
- * @returns {Object} the behavior object.
- */
-export function getPartBehavior(name) {
-    return behaviors[name];
-}
 
 /**
  * Get part state from its name.
  * @param {String} name The part name.
  * @returns {Object} the state object.
  */
-export function getPartState(name) {
+export function getPartObject(name) {
     return states[name];
 }

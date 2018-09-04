@@ -1,10 +1,9 @@
 /**
- * @param {OscillatorBehavior} behavior A behavior object matching this state object.
  * @param {Array} pins An array containing the pin indices.
  * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
  */
-export function OscillatorState(behavior, pins, renderer) {
+export function Oscillator(pins, renderer) {
     let _state = 0;
 
     /**
@@ -21,14 +20,14 @@ export function OscillatorState(behavior, pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[pins[OscillatorState.PIN_INDEX_POWER]] === 0)
+        if (state[pins[Oscillator.PIN_INDEX_POWER]] === 0)
             return;
 
         _state = 1 - _state;
 
-        state[pins[OscillatorState.PIN_INDEX_PULSE]] = _state;
+        state[pins[Oscillator.PIN_INDEX_PULSE]] = _state;
     };
 }
 
-OscillatorState.PIN_INDEX_POWER = 0;
-OscillatorState.PIN_INDEX_PULSE = 1;
+Oscillator.PIN_INDEX_POWER = 0;
+Oscillator.PIN_INDEX_PULSE = 1;

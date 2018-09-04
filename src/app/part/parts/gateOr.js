@@ -1,10 +1,9 @@
 /**
- * @param {GateNotBehavior} behavior A behavior object matching this state object.
  * @param {Array} pins An array containing the pin indices.
  * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
  */
-export function GateNotState(behavior, pins, renderer) {
+export function GateOr(pins, renderer) {
     /**
      * Initialize the state.
      * @param {Physics} body A physics body to apply state to.
@@ -18,17 +17,19 @@ export function GateNotState(behavior, pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[pins[GateNotState.PIN_INDEX_POWER]] === 1 &&
-            state[pins[GateNotState.PIN_INDEX_IN]] === 0) {
-            state[pins[GateNotState.PIN_INDEX_OUTPUT]] = 1;
+        if (state[pins[GateOr.PIN_INDEX_POWER]] === 1 && (
+            state[pins[GateOr.PIN_INDEX_IN_1]] === 1 ||
+            state[pins[GateOr.PIN_INDEX_IN_2]] === 1)) {
+            state[pins[GateOr.PIN_INDEX_OUTPUT]] = 1;
 
             return;
         }
 
-        state[pins[GateNotState.PIN_INDEX_OUTPUT]] = 0;
+        state[pins[GateOr.PIN_INDEX_OUTPUT]] = 0;
     };
 }
 
-GateNotState.PIN_INDEX_POWER = 0;
-GateNotState.PIN_INDEX_OUTPUT = 1;
-GateNotState.PIN_INDEX_IN = 2;
+GateOr.PIN_INDEX_POWER = 0;
+GateOr.PIN_INDEX_OUTPUT = 1;
+GateOr.PIN_INDEX_IN_1 = 2;
+GateOr.PIN_INDEX_IN_2 = 3;
