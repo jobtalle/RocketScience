@@ -1,0 +1,26 @@
+{
+  "label": "PART_SENSOR_TOUCH_NAME",
+  "description": "PART_SENSOR_TOUCH_DESCRIPTION",
+  "icon": "part-sensor-touch",
+  "object": "SensorTouch",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
+        ],
+        "air": [
+          {"x": 0, "y": 1}
+        ]
+      },
+      "io": [
+        {"type": "in", "x": 0, "y": 0}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partSensorTouchBottom", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}
