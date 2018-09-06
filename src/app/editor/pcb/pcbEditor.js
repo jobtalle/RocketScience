@@ -216,7 +216,7 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
         myr.translate(x, 0);
         myr.transform(_view.getTransform());
 
-        _renderer.draw(0, 0);
+        _renderer.drawBody(0, 0);
         _editor.draw(myr);
 
         myr.pop();

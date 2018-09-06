@@ -53,7 +53,11 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
         myr.push();
         myr.transform(_transform);
 
-        _renderer.draw(0, 0);
+        _renderer.drawBody(0, 0);
+
+        myr.pop();
+
+        _renderer.drawConnected();
     };
 
     /**

@@ -32,8 +32,8 @@ export function PartRenderer(sprites, configuration) {
 
     /**
      * Draw the internal parts.
-     * @param {Number} x The X position to draw at.
-     * @param {Number} y The Y position to draw at.
+     * @param {Number} x The X position to drawBody at.
+     * @param {Number} y The Y position to drawBody at.
      */
     this.drawInternal = (x, y) => {
         for (let i = 0; i < _externalThreshold; ++i)
@@ -42,10 +42,8 @@ export function PartRenderer(sprites, configuration) {
 
     /**
      * Draw the external parts.
-     * @param {Number} x The X position to draw at.
-     * @param {Number} y The Y position to draw at.
      */
-    this.drawExternal = (x, y) => {
+    this.drawExternal = () => {
         for (let i = _externalThreshold; i < _sprites.length; ++i)
             _sprites[i].drawTransformedAt(0, 0, _transforms[i]);
     };

@@ -84,11 +84,11 @@ export function PcbRenderer(myr, sprites, pcb) {
     this.getPartRenderer = fixture => _partRenderers[getFixtureIndex(fixture)];
 
     /**
-     * Draws the associated pcb.
+     * Draws the associated pcb body.
      * @param {Number} x The x coordinate in pixels.
      * @param {Number} y The y coordinate in pixels.
      */
-    this.draw = (x, y) => {
+    this.drawBody = (x, y) => {
         switch (_level) {
             case PcbRenderer.LEVEL_BOARD:
                 _layerPcb.draw(x, y);
@@ -106,9 +106,16 @@ export function PcbRenderer(myr, sprites, pcb) {
                 for (let i = 0; i < _partRenderers.length; ++i)
                     _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
 
-                // TODO: Obviously debug stuff, the local matrix should be a parameter or something
-                myr.pop();
+                break;
+        }
+    };
 
+    /**
+     * Draws the connected parts that are not part of the PCB body.
+     */
+    this.drawConnected = () => {
+        switch (_level) {
+            case PcbRenderer.LEVEL_HULL:
                 for (let i = 0; i < _partRenderers.length; ++i)
                     _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
 

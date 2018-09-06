@@ -4,7 +4,7 @@ import {createPolygonShape} from "./polygon";
 const sensorShape = [
     new Myr.Vector(0.5, -0.5),
     new Myr.Vector(0.5, 0.5),
-    new Myr.Vector(1.5, 0)];
+    new Myr.Vector(1, 0)];
 
 export function createSensorShape(x, y, size, direction) {
     const transform = new Myr.Transform();
