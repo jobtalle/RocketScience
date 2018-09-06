@@ -10,7 +10,6 @@ const findOutput = (paths, x, y) => {
 };
 
 const PathEntry = function(path, pinIndex, part) {
-    this.getPath = () => path;
     this.contains = (x, y) => path.containsPosition(x, y);
     this.getPinIndex = () => pinIndex;
     this.getPartEntry = () => part;
@@ -26,7 +25,6 @@ const PartEntry = function(fixture) {
     this.hasOutputs = () => hasOutputs;
     this.connectOutput = () => --requiredOutputs === 0;
     this.getRequiredOutputs = () => requiredOutputs;
-    this.getName = () => fixture.part.getDefinition().object;
 
     this.registerPins = (pcb, pathAdder, pinOffset) => {
         let used = 0;
@@ -94,18 +92,9 @@ const PartEntry = function(fixture) {
 export function PcbGraph(pcb) {
     const _paths = [];
     const _parts = [];
-    const _invalidPaths = [];
     let _outPins = 0;
 
-    const addPath = entry => {
-        for (const path of _paths) if (path.getPath().intersects(entry.getPath())) {
-            _invalidPaths.push(entry.getPath());
-
-            return;
-        }
-
-        _paths.push(entry);
-    };
+    const addPath = entry => _paths.push(entry);
 
     const analyze = () => {
         for (const fixture of pcb.getFixtures()) {
@@ -211,26 +200,11 @@ export function PcbGraph(pcb) {
         const ordered = order();
         const states = [];
 
-        // Debug print:
-        let log = "";
-
-        for (const part of ordered)
-            log += part.getName() + " ";
-
-        console.log("Parts: " + log);
-
         for (const entry of ordered)
             states.push(entry.makeState(pcb, renderer));
 
         return states;
     };
-
-    /**
-     * Get the invalid paths on this graph.
-     * An invalid path has multiple outputs connected to it.
-     * @returns {Array} An array of PcbPaths connected to multiple outputs.
-     */
-    this.getInvalidPaths = () => _invalidPaths;
 
     build();
 }

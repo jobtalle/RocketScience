@@ -25,5 +25,8 @@
   "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a positive signal. Many parts need to be powered to function.",
 
   "PART_WHEEL_NAME": "Wheel",
-  "PART_WHEEL_DESCRIPTION": "A wheel"
+  "PART_WHEEL_DESCRIPTION": "A wheel",
+
+  "PART_SENSOR_TOUCH_NAME": "Touch sensor",
+  "PART_SENSOR_TOUCH_DESCRIPTION": "A touch sensor will output a positive signal while making contact with an object."
 }
