@@ -15,6 +15,47 @@ export function Physics(gravity) {
 
     let _terrainBody = null;
 
+    const createContactListener = () => {
+        const listener = new box2d.JSContactListener();
+
+        _world.SetContactListener(listener);
+
+        listener.BeginContact = contact => {
+            contact = box2d.wrapPointer(contact, box2d.b2Contact);
+
+            if (!(contact.GetFixtureA().IsSensor() ^ contact.GetFixtureB().IsSensor()))
+                return;
+
+            if (contact.GetFixtureA().IsSensor())
+                contact.GetFixtureA().contactListener.beginContact();
+            else
+                contact.GetFixtureB().contactListener.beginContact();
+        };
+
+        listener.EndContact = contact => {
+            contact = box2d.wrapPointer(contact, box2d.b2Contact);
+
+            if (!(contact.GetFixtureA().IsSensor() ^ contact.GetFixtureB().IsSensor()))
+                return;
+
+            if (contact.IsTouching())
+                return;
+
+            if (contact.GetFixtureA().IsSensor())
+                contact.GetFixtureA().contactListener.endContact();
+            else
+                contact.GetFixtureB().contactListener.endContact();
+        };
+
+        listener.PreSolve = (contact, oldManifold) => {
+
+        };
+
+        listener.PostSolve = (contact, impulse) => {
+
+        };
+    };
+
     /**
      * Update the physics state
      * @param {Number} timeStep The number of seconds passed after the previous update.
@@ -94,6 +135,8 @@ export function Physics(gravity) {
     this.free = () => {
         box2d.destroy(_world);
     };
+
+    createContactListener();
 }
 
 Physics.VELOCITY_ITERATIONS = 8;

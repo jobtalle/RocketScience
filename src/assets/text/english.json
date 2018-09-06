@@ -1,10 +1,10 @@
 {
   "TITLE": "RocketScience",
 
+  "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
   "CATEGORY_LOGIC": "Logic",
   "CATEGORY_POWER": "Power",
-  "CATEGORY_CONTROL": "Control",
 
   "PART_LED_NAME": "Led",
   "PART_LED_DESCRIPTION": "Emits light when electricity is supplied to it.",

@@ -7,7 +7,14 @@ export function Fixture(shape, category, mask) {
     this.free = () => box2d.destroy(_definition);
 
     _definition.set_shape(shape);
-    _definition.set_density(5);
-    _definition.get_filter().set_categoryBits(category);
-    _definition.get_filter().set_maskBits(mask);
+
+    if (category) {
+        _definition.get_filter().set_categoryBits(category);
+        _definition.get_filter().set_maskBits(mask);
+        _definition.set_density(5);
+    }
+    else {
+        _definition.set_isSensor(true);
+        _definition.set_density(0);
+    }
 }

@@ -2,15 +2,17 @@ import * as Myr from "../../../../../lib/myr";
 import {createPolygonShape} from "./polygon";
 
 const sensorShape = [
-    new Myr.Vector(0, 0),
-    new Myr.Vector(0, 1),
-    new Myr.Vector(1, 0.5)];
+    new Myr.Vector(0.5, -0.5),
+    new Myr.Vector(0.5, 0.5),
+    new Myr.Vector(1.5, 0)];
 
-export function createSensorShape(direction) {
+export function createSensorShape(x, y, size, direction) {
     const transform = new Myr.Transform();
     const polygon = [];
 
+    transform.translate(x, y);
     transform.rotate(direction);
+    transform.scale(size, size);
 
     for (const vector of sensorShape) {
         const transformed = vector.copy();

@@ -6,6 +6,7 @@ import * as Myr from "../../../lib/myr";
 import {WheelJoint} from "./joints/wheelJoint";
 import {Channels} from "./channels";
 import {Fixture} from "./internal/fixture";
+import {createSensorShape} from "./internal/shapes/sensor";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -14,6 +15,9 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
     const _connected = [];
 
     const updateTransform = () => {
+        if (!transform)
+            return;
+
         transform.identity();
         transform.translate(
             _body.GetPosition().get_x() * Terrain.PIXELS_PER_METER,
@@ -73,13 +77,19 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * Create a touch sensor on this body.
      * @param {Number} xOffset The wheel X offset in meters.
      * @param {Number} yOffset The wheel Y offset in meters.
+     * @param {Number} size The size of the sensor block in meters.
      * @param {Number} direction The direction this sensor is pointing towards in radians.
-     * @returns [Object} A sensor.
+     * @param {ContactListener} contactListener A contact listener.
      */
-    this.createTouchSensor = (xOffset, yOffset, direction) => {
+    this.createTouchSensor = (xOffset, yOffset, size, direction, contactListener) => {
         const offset = new Myr.Vector(xOffset - xOrigin, yOffset - yOrigin);
+        const shape = createSensorShape(offset.x, offset.y, size, direction);
+        const fixture = new Fixture(shape);
 
+        _body.CreateFixture(fixture.getDefinition()).contactListener = contactListener;
 
+        box2d.destroy(shape);
+        fixture.free();
     };
 
     this._getBody = () => _body;
