@@ -4,6 +4,8 @@ import {createCircleShape} from "./internal/shapes/circle";
 import {BodyDefinition} from "./internal/bodyDefinition";
 import * as Myr from "../../../lib/myr";
 import {WheelJoint} from "./joints/wheelJoint";
+import {Channels} from "./channels";
+import {Fixture} from "./internal/fixture";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -67,10 +69,26 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
         return new WheelJoint(world, this, body, offset, new Myr.Vector(0, 0));
     };
 
+    /**
+     * Create a touch sensor on this body.
+     * @param {Number} xOffset The wheel X offset in meters.
+     * @param {Number} yOffset The wheel Y offset in meters.
+     * @param {Number} direction The direction this sensor is pointing towards in radians.
+     * @returns [Object} A sensor.
+     */
+    this.createTouchSensor = (xOffset, yOffset, direction) => {
+        const offset = new Myr.Vector(xOffset - xOrigin, yOffset - yOrigin);
+
+
+    };
+
     this._getBody = () => _body;
 
     for (const shape of shapes) {
-        _body.CreateFixture(shape, 5.0);
+        const fixture = new Fixture(shape, Channels.OBJECT, Channels.OBJECT);
+
+        _body.CreateFixture(fixture.getDefinition());
+        fixture.free();
 
         box2d.destroy(shape);
     }
