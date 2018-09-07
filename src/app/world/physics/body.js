@@ -7,6 +7,7 @@ import {WheelJoint} from "./joints/wheelJoint";
 import {Channels} from "./channels";
 import {Fixture} from "./internal/fixture";
 import {createSensorShape} from "./internal/shapes/sensor";
+import {Mover} from "./mover";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -28,12 +29,17 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
             -yOrigin * Terrain.PIXELS_PER_METER);
     };
 
+    const getOffset = (dx, dy) => {
+        return new Myr.Vector(dx - xOrigin, dy - yOrigin);
+    };
+
     /**
      * Update the body state.
+     * @param {Number} timeStep The time step.
      */
-    this.update = () => {
+    this.update = timeStep => {
         for (const connected of _connected)
-            connected.update();
+            connected.update(timeStep);
 
         updateTransform();
     };
@@ -57,7 +63,7 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @returns {WheelJoint} A new body representing the wheel.
      */
     this.createWheel = (radius, xOffset, yOffset, transform) => {
-        const offset = new Myr.Vector(xOffset - xOrigin, yOffset - yOrigin);
+        const offset = getOffset(xOffset, yOffset);
         const body = new Body(
             physics,
             world,
@@ -82,7 +88,7 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @param {ContactListener} contactListener A contact listener.
      */
     this.createTouchSensor = (xOffset, yOffset, size, direction, contactListener) => {
-        const offset = new Myr.Vector(xOffset - xOrigin, yOffset - yOrigin);
+        const offset = getOffset(xOffset, yOffset);
         const shape = createSensorShape(offset.x, offset.y, size, direction);
         const fixture = new Fixture(shape);
 
@@ -90,6 +96,21 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
 
         box2d.destroy(shape);
         fixture.free();
+    };
+
+    /**
+     * Create a mover on this body.
+     * @param {Number} xOffset The anchor X offset in meters.
+     * @param {Number} yOffset The anchor Y offset in meters.
+     * @returns {Mover} A mover.
+     */
+    this.createMover = (xOffset, yOffset) => {
+        const offset = getOffset(xOffset, yOffset);
+        const mover = new Mover(this, offset.x, offset.y);
+
+        _connected.push(mover);
+
+        return mover;
     };
 
     this._getBody = () => _body;

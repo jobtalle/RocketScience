@@ -1,3 +1,7 @@
+import {Pcb} from "../../pcb/pcb";
+import {Terrain} from "../../world/terrain/terrain";
+import * as Myr from "../../../lib/myr";
+
 /**
  * @param {Array} pins An array containing the pin indices.
  * @param {PartRenderer} renderer A part renderer to render state to.
@@ -6,12 +10,16 @@
  * @constructor
  */
 export function Propeller(pins, renderer, x, y) {
+    let mover = null;
+
     /**
      * Initialize the state.
      * @param {Object} body A physics body to apply state to.
      */
     this.initialize = body => {
-
+        mover = body.createMover(
+            (x + 2) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            (y - 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
     };
 
     /**
@@ -19,7 +27,9 @@ export function Propeller(pins, renderer, x, y) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-
+        if (state[pins[Propeller.PIN_INDEX_POWER]] === 1 && state[pins[Propeller.PIN_INDEX_ON]] === 1) {
+            mover.setForce(new Myr.Vector(0, -3500));
+        }
     };
 }
 

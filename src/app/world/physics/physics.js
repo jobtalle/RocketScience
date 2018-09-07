@@ -64,7 +64,7 @@ export function Physics(gravity) {
         _world.Step(timeStep, Physics.VELOCITY_ITERATIONS, Physics.POSITION_ITERATIONS);
 
         for (const body of _bodies)
-            body.update();
+            body.update(timeStep);
     };
 
     /**
