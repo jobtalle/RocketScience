@@ -11,16 +11,10 @@ import {ContactListener} from "../../world/physics/contactListener";
  */
 export function SensorTouch(pins, renderer, x, y) {
     let sensor = null;
-    let touching = false;
     let cooldown = 0;
 
     const beginContact = () => {
-        touching = true;
         cooldown = SensorTouch.SIGNAL_TICK_COOLDOWN;
-    };
-
-    const endContact = () => {
-        touching = false;
     };
 
     /**
@@ -33,7 +27,7 @@ export function SensorTouch(pins, renderer, x, y) {
             (y + 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
             Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
             -Math.PI * 0.5,
-            new ContactListener(beginContact, endContact));
+            new ContactListener(beginContact, null));
     };
 
     /**
@@ -44,8 +38,7 @@ export function SensorTouch(pins, renderer, x, y) {
         if (cooldown > 0) {
             state[pins[SensorTouch.PIN_INDEX_SIGNAL]] = 1;
 
-            if (!touching)
-                --cooldown;
+            --cooldown;
         } else
             state[pins[SensorTouch.PIN_INDEX_SIGNAL]] = 0;
     };
