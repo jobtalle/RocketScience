@@ -28,5 +28,8 @@
   "PART_WHEEL_DESCRIPTION": "A wheel",
 
   "PART_SENSOR_TOUCH_NAME": "Touch sensor",
-  "PART_SENSOR_TOUCH_DESCRIPTION": "A touch sensor will output a positive signal while making contact with an object."
+  "PART_SENSOR_TOUCH_DESCRIPTION": "A touch sensor will output a positive signal while making contact with an object.",
+
+  "PART_PROPELLER_NAME": "Propeller",
+  "PART_PROPELLER_DESCRIPTION": "A propeller."
 }

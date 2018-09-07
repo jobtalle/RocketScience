@@ -6,6 +6,7 @@ import {GateAnd} from "./parts/gateAnd";
 import {GateNot} from "./parts/gateNot";
 import {Wheel} from "./parts/wheel";
 import {SensorTouch} from "./parts/sensorTouch";
+import {Propeller} from "./parts/propeller";
 
 // TODO: Can this be automated? E.G.:
 /*
@@ -24,7 +25,8 @@ const states = {
     "GateAnd": GateAnd,
     "GateNot": GateNot,
     "Wheel": Wheel,
-    "SensorTouch": SensorTouch
+    "SensorTouch": SensorTouch,
+    "Propeller": Propeller
 };
 
 /**
