@@ -96,28 +96,32 @@ export function PcbRenderer(myr, sprites, pcb) {
             case PcbRenderer.LEVEL_PARTS:
                 _layerPcb.draw(x, y);
 
-                for (let i = 0; i < _partRenderers.length; ++i)
+                for (let i = 0; i < _partRenderers.length; ++i) {
                     _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
+                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+                }
 
                 break;
             case PcbRenderer.LEVEL_HULL:
                 _layerPcb.draw(x, y);
 
-                for (let i = 0; i < _partRenderers.length; ++i)
+                for (let i = 0; i < _partRenderers.length; ++i) {
                     _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
+                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+                }
 
                 break;
         }
     };
 
     /**
-     * Draws the connected parts that are not part of the PCB body.
+     * Draws the separate parts that are not part of the PCB body.
      */
-    this.drawConnected = () => {
+    this.drawSeparate = () => {
         switch (_level) {
             case PcbRenderer.LEVEL_HULL:
                 for (let i = 0; i < _partRenderers.length; ++i)
-                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+                    _partRenderers[i].drawSeparate();
 
                 break;
         }

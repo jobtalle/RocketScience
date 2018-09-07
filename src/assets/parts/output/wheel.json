@@ -32,7 +32,7 @@
         "internal": [
           {"name": "partWheel", "x": 0, "y": 0}
         ],
-        "external": [
+        "separate": [
           {"name": "partWheelExternal", "x": -1, "y": -1}
         ]
       }

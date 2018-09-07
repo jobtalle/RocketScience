@@ -10,7 +10,8 @@ import {Pcb} from "../pcb/pcb";
 export function PartRenderer(sprites, configuration) {
     const _sprites = [];
     const _transforms = [];
-    const _externalThreshold = configuration.sprites.internal.length;
+    let _externalThreshold = 0;
+    let _separateThreshold = 0;
 
     const readSprite = sprite => {
         const transform = new Myr.Transform();
@@ -23,10 +24,20 @@ export function PartRenderer(sprites, configuration) {
     };
 
     const createFromConfiguration = configuration => {
-        if (configuration.sprites.internal) for (const sprite of configuration.sprites.internal)
+        if (configuration.sprites.internal) for (const sprite of configuration.sprites.internal) {
             readSprite(sprite);
 
-        if (configuration.sprites.external) for (const sprite of configuration.sprites.external)
+            ++_externalThreshold;
+            ++_separateThreshold;
+        }
+
+        if (configuration.sprites.external) for (const sprite of configuration.sprites.external) {
+            readSprite(sprite);
+
+            ++_separateThreshold;
+        }
+
+        if (configuration.sprites.separate) for (const sprite of configuration.sprites.separate)
             readSprite(sprite);
     };
 
@@ -42,9 +53,19 @@ export function PartRenderer(sprites, configuration) {
 
     /**
      * Draw the external parts.
+     * @param {Number} x The X position to drawBody at.
+     * @param {Number} y The Y position to drawBody at.
      */
-    this.drawExternal = () => {
-        for (let i = _externalThreshold; i < _sprites.length; ++i)
+    this.drawExternal = (x, y) => {
+        for (let i = _externalThreshold; i < _separateThreshold; ++i)
+            _sprites[i].drawTransformedAt(x, y, _transforms[i]);
+    };
+
+    /**
+     * Draw the separate parts.
+     */
+    this.drawSeparate = () => {
+        for (let i = _separateThreshold; i < _sprites.length; ++i)
             _sprites[i].drawTransformed(_transforms[i]);
     };
 

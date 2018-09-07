@@ -57,7 +57,7 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
 
         myr.pop();
 
-        _renderer.drawConnected();
+        _renderer.drawSeparate();
     };
 
     /**
