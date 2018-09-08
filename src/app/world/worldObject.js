@@ -35,7 +35,7 @@ export function WorldObject(myr, sprites, physics, pcb, x, y) {
      * @param {Number} timeStep The number of milliseconds passed after the previous update.
      */
     this.update = timeStep => {
-
+        _state.update(timeStep);
     };
 
     /**

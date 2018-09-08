@@ -29,5 +29,14 @@ export function PcbState(pcb, renderer, body) {
             state.tick(_stateArray);
     };
 
+    /**
+     * Update the parts.
+     * @param {Number} timeStep The time step.
+     */
+    this.update = timeStep => {
+        for (const state of _states) if (state.update)
+            state.update(timeStep);
+    };
+
     build();
 }

@@ -1,5 +1,6 @@
-import {box2d, getb2Vec2} from "./internal/box2d";
+import {getb2Vec2} from "./internal/box2d";
 
+// Only instantiate movers from body!
 export function Mover(body, xOffset, yOffset) {
     let _force = null;
 
@@ -23,7 +24,6 @@ export function Mover(body, xOffset, yOffset) {
             force.rotate(body._getBody().GetAngle());
             force.multiply(timeStep);
 
-            // TODO: Rotate force!
             body._getBody().ApplyForce(
                 getb2Vec2(force.x, force.y),
                 forcePosition);

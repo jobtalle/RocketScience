@@ -11,6 +11,7 @@ import * as Myr from "../../../lib/myr";
  */
 export function Propeller(pins, renderer, x, y) {
     let mover = null;
+    let moving = false;
 
     /**
      * Initialize the state.
@@ -29,9 +30,26 @@ export function Propeller(pins, renderer, x, y) {
     this.tick = state => {
         if (state[pins[Propeller.PIN_INDEX_POWER]] === 1 && state[pins[Propeller.PIN_INDEX_ON]] === 1) {
             mover.setForce(new Myr.Vector(0, -3500));
+
+            moving = true;
         }
+        else {
+            mover.setForce(null);
+
+            moving = false;
+        }
+    };
+
+    /**
+     * Update the part.
+     * @param {Number} timeStep The time step.
+     */
+    this.update = timeStep => {
+        if (moving)
+            renderer.getSprites()[Propeller.SPRITE_INDEX_PROPELLER].animate(timeStep);
     };
 }
 
 Propeller.PIN_INDEX_POWER = 0;
 Propeller.PIN_INDEX_ON = 1;
+Propeller.SPRITE_INDEX_PROPELLER = 1;
