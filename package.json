@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "noisejs": "^2.1.0",
+    "npm": "^6.4.1",
     "poly-decomp": "^0.3.0"
   }
 }

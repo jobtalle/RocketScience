@@ -18,10 +18,14 @@ export function Mover(body, xOffset, yOffset) {
     this.update = timeStep => {
         if (_force) {
             const forcePosition = body._getBody().GetWorldPoint(getb2Vec2(xOffset, yOffset));
+            const force = _force.copy();
+
+            force.rotate(body._getBody().GetAngle());
+            force.multiply(timeStep);
 
             // TODO: Rotate force!
             body._getBody().ApplyForce(
-                getb2Vec2(_force.x * timeStep, _force.y * timeStep),
+                getb2Vec2(force.x, force.y),
                 forcePosition);
         }
     };
