@@ -14,7 +14,7 @@
         ]
       },
       "io": [
-        {"type": "in", "x": 0, "y": 0}
+        {"type": "in", "signal": "discrete", "x": 0, "y": 0}
       ],
       "sprites": {
         "internal": [

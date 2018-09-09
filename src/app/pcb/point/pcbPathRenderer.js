@@ -1,4 +1,5 @@
 import {Pcb} from "../pcb";
+import * as Myr from "../../../lib/myr";
 
 /**
  * A renderer for a PcbPath.
@@ -26,6 +27,14 @@ export function PcbPathRenderer(pointRenderer) {
     this.render = (myr, path) => {
         _myr = myr;
 
-        path.forPoints(renderPoint);
+        if (pointRenderer.getModeColor()) {
+            myr.setColor(pointRenderer.getModeColor());
+
+            path.forPoints(renderPoint);
+
+            myr.setColor(Myr.Color.WHITE);
+        }
+        else
+            path.forPoints(renderPoint);
     };
 }

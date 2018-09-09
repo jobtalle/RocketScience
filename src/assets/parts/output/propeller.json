@@ -28,10 +28,10 @@
         ]
       },
       "io": [
-        {"type": "in", "x": 0, "y": 1},
-        {"type": "in", "x": 3, "y": 1},
-        {"type": "structural", "x": 0, "y": 0},
-        {"type": "structural", "x": 3, "y": 0}
+        {"type": "in", "signal": "discrete", "x": 0, "y": 1},
+        {"type": "in", "signal": "discrete", "x": 3, "y": 1},
+        {"type": "structural", "signal": "discrete", "x": 0, "y": 0},
+        {"type": "structural", "signal": "discrete", "x": 3, "y": 0}
       ],
       "sprites": {
         "internal": [

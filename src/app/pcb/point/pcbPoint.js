@@ -111,7 +111,7 @@ PcbPoint.prototype.hasDirection = function(direction) {
  * @returns {Boolean} A boolean which is True if this point has paths etched into it.
  */
 PcbPoint.prototype.hasPaths = function() {
-    return (this.paths & 0xFF) !== 0;
+    return (this.paths & PcbPoint.PATHS_MASK) !== 0;
 };
 
 /**
@@ -119,7 +119,7 @@ PcbPoint.prototype.hasPaths = function() {
  * @param {PcbPoint} point A PCB point.
  */
 PcbPoint.prototype.flatten = function(point) {
-    this.paths |= (point.paths & 0xFF);
+    this.paths |= (point.paths & PcbPoint.PATHS_MASK);
 };
 
 /**
@@ -128,7 +128,7 @@ PcbPoint.prototype.flatten = function(point) {
  * @returns {Boolean} A boolean which indicates whether the points have overlapping paths.
  */
 PcbPoint.prototype.pathOverlaps = function(point) {
-    return ((this.paths & point.paths) & 0xFF) !==0;
+    return ((this.paths & point.paths) & PcbPoint.PATHS_MASK) !==0;
 };
 
 /**
@@ -137,7 +137,7 @@ PcbPoint.prototype.pathOverlaps = function(point) {
  * @returns {Boolean} A boolean which indicates whether the points have equal paths.
  */
 PcbPoint.prototype.pathEquals = function(point) {
-    return ((this.paths & point.paths) & 0xFF) === (point.paths & 0xFF);
+    return ((this.paths & point.paths) & PcbPoint.PATHS_MASK) === (point.paths & PcbPoint.PATHS_MASK);
 };
 
 /**
@@ -145,7 +145,7 @@ PcbPoint.prototype.pathEquals = function(point) {
  * @param {PcbPoint} point A point to erase overlapping paths from.
  */
 PcbPoint.prototype.erase = function(point) {
-    this.paths &= ~(point.paths & 0xFF);
+    this.paths &= ~(point.paths & PcbPoint.PATHS_MASK);
 };
 
 /**
@@ -194,14 +194,15 @@ PcbPoint.directionToDelta = direction => directionDeltas[direction];
  */
 PcbPoint.deltaToDirection = (dx, dy) => {
     if (dx === 1)
-        return -dy - Math.min(-dy, 0) * 8;
+        return -dy - (Math.min(-dy, 0) << 3);
 
     return 4 + ((1 + dx) + 1) * dy;
 };
 
-PcbPoint.CONNECTION_BIT_OUTPUT = 256;
-PcbPoint.CONNECTION_BIT_INPUT = 512;
-PcbPoint.CONNECTION_BIT_STRUCTURAL = 1024;
+PcbPoint.PATHS_MASK = 0xFF;
+PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;
+PcbPoint.CONNECTION_BIT_INPUT = 0x200;
+PcbPoint.CONNECTION_BIT_STRUCTURAL = 0x400;
 PcbPoint.CONNECTION_BITS =
     PcbPoint.CONNECTION_BIT_OUTPUT |
     PcbPoint.CONNECTION_BIT_INPUT |

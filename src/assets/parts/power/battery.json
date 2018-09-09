@@ -16,10 +16,10 @@
         ]
       },
       "io": [
-        {"type": "out", "x": 0, "y": 0},
-        {"type": "out", "x": 1, "y": 0},
-        {"type": "out", "x": 0, "y": 2},
-        {"type": "out", "x": 1, "y": 2}
+        {"type": "out", "signal": "discrete", "x": 0, "y": 0},
+        {"type": "out", "signal": "discrete", "x": 1, "y": 0},
+        {"type": "out", "signal": "discrete", "x": 0, "y": 2},
+        {"type": "out", "signal": "discrete", "x": 1, "y": 2}
       ],
       "sprites": {
         "internal": [

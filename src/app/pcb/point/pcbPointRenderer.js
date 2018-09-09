@@ -4,7 +4,7 @@ import * as Myr from "../../../lib/myr";
  * A pcb path renderer, used for rendering etched states of PCB points.
  * @param {Sprites} sprites The sprites library.
  * @param {Boolean} isPlan A boolean indicating whether this path is a planned path or an existing path.
- * @param {Object} [mode] A render mode, one of the valid mode constants of this object. Only required for plans.
+ * @param {Object} [mode] If this renderer is a plan, a valid mode constant should be given to denote the kind of plan.
  * @constructor
  */
 export function PcbPointRenderer(sprites, isPlan, mode) {
@@ -45,6 +45,12 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
     this.setMode = newMode => mode = newMode;
 
     /**
+     * Get the color which should be used for the mode this renderer is in.
+     * @returns {Myr.Color} A color, or null if no filter color should be set.
+     */
+    this.getModeColor = () => mode;
+
+    /**
      * Render an etched state.
      * @param {Myr} myr A Myriad instance.
      * @param {PcbPoint} point A point to render the etch state from.
@@ -55,10 +61,6 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
         if (point.paths === 0)
             return;
 
-        // TODO: Don't change state on every point render!
-        if (mode)
-            myr.setColor(mode);
-
         for (let direction = 0; direction < 8; ++direction) if (point.hasDirection(direction))
             SPRITES_PATHS[direction].draw(x - 1, y - 1);
 
@@ -66,9 +68,6 @@ export function PcbPointRenderer(sprites, isPlan, mode) {
             SPRITE_JUNCTION.draw(x, y);
         else
             SPRITE_NODE.draw(x, y);
-
-        if (mode)
-            myr.setColor(Myr.Color.WHITE);
     };
 }
 
