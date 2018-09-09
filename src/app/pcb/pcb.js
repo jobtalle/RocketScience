@@ -143,6 +143,22 @@ export function Pcb(myr, sprites) {
         }
     };
 
+    const eraseConnectionsIntersecting = (x, y) => {
+        for (let direction = 0; direction < 8; ++direction) {
+            const delta = PcbPoint.directionToDelta(direction);
+
+            if (delta.x !== 0 && delta.y !== 0)
+                continue;
+
+            const erase = new PcbPoint();
+
+            erase.etchDirection((direction + 5) % 8);
+            erase.etchDirection((direction + 3) % 8);
+
+            this.getPoint(x + delta.x, y + delta.y).erasePaths(erase);
+        }
+    };
+
     /**
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
@@ -232,13 +248,14 @@ export function Pcb(myr, sprites) {
 
     /**
      * Erase a Pcb cell. You'll need to pack afterwards to prevent sparse pcb's.
-     * The cell must exist. Never erase all points!
+     * The cell must exist. Never erasePaths all points!
      * @param {Number} x The X position of the point.
      * @param {Number} y The Y position of the point.
      */
     this.erase = (x, y) => {
         erasePartAt(x, y);
         eraseConnectionsTo(x, y);
+        eraseConnectionsIntersecting(x, y);
 
         _points[y][x] = null;
         --_pointCount;

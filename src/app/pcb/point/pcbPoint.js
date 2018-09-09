@@ -144,7 +144,7 @@ PcbPoint.prototype.pathEquals = function(point) {
  * Erase this points connections overlapping with another points connections.
  * @param {PcbPoint} point A point to erase overlapping paths from.
  */
-PcbPoint.prototype.erase = function(point) {
+PcbPoint.prototype.erasePaths = function(point) {
     this.paths &= ~(point.paths & PcbPoint.PATHS_MASK);
 };
 
