@@ -152,7 +152,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             if (!pcb.getPoint(at.x, at.y))
                 return null;
 
-            if (at.x !== 0 && at.y !== 0 && !pcb.getPoint(at.x - dx, at.y) || !pcb.getPoint(at.x, at.y - dy))
+            if (at.x !== 0 && at.y !== 0 && (!pcb.getPoint(at.x - dx, at.y) || !pcb.getPoint(at.x, at.y - dy)))
                 return null;
 
             path.push(at.x, at.y, new PcbPoint(), true);
