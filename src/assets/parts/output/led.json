@@ -14,7 +14,7 @@
         ]
       },
       "io": [
-        {"type": "in", "signal": "discrete", "x": 0, "y": 0}
+        {"x": 0, "y": 0, "type": "in", "signal": "discrete", "name": "PART_LED_PIN_NAME", "description": "PART_LED_PIN_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [

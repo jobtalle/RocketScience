@@ -4,6 +4,10 @@
  * @constructor
  */
 export function InfoPinoutEntryIndex(index) {
+    /**
+     * Get the HTML element of this pin index.
+     * @returns {HTMLElement} The HTML element of this element.
+     */
     this.getElement = () => {
         const element = document.createElement("div");
 

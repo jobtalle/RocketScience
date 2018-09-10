@@ -1,3 +1,7 @@
+#info {
+    overflow-y: auto;
+}
+
 #info .title {
     padding: 1vh;
     text-align: center;
@@ -16,18 +20,15 @@
 }
 
 #info .pinouts {
-    overflow: scroll;
+
 }
 
 #info .pinouts .pinout {
     width: 100%;
-    height: 20px;
     background-color: blue;
 }
 
 #info .pinouts .pinout .pinout-index {
     box-sizing: border-box;
     background-color: white;
-
-    border: 1px solid black;
 }

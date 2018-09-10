@@ -16,8 +16,8 @@
         ]
       },
       "io": [
-        {"type": "in", "signal": "discrete", "x": 0, "y": 0},
-        {"type": "out", "signal": "discrete", "x": 1, "y": 0}
+        {"x": 0, "y": 0, "type": "in", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "out", "signal": "discrete", "name": "PART_OSCILLATOR_PIN_1_NAME", "description": "PART_OSCILLATOR_PIN_1_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [

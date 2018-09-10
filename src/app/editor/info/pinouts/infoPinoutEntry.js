@@ -1,11 +1,14 @@
+import {InfoPinoutEntryIndex} from "./infoPinoutEntryIndex";
+import {getString} from "../../../language";
+import {InfoPinoutEntryName} from "./infoPinoutEntryName";
+import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
+
 /**
  * A pinout entry.
  * @param {Number} index This pin's index.
  * @param {Object} pin A valid pin description.
  * @constructor
  */
-import {InfoPinoutEntryIndex} from "./infoPinoutEntryIndex";
-
 export function InfoPinoutEntry(index, pin) {
     /**
      * Get the HTML element of this pin information.
@@ -16,6 +19,8 @@ export function InfoPinoutEntry(index, pin) {
 
         element.className = InfoPinoutEntry.CLASS;
         element.appendChild(new InfoPinoutEntryIndex(index).getElement());
+        element.appendChild(new InfoPinoutEntryName(getString(pin.name)).getElement());
+        element.appendChild(new InfoPinoutEntryDescription(getString(pin.description)).getElement());
 
         return element;
     };

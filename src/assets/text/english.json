@@ -5,15 +5,28 @@
   "CATEGORY_OUTPUT": "Output",
   "CATEGORY_LOGIC": "Logic",
   "CATEGORY_POWER": "Power",
+  
+  "PIN_POWER_NAME": "Power",
+  "PIN_POWER_DESCRIPTION": "This part will only work when power is supplied to this pin.",
 
   "PART_LED_NAME": "Led",
   "PART_LED_DESCRIPTION": "Emits light when a signal is supplied to it.",
+  "PART_LED_PIN_NAME": "Power",
+  "PART_LED_PIN_DESCRIPTION": "If a signal is supplied to this pin, the LED will light up.",
 
   "PART_OSCILLATOR_NAME": "Oscillator",
   "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output.",
+  "PART_OSCILLATOR_PIN_1_NAME": "Output",
+  "PART_OSCILLATOR_PIN_1_DESCRIPTION": "When this part is active, the output signal will flip from on to off and vice versa on every tick.",
 
   "PART_GATE_OR_NAME": "OR gate",
   "PART_GATE_OR_DESCRIPTION": "An OR gate. Its output will be on when at least one of its two inputs is on.",
+  "PART_GATE_OR_PIN_1_NAME": "Output",
+  "PART_GATE_OR_PIN_1_DESCRIPTION": "When this part is active, this pin will output a high signal when at least one input receives a high signal too.",
+  "PART_GATE_OR_PIN_2_NAME": "Input 1",
+  "PART_GATE_OR_PIN_2_DESCRIPTION": "The first input signal.",
+  "PART_GATE_OR_PIN_3_NAME": "Input 2",
+  "PART_GATE_OR_PIN_3_DESCRIPTION": "The second input signal.",
 
   "PART_GATE_AND_NAME": "AND gate",
   "PART_GATE_AND_DESCRIPTION": "An AND gate. Its output will be on, if and only if its two inputs are on.",
