@@ -1,6 +1,7 @@
 import {PcbPoint} from "./point/pcbPoint";
 import {Fixture} from "../part/fixture";
 import * as Myr from "../../lib/myr";
+import {Pin} from "../part/pin";
 
 /**
  * Defines a PCB.
@@ -360,13 +361,13 @@ export function Pcb(myr, sprites) {
 
         for (const pin of part.getConfiguration().io) {
             switch (pin.type) {
-                case "in":
+                case Pin.TYPE_IN:
                     this.getPoint(pin.x + x, pin.y + y).connectInput();
                     break;
-                case "out":
+                case Pin.TYPE_OUT:
                     this.getPoint(pin.x + x, pin.y + y).connectOutput();
                     break;
-                case "structural":
+                case Pin.TYPE_STRUCTURAL:
                     this.getPoint(pin.x + x, pin.y + y).connectStructural();
                     break;
             }

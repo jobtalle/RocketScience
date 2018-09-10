@@ -1,9 +1,17 @@
+import {InfoPinoutEntry} from "./infoPinoutEntry";
+import {Pin} from "../../../part/pin";
+
 /**
  * A list of pinouts.
  * @param {Object} configuration A valid part configuration to read pins from.
  * @constructor
  */
 export function InfoPinouts(configuration) {
+    const makeEntries = (element, io) => {
+        for (const pin of io) if (pin.type !== Pin.TYPE_STRUCTURAL)
+            element.appendChild(new InfoPinoutEntry(pin).getElement());
+    };
+
     /**
      * Get the HTML element of this pinout information.
      * @returns {HTMLElement} The HTML element of this list.
@@ -12,6 +20,9 @@ export function InfoPinouts(configuration) {
         const element = document.createElement("div");
 
         element.className = InfoPinouts.CLASS;
+
+        if (configuration)
+            makeEntries(element, configuration.io);
 
         return element;
     };

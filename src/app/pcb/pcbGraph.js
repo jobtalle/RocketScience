@@ -1,6 +1,7 @@
 import {getPartObject} from "../part/objects";
 import {PcbPath} from "./point/pcbPath";
 import * as Myr from "../../lib/myr";
+import {Pin} from "../part/pin";
 
 const findOutput = (paths, x, y) => {
     for (const path of paths) if (path.contains(x, y))
@@ -30,7 +31,7 @@ const PartEntry = function(fixture) {
         let used = 0;
 
         for (const pin of this.getPins()) {
-            if (pin.type === "out") {
+            if (pin.type === Pin.TYPE_OUT) {
                 const pinIndex = pinOffset + used++;
                 const path = new PcbPath();
 
@@ -101,7 +102,7 @@ export function PcbGraph(pcb) {
             const entry = new PartEntry(fixture);
             let outPins = 0;
 
-            for (const pin of entry.getPins()) if (pin.type === "out")
+            for (const pin of entry.getPins()) if (pin.type === Pin.TYPE_OUT)
                 ++outPins;
 
             _parts.push(entry);

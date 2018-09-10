@@ -6,6 +6,7 @@ import "../../part/objects"
 import {PcbPath} from "../../pcb/point/pcbPath";
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
+import {Pin} from "../../part/pin";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -63,7 +64,7 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
     const checkPins = (x, y, io) => {
         const paths = [];
 
-        for (const pin of io) if (pin.type === "out") {
+        for (const pin of io) if (pin.type === Pin.TYPE_OUT) {
             const point = pcb.getPoint(cursor.x + pin.x + x, cursor.y + pin.y + y);
 
             if (point.hasPaths()) {

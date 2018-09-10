@@ -14,3 +14,13 @@
     font-style: italic;
     font-size: 2vh;
 }
+
+#info .pinouts {
+    overflow: scroll;
+}
+
+#info .pinouts .pinout {
+    width: 100%;
+    height: 20px;
+    background-color: blue;
+}
