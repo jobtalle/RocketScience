@@ -8,8 +8,10 @@ import {Pin} from "../../../part/pin";
  */
 export function InfoPinouts(configuration) {
     const makeEntries = (element, io) => {
+        let index = 0;
+
         for (const pin of io) if (pin.type !== Pin.TYPE_STRUCTURAL)
-            element.appendChild(new InfoPinoutEntry(pin).getElement());
+            element.appendChild(new InfoPinoutEntry(++index, pin).getElement());
     };
 
     /**
@@ -20,9 +22,7 @@ export function InfoPinouts(configuration) {
         const element = document.createElement("div");
 
         element.className = InfoPinouts.CLASS;
-
-        if (configuration)
-            makeEntries(element, configuration.io);
+        makeEntries(element, configuration.io);
 
         return element;
     };

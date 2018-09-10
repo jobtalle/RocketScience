@@ -9,15 +9,13 @@ import {InfoPinouts} from "./pinouts/infoPinouts";
  */
 export function Info() {
     const _element = document.createElement("div");
+    let _pinouts = null;
 
     const make = () => {
         _element.id = Info.ID;
     };
 
-    /**
-     * Clear any information displayed by this element.
-     */
-    this.clear = () => {
+    const clear = () => {
         let element;
 
         while(element = _element.firstChild)
@@ -30,10 +28,20 @@ export function Info() {
      * @param {String} text The text, which may contain HTML.
      */
     this.setText = (title, text) => {
-        this.clear();
+        clear();
 
         _element.appendChild(new InfoTitle(title).getElement());
         _element.appendChild(new InfoDescription(text).getElement());
+    };
+
+    /**
+     * Clear the current text.
+     */
+    this.clearText = () => {
+        clear();
+
+        if (_pinouts)
+            _element.appendChild(_pinouts.getElement());
     };
 
     /**
@@ -41,9 +49,14 @@ export function Info() {
      * @param {Object} configuration A valid part configuration to read pins from.
      */
     this.setPinouts = configuration => {
-        this.clear();
+        clear();
 
-        _element.appendChild(new InfoPinouts(configuration).getElement());
+        if (configuration) {
+            _pinouts = new InfoPinouts(configuration);
+
+            _element.appendChild(_pinouts.getElement());
+        } else
+            _pinouts = null;
     };
 
     /**

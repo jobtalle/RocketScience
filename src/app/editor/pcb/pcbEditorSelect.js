@@ -93,6 +93,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             selection.addSelected(fixture);
 
         PcbEditorSelect.crop(selection);
+
         updateSelectedInfo();
     };
 
@@ -107,6 +108,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             selection.addSelected(fixture);
 
         PcbEditorSelect.crop(selection);
+
         updateSelectedInfo();
     };
 
@@ -257,6 +259,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      */
     this.reset = () => {
         selection.clearSelected();
+
+        updateSelectedInfo();
 
         this.cancelAction();
     };

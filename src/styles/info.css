@@ -24,3 +24,10 @@
     height: 20px;
     background-color: blue;
 }
+
+#info .pinouts .pinout .pinout-index {
+    box-sizing: border-box;
+    background-color: white;
+
+    border: 1px solid black;
+}

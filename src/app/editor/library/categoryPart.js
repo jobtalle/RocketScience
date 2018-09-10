@@ -19,7 +19,7 @@ export function CategoryPart(part, setPart, info) {
 
     const onEnter = () => info.setText(getString(part.label), getString(part.description));
 
-    const onLeave = () => info.clear();
+    const onLeave = () => info.clearText();
 
     /**
      * Get the HTML element of this category.
