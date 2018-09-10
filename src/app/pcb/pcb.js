@@ -1,5 +1,6 @@
 import {PcbPoint} from "./point/pcbPoint";
 import {Fixture} from "../part/fixture";
+import * as Myr from "../../lib/myr";
 
 /**
  * Defines a PCB.
@@ -10,6 +11,7 @@ import {Fixture} from "../part/fixture";
 export function Pcb(myr, sprites) {
     const _fixtures = [];
     const _points = [];
+    const _air = [];
 
     let _width = 0;
     let _pointCount = 0;
@@ -162,6 +164,19 @@ export function Pcb(myr, sprites) {
 
             point.erasePaths(erase);
         }
+    };
+
+    /**
+     * Check whether a point is unoccupied air. The point must lie outside the PCB.
+     * @param {Number} x The x position on the board.
+     * @param {Number} y The y position on the board.
+     * @returns {Boolean} A boolean which is true if the air is unoccupied.
+     */
+    this.isAir = (x, y) => {
+        for (const air of _air) if (air.x === x && air.y === y)
+            return false;
+
+        return true;
     };
 
     /**
@@ -340,6 +355,9 @@ export function Pcb(myr, sprites) {
         for (const point of part.getConfiguration().footprint.points)
             this.getPoint(point.x + x, point.y + y).part = part;
 
+        if (part.getConfiguration().footprint.air) for (const point of part.getConfiguration().footprint.air)
+            _air.push(new Myr.Vector(point.x + x, point.y + y));
+
         for (const pin of part.getConfiguration().io) {
             switch (pin.type) {
                 case "in":
@@ -377,6 +395,12 @@ export function Pcb(myr, sprites) {
 
         for (const point of part.getConfiguration().footprint.points)
             this.getPoint(fixture.x + point.x, fixture.y + point.y).part = null;
+
+        if (part.getConfiguration().footprint.air) for (let i = _air.length; i-- > 0;) {
+            for (const point of part.getConfiguration().footprint.air)
+                if (_air[i].x === point.x + fixture.x && _air[i].y === point.y + fixture.y)
+                    _air.splice(i, 1);
+        }
 
         for (const pin of part.getConfiguration().io)
             this.getPoint(fixture.x + pin.x, fixture.y + pin.y).disconnect();
