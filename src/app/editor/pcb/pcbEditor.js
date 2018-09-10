@@ -175,6 +175,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
 
     const revertEditor = () => {
         setEditor(_stashedEditor);
+
+        return _editor;
     };
 
     /**

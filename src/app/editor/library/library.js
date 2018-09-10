@@ -17,7 +17,7 @@ export function Library(editor, toolbar, overlay, width) {
     let _container = null;
 
     const setPart = part => {
-        toolbar.onKeyDown(Toolbar.KEY_PRESS_SELECT, false);
+        toolbar.onKeyDown(Toolbar.KEY_PRESS_SELECT);
 
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     };

@@ -2,9 +2,10 @@ import {PartRenderer} from "../../part/partRenderer";
 import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {Part} from "../../part/part";
-import {getPartBehavior} from "../../part/objects";
 import "../../part/objects"
 import {PcbPath} from "../../pcb/point/pcbPath";
+import {Selection} from "./selection";
+import {PcbEditorSelect} from "./pcbEditorSelect";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -172,6 +173,8 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
             if (selection)
                 selection.clearSelected();
 
+            const pcbFixtures = [];
+
             for (const fixture of fixtures) {
                 let part = null;
 
@@ -191,10 +194,16 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
 
                 if (selection)
                     selection.addSelected(pcbFixture);
+                else
+                    pcbFixtures.push(pcbFixture);
             }
 
             editor.revalidate();
-            editor.revert();
+
+            const revertEditor = editor.revert();
+
+            if (!selection && revertEditor instanceof PcbEditorSelect)
+                revertEditor.select(pcbFixtures);
 
             return true;
         }

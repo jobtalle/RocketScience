@@ -79,9 +79,8 @@ export function Toolbar(editor, overlay, x, game) {
     /**
      * A key is pressed.
      * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
      */
-    this.onKeyDown = (key, control) => {
+    this.onKeyDown = (key) => {
         switch (key) {
             case Toolbar.KEY_PRESS_EXTEND:
                 _buttonExtend.getElement().click();

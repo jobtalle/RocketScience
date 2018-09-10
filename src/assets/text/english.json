@@ -1,5 +1,5 @@
 {
-  "TITLE": "RocketScience",
+  "TITLE": "Rocket Science",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
@@ -7,7 +7,7 @@
   "CATEGORY_POWER": "Power",
 
   "PART_LED_NAME": "Led",
-  "PART_LED_DESCRIPTION": "Emits light when electricity is supplied to it.",
+  "PART_LED_DESCRIPTION": "Emits light when a signal is supplied to it.",
 
   "PART_OSCILLATOR_NAME": "Oscillator",
   "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output.",

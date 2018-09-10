@@ -79,38 +79,26 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         editor.revalidate();
     };
 
-    const crop = () => {
-        let left = undefined;
-        let top = undefined;
-        let right = undefined;
-        let bottom = undefined;
-
-        for (const fixture of selection.getSelected()) {
-            for (const point of fixture.part.getConfiguration().footprint.points) {
-                if (left === undefined || point.x + fixture.x < left)
-                    left = point.x + fixture.x;
-
-                if (right === undefined || point.x + fixture.x > right)
-                    right = point.x + fixture.x;
-
-                if (top === undefined || point.y + fixture.y < top)
-                    top = point.y + fixture.y;
-
-                if (bottom === undefined || point.y + fixture.y > bottom)
-                    bottom = point.y + fixture.y;
-            }
-        }
-
-        selection.setRegion(left, right, top, bottom);
-    };
-
     const selectAll = () => {
         selection.clearSelected();
 
         for (const fixture of pcb.getFixtures())
             selection.addSelected(fixture);
 
-        crop();
+        PcbEditorSelect.crop(selection);
+    };
+
+    /**
+     * Select a fixture.
+     * @param {Array} fixtures An array of fixtures to select.
+     */
+    this.select = fixtures => {
+        selection.clearSelected();
+
+        for (const fixture of fixtures)
+            selection.addSelected(fixture);
+
+        PcbEditorSelect.crop(selection);
     };
 
     /**
@@ -215,7 +203,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             if (selection.getSelected().length === 0)
                 this.moveCursor();
             else
-                crop();
+                PcbEditorSelect.crop(selection);
         }
         else if (_moveStart && _moveStart.equals(cursor)) {
             _moveStart = null;
@@ -225,7 +213,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             findSelectedParts();
 
             if (selection.getSelected().length > 0)
-                crop();
+                PcbEditorSelect.crop(selection);
         }
     };
 
@@ -269,13 +257,37 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
     /**
      * Draw this editor.
-     * @param {Myr} myr A myriad instance.
      */
-    this.draw = myr => {
+    this.draw = () => {
         if (_selectable || selection.getSelected().length > 0)
             selection.draw();
     };
 }
+
+PcbEditorSelect.crop = selection => {
+    let left = undefined;
+    let top = undefined;
+    let right = undefined;
+    let bottom = undefined;
+
+    for (const fixture of selection.getSelected()) {
+        for (const point of fixture.part.getConfiguration().footprint.points) {
+            if (left === undefined || point.x + fixture.x < left)
+                left = point.x + fixture.x;
+
+            if (right === undefined || point.x + fixture.x > right)
+                right = point.x + fixture.x;
+
+            if (top === undefined || point.y + fixture.y < top)
+                top = point.y + fixture.y;
+
+            if (bottom === undefined || point.y + fixture.y > bottom)
+                bottom = point.y + fixture.y;
+        }
+    }
+
+    selection.setRegion(left, right, top, bottom);
+};
 
 PcbEditorSelect.KEY_DELETE = "Delete";
 PcbEditorSelect.KEY_COPY = "c";
