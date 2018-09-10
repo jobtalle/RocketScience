@@ -150,12 +150,17 @@ export function Pcb(myr, sprites) {
             if (delta.x !== 0 && delta.y !== 0)
                 continue;
 
+            const point = this.getPoint(x + delta.x, y + delta.y);
+
+            if (!point)
+                continue;
+
             const erase = new PcbPoint();
 
             erase.etchDirection((direction + 5) % 8);
             erase.etchDirection((direction + 3) % 8);
 
-            this.getPoint(x + delta.x, y + delta.y).erasePaths(erase);
+            point.erasePaths(erase);
         }
     };
 
