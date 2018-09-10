@@ -7,26 +7,19 @@ const showPartInfo = (part, setInfo) => {
         setInfo("", "");
 };
 
-let clickedPart = null;
-
 /**
  * A part button used to instantiate a part.
  * @param {Object} part A part from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
- * @param {Function} setInfo The function to be called when new part info is selected.
+ * @param {Info} info The information box.
  * @constructor
  */
-export function CategoryPart(part, setPart, setInfo) {
-    const onClick = () => {
-        clickedPart = part;
+export function CategoryPart(part, setPart, info) {
+    const onClick = () => setPart(part);
 
-        setPart(part);
-        showPartInfo(part, setInfo);
-    };
+    const onEnter = () => info.setText(getString(part.label), getString(part.description));
 
-    const onEnter = () => showPartInfo(part, setInfo);
-
-    const onLeave = () => showPartInfo(clickedPart, setInfo);
+    const onLeave = () => info.clear();
 
     /**
      * Get the HTML element of this category.

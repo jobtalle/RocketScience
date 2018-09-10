@@ -2,11 +2,11 @@
  * A part description inside the info box.
  * @constructor
  */
-export function CategoryInfoDescription() {
+export function InfoDescription() {
     const _element = document.createElement("div");
 
     const make = () => {
-        _element.className = CategoryInfoDescription.CLASS;
+        _element.className = InfoDescription.CLASS;
     };
 
     /**
@@ -26,4 +26,4 @@ export function CategoryInfoDescription() {
     make();
 }
 
-CategoryInfoDescription.CLASS = "description";
+InfoDescription.CLASS = "description";

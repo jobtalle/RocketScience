@@ -33,29 +33,12 @@
 }
 
 #info {
+    box-sizing: border-box;
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 20%;
+    height: 30%;
 
     border: 1px solid black;
-    border-radius: 0.5vh;
     background-color: #f5f5f5;
-}
-
-#info .title {
-    padding: 1vh;
-    text-align: center;
-
-    font-size: 2.5vh;
-    color: black;
-    background-color: transparent;
-}
-
-#info .description {
-    padding-left: 2vh;
-    padding-right: 2vh;
-
-    font-style: italic;
-    font-size: 2vh;
 }

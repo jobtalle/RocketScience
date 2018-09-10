@@ -2,11 +2,11 @@
  * The title of a part information box.
  * @constructor
  */
-export function CategoryInfoTitle() {
+export function InfoTitle() {
     const _element = document.createElement("div");
 
     const make = () => {
-        _element.className = CategoryInfoTitle.CLASS;
+        _element.className = InfoTitle.CLASS;
     };
 
     /**
@@ -26,4 +26,4 @@ export function CategoryInfoTitle() {
     make();
 }
 
-CategoryInfoTitle.CLASS = "title";
+InfoTitle.CLASS = "title";

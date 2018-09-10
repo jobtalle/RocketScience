@@ -2,8 +2,8 @@ import "../../../styles/library.css"
 import parts from "../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
-import {CategoryInfo} from "./categoryInfo";
 import {Toolbar} from "../toolbar/toolbar";
+import {Info} from "../info/info";
 
 /**
  * An HTML based part library.
@@ -23,7 +23,7 @@ export function Library(editor, toolbar, overlay, width) {
     };
 
     const build = () => {
-        const info = new CategoryInfo();
+        const info = new Info();
 
         _container = document.createElement("div");
         _container.id = Library.ID;
@@ -31,7 +31,7 @@ export function Library(editor, toolbar, overlay, width) {
 
         for (const category in parts)
             if (parts.hasOwnProperty(category))
-                _container.appendChild(new Category(parts[category], setPart, info.setInfo).getElement());
+                _container.appendChild(new Category(parts[category], setPart, info).getElement());
 
         _container.appendChild(info.getElement());
 

@@ -1,0 +1,16 @@
+#info .title {
+    padding: 1vh;
+    text-align: center;
+
+    font-size: 2.5vh;
+    color: black;
+    background-color: transparent;
+}
+
+#info .description {
+    padding-left: 2vh;
+    padding-right: 2vh;
+
+    font-style: italic;
+    font-size: 2vh;
+}
