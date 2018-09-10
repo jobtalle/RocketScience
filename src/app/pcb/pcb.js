@@ -397,9 +397,13 @@ export function Pcb(myr, sprites) {
             this.getPoint(fixture.x + point.x, fixture.y + point.y).part = null;
 
         if (part.getConfiguration().footprint.air) for (let i = _air.length; i-- > 0;) {
-            for (const point of part.getConfiguration().footprint.air)
-                if (_air[i].x === point.x + fixture.x && _air[i].y === point.y + fixture.y)
+            for (const point of part.getConfiguration().footprint.air) {
+                if (_air[i].x === point.x + fixture.x && _air[i].y === point.y + fixture.y) {
                     _air.splice(i, 1);
+
+                    break;
+                }
+            }
         }
 
         for (const pin of part.getConfiguration().io)
