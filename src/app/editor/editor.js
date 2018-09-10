@@ -1,6 +1,7 @@
 import {PcbEditor} from "./pcb/pcbEditor";
 import {Library} from "./library/library";
 import {Toolbar} from "./toolbar/toolbar";
+import {Info} from "./info/info";
 
 /**
  * Provides a grid editor.
@@ -14,15 +15,17 @@ import {Toolbar} from "./toolbar/toolbar";
  * @constructor
  */
 export function Editor(myr, sprites, overlay, world, width, height, game) {
+    const _info = new Info();
     const _pcbEditor = new PcbEditor(
         myr,
         sprites,
         world,
         Math.floor(width * Editor.EDITOR_WIDTH),
         height,
-        width - Math.floor(width * Editor.EDITOR_WIDTH));
+        width - Math.floor(width * Editor.EDITOR_WIDTH),
+        _info.setPinouts);
     const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
-    const _library = new Library(_pcbEditor, _toolbar, overlay, width - _pcbEditor.getWidth());
+    const _library = new Library(_pcbEditor, _toolbar, _info, overlay, width - _pcbEditor.getWidth());
 
     let _editorHover = false;
 
@@ -145,7 +148,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      */
     this.onKeyDown = (key, control) => {
         _pcbEditor.onKeyDown(key, control);
-        _toolbar.onKeyDown(key, control);
+        _toolbar.onKeyDown(key);
     };
 
     /**

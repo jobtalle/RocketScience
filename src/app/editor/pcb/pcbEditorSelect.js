@@ -79,6 +79,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         editor.revalidate();
     };
 
+    const updateSelectedInfo = () => {
+        if (selection.getSelected().length === 1)
+            editor.select(selection.getSelected()[0].part.getConfiguration());
+        else
+            editor.select(null);
+    };
+
     const selectAll = () => {
         selection.clearSelected();
 
@@ -86,6 +93,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             selection.addSelected(fixture);
 
         PcbEditorSelect.crop(selection);
+        updateSelectedInfo();
     };
 
     /**
@@ -99,6 +107,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
             selection.addSelected(fixture);
 
         PcbEditorSelect.crop(selection);
+        updateSelectedInfo();
     };
 
     /**
@@ -123,6 +132,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                     deleteSelectedParts();
 
                     selection.clearSelected();
+                    updateSelectedInfo();
 
                     this.moveCursor();
                 }
@@ -204,6 +214,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 this.moveCursor();
             else
                 PcbEditorSelect.crop(selection);
+
+            updateSelectedInfo();
         }
         else if (_moveStart && _moveStart.equals(cursor)) {
             _moveStart = null;
@@ -214,6 +226,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
             if (selection.getSelected().length > 0)
                 PcbEditorSelect.crop(selection);
+
+            updateSelectedInfo();
         }
     };
 

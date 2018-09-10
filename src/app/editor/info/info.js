@@ -1,6 +1,7 @@
 import "../../../styles/info.css"
-import {InfoTitle} from "./InfoTitle";
-import {InfoDescription} from "./InfoDescription";
+import {InfoTitle} from "./description/InfoTitle";
+import {InfoDescription} from "./description/InfoDescription";
+import {InfoPinouts} from "./pinouts/infoPinouts";
 
 /**
  * An information box about the currently selected part.
@@ -8,8 +9,6 @@ import {InfoDescription} from "./InfoDescription";
  */
 export function Info() {
     const _element = document.createElement("div");
-    const _title = new InfoTitle();
-    const _description = new InfoDescription();
 
     const make = () => {
         _element.id = Info.ID;
@@ -26,18 +25,25 @@ export function Info() {
     };
 
     /**
-     * Set the information in this box.
+     * Display a part description in this box.
      * @param {String} title The title.
      * @param {String} text The text, which may contain HTML.
      */
     this.setText = (title, text) => {
         this.clear();
 
-        _title.setTitle(title);
-        _description.setText(text);
+        _element.appendChild(new InfoTitle(title).getElement());
+        _element.appendChild(new InfoDescription(text).getElement());
+    };
 
-        _element.appendChild(_title.getElement());
-        _element.appendChild(_description.getElement());
+    /**
+     * Display pinout information.
+     * @param {Object} configuration A valid part configuration to read pins from.
+     */
+    this.setPinouts = configuration => {
+        this.clear();
+
+        _element.appendChild(new InfoPinouts(configuration).getElement());
     };
 
     /**

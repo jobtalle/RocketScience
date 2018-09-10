@@ -20,9 +20,10 @@ import {PcbEditorEtch} from "./pcbEditorEtch";
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
+ * @param {Function} onSelect A function to execute when a part configuration is selected.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, width, height, x) {
+export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -64,7 +65,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
             undoPush: undoPush,
             replace: setEditor,
             shift: shift,
-            revert: revertEditor
+            revert: revertEditor,
+            select: onSelect
         };
     };
 
@@ -186,6 +188,8 @@ export function PcbEditor(myr, sprites, world, width, height, x) {
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
+        onSelect(null);
+
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
                 setEditor(new PcbEditorReshape(sprites, _pcb, _cursor, makeInterface()));
