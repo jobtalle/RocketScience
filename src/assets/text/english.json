@@ -8,45 +8,38 @@
   
   "PIN_POWER_NAME": "Power",
   "PIN_POWER_DESCRIPTION": "This part will only work when power is supplied to this pin.",
+  "PIN_OUTPUT_NAME": "Output",
+  "PIN_INPUT_NAME": "Input",
+  "PIN_INPUT_1_NAME": "Input 1",
+  "PIN_INPUT_2_NAME": "Input 2",
 
   "PART_LED_NAME": "Led",
   "PART_LED_DESCRIPTION": "Emits light when a signal is supplied to it.",
-  "PART_LED_PIN_NAME": "Power",
   "PART_LED_PIN_DESCRIPTION": "If a signal is supplied to this pin, the LED will light up.",
 
   "PART_OSCILLATOR_NAME": "Oscillator",
   "PART_OSCILLATOR_DESCRIPTION": "An oscillator with constantly inverting output.",
-  "PART_OSCILLATOR_PIN_1_NAME": "Output",
   "PART_OSCILLATOR_PIN_1_DESCRIPTION": "When this part is active, the output signal will flip from on to off and vice versa on every tick.",
 
   "PART_GATE_OR_NAME": "OR gate",
   "PART_GATE_OR_DESCRIPTION": "An OR gate. Its output will be on when at least one of its two inputs is on.",
-  "PART_GATE_OR_PIN_1_NAME": "Output",
   "PART_GATE_OR_PIN_1_DESCRIPTION": "When this part is active, this pin will output a high signal when at least one input receives a high signal.",
-  "PART_GATE_OR_PIN_2_NAME": "Input 1",
   "PART_GATE_OR_PIN_2_DESCRIPTION": "The first input signal.",
-  "PART_GATE_OR_PIN_3_NAME": "Input 2",
   "PART_GATE_OR_PIN_3_DESCRIPTION": "The second input signal.",
 
   "PART_GATE_AND_NAME": "AND gate",
   "PART_GATE_AND_DESCRIPTION": "An AND gate. Its output will be on, if and only if its two inputs are on.",
-  "PART_GATE_AND_PIN_1_NAME": "Output",
   "PART_GATE_AND_PIN_1_DESCRIPTION": "When this part is active, this pin will output a high signal when both inputs receive a high signal.",
-  "PART_GATE_AND_PIN_2_NAME": "Input 1",
   "PART_GATE_AND_PIN_2_DESCRIPTION": "The first input signal.",
-  "PART_GATE_AND_PIN_3_NAME": "Input 2",
   "PART_GATE_AND_PIN_3_DESCRIPTION": "The second input signal.",
 
   "PART_GATE_NOT_NAME": "NOT gate",
   "PART_GATE_NOT_DESCRIPTION": "A NOT gate. Its output will be on when its input is off.",
-  "PART_GATE_NOT_PIN_1_NAME": "Output",
   "PART_GATE_NOT_PIN_1_DESCRIPTION": "When this part is active, this pin will output a high signal when the input is low and a low signal when the input is high.",
-  "PART_GATE_NOT_PIN_2_NAME": "input",
   "PART_GATE_NOT_PIN_2_DESCRIPTION": "The input signal.",
 
   "PART_BATTERY_NAME": "Battery",
   "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a positive signal. Many parts need to be powered to function.",
-  "PART_BATTERY_PIN_NAME": "Output",
   "PART_BATTERY_PIN_DESCRIPTION": "This pin will always output a high signal.",
 
   "PART_WHEEL_NAME": "Wheel",
@@ -60,11 +53,9 @@
 
   "PART_SENSOR_TOUCH_NAME": "Touch sensor",
   "PART_SENSOR_TOUCH_DESCRIPTION": "A touch sensor will output a positive signal while making contact with an object.",
-  "PART_SENSOR_TOUCH_PIN_NAME": "Output",
   "PART_SENSOR_TOUCH_PIN_DESCRIPTION": "When the touch sensor makes hits something, a high signal pulse will be given.",
 
   "PART_PROPELLER_NAME": "Propeller",
   "PART_PROPELLER_DESCRIPTION": "A propeller.",
-  "PART_PROPELLER_PIN_NAME": "Input",
   "PART_PROPELLER_PIN_DESCRIPTION": "When a high signal is provided, the propeller will rotate and try to propel the craft towards the propeller direction."
 }
