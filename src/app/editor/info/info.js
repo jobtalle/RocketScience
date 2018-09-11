@@ -9,17 +9,19 @@ import {InfoPinouts} from "./pinouts/infoPinouts";
  */
 export function Info() {
     const _element = document.createElement("div");
+    const _extension = document.createElement("div");
     let _pinouts = null;
 
     const make = () => {
         _element.id = Info.ID;
+        _extension.id = Info.ID_EXTENSION;
     };
 
     const clear = () => {
         let element;
 
-        while(element = _element.firstChild)
-        _element.removeChild(element);
+        while (element = _element.firstChild)
+            _element.removeChild(element);
     };
 
     /**
@@ -41,7 +43,7 @@ export function Info() {
         clear();
 
         if (_pinouts)
-            _element.appendChild(_pinouts.getElement());
+            _element.appendChild(_pinouts.getElement(_extension));
     };
 
     /**
@@ -54,18 +56,39 @@ export function Info() {
         if (configuration) {
             _pinouts = new InfoPinouts(configuration);
 
-            _element.appendChild(_pinouts.getElement());
+            _element.appendChild(_pinouts.getElement(_extension));
         } else
             _pinouts = null;
     };
 
     /**
-     * Get the HTML element of this part list.
+     * Set the contents of the info box extension.
+     * @param {HTMLElement} element An element to add to the extension box. May be null.
+     */
+    this.setExtension = element => {
+        let e;
+
+        while (e = _extension.firstChild)
+            _extension.removeChild(e);
+
+        if (element)
+            _extension.appendChild(element);
+    };
+
+    /**
+     * Get the HTML element of this info box.
      * @returns {HTMLElement} The HTML element of this part list.
      */
     this.getElement = () => _element;
+
+    /**
+     * Get the extension element of this info box.
+     * @returns {HTMLElement} The HTML element of this info extension.
+     */
+    this.getExtension = () => _extension;
 
     make();
 }
 
 Info.ID = "info";
+Info.ID_EXTENSION = "info-extension";

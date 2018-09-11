@@ -1,5 +1,7 @@
 import {InfoPinoutEntry} from "./infoPinoutEntry";
 import {Pin} from "../../../part/pin";
+import {getString} from "../../../language";
+import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
 
 /**
  * A list of pinouts.
@@ -7,22 +9,31 @@ import {Pin} from "../../../part/pin";
  * @constructor
  */
 export function InfoPinouts(configuration) {
-    const makeEntries = (element, io) => {
+    const makeEntries = (info, extension, io) => {
         let index = 0;
+        let descriptions = [];
 
-        for (const pin of io) if (pin.type !== Pin.TYPE_STRUCTURAL)
-            element.appendChild(new InfoPinoutEntry(++index, pin).getElement());
+        for (const pin of io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
+            const description = new InfoPinoutEntryDescription(getString(pin.description)).getElement();
+            descriptions.push(description);
+
+            info.appendChild(new InfoPinoutEntry(++index, pin).getElement(description));
+        }
+
+        for (const description of descriptions)
+            extension.appendChild(description);
     };
 
     /**
      * Get the HTML element of this pinout information.
+     * @param {HTMLElement} info An element to add extra information to.
      * @returns {HTMLElement} The HTML element of this list.
      */
-    this.getElement = () => {
+    this.getElement = info => {
         const element = document.createElement("table");
 
         element.className = InfoPinouts.CLASS;
-        makeEntries(element, configuration.io);
+        makeEntries(element, info, configuration.io);
 
         return element;
     };

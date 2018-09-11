@@ -46,6 +46,10 @@
     border-bottom: 1px solid black;
 }
 
+#info .pinouts .pinout:hover {
+    background-color: crimson;
+}
+
 #info .pinouts .pinout .pinout-index {
     padding: 3px;
     border-right: 1px solid black;
@@ -62,4 +66,22 @@
 
 #info .pinout-out {
     background-color: aqua;
+}
+
+#info-extension {
+    position: absolute;
+    bottom: 0;
+    width: 75%;
+    height: 30%;
+    left: 100%;
+}
+
+#info-extension .pinout-description {
+    padding: 3px;
+    background-color: white;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    width: 100%;
+    display: none;
 }

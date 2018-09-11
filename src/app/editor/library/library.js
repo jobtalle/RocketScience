@@ -33,6 +33,7 @@ export function Library(editor, toolbar, info, overlay, width) {
                 _container.appendChild(new Category(parts[category], setPart, info).getElement());
 
         _container.appendChild(info.getElement());
+        _container.appendChild(info.getExtension());
 
         this.show();
     };

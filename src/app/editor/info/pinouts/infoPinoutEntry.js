@@ -1,7 +1,6 @@
 import {InfoPinoutEntryIndex} from "./infoPinoutEntryIndex";
 import {getString} from "../../../language";
 import {InfoPinoutEntryName} from "./infoPinoutEntryName";
-import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
 import {Pin} from "../../../part/pin";
 
 /**
@@ -21,15 +20,18 @@ export function InfoPinoutEntry(index, pin) {
 
     /**
      * Get the HTML element of this pin information.
+     * @param {HTMLElement} description A description element to toggle visibility when hovering.
      * @returns {HTMLElement} The HTML element of this list.
      */
-    this.getElement = () => {
+    this.getElement = description => {
         const row = document.createElement("tr");
 
         row.className = InfoPinoutEntry.CLASS;
         row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
         row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name)).getElement()));
-        //row.appendChild(new InfoPinoutEntryDescription(getString(pin.description)).getElement());
+
+        row.onmouseover = () => description.style.display = "block";
+        row.onmouseout = () => description.style.display = "none";
 
         switch (pin.type) {
             case Pin.TYPE_IN:
