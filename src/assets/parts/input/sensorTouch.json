@@ -14,7 +14,7 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 0, "type": "out", "signal": "discrete"}
+        {"x": 0, "y": 0, "type": "out", "signal": "discrete", "name": "PART_SENSOR_TOUCH_PIN_NAME", "description": "PART_SENSOR_TOUCH_PIN_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [
