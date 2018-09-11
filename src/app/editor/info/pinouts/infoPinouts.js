@@ -19,7 +19,7 @@ export function InfoPinouts(configuration) {
      * @returns {HTMLElement} The HTML element of this list.
      */
     this.getElement = () => {
-        const element = document.createElement("div");
+        const element = document.createElement("table");
 
         element.className = InfoPinouts.CLASS;
         makeEntries(element, configuration.io);
@@ -28,4 +28,14 @@ export function InfoPinouts(configuration) {
     };
 }
 
+InfoPinouts.formatIndex = index => {
+    let result = index.toString();
+
+    while (result.length < InfoPinouts.INDEX_PADDING)
+        result = "0" + result;
+
+    return result;
+};
+
 InfoPinouts.CLASS = "pinouts";
+InfoPinouts.INDEX_PADDING = 2;

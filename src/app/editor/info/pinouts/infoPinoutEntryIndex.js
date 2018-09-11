@@ -1,3 +1,5 @@
+import {InfoPinouts} from "./infoPinouts";
+
 /**
  * The index of a pinout.
  * @param {Number} index The pin index.
@@ -12,7 +14,7 @@ export function InfoPinoutEntryIndex(index) {
         const element = document.createElement("div");
 
         element.className = InfoPinoutEntryIndex.CLASS;
-        element.innerText = index.toString();
+        element.innerText = InfoPinouts.formatIndex(index);
 
         return element;
     }

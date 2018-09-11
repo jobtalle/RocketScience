@@ -17,9 +17,9 @@
       },
       "io": [
         {"x": 0, "y": 0, "type": "in", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
-        {"x": 1, "y": 0, "type": "out", "signal": "discrete", "name": "PART_OUTPUT_NAME", "description": "PART_GATE_OR_PIN_1_DESCRIPTION"},
-        {"x": 0, "y": 2, "type": "in", "signal": "discrete", "name": "PART_INPUT_1_NAME", "description": "PART_GATE_OR_PIN_2_DESCRIPTION"},
-        {"x": 1, "y": 2, "type": "in", "signal": "discrete", "name": "PART_INPUT_2_NAME", "description": "PART_GATE_OR_PIN_3_DESCRIPTION"}
+        {"x": 1, "y": 0, "type": "out", "signal": "discrete", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_OR_PIN_1_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "in", "signal": "discrete", "name": "PIN_INPUT_1_NAME", "description": "PART_GATE_OR_PIN_2_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "in", "signal": "discrete", "name": "PIN_INPUT_2_NAME", "description": "PART_GATE_OR_PIN_3_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [

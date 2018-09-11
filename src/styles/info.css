@@ -1,5 +1,13 @@
 #info {
     overflow-y: auto;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 30%;
+
+    border: 1px solid black;
+    background-color: lightgray;
 }
 
 #info .title {
@@ -20,15 +28,38 @@
 }
 
 #info .pinouts {
+    width: 100%;
+    border-collapse: collapse;
+}
 
+#info .pinouts td {
+    padding: 0;
+}
+
+#info .pinouts td + td {
+    width: 100%;
 }
 
 #info .pinouts .pinout {
-    width: 100%;
-    background-color: lightgray;
+    font-family: monospace;
+    font-size: 12pt;
+    border-bottom: 1px solid black;
 }
 
 #info .pinouts .pinout .pinout-index {
-    box-sizing: border-box;
+    padding: 3px;
+    border-right: 1px solid black;
+}
+
+#info .pinouts .pinout .pinout-name {
+    padding: 3px;
     background-color: white;
+}
+
+#info .pinout-in {
+    background-color: aquamarine;
+}
+
+#info .pinout-out {
+    background-color: aqua;
 }
