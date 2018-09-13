@@ -22,6 +22,9 @@ export function Info() {
 
         while (element = _element.firstChild)
             _element.removeChild(element);
+
+        while (element = _extension.firstChild)
+            _extension.removeChild(element);
     };
 
     /**
