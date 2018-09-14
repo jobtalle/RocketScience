@@ -2,6 +2,11 @@ import {PcbEditor} from "./pcb/pcbEditor";
 import {Library} from "./library/library";
 import {Toolbar} from "./toolbar/toolbar";
 import {Info} from "./info/info";
+import {Overlay} from "./overlay/overlay";
+import {View} from "../view/view";
+import {ZoomProfile} from "../view/zoomProfile";
+import {ShiftProfile} from "../view/shiftProfile";
+import * as Myr from "../../lib/myr";
 
 /**
  * Provides a grid editor.
@@ -15,19 +20,45 @@ import {Info} from "./info/info";
  * @constructor
  */
 export function Editor(myr, sprites, overlay, world, width, height, game) {
+    const _editorWidth = Math.floor(width * Editor.EDITOR_WIDTH);
+    const _view = new View(
+        _editorWidth,
+        height,
+        new ZoomProfile(
+            ZoomProfile.TYPE_ROUND,
+            Editor.ZOOM_FACTOR,
+            Editor.ZOOM_DEFAULT,
+            Editor.ZOOM_MIN,
+            Editor.ZOOM_MAX),
+        new ShiftProfile(
+            1));
     const _info = new Info();
+    const _overlay = new Overlay(overlay, width - _editorWidth);
     const _pcbEditor = new PcbEditor(
         myr,
         sprites,
         world,
-        Math.floor(width * Editor.EDITOR_WIDTH),
+        _view,
+        _editorWidth,
         height,
-        width - Math.floor(width * Editor.EDITOR_WIDTH),
+        width - _editorWidth,
         _info.setPinouts);
     const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
     const _library = new Library(_pcbEditor, _toolbar, _info, overlay, width - _pcbEditor.getWidth());
 
     let _editorHover = false;
+    let _pcbScreenPosition = new Myr.Vector(0, 0);
+
+    const onViewChanged = () => {
+        _pcbScreenPosition.x = 0;
+        _pcbScreenPosition.y = 0;
+
+        _view.getInverse().apply(_pcbScreenPosition);
+        _overlay.move(
+            -_pcbScreenPosition.x,
+            -_pcbScreenPosition.y,
+            _view.getZoom());
+    };
 
     /**
      * Start editing a pcb.
@@ -44,6 +75,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * Hide the editor
      */
     this.hide = () => {
+        _overlay.hide();
         _pcbEditor.hide();
         _library.hide();
         _toolbar.hide();
@@ -53,6 +85,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * Show the editor.
      */
     this.show = () => {
+        _overlay.show();
         _pcbEditor.show();
         _library.show();
         _toolbar.show();
@@ -157,6 +190,12 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
     this.free = () => {
         _pcbEditor.free();
     };
+
+    _view.setOnChanged(onViewChanged);
 }
 
 Editor.EDITOR_WIDTH = 0.7;
+Editor.ZOOM_DEFAULT = 4;
+Editor.ZOOM_FACTOR = 0.15;
+Editor.ZOOM_MIN = 1;
+Editor.ZOOM_MAX = 8;

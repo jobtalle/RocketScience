@@ -1,8 +1,10 @@
 #library {
+    box-sizing: border-box;
     position: absolute;
     height: 100%;
     user-select: none;
     background-color: #dee5ef;
+    border-right: 1px solid black;
 }
 
 #library .title {

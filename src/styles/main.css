@@ -1,9 +1,11 @@
 #wrapper {
+    overflow: hidden;
     position: relative;
     width: 1024px;
     height: 768px;
     margin-left: auto;
     margin-right: auto;
+    border: 1px solid black;
 }
 
 #overlay {

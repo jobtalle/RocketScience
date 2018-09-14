@@ -15,6 +15,7 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
     const _inverse = new Myr.Transform();
     const _mouse = new Myr.Vector(0, 0);
 
+    let _onChanged = null;
     let _dragging = false;
 
     const updateTransform = () => {
@@ -25,6 +26,9 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
 
         _inverse.set(_transform);
         _inverse.invert();
+
+        if (_onChanged)
+            _onChanged();
     };
 
     const moveView = (x, y) => {
@@ -39,6 +43,14 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
         moveView(
             (_mouse.x - viewWidth * 0.5) * scaleFactor,
             (_mouse.y - viewHeight * 0.5) * scaleFactor);
+    };
+
+    /**
+     * Specify a function that should be executed whenever the view changes.
+     * @param {Function} f A function.
+     */
+    this.setOnChanged = f => {
+        _onChanged = f;
     };
 
     /**

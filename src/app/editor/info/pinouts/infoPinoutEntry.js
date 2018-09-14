@@ -20,7 +20,7 @@ export function InfoPinoutEntry(index, pin) {
 
     /**
      * Get the HTML element of this pin information.
-     * @param {HTMLElement} description A description element to toggle visibility when hovering.
+     * @param {HTMLElement} [description] An optional description element to toggle visibility when hovering.
      * @returns {HTMLElement} The HTML element of this list.
      */
     this.getElement = description => {
@@ -30,8 +30,10 @@ export function InfoPinoutEntry(index, pin) {
         row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
         row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name)).getElement()));
 
-        row.onmouseover = () => description.style.display = "block";
-        row.onmouseout = () => description.style.display = "none";
+        if (description) {
+            row.onmouseover = () => description.style.display = "block";
+            row.onmouseout = () => description.style.display = "none";
+        }
 
         switch (pin.type) {
             case Pin.TYPE_IN:

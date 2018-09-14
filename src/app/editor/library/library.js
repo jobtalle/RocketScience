@@ -34,8 +34,6 @@ export function Library(editor, toolbar, info, overlay, width) {
 
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
-
-        this.show();
     };
 
     /**

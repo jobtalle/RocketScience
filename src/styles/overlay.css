@@ -1,0 +1,9 @@
+#editor-overlay {
+    pointer-events: none;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background-color: crimson;
+    opacity: 0.2;
+    transform-origin: 0 0;
+}

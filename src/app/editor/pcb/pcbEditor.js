@@ -3,27 +3,27 @@ import {World} from "../../world/world";
 import {Pcb} from "../../pcb/pcb";
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {View} from "../../view/view";
-import {ZoomProfile} from "../../view/zoomProfile";
-import Myr from "../../../lib/myr.js"
-import {ShiftProfile} from "../../view/shiftProfile";
+import Myr from "../../../lib/myr.js";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
+import {Editor} from "../editor";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
  * @param {Myr} myr An instance of the Myriad engine.
  * @param {Sprites} sprites All sprites.
  * @param {World} world A world instance to interact with.
+ * @param {View} view A View instance.
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
  * @param {Function} onSelect A function to execute when a part configuration is selected.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
+export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -32,26 +32,11 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
     const UNDO_COUNT = 64;
-    const ZOOM_DEFAULT = 4;
-    const ZOOM_FACTOR = 0.15;
-    const ZOOM_MIN = 1;
-    const ZOOM_MAX = 8;
 
     const _undoStack = [];
     const _redoStack = [];
     const _cursor = new Myr.Vector(-1, -1);
     const _pcbPosition = new Myr.Vector(0, 0);
-    const _view = new View(
-        width,
-        height,
-        new ZoomProfile(
-            ZoomProfile.TYPE_ROUND,
-            ZOOM_FACTOR,
-            ZOOM_DEFAULT,
-            ZOOM_MIN,
-            ZOOM_MAX),
-        new ShiftProfile(
-            1));
 
     let _pcb = null;
     let _renderer = null;
@@ -74,7 +59,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
         _pcbPosition.x += dx * Terrain.METERS_PER_PIXEL;
         _pcbPosition.y += dy * Terrain.METERS_PER_PIXEL;
 
-        _view.focus(_view.getFocusX() - dx, _view.getFocusY() - dy, _view.getZoom());
+        view.focus(view.getFocusX() - dx, view.getFocusY() - dy, view.getZoom());
 
         matchWorldPosition();
     };
@@ -88,9 +73,9 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
 
     const matchWorldPosition = () => {
         world.getView().focus(
-            _view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / _view.getZoom(),
-            _view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
-            _view.getZoom());
+            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
+            view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
+            view.getZoom());
     };
 
     const revalidate = () => {
@@ -133,10 +118,10 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
         const oldX = _cursor.x;
         const oldY = _cursor.y;
 
-        _cursor.x = _view.getMouse().x;
-        _cursor.y = _view.getMouse().y;
+        _cursor.x = view.getMouse().x;
+        _cursor.y = view.getMouse().y;
 
-        _view.getInverse().apply(_cursor);
+        view.getInverse().apply(_cursor);
 
         _cursor.x = Math.floor(_cursor.x / Pcb.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Pcb.PIXELS_PER_POINT);
@@ -220,7 +205,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
     this.draw = x => {
         myr.push();
         myr.translate(x, 0);
-        myr.transform(_view.getTransform());
+        myr.transform(view.getTransform());
 
         _renderer.drawBody(0, 0);
         _editor.draw(myr);
@@ -243,7 +228,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
      * Hide the pcb editor.
      */
     this.hide = () => {
-        _view.onMouseRelease();
+        view.onMouseRelease();
         _editor.reset();
 
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
@@ -272,16 +257,16 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
             const dx = (x - _pcbPosition.x) * Terrain.PIXELS_PER_METER;
             const dy = (y - _pcbPosition.y) * Terrain.PIXELS_PER_METER;
 
-            _view.focus(
-                _view.getFocusX() - dx,
-                _view.getFocusY() - dy,
-                _view.getZoom());
+            view.focus(
+                view.getFocusX() - dx,
+                view.getFocusY() - dy,
+                view.getZoom());
         }
         else
-            _view.focus(
+            view.focus(
                 pcb.getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
                 pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
-                ZOOM_DEFAULT);
+                Editor.ZOOM_DEFAULT);
 
         updatePcb(pcb);
 
@@ -301,12 +286,18 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
     this.getWidth = () => width;
 
     /**
+     * Get the PCB position.
+     * @returns {Myr.Vector} The PCB position.
+     */
+    this.getPCBPosition = () => _pcbPosition;
+
+    /**
      * Press the mouse.
      */
     this.onMousePress = () => {
         if (!mouseDown()) {
-            _pressLocation = _view.getMouse().copy();
-            _view.onMousePress();
+            _pressLocation = view.getMouse().copy();
+            view.onMousePress();
         }
     };
 
@@ -314,14 +305,14 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        if (_pressLocation && _pressLocation.equals(_view.getMouse()))
+        if (_pressLocation && _pressLocation.equals(view.getMouse()))
             _editor.reset();
         else
             mouseUp();
 
         _pressLocation = null;
 
-        _view.onMouseRelease();
+        view.onMouseRelease();
     };
 
     /**
@@ -330,9 +321,9 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        _view.onMouseMove(x, y);
+        view.onMouseMove(x, y);
 
-        if (_view.isDragging())
+        if (view.isDragging())
             matchWorldPosition();
 
         if (updateCursor())
@@ -354,7 +345,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
             return;
 
         _editor.cancelAction();
-        _view.onMouseRelease();
+        view.onMouseRelease();
     };
 
     /**
@@ -364,7 +355,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
         if (_editor.zoomIn())
             return;
 
-        _view.zoomIn();
+        view.zoomIn();
 
         matchWorldPosition();
     };
@@ -376,7 +367,7 @@ export function PcbEditor(myr, sprites, world, width, height, x, onSelect) {
         if (_editor.zoomOut())
             return;
 
-        _view.zoomOut();
+        view.zoomOut();
 
         matchWorldPosition();
     };

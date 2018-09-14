@@ -50,8 +50,6 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(_buttonEtch.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
-
-        this.show();
     };
 
     /**
