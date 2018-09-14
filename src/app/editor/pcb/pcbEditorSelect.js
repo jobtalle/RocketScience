@@ -44,7 +44,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 fixture.y - selection.getTop()));
 
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
-        selection.clearSelected();
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, selection));
     };
