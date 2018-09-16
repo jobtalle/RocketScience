@@ -31,8 +31,8 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
-    const _info = new Info();
     const _overlay = new Overlay(overlay, width - _editorWidth);
+    const _info = new Info(_overlay);
     const _pcbEditor = new PcbEditor(
         myr,
         sprites,
@@ -41,8 +41,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
         _editorWidth,
         height,
         width - _editorWidth,
-        _info,
-        _overlay);
+        _info);
     const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
     const _library = new Library(_pcbEditor, _toolbar, _info, overlay, width - _pcbEditor.getWidth());
 

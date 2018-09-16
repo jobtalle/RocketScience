@@ -5,16 +5,32 @@ import {InfoPinouts} from "./pinouts/infoPinouts";
 
 /**
  * An information box about the currently selected part.
+ * @param {Overlay} overlay The overlay object to display additional information on.
  * @constructor
  */
-export function Info() {
+export function Info(overlay) {
     const _element = document.createElement("div");
     const _extension = document.createElement("div");
 
     let _pinouts = null;
+    let _selectedConfiguration = null;
+    let _selectedX = 0;
+    let _selectedY = 0;
+
+    const mouseEnter = () => {
+        if (_pinouts)
+            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration);
+    };
+
+    const mouseLeave = () => {
+        overlay.clear();
+    };
 
     const make = () => {
         _element.id = Info.ID;
+        _element.onmouseenter = () => mouseEnter();
+        _element.onmouseleave = () => mouseLeave();
+
         _extension.id = Info.ID_EXTENSION;
     };
 
@@ -52,13 +68,18 @@ export function Info() {
 
     /**
      * Display pinout information.
-     * @param {Object} configuration A valid part configuration to read pins from.
+     * @param {Object} configuration A valid part configuration to read pins from. May be null.
+     * @param {Number} [x] The x position of a currently selected configuration.
+     * @param {Number} [y] The y position of a currently selected configuration.
      */
-    this.setPinouts = configuration => {
+    this.setPinouts = (configuration, x, y) => {
         clear();
 
         if (configuration) {
             _pinouts = new InfoPinouts(configuration);
+            _selectedConfiguration = configuration;
+            _selectedX = x;
+            _selectedY = y;
 
             _element.appendChild(_pinouts.getElement(_extension));
         } else

@@ -21,10 +21,9 @@ import Myr from "../../../lib/myr.js";
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
  * @param {Info} info The info object.
- * @param {Overlay} overlay The overlay object.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, view, width, height, x, info, overlay) {
+export function PcbEditor(myr, sprites, world, view, width, height, x, info) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -52,8 +51,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
             replace: setEditor,
             shift: shift,
             revert: revertEditor,
-            info: info,
-            overlay: overlay
+            info: info
         };
     };
 
@@ -176,7 +174,6 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
      */
     this.setEditMode = mode => {
         info.setPinouts(null);
-        overlay.clear();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
