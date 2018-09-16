@@ -20,11 +20,11 @@ import Myr from "../../../lib/myr.js";
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
- * @param {Function} onSelect A function to execute when a part configuration is selected.
+ * @param {Info} info The info object.
  * @param {Overlay} overlay The overlay object.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect, overlay) {
+export function PcbEditor(myr, sprites, world, view, width, height, x, info, overlay) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -52,7 +52,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect,
             replace: setEditor,
             shift: shift,
             revert: revertEditor,
-            select: onSelect,
+            info: info,
             overlay: overlay
         };
     };
@@ -175,7 +175,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect,
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
-        onSelect(null);
+        info.setPinouts(null);
         overlay.clear();
 
         switch (mode) {

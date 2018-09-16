@@ -1,5 +1,7 @@
 import {Pcb} from "../../pcb/pcb";
 import {OverlayPinoutsPin} from "./overlayPinoutsPin";
+import * as Myr from "../../../lib/myr";
+import {Pin} from "../../part/pin";
 
 /**
  * A pinouts overlay.
@@ -22,8 +24,8 @@ export function OverlayPinouts(x, y, configuration) {
 
         let index = 0;
 
-        for (const pin of configuration.io)
-            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index).getElement());
+        for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL)
+            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin.y===0?new Myr.Vector(0, -1):new Myr.Vector(0, 1)).getElement());
 
         return element;
     };

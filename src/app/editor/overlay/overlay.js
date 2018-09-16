@@ -59,8 +59,7 @@ export function Overlay(overlay, xOffset) {
     this.makePinoutOverlay = (x, y, configuration) => {
         this.clear();
 
-        if (x)
-            _element.appendChild(new OverlayPinouts(x, y, configuration).getElement());
+        _element.appendChild(new OverlayPinouts(x, y, configuration).getElement());
     };
 
     build();

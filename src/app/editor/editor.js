@@ -41,7 +41,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
         _editorWidth,
         height,
         width - _editorWidth,
-        _info.setPinouts,
+        _info,
         _overlay);
     const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
     const _library = new Library(_pcbEditor, _toolbar, _info, overlay, width - _pcbEditor.getWidth());

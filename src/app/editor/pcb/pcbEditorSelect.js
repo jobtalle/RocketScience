@@ -80,10 +80,10 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
     const updateSelectedInfo = () => {
         if (selection.getSelected().length === 1) {
-            editor.select(selection.getSelected()[0].part.getConfiguration());
+            editor.info.setPinouts(selection.getSelected()[0].part.getConfiguration());
             editor.overlay.makePinoutOverlay(selection.getSelected()[0].x, selection.getSelected()[0].y, selection.getSelected()[0].part.getConfiguration());
         } else {
-            editor.select(null);
+            editor.info.setPinouts(null);
             editor.overlay.clear();
         }
     };
