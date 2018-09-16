@@ -176,6 +176,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect,
      */
     this.setEditMode = mode => {
         onSelect(null);
+        overlay.clear();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:

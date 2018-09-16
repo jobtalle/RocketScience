@@ -1,16 +1,21 @@
 #editor-overlay {
     pointer-events: none;
     position: absolute;
-    width: 64px;
-    height: 64px;
-    background-color: crimson;
-    opacity: 0.2;
-    transform-origin: 0 0;
 }
 
 #editor-overlay .pinouts {
     position: absolute;
+}
+
+#editor-overlay .pinouts .pin {
+    position: absolute;
+    font-family: monospace;
+    font-size: 4px;
     width: 6px;
     height: 6px;
-    background-color: aqua;
+    color: black;
+
+    text-align: center;
+    line-height: 6px;
+    background-color: white;
 }

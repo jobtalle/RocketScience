@@ -56,7 +56,7 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
      */
-    this.makeOverlay = (x, y, configuration) => {
+    this.makePinoutOverlay = (x, y, configuration) => {
         this.clear();
 
         if (x)

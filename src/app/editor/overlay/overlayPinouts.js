@@ -1,4 +1,5 @@
 import {Pcb} from "../../pcb/pcb";
+import {OverlayPinoutsPin} from "./overlayPinoutsPin";
 
 /**
  * A pinouts overlay.
@@ -18,6 +19,11 @@ export function OverlayPinouts(x, y, configuration) {
         element.className = OverlayPinouts.CLASS;
         element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
         element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
+
+        let index = 0;
+
+        for (const pin of configuration.io)
+            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index).getElement());
 
         return element;
     };
