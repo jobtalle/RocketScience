@@ -1,4 +1,5 @@
 import "../../../styles/overlay.css"
+import {OverlayPinouts} from "./overlayPinouts";
 
 /**
  * An overlay for the PCB editor.
@@ -11,7 +12,17 @@ export function Overlay(overlay, xOffset) {
 
     const build = () => {
         _element.id = Overlay.ID;
-        _element.style.left = xOffset.toString() + "px";
+        _element.style.left = xOffset + "px";
+    };
+
+    /**
+     * Clear all overlay elements.
+     */
+    this.clear = () => {
+        let element;
+
+        while (element = _element.firstChild)
+            _element.removeChild(element);
     };
 
     /**
@@ -21,7 +32,7 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} scale The scale as a factor.
      */
     this.move = (x, y, scale) => {
-        _element.style.transform = "scale(" + scale.toString() + ") translate(" + x.toString() + "px, " + y.toString() + "px)";
+        _element.style.transform = "scale(" + scale + ") translate(" + x + "px," + y + "px)";
     };
 
     /**
@@ -37,6 +48,19 @@ export function Overlay(overlay, xOffset) {
      */
     this.hide = () => {
         overlay.removeChild(_element);
+    };
+
+    /**
+     * Make a pinout overlay for a configured part at a location.
+     * @param {Number} x The x location on the pcb.
+     * @param {Number} y The y location on the pcb.
+     * @param {Object} configuration A valid part configuration.
+     */
+    this.makeOverlay = (x, y, configuration) => {
+        this.clear();
+
+        if (x)
+            _element.appendChild(new OverlayPinouts(x, y, configuration).getElement());
     };
 
     build();

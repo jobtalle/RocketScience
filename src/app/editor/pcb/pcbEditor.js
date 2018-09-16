@@ -3,13 +3,13 @@ import {World} from "../../world/world";
 import {Pcb} from "../../pcb/pcb";
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {View} from "../../view/view";
-import Myr from "../../../lib/myr.js";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../editor";
+import Myr from "../../../lib/myr.js";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -21,9 +21,10 @@ import {Editor} from "../editor";
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
  * @param {Function} onSelect A function to execute when a part configuration is selected.
+ * @param {Overlay} overlay The overlay object.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect) {
+export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect, overlay) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -51,7 +52,8 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, onSelect)
             replace: setEditor,
             shift: shift,
             revert: revertEditor,
-            select: onSelect
+            select: onSelect,
+            overlay: overlay
         };
     };
 

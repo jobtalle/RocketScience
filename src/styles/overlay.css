@@ -7,3 +7,10 @@
     opacity: 0.2;
     transform-origin: 0 0;
 }
+
+#editor-overlay .pinouts {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: aqua;
+}

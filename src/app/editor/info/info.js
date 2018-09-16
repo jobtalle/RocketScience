@@ -10,6 +10,7 @@ import {InfoPinouts} from "./pinouts/infoPinouts";
 export function Info() {
     const _element = document.createElement("div");
     const _extension = document.createElement("div");
+
     let _pinouts = null;
 
     const make = () => {
