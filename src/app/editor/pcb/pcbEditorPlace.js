@@ -292,6 +292,13 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
     };
 
     /**
+     * Make this editor active.
+     */
+    this.makeActive = () => {
+
+    };
+
+    /**
      * Draw this editor.
      * @param {Myr} myr A myriad instance.
      */

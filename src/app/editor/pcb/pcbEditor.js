@@ -67,6 +67,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info) {
     const setEditor = editor => {
         _stashedEditor = _editor;
         _editor = editor;
+        _editor.makeActive();
 
         moveCursor();
     };

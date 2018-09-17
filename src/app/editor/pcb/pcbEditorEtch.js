@@ -345,6 +345,13 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * Make this editor active.
+     */
+    this.makeActive = () => {
+
+    };
+
+    /**
      * Draw this editor.
      * @param {Myr} myr A myriad instance.
      */

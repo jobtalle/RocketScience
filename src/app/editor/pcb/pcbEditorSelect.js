@@ -84,11 +84,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 selection.getSelected()[0].part.getConfiguration(),
                 selection.getSelected()[0].x,
                 selection.getSelected()[0].y);
-            //editor.overlay.makePinoutOverlay(selection.getSelected()[0].x, selection.getSelected()[0].y, selection.getSelected()[0].part.getConfiguration());
-        } else {
+        } else
             editor.info.setPinouts(null);
-            //editor.overlay.clear();
-        }
     };
 
     const selectAll = () => {
@@ -290,6 +287,13 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      */
     this.update = timeStep => {
 
+    };
+
+    /**
+     * Make this editor active.
+     */
+    this.makeActive = () => {
+        updateSelectedInfo();
     };
 
     /**

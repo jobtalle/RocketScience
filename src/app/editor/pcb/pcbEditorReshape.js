@@ -277,6 +277,13 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * Make this editor active.
+     */
+    this.makeActive = () => {
+
+    };
+
+    /**
      * Draw this editor.
      */
     this.draw = () => {
