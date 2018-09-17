@@ -25,6 +25,7 @@ export function InfoPinoutEntry(index, pin) {
      */
     this.getElement = description => {
         const row = document.createElement("tr");
+        const color = Pin.getPinColor(pin);
 
         row.className = InfoPinoutEntry.CLASS;
         row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
@@ -35,19 +36,11 @@ export function InfoPinoutEntry(index, pin) {
             row.onmouseout = () => description.style.display = "none";
         }
 
-        switch (pin.type) {
-            case Pin.TYPE_IN:
-                row.classList.add(InfoPinoutEntry.CLASS_IN);
-                break;
-            case Pin.TYPE_OUT:
-                row.classList.add(InfoPinoutEntry.CLASS_OUT);
-                break;
-        }
+        console.log(color.toHex());
+        row.style.backgroundColor = color.toHex();
 
         return row;
     };
 }
 
 InfoPinoutEntry.CLASS = "pinout";
-InfoPinoutEntry.CLASS_IN = "pinout-in";
-InfoPinoutEntry.CLASS_OUT = "pinout-out";

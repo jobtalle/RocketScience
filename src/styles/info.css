@@ -61,14 +61,6 @@
     color: white;
 }
 
-#info .pinout-in {
-    background-color: aquamarine;
-}
-
-#info .pinout-out {
-    background-color: aqua;
-}
-
 #info-extension {
     pointer-events: none;
     position: absolute;
