@@ -51,6 +51,20 @@ export function Info(overlay) {
     };
 
     /**
+     * The parent component is shown.
+     */
+    this.show = () => {
+
+    };
+
+    /**
+     * The parent component is hidden.
+     */
+    this.hide = () => {
+        mouseLeave();
+    };
+
+    /**
      * Display a part description in this box.
      * @param {String} title The title.
      * @param {String} text The text, which may contain HTML.

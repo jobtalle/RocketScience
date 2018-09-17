@@ -22,13 +22,50 @@ export function OverlayPinouts(x, y, configuration) {
         element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
         element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
 
+        const directions = OverlayPinouts.makeLabelDirections(configuration);
         let index = 0;
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL)
-            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, pin.y===0?new Myr.Vector(0, -1):new Myr.Vector(0, 1)).getElement());
+            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, directions[index - 1]).getElement());
 
         return element;
     };
 }
+
+OverlayPinouts.makeLabelDirections = configuration => {
+    const directions = [];
+    const occupied = [];
+    const isFree = (x, y) => {
+        for (const point of occupied)
+            if (point.x === x && point.y === y)
+                return false;
+
+        return true;
+    };
+
+    for (const point of configuration.footprint.points)
+        occupied.push(point);
+
+    if (configuration.footprint.air) for (const air of configuration.footprint.air)
+        occupied.push(air);
+
+    if (configuration.footprint.space) for (const space of configuration.footprint.space)
+        occupied.push(space);
+
+    for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
+        if (isFree(pin.x, pin.y - 1))
+            directions.push(new Myr.Vector(0, -1));
+        else if (isFree(pin.x, pin.y + 1))
+            directions.push(new Myr.Vector(0, 1));
+        else if (isFree(pin.x - 1, pin.y))
+            directions.push(new Myr.Vector(-1, 0));
+        else if (isFree(pin.x + 1, pin.y))
+            directions.push(new Myr.Vector(1, 0));
+        else
+            directions.push(new Myr.Vector(0, -1));
+    }
+
+    return directions;
+};
 
 OverlayPinouts.CLASS = "pinouts";

@@ -49,6 +49,7 @@
 #info .pinouts .pinout .pinout-index {
     padding: 3px;
     border-right: 1px solid black;
+    color: white;
 }
 
 #info .pinouts .pinout .pinout-name {

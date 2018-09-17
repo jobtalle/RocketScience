@@ -48,6 +48,8 @@ export function Library(editor, toolbar, info, overlay, width) {
      */
     this.hide = () => {
         overlay.removeChild(_container);
+
+        info.hide();
     };
 
     /**
@@ -55,6 +57,8 @@ export function Library(editor, toolbar, info, overlay, width) {
      */
     this.show = () => {
         overlay.appendChild(_container);
+
+        info.show();
     };
 
     build();
