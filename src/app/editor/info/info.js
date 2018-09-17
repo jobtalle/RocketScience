@@ -112,6 +112,33 @@ export function Info(overlay) {
     };
 
     /**
+     * Display pinouts with one selected pin. Other pin numbers will not be shown.
+     * @param {Object} configuration A valid part configuration to read pins from. May be null.
+     * @param {Number} [x] The x position of a currently selected configuration.
+     * @param {Number} [y] The y position of a currently selected configuration.
+     * @param {Number} [index] The selected pin index.
+     */
+    this.setPinoutsSelected = (configuration, x, y, index) => {
+        if (!configuration) {
+            this.setPinouts(null);
+
+            return;
+        }
+
+        clear();
+
+        _pinouts = new InfoPinouts(configuration, _extension, index);
+        _selectedConfiguration = configuration;
+        _selectedX = x;
+        _selectedY = y;
+
+        if (index !== undefined)
+            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration, index);
+
+        _element.appendChild(_pinouts.getElement());
+    };
+
+    /**
      * Check if the cursor is hovering over this element.
      * @returns {Boolean} A boolean indicating whether the mouse hovers anywhere over the info box.
      */

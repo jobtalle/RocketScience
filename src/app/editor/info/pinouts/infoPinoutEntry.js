@@ -7,7 +7,7 @@ import {Pin} from "../../../part/pin";
  * A pinout entry.
  * @param {Number} index This pin's index.
  * @param {Object} pin A valid pin description.
- * @param {HTMLElement} description A description element to toggle visibility when hovering.
+ * @param {HTMLElement} [description] An optional description element to toggle visibility when hovering.
  * @constructor
  */
 export function InfoPinoutEntry(index, pin, description) {
@@ -30,7 +30,8 @@ export function InfoPinoutEntry(index, pin, description) {
     };
 
     const mouseOver = () => {
-        description.style.display = "block";
+        if (description)
+            description.style.display = "block";
 
         _hover = true;
 
@@ -39,7 +40,8 @@ export function InfoPinoutEntry(index, pin, description) {
     };
 
     const mouseOut = () => {
-        description.style.display = "none";
+        if (description)
+            description.style.display = "none";
 
         _hover = false;
 

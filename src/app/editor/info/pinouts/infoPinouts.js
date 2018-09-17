@@ -7,13 +7,27 @@ import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
  * A list of pinouts.
  * @param {Object} configuration A valid part configuration to read pins from.
  * @param {HTMLElement} info An element to add extra information to.
+ * @param {Number} [pinIndex] An optional index of the selected pin. If set, the description will be shown in the table.
  * @constructor
  */
-export function InfoPinouts(configuration, info) {
+export function InfoPinouts(configuration, info, pinIndex) {
     const _element = document.createElement("table");
     const _entries = [];
 
     let _overlay = null;
+
+    const makeDescriptionRow = description => {
+        const row = document.createElement("tr");
+        const column = document.createElement("td");
+
+        row.className = InfoPinouts.CLASS_INLINE_DESCRIPTION;
+        column.colSpan = 2;
+
+        column.appendChild(description.getElement());
+        row.appendChild(column);
+
+        return row;
+    };
 
     const make = () => {
         _element.className = InfoPinouts.CLASS;
@@ -22,13 +36,20 @@ export function InfoPinouts(configuration, info) {
         let descriptions = [];
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
-            const description = new InfoPinoutEntryDescription(getString(pin.description)).getElement();
-            descriptions.push(description);
+            let description = null;
+
+            if (pinIndex === undefined) {
+                description = new InfoPinoutEntryDescription(getString(pin.description)).getElement();
+                descriptions.push(description);
+            }
 
             const entry = new InfoPinoutEntry(++index, pin, description);
             _entries.push(entry);
 
             _element.appendChild(entry.getElement());
+
+            if (pinIndex !== undefined && pinIndex + 1 === index)
+                _element.appendChild(makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description))));
         }
 
         for (const description of descriptions)
@@ -73,4 +94,5 @@ InfoPinouts.formatIndex = index => {
 };
 
 InfoPinouts.CLASS = "pinouts";
+InfoPinouts.CLASS_INLINE_DESCRIPTION = "inline-description";
 InfoPinouts.INDEX_PADDING = 2;

@@ -24,6 +24,25 @@ export function Part(definition, configurationIndex) {
     this.getConfiguration = () => definition.configurations[configurationIndex];
 
     /**
+     * Get the index of the pin at a given location.
+     * @param {Number} x The x position on this part.
+     * @param {Number} y The y position on this part.
+     * @returns {Number} The pin index at this location, or -1 if no pin exists here.
+     */
+    this.getPinIndexAt = (x, y) => {
+        let index = 0;
+
+        for (const pin of this.getConfiguration().io) {
+            if (pin.x === x && pin.y === y)
+                return index;
+
+            ++index;
+        }
+
+        return -1;
+    };
+
+    /**
      * Copy this part.
      * @returns {Part} A deep copy of this part.
      */

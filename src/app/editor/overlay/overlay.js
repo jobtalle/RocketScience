@@ -55,12 +55,13 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} x The x location on the pcb.
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
+     * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide this if all pins must be shown.
      * @returns {OverlayPinouts} The pinout overlay object.
      */
-    this.makePinoutOverlay = (x, y, configuration) => {
+    this.makePinoutOverlay = (x, y, configuration, highlightIndex) => {
         this.clear();
 
-        const overlayPinouts = new OverlayPinouts(x, y, configuration);
+        const overlayPinouts = new OverlayPinouts(x, y, configuration, highlightIndex);
 
         _element.appendChild(overlayPinouts.getElement());
 

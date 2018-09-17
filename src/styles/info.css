@@ -62,6 +62,15 @@
     color: white;
 }
 
+#info .pinouts .inline-description {
+    background-color: white;
+    border-bottom: 1px solid black;
+}
+
+#info .pinouts .pinout-description {
+    padding: 3px;
+}
+
 #info-extension {
     pointer-events: none;
     position: absolute;

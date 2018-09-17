@@ -8,9 +8,10 @@ import {Pin} from "../../part/pin";
  * @param {Number} x The x location on the pcb.
  * @param {Number} y The y location on the pcb.
  * @param {Object} configuration A valid part configuration.
+ * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide this if all pins must be shown.
  * @constructor
  */
-export function OverlayPinouts(x, y, configuration) {
+export function OverlayPinouts(x, y, configuration, highlightIndex) {
     const _element = document.createElement("div");
     const _pins = [];
 
@@ -23,7 +24,12 @@ export function OverlayPinouts(x, y, configuration) {
         let index = 0;
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
-            const label = new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, directions[index - 1]);
+            ++index;
+
+            if (highlightIndex !== undefined && index !== highlightIndex + 1)
+                continue;
+
+            const label = new OverlayPinoutsPin(pin.x, pin.y, index, pin, directions[index - 1]);
 
             _pins.push(label);
             _element.appendChild(label.getElement());

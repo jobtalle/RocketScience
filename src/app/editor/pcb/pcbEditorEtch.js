@@ -20,6 +20,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const _pointRenderer = new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT);
     const _pathRenderer = new PcbPathRenderer(_pointRenderer);
 
+    let _fixture = null;
     let _selectMode = null;
     let _pathEtch = null;
     let _pathSelected = null;
@@ -27,6 +28,20 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     let _dragging = false;
     let _etchable = false;
     let _deleting = false;
+
+    const setFixture = fixture => {
+        if (fixture === _fixture && fixture === null)
+            return;
+
+        _fixture = fixture;
+
+        if (fixture) {
+            const index = fixture.part.getPinIndexAt(cursor.x - fixture.x, cursor.y - fixture.y);
+
+            editor.info.setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
+        } else
+            editor.info.setPinoutsSelected(null);
+    };
 
     const setModeDeletePath = () => {
         const routePath = new PcbPath();
@@ -212,9 +227,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     /**
      * A key is pressed.
      * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
      */
-    this.onKeyDown = (key, control) => {
+    this.onKeyDown = (key) => {
         switch (key) {
             case PcbEditorEtch.KEY_DELETE:
                 if (_pathSelected) {
@@ -238,6 +252,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         const point = pcb.getPoint(cursor.x, cursor.y);
 
         if (_dragging) {
+            setFixture(null);
+
             if (point) {
                 _pathEtch = makePath(_startPoint, cursor);
 
@@ -252,6 +268,11 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
         }
         else {
             _etchable = point !== null;
+
+            if (point && point.isConnected())
+                setFixture(pcb.getFixture(point.part));
+            else
+                setFixture(null);
 
             if (_etchable && point.hasPaths()) {
                 _pathSelected = new PcbPath();
