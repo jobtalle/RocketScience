@@ -55,11 +55,16 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} x The x location on the pcb.
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
+     * @returns {OverlayPinouts} The pinout overlay object.
      */
     this.makePinoutOverlay = (x, y, configuration) => {
         this.clear();
 
-        _element.appendChild(new OverlayPinouts(x, y, configuration).getElement());
+        const overlayPinouts = new OverlayPinouts(x, y, configuration);
+
+        _element.appendChild(overlayPinouts.getElement());
+
+        return overlayPinouts;
     };
 
     build();

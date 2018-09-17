@@ -19,6 +19,10 @@
     line-height: 6px;
 }
 
+#editor-overlay .pinouts .pin.selected {
+    text-decoration: underline;
+}
+
 #editor-overlay .pinouts .pin .arrow {
     position: absolute;
 }

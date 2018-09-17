@@ -17,7 +17,6 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     let _selectable = false;
     let _dragging = false;
     let _moveStart = null;
-    let _hideSelection = false;
 
     const move = start => {
         const moveFixtures = [];
@@ -136,7 +135,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     this.onKeyDown = (key, control) => {
         switch (key) {
             case PcbEditorSelect.KEY_DELETE:
-                if (selection.getSelected().length > 0) {
+                if (!editor.info.isHovering() && selection.getSelected().length > 0) {
                     deleteSelectedParts();
 
                     selection.clearSelected();

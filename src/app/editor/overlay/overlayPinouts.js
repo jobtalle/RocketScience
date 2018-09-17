@@ -11,25 +11,39 @@ import {Pin} from "../../part/pin";
  * @constructor
  */
 export function OverlayPinouts(x, y, configuration) {
-    /**
-     * Get the HTML element of this overlay.
-     * @returns {HTMLElement} The HTML element.
-     */
-    this.getElement = () => {
-        const element = document.createElement("div");
+    const _element = document.createElement("div");
+    const _pins = [];
 
-        element.className = OverlayPinouts.CLASS;
-        element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
-        element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
+    const make = () => {
+        _element.className = OverlayPinouts.CLASS;
+        _element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
 
         const directions = OverlayPinouts.makeLabelDirections(configuration);
         let index = 0;
 
-        for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL)
-            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, directions[index - 1]).getElement());
+        for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
+            const label = new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, directions[index - 1]);
 
-        return element;
+            _pins.push(label);
+            _element.appendChild(label.getElement());
+        }
     };
+
+    /**
+     * Get the HTML element of this overlay.
+     * @returns {HTMLElement} The HTML element.
+     */
+    this.getElement = () => _element;
+
+    /**
+     * Get a pin label by its index.
+     * @param {Number} index The pin index.
+     * @returns {OverlayPinoutsPin} A pin label.
+     */
+    this.getPin = index => _pins[index];
+
+    make();
 }
 
 OverlayPinouts.makeLabelDirections = configuration => {
@@ -46,7 +60,6 @@ OverlayPinouts.makeLabelDirections = configuration => {
         let top = EMPTY;
         let right = EMPTY;
         let bottom = EMPTY;
-        let direction;
 
         for (const point of occupied) {
             if (point.x === x - 1 && point.y === y)

@@ -20,14 +20,16 @@ export function Info(overlay) {
 
     const mouseEnter = () => {
         if (_pinouts) {
-            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration);
-
+            _pinouts.setOverlay(overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration));
             _hover = true;
         }
     };
 
     const mouseLeave = () => {
         overlay.clear();
+
+        if (_pinouts)
+            _pinouts.setOverlay(null);
 
         _hover = false;
     };
@@ -96,28 +98,17 @@ export function Info(overlay) {
         clear();
 
         if (configuration) {
-            _pinouts = new InfoPinouts(configuration);
+            _pinouts = new InfoPinouts(configuration, _extension);
             _selectedConfiguration = configuration;
             _selectedX = x;
             _selectedY = y;
 
-            _element.appendChild(_pinouts.getElement(_extension));
-        } else
+            _element.appendChild(_pinouts.getElement());
+        } else {
+            overlay.clear();
+
             _pinouts = null;
-    };
-
-    /**
-     * Set the contents of the info box extension.
-     * @param {HTMLElement} element An element to add to the extension box. May be null.
-     */
-    this.setExtension = element => {
-        let e;
-
-        while (e = _extension.firstChild)
-            _extension.removeChild(e);
-
-        if (element)
-            _extension.appendChild(element);
+        }
     };
 
     /**

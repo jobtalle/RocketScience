@@ -14,22 +14,42 @@ import {Pin} from "../../part/pin";
  * @constructor
  */
 export function OverlayPinoutsPin(x, y, index, pin, offset) {
-    this.getElement = () => {
-        const element = document.createElement("div");
+    const _element = document.createElement("div");
+
+    const make = () => {
         const color = Pin.getPinColor(pin);
 
         color.a = OverlayPinoutsPin.ALPHA;
 
-        element.className = OverlayPinoutsPin.CLASS;
-        element.style.left = ((x + offset.x * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
-        element.style.top = ((y + offset.y * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
-        element.style.backgroundColor = Utils.colorToCss(color);
-        element.innerText = InfoPinouts.formatIndex(index);
+        _element.className = OverlayPinoutsPin.CLASS;
+        _element.style.left = ((x + offset.x * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.top = ((y + offset.y * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.backgroundColor = Utils.colorToCss(color);
+        _element.innerText = InfoPinouts.formatIndex(index);
 
-        element.appendChild(OverlayPinoutsPin.makeArrow(offset, color));
-
-        return element;
+        _element.appendChild(OverlayPinoutsPin.makeArrow(offset, color));
     };
+
+    /**
+     * Get this pin labels element.
+     * @returns {HTMLElement} The HTML element of this label.
+     */
+    this.getElement = () => _element;
+
+    /**
+     * Focus or un-focus this label.
+     * @param {Boolean} focus A boolean indicating whether this pin label has focus or not.
+     */
+    this.setFocus = focus => {
+        if (focus) {
+            if (!_element.classList.contains(OverlayPinoutsPin.CLASS_SELECTED))
+                _element.classList.add(OverlayPinoutsPin.CLASS_SELECTED);
+        } else if (_element.classList.contains(OverlayPinoutsPin.CLASS_SELECTED)) {
+            _element.classList.remove(OverlayPinoutsPin.CLASS_SELECTED);
+        }
+    };
+
+    make();
 }
 
 OverlayPinoutsPin.makeArrow = (vector, color) => {
@@ -68,5 +88,6 @@ OverlayPinoutsPin.makeArrow = (vector, color) => {
 };
 
 OverlayPinoutsPin.CLASS = "pin";
+OverlayPinoutsPin.CLASS_SELECTED = "selected";
 OverlayPinoutsPin.CLASS_ARROW = "arrow";
 OverlayPinoutsPin.ALPHA = 0.6;
