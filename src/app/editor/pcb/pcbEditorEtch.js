@@ -15,7 +15,6 @@ import {PcbPathRenderer} from "../../pcb/point/pcbPathRenderer";
  */
 export function PcbEditorEtch(sprites, pcb, cursor, editor) {
     const SPRITE_ETCH = sprites.getSprite("pcbEtch");
-    const SPRITE_ETCH_HOVER = sprites.getSprite("pcbEtchHover");
 
     const _pointRenderer = new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT);
     const _pathRenderer = new PcbPathRenderer(_pointRenderer);
@@ -361,8 +360,7 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
      * @param {Number} timeStep The time passed since the last update in seconds.
      */
     this.update = timeStep => {
-        if (_dragging)
-            SPRITE_ETCH.animate(timeStep);
+
     };
 
     /**
@@ -381,12 +379,12 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             if (_pathEtch)
                 _pathRenderer.render(myr, _pathEtch);
 
-            SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, (_startPoint.y - 1) * Pcb.PIXELS_PER_POINT);
+            SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, _startPoint.y * Pcb.PIXELS_PER_POINT);
         } else if (_etchable) {
             if (_pathSelected)
                 _pathRenderer.render(myr, _pathSelected);
 
-            SPRITE_ETCH_HOVER.draw(cursor.x * Pcb.PIXELS_PER_POINT, (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
+            SPRITE_ETCH.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
         }
     };
 }
