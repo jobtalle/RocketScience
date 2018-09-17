@@ -2,25 +2,31 @@ import {Pcb} from "../../pcb/pcb";
 import {InfoPinouts} from "../info/pinouts/infoPinouts";
 import {Utils} from "../../utils/utils";
 import * as Myr from "../../../lib/myr";
+import {Pin} from "../../part/pin";
 
 /**
  * A pin number pointing towards the pin.
  * @param {Number} x The x position on the pcb.
  * @param {Number} y The y position on the pcb.
  * @param {Number} index The pin index to display.
+ * @param {Object} pin The pin object.
  * @param {Myr.Vector} offset The offset in which the label is shifted. Must have a length of 1 and not be diagonal.
  * @constructor
  */
-export function OverlayPinoutsPin(x, y, index, offset) {
+export function OverlayPinoutsPin(x, y, index, pin, offset) {
     this.getElement = () => {
         const element = document.createElement("div");
+        const color = Pin.getPinColor(pin);
+
+        color.a = OverlayPinoutsPin.ALPHA;
 
         element.className = OverlayPinoutsPin.CLASS;
         element.style.left = ((x + offset.x * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
         element.style.top = ((y + offset.y * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
+        element.style.backgroundColor = Utils.colorToCss(color);
         element.innerText = InfoPinouts.formatIndex(index);
 
-        element.appendChild(OverlayPinoutsPin.makeArrow(offset, new Myr.Color(1, 1, 1, 0.4)));
+        element.appendChild(OverlayPinoutsPin.makeArrow(offset, color));
 
         return element;
     };
@@ -63,3 +69,4 @@ OverlayPinoutsPin.makeArrow = (vector, color) => {
 
 OverlayPinoutsPin.CLASS = "pin";
 OverlayPinoutsPin.CLASS_ARROW = "arrow";
+OverlayPinoutsPin.ALPHA = 0.6;

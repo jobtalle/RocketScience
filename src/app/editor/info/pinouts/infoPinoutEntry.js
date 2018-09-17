@@ -36,7 +36,6 @@ export function InfoPinoutEntry(index, pin) {
             row.onmouseout = () => description.style.display = "none";
         }
 
-        console.log(color.toHex());
         row.style.backgroundColor = color.toHex();
 
         return row;

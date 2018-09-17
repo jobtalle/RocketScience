@@ -25,7 +25,7 @@ export function OverlayPinouts(x, y, configuration) {
         let index = 0;
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL)
-            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin.y===0?new Myr.Vector(0, -1):new Myr.Vector(0, 1)).getElement());
+            element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, ++index, pin, pin.y===0?new Myr.Vector(0, -1):new Myr.Vector(0, 1)).getElement());
 
         return element;
     };
