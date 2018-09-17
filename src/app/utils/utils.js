@@ -8,9 +8,9 @@ export const Utils = {
      */
     colorToCss: function(color) {
         return "rgba(" +
-            Math.floor(color.r * 256) + "," +
-            Math.floor(color.g * 256) + "," +
-            Math.floor(color.b * 256) + "," +
+            Math.floor(color.r * 255) + "," +
+            Math.floor(color.g * 255) + "," +
+            Math.floor(color.b * 255) + "," +
             color.a + ")";
     }
 };
