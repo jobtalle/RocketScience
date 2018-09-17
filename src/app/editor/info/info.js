@@ -16,14 +16,20 @@ export function Info(overlay) {
     let _selectedConfiguration = null;
     let _selectedX = 0;
     let _selectedY = 0;
+    let _hover = false;
 
     const mouseEnter = () => {
-        if (_pinouts)
+        if (_pinouts) {
             overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration);
+
+            _hover = true;
+        }
     };
 
     const mouseLeave = () => {
         overlay.clear();
+
+        _hover = false;
     };
 
     const make = () => {
@@ -99,6 +105,12 @@ export function Info(overlay) {
         if (element)
             _extension.appendChild(element);
     };
+
+    /**
+     * Check if the cursor is hovering over this element.
+     * @returns {Boolean} A boolean indicating whether the mouse hovers anywhere over the info box.
+     */
+    this.isHovering = () => _hover;
 
     /**
      * Get the HTML element of this info box.

@@ -243,15 +243,14 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      * The mouse enters.
      */
     this.onMouseEnter = () => {
-        _hideSelection = false;
+
     };
 
     /**
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
-        if (selection.getSelected().length === 1)
-            _hideSelection = true;
+
     };
 
     /**
@@ -298,7 +297,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      * Draw this editor.
      */
     this.draw = () => {
-        if (!_hideSelection && (_selectable || selection.getSelected().length > 0))
+        if (!editor.info.isHovering() && (_selectable || selection.getSelected().length > 0))
             selection.draw();
     };
 }
