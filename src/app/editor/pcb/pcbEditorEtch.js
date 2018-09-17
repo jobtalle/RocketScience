@@ -379,7 +379,8 @@ export function PcbEditorEtch(sprites, pcb, cursor, editor) {
             if (_pathEtch)
                 _pathRenderer.render(myr, _pathEtch);
 
-            SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, _startPoint.y * Pcb.PIXELS_PER_POINT);
+            if (_startPoint.equals(cursor))
+                SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, _startPoint.y * Pcb.PIXELS_PER_POINT);
         } else if (_etchable) {
             if (_pathSelected)
                 _pathRenderer.render(myr, _pathSelected);
