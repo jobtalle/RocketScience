@@ -226,6 +226,20 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
     };
 
     /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+
+    };
+
+    /**
      * Zoom in.
      * @returns {Boolean} A boolean indicating whether this editor handled the action.
      */

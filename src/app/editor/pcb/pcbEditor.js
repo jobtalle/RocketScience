@@ -334,7 +334,10 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info) {
      * The mouse enters.
      */
     this.onMouseEnter = () => {
+        if (!_editor)
+            return;
 
+        _editor.onMouseEnter();
     };
 
     /**
@@ -344,7 +347,9 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info) {
         if (!_editor)
             return;
 
+        _editor.onMouseLeave();
         _editor.cancelAction();
+
         view.onMouseRelease();
     };
 

@@ -17,6 +17,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     let _selectable = false;
     let _dragging = false;
     let _moveStart = null;
+    let _hideSelection = false;
 
     const move = start => {
         const moveFixtures = [];
@@ -239,6 +240,21 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     };
 
     /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+        _hideSelection = false;
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+        if (selection.getSelected().length === 1)
+            _hideSelection = true;
+    };
+
+    /**
      * Zoom in.
      * @returns {Boolean} A boolean indicating whether this editor handled the action.
      */
@@ -282,7 +298,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
      * Draw this editor.
      */
     this.draw = () => {
-        if (_selectable || selection.getSelected().length > 0)
+        if (!_hideSelection && (_selectable || selection.getSelected().length > 0))
             selection.draw();
     };
 }
