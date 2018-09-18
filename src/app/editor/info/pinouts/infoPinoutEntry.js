@@ -18,16 +18,13 @@ export function InfoPinoutEntry(index, pin, selected, description) {
     let _hover = false;
 
     const make = () => {
-        const color = Pin.getPinColor(pin);
-
         _row.className = InfoPinoutEntry.CLASS;
-        _row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
-        _row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name), selected).getElement()));
-
         _row.onmouseover = mouseOver;
         _row.onmouseout = mouseOut;
+        _row.style.backgroundColor = Pin.getPinColor(pin).toHex();
 
-        _row.style.backgroundColor = color.toHex();
+        _row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
+        _row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name), selected).getElement()));
     };
 
     const mouseOver = () => {

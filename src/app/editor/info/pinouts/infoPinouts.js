@@ -33,29 +33,25 @@ export function InfoPinouts(configuration, info, pinIndex) {
         _element.className = InfoPinouts.CLASS;
 
         let index = 0;
-        let descriptions = [];
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
             let description = null;
 
             if (pinIndex === undefined) {
                 description = new InfoPinoutEntryDescription(getString(pin.description)).getElement();
-                descriptions.push(description);
+                info.appendChild(description);
             }
 
             const entry = new InfoPinoutEntry(index + 1, pin, pinIndex === index, description);
-            _entries.push(entry);
 
+            _entries.push(entry);
             _element.appendChild(entry.getElement());
 
-            if (pinIndex !== undefined && pinIndex === index)
+            if (pinIndex === index)
                 _element.appendChild(makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description))));
 
             ++index;
         }
-
-        for (const description of descriptions)
-            info.appendChild(description);
     };
 
     /**
@@ -71,16 +67,10 @@ export function InfoPinouts(configuration, info, pinIndex) {
     this.setOverlay = overlay => {
         _overlay = overlay;
 
-        if (_overlay) {
-            let index = 0;
-
-            for (const entry of _entries)
-                entry.setLabel(_overlay.getPin(index++));
-        }
-        else {
-            for (const entry of _entries)
+        if (_overlay) for (let i = 0; i < _entries.length; ++i)
+                _entries[i].setLabel(_overlay.getPin(i));
+        else for (const entry of _entries)
                 entry.setLabel(null);
-        }
     };
 
     make();
