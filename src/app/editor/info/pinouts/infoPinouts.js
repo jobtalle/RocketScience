@@ -43,13 +43,15 @@ export function InfoPinouts(configuration, info, pinIndex) {
                 descriptions.push(description);
             }
 
-            const entry = new InfoPinoutEntry(++index, pin, description);
+            const entry = new InfoPinoutEntry(index + 1, pin, pinIndex === index, description);
             _entries.push(entry);
 
             _element.appendChild(entry.getElement());
 
-            if (pinIndex !== undefined && pinIndex + 1 === index)
+            if (pinIndex !== undefined && pinIndex === index)
                 _element.appendChild(makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description))));
+
+            ++index;
         }
 
         for (const description of descriptions)

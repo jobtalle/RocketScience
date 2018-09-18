@@ -57,7 +57,7 @@
     background-color: white;
 }
 
-#info .pinouts .pinout .pinout-name:hover {
+#info .pinouts .pinout .pinout-name.selected {
     background-color: gray;
     color: white;
 }

@@ -7,10 +7,11 @@ import {Pin} from "../../../part/pin";
  * A pinout entry.
  * @param {Number} index This pin's index.
  * @param {Object} pin A valid pin description.
+ * @param {Boolean} selected A boolean which is true if this entry is currently selected.
  * @param {HTMLElement} [description] An optional description element to toggle visibility when hovering.
  * @constructor
  */
-export function InfoPinoutEntry(index, pin, description) {
+export function InfoPinoutEntry(index, pin, selected, description) {
     const _row = document.createElement("tr");
 
     let _label = null;
@@ -21,7 +22,7 @@ export function InfoPinoutEntry(index, pin, description) {
 
         _row.className = InfoPinoutEntry.CLASS;
         _row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
-        _row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name)).getElement()));
+        _row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name), selected).getElement()));
 
         _row.onmouseover = mouseOver;
         _row.onmouseout = mouseOut;
