@@ -53,7 +53,7 @@
 
   "PART_SENSOR_TOUCH_NAME": "Touch sensor",
   "PART_SENSOR_TOUCH_DESCRIPTION": "A touch sensor will output a positive signal while making contact with an object.",
-  "PART_SENSOR_TOUCH_PIN_DESCRIPTION": "When the touch sensor makes hits something, a high signal pulse will be given.",
+  "PART_SENSOR_TOUCH_PIN_DESCRIPTION": "When the touch sensor hits something, a high signal pulse will be given.",
 
   "PART_PROPELLER_NAME": "Propeller",
   "PART_PROPELLER_DESCRIPTION": "A propeller.",
