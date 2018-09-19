@@ -11,12 +11,39 @@ import {InfoPinouts} from "./pinouts/infoPinouts";
 export function Info(overlay) {
     const _element = document.createElement("div");
     const _extension = document.createElement("div");
+    const _stashedElement = [];
+    const _stashedExtension = [];
 
     let _pinouts = null;
     let _selectedConfiguration = null;
     let _selectedX = 0;
     let _selectedY = 0;
     let _hover = false;
+
+    const stash = () => {
+        let element;
+
+        while (element = _element.firstChild) {
+            _stashedElement.push(element);
+            _element.removeChild(element);
+        }
+
+        while (element = _extension.firstChild) {
+            _stashedExtension.push(element);
+            _extension.removeChild(element);
+        }
+    };
+
+    const unstash = () => {
+        for (const element of _stashedElement)
+            _element.appendChild(element);
+
+        for (const element of _stashedExtension)
+            _extension.appendChild(element);
+
+        _stashedElement.splice(0, _stashedElement.length);
+        _stashedExtension.splice(0, _stashedExtension.length);
+    };
 
     const mouseEnter = () => {
         if (_pinouts) {
@@ -70,7 +97,10 @@ export function Info(overlay) {
      * @param {String} text The text, which may contain HTML.
      */
     this.setText = (title, text) => {
-        clear();
+        if (_pinouts)
+            stash();
+        else
+            clear();
 
         _element.appendChild(new InfoTitle(title).getElement());
         _element.appendChild(new InfoDescription(text).getElement());
@@ -83,7 +113,7 @@ export function Info(overlay) {
         clear();
 
         if (_pinouts)
-            _element.appendChild(_pinouts.getElement(_extension));
+            unstash();
     };
 
     /**
