@@ -14,8 +14,6 @@ export function InfoPinouts(configuration, info, pinIndex) {
     const _element = document.createElement("table");
     const _entries = [];
 
-    let _overlay = null;
-
     const makeDescriptionRow = description => {
         const row = document.createElement("tr");
         const column = document.createElement("td");
@@ -59,19 +57,6 @@ export function InfoPinouts(configuration, info, pinIndex) {
      * @returns {HTMLElement} The HTML element of this list.
      */
     this.getElement = () => _element;
-
-    /**
-     * Set or unset a pinout overlay to highlight labels on.
-     * @param {OverlayPinouts} overlay An overlay, or null if no overlay is selected.
-     */
-    this.setOverlay = overlay => {
-        _overlay = overlay;
-
-        if (_overlay) for (let i = 0; i < _entries.length; ++i)
-                _entries[i].setLabel(_overlay.getPin(i));
-        else for (const entry of _entries)
-                entry.setLabel(null);
-    };
 
     make();
 }

@@ -36,19 +36,6 @@ export function OverlayPinoutsPin(x, y, index, pin, offset) {
      */
     this.getElement = () => _element;
 
-    /**
-     * Focus or un-focus this label.
-     * @param {Boolean} focus A boolean indicating whether this pin label has focus or not.
-     */
-    this.setFocus = focus => {
-        if (focus) {
-            if (!_element.classList.contains(OverlayPinoutsPin.CLASS_SELECTED))
-                _element.classList.add(OverlayPinoutsPin.CLASS_SELECTED);
-        } else if (_element.classList.contains(OverlayPinoutsPin.CLASS_SELECTED)) {
-            _element.classList.remove(OverlayPinoutsPin.CLASS_SELECTED);
-        }
-    };
-
     make();
 }
 
@@ -88,6 +75,5 @@ OverlayPinoutsPin.makeArrow = (vector, color) => {
 };
 
 OverlayPinoutsPin.CLASS = "pin";
-OverlayPinoutsPin.CLASS_SELECTED = "selected";
 OverlayPinoutsPin.CLASS_ARROW = "arrow";
 OverlayPinoutsPin.ALPHA = 0.6;

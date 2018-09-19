@@ -32,9 +32,6 @@ export function InfoPinoutEntry(index, pin, selected, description) {
             description.style.display = "block";
 
         _hover = true;
-
-        if (_label)
-            _label.setFocus(true);
     };
 
     const mouseOut = () => {
@@ -42,9 +39,6 @@ export function InfoPinoutEntry(index, pin, selected, description) {
             description.style.display = "none";
 
         _hover = false;
-
-        if (_label)
-            _label.setFocus(false);
     };
 
     const makeColumn = element => {
@@ -60,17 +54,6 @@ export function InfoPinoutEntry(index, pin, selected, description) {
      * @returns {HTMLElement} The HTML element of this list.
      */
     this.getElement = () => _row;
-
-    /**
-     * Set a label to highlight when hovering.
-     * @param {OverlayPinoutsPin} label A pin label.
-     */
-    this.setLabel = label => {
-        _label = label;
-
-        if (_label && _hover)
-            _label.setFocus(true);
-    };
 
     make();
 }

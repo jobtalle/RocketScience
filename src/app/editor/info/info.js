@@ -20,16 +20,14 @@ export function Info(overlay) {
 
     const mouseEnter = () => {
         if (_pinouts) {
-            _pinouts.setOverlay(overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration));
+            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration);
+
             _hover = true;
         }
     };
 
     const mouseLeave = () => {
         overlay.clear();
-
-        if (_pinouts)
-            _pinouts.setOverlay(null);
 
         _hover = false;
     };
