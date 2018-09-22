@@ -1,6 +1,7 @@
 import * as Myr from "../../../lib/myr";
 import {Pcb} from "../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
+import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.
@@ -16,14 +17,42 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
 
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);
+
+    let _dragPointsLeft = null;
+    let _dragPointsTop;
+    let _dragPointsRight;
+    let _dragPointsBottom;
     let _dragging = false;
     let _extendable = false;
     let _deletable = false;
 
-    const erase = () => {
-        if (_cursorDragPoints.length === pcb.getPointCount())
-            return;
+    const dragPointsClear = () => {
+        _cursorDragPoints.splice(0, _cursorDragPoints.length);
 
+        _dragPointsLeft = null;
+    };
+
+    const dragPointsAdd = point => {
+        _cursorDragPoints.push(point);
+
+        if (_dragPointsLeft === null) {
+            _dragPointsLeft = _dragPointsRight = point.x;
+            _dragPointsTop = _dragPointsBottom = point.y;
+        }
+        else {
+            if (point.x < _dragPointsLeft)
+                _dragPointsLeft = point.x;
+            else if (point.x > _dragPointsRight)
+                _dragPointsRight = point.x;
+
+            if (point.y < _dragPointsTop)
+                _dragPointsTop = point.y;
+            else if (point.y > _dragPointsBottom)
+                _dragPointsBottom = point.y;
+        }
+    };
+
+    const erase = () => {
         editor.undoPush();
 
         for (const point of _cursorDragPoints)
@@ -37,7 +66,7 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
 
     const dragPreventSplit = (left, top, right, bottom) => {
         if (_cursorDragPoints.length === pcb.getPointCount()) {
-            _cursorDragPoints.splice(0, _cursorDragPoints.length);
+            dragPointsClear();
 
             return;
         }
@@ -92,7 +121,7 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
                     continue;
 
                 for (let i = 0; i < groups[group].points.length; ++i)
-                    _cursorDragPoints.push(groups[group].points[i]);
+                    dragPointsAdd(groups[group].points[i]);
             }
         }
     };
@@ -160,20 +189,33 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
             const top = Math.min(cursor.y, _cursorDrag.y);
             const bottom = Math.max(cursor.y, _cursorDrag.y);
 
-            _cursorDragPoints.splice(0, _cursorDragPoints.length);
+            dragPointsClear();
 
             if (_extendable) {
                 for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
                     if (pcb.isExtendable(x, y))
-                        _cursorDragPoints.push(new Myr.Vector(x, y));
+                        dragPointsAdd(new Myr.Vector(x, y));
             }
             else {
                 for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
                     if (pcb.getPoint(x, y))
-                        _cursorDragPoints.push(new Myr.Vector(x, y));
+                        dragPointsAdd(new Myr.Vector(x, y));
 
                 dragPreventSplit(left, top, right, bottom);
             }
+
+            editor.overlay.makeRulers([
+                new OverlayRulerDefinition(
+                    _dragPointsLeft,
+                    _dragPointsBottom + 1,
+                    OverlayRulerDefinition.DIRECTION_RIGHT,
+                    _dragPointsRight - _dragPointsLeft + 1),
+                new OverlayRulerDefinition(
+                    _dragPointsRight + 1,
+                    _dragPointsBottom + 1,
+                    OverlayRulerDefinition.DIRECTION_UP,
+                    _dragPointsBottom - _dragPointsTop + 1)
+            ]);
         }
         else {
             _extendable =
@@ -217,6 +259,8 @@ export function PcbEditorReshape(sprites, pcb, cursor, editor) {
                 extend();
             else
                 erase();
+
+            editor.overlay.clearRulers();
 
             _extendable = _deletable = false;
             _dragging = false;
