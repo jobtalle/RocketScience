@@ -15,7 +15,11 @@ const showPartInfo = (part, setInfo) => {
  * @constructor
  */
 export function CategoryPart(part, setPart, info) {
-    const onClick = () => setPart(part);
+    const onClick = () => {
+        info.clearText();
+
+        setPart(part);
+    };
 
     const onEnter = () => info.setText(getString(part.label), getString(part.description));
 

@@ -18,6 +18,7 @@ export function Library(editor, toolbar, info, overlay, width) {
     let _container = null;
 
     const setPart = part => {
+        // Go to select mode through the toolbar
         toolbar.onKeyDown(Toolbar.KEY_PRESS_SELECT);
 
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
