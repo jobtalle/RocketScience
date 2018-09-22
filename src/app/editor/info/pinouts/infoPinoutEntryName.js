@@ -5,23 +5,26 @@
  * @constructor
  */
 export function InfoPinoutEntryName(name, selected) {
+    const _element = document.createElement("div");
+
+    const make = () => {
+        const toggleSelected = () => _element.classList.toggle(InfoPinoutEntryName.CLASS_SELECTED);
+
+        _element.className = InfoPinoutEntryName.CLASS;
+        _element.innerText = name;
+        _element.onmouseenter = _element.onmouseleave = toggleSelected;
+
+        if (selected)
+            toggleSelected();
+    };
+
     /**
      * Get the HTML element of this pin name.
      * @returns {HTMLElement} The HTML element of this element.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
-        const toggleSelected = () => element.classList.toggle(InfoPinoutEntryName.CLASS_SELECTED);
+    this.getElement = () => _element;
 
-        element.className = InfoPinoutEntryName.CLASS;
-        element.innerText = name;
-        element.onmouseenter = element.onmouseleave = toggleSelected;
-
-        if (selected)
-            toggleSelected();
-
-        return element;
-    };
+    make();
 }
 
 InfoPinoutEntryName.CLASS = "pinout-name";

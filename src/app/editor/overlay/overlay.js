@@ -1,5 +1,6 @@
 import "../../../styles/overlay.css"
-import {OverlayPinouts} from "./overlayPinouts";
+import {OverlayPinouts} from "./pinouts/overlayPinouts";
+import {OverlayRulers} from "./rulers/overlayRulers";
 
 /**
  * An overlay for the PCB editor.
@@ -11,6 +12,7 @@ export function Overlay(overlay, xOffset) {
     const _element = document.createElement("div");
 
     let _pinouts = null;
+    let _rulers = null;
 
     const build = () => {
         _element.id = Overlay.ID;
@@ -63,6 +65,27 @@ export function Overlay(overlay, xOffset) {
         if (_pinouts) {
             _element.removeChild(_pinouts);
             _pinouts = null;
+        }
+    };
+
+    /**
+     * Make rulers on this overlay.
+     * @param {Array} definitions An array of OverlayRulerDefinition objects.
+     */
+    this.makeRulers = definitions => {
+        this.clearRulers();
+
+        _rulers = new OverlayRulers(definitions).getElement();
+        _element.appendChild(_rulers);
+    };
+
+    /**
+     * Clear any rulers.
+     */
+    this.clearRulers = () => {
+        if (_rulers) {
+            _element.removeChild(_rulers);
+            _rulers = null;
         }
     };
 

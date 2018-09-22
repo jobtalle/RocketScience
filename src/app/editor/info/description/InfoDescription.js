@@ -3,18 +3,20 @@
  * @constructor
  */
 export function InfoDescription(text) {
+    const _element = document.createElement("div");
+
+    const make = () => {
+        _element.className = InfoDescription.CLASS;
+        _element.innerHTML = text;
+    };
+
     /**
      * Get the HTML element of this part list.
      * @returns {HTMLElement} The HTML element of this part list.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
+    this.getElement = () => _element;
 
-        element.className = InfoDescription.CLASS;
-        element.innerHTML = text;
-
-        return element;
-    };
+    make();
 }
 
 InfoDescription.CLASS = "description";

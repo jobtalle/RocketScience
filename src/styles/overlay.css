@@ -22,3 +22,22 @@
 #editor-overlay .pinouts .pin .arrow {
     position: absolute;
 }
+
+#editor-overlay .rulers {
+    position: absolute;
+    font-size: 4px;
+}
+
+#editor-overlay .rulers .ruler {
+    position: absolute;
+    height: 6px;
+    color: white;
+    line-height: 6px;
+    font-family: monospace;
+    text-align: center;
+}
+
+#editor-overlay .rulers .ruler.up {
+    transform-origin: 0 0;
+    transform: rotate(-90deg);
+}

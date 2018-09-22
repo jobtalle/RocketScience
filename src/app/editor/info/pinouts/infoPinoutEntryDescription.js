@@ -4,18 +4,20 @@
  * @constructor
  */
 export function InfoPinoutEntryDescription(description) {
+    const _element = document.createElement("div");
+
+    const make = () => {
+        _element.className = InfoPinoutEntryDescription.CLASS;
+        _element.innerHTML = description;
+    };
+
     /**
      * Get the HTML element of this pin description.
      * @returns {HTMLElement} The HTML element of this element.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
+    this.getElement = () => _element;
 
-        element.className = InfoPinoutEntryDescription.CLASS;
-        element.innerHTML = description;
-
-        return element;
-    }
+    make();
 }
 
 InfoPinoutEntryDescription.CLASS = "pinout-description";

@@ -4,18 +4,20 @@
  * @constructor
  */
 export function InfoTitle(title) {
+    const _element = document.createElement("div");
+
+    const make = () => {
+        _element.className = InfoTitle.CLASS;
+        _element.innerText = title;
+    };
+
     /**
      * Get the HTML element of this part list.
      * @returns {HTMLElement} The HTML element of this part list.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
+    this.getElement = () => _element;
 
-        element.className = InfoTitle.CLASS;
-        element.innerText = title;
-
-        return element;
-    };
+    make();
 }
 
 InfoTitle.CLASS = "title";

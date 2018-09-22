@@ -12,7 +12,6 @@ import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
  */
 export function InfoPinouts(configuration, info, pinIndex) {
     const _element = document.createElement("table");
-    const _entries = [];
 
     const makeDescriptionRow = description => {
         const row = document.createElement("tr");
@@ -40,10 +39,7 @@ export function InfoPinouts(configuration, info, pinIndex) {
                 info.appendChild(description);
             }
 
-            const entry = new InfoPinoutEntry(index + 1, pin, pinIndex === index, description);
-
-            _entries.push(entry);
-            _element.appendChild(entry.getElement());
+            _element.appendChild(new InfoPinoutEntry(index + 1, pin, pinIndex === index, description).getElement());
 
             if (pinIndex === index)
                 _element.appendChild(makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description))));

@@ -1,7 +1,7 @@
-import {Pcb} from "../../pcb/pcb";
+import {Pcb} from "../../../pcb/pcb";
 import {OverlayPinoutsPin} from "./overlayPinoutsPin";
-import * as Myr from "../../../lib/myr";
-import {Pin} from "../../part/pin";
+import * as Myr from "../../../../lib/myr";
+import {Pin} from "../../../part/pin";
 
 /**
  * A pinouts overlay.
@@ -13,7 +13,6 @@ import {Pin} from "../../part/pin";
  */
 export function OverlayPinouts(x, y, configuration, highlightIndex) {
     const _element = document.createElement("div");
-    const _pins = [];
 
     const make = () => {
         _element.className = OverlayPinouts.CLASS;
@@ -29,10 +28,7 @@ export function OverlayPinouts(x, y, configuration, highlightIndex) {
             if (highlightIndex !== undefined && index !== highlightIndex + 1)
                 continue;
 
-            const label = new OverlayPinoutsPin(pin.x, pin.y, index, pin, directions[index - 1]);
-
-            _pins.push(label);
-            _element.appendChild(label.getElement());
+            _element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, index, pin, directions[index - 1]).getElement());
         }
     };
 

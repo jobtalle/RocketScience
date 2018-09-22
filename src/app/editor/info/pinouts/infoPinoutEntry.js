@@ -14,7 +14,6 @@ import {Pin} from "../../../part/pin";
 export function InfoPinoutEntry(index, pin, selected, description) {
     const _row = document.createElement("tr");
 
-    let _label = null;
     let _hover = false;
 
     const make = () => {

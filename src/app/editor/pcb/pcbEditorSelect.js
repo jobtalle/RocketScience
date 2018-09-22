@@ -2,6 +2,7 @@ import {Pcb} from "../../pcb/pcb";
 import * as Myr from "../../../lib/myr";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {Selection} from "./selection";
+import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -80,12 +81,26 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
     const updateSelectedInfo = () => {
         if (selection.getSelected().length === 1) {
+            editor.overlay.makeRulers([
+                new OverlayRulerDefinition(
+                    selection.getLeft(),
+                    selection.getBottom() + 1,
+                    OverlayRulerDefinition.DIRECTION_RIGHT,
+                    selection.getRight() - selection.getLeft() + 1),
+                new OverlayRulerDefinition(
+                    selection.getRight() + 1,
+                    selection.getBottom() + 1,
+                    OverlayRulerDefinition.DIRECTION_UP,
+                    selection.getBottom() - selection.getTop() + 1)
+            ]);
             editor.info.setPinouts(
                 selection.getSelected()[0].part.getConfiguration(),
                 selection.getSelected()[0].x,
                 selection.getSelected()[0].y);
-        } else
+        } else {
+            editor.overlay.clearRulers();
             editor.info.setPinouts(null);
+        }
     };
 
     const selectAll = () => {
