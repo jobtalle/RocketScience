@@ -30,11 +30,41 @@
 
 #editor-overlay .rulers .ruler {
     position: absolute;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
     height: 6px;
     color: white;
     line-height: 6px;
     font-family: monospace;
-    text-align: center;
+}
+
+#editor-overlay .rulers .ruler .padding {
+    display: block;
+    flex-grow: 1;
+}
+
+#editor-overlay .rulers .ruler .text {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+#editor-overlay .rulers .ruler .hbar {
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    width: calc(100% - 1px);
+    top: -2px;
+    height: 1px;
+}
+
+#editor-overlay .rulers .ruler .vbar {
+    display: inline-block;
+    background-color: white;
+    height: calc(100% - 1px);
+    margin-top: 1px;
+    width: 1px;
 }
 
 #editor-overlay .rulers .ruler.up {
