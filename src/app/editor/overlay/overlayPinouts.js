@@ -42,13 +42,6 @@ export function OverlayPinouts(x, y, configuration, highlightIndex) {
      */
     this.getElement = () => _element;
 
-    /**
-     * Get a pin label by its index.
-     * @param {Number} index The pin index.
-     * @returns {OverlayPinoutsPin} A pin label.
-     */
-    this.getPin = index => _pins[index];
-
     make();
 }
 

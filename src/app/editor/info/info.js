@@ -47,14 +47,15 @@ export function Info(overlay) {
 
     const mouseEnter = () => {
         if (_pinouts) {
-            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration);
+            overlay.makePinouts(_selectedX, _selectedY, _selectedConfiguration);
 
             _hover = true;
         }
     };
 
     const mouseLeave = () => {
-        overlay.clear();
+        if (_pinouts)
+            overlay.clearPinouts();
 
         _hover = false;
     };
@@ -133,7 +134,7 @@ export function Info(overlay) {
 
             _element.appendChild(_pinouts.getElement());
         } else {
-            overlay.clear();
+            overlay.clearPinouts();
 
             _pinouts = null;
         }
@@ -161,7 +162,7 @@ export function Info(overlay) {
         _selectedY = y;
 
         if (index !== undefined)
-            overlay.makePinoutOverlay(_selectedX, _selectedY, _selectedConfiguration, index);
+            overlay.makePinouts(_selectedX, _selectedY, _selectedConfiguration, index);
 
         _element.appendChild(_pinouts.getElement());
     };

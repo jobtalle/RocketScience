@@ -10,19 +10,11 @@ import {OverlayPinouts} from "./overlayPinouts";
 export function Overlay(overlay, xOffset) {
     const _element = document.createElement("div");
 
+    let _pinouts = null;
+
     const build = () => {
         _element.id = Overlay.ID;
         _element.style.left = xOffset + "px";
-    };
-
-    /**
-     * Clear all overlay elements.
-     */
-    this.clear = () => {
-        let element;
-
-        while (element = _element.firstChild)
-            _element.removeChild(element);
     };
 
     /**
@@ -56,16 +48,22 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
      * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide this if all pins must be shown.
-     * @returns {OverlayPinouts} The pinout overlay object.
      */
-    this.makePinoutOverlay = (x, y, configuration, highlightIndex) => {
-        this.clear();
+    this.makePinouts = (x, y, configuration, highlightIndex) => {
+        this.clearPinouts();
 
-        const overlayPinouts = new OverlayPinouts(x, y, configuration, highlightIndex);
+        _pinouts = new OverlayPinouts(x, y, configuration, highlightIndex).getElement();
+        _element.appendChild(_pinouts);
+    };
 
-        _element.appendChild(overlayPinouts.getElement());
-
-        return overlayPinouts;
+    /**
+     * Clear any pinout overlay.
+     */
+    this.clearPinouts = () => {
+        if (_pinouts) {
+            _element.removeChild(_pinouts);
+            _pinouts = null;
+        }
     };
 
     build();
