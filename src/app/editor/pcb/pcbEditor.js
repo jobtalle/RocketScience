@@ -173,10 +173,12 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
      * Set the editors edit mode. Possible options are:
      * PcbEditor.EDIT_MODE_SELECT  for selection dragging.
      * PcbEditor.EDIT_MODE_RESHAPE for PCB reshaping.
+     * PcbEditor.EDIT_MODE_ETCH for path etching.
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
         info.setPinouts(null);
+        overlay.clearRulers();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:

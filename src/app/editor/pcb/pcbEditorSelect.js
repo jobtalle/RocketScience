@@ -30,6 +30,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
 
         deleteSelectedParts();
 
+        editor.overlay.clearRulers();
         selection.move(cursor.x - start.x, cursor.y - start.y);
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, selection));
@@ -44,6 +45,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                 fixture.x - selection.getLeft(),
                 fixture.y - selection.getTop()));
 
+        editor.overlay.clearRulers();
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
 
         editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, selection));
@@ -80,7 +82,15 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
     };
 
     const updateSelectedInfo = () => {
-        if (selection.getSelected().length === 1) {
+        if (selection.getSelected().length === 1)
+            editor.info.setPinouts(
+                selection.getSelected()[0].part.getConfiguration(),
+                selection.getSelected()[0].x,
+                selection.getSelected()[0].y);
+        else
+            editor.info.setPinouts(null);
+
+        if (selection.getSelected().length > 1)
             editor.overlay.makeRulers([
                 new OverlayRulerDefinition(
                     selection.getLeft(),
@@ -93,14 +103,8 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
                     OverlayRulerDefinition.DIRECTION_UP,
                     selection.getBottom() - selection.getTop() + 1)
             ]);
-            editor.info.setPinouts(
-                selection.getSelected()[0].part.getConfiguration(),
-                selection.getSelected()[0].x,
-                selection.getSelected()[0].y);
-        } else {
+        else
             editor.overlay.clearRulers();
-            editor.info.setPinouts(null);
-        }
     };
 
     const selectAll = () => {
@@ -207,6 +211,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         }
         else if (_selectable) {
             selection.clearSelected();
+            updateSelectedInfo();
 
             _cursorDrag.x = cursor.x;
             _cursorDrag.y = cursor.y;
