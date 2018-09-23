@@ -21,4 +21,40 @@ export function EditorOutput(renderContext) {
      * @returns {Info} The info object.
      */
     this.getInfo = () => _info;
+
+    /**
+     * Show the editors.
+     */
+    this.show = () => {
+        _overlay.show();
+    };
+
+    /**
+     * Hide the editors.
+     */
+    this.hide = () => {
+        _overlay.hide();
+    };
+
+    /**
+     * Free all resources.
+     */
+    this.free = () => {
+
+    };
+
+    /**
+     * Update the editors.
+     * @param {Number} timeStep The number of seconds passed since the last update.
+     */
+    this.update = timeStep => {
+
+    };
+
+    /**
+     * Draw the editor.
+     */
+    this.draw = () => {
+
+    };
 }

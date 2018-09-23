@@ -38,12 +38,6 @@ export function Library(editor, toolbar, info, overlay, width) {
     };
 
     /**
-     * Gets the width of the library.
-     * @returns {Number} The width in pixels.
-     */
-    this.getWidth = () => width;
-
-    /**
      * Hide the library. This does not delete the library.
      * It can be shown again later using show().
      */

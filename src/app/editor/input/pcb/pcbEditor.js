@@ -206,9 +206,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
     /**
      * Draw the pcb editor.
      */
-    this.draw = x => {
+    this.draw = () => {
         renderContext.getMyr().push();
-        renderContext.getMyr().translate(x, 0);
+        renderContext.getMyr().translate(renderContext.getViewport().getSplitX(), 0);
         renderContext.getMyr().transform(view.getTransform());
 
         _renderer.drawBody(0, 0);

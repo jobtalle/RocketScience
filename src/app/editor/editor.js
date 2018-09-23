@@ -1,7 +1,6 @@
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
-import {Viewport} from "./viewport";
 import {EditorOutput} from "./output/editorOutput";
 import {EditorInput} from "./input/editorInput";
 import * as Myr from "../../lib/myr";
@@ -47,29 +46,22 @@ export function Editor(renderContext, world, game) {
      * @param {Number} x The X position in the world in meters.
      * @param {Number} y The Y position in the world in meters.
      */
-    this.edit = (pcb, x, y) => {
-        _input.getPcbEditor().edit(pcb, x, y);
-        _input.getToolbar().default();
-    };
+    this.edit = (pcb, x, y) => _input.edit(pcb, x, y);
 
     /**
      * Hide the editor
      */
     this.hide = () => {
-        _output.getOverlay().hide();
-        _input.getPcbEditor().hide();
-        _input.getLibrary().hide();
-        _input.getToolbar().hide();
+        _output.hide();
+        _input.hide();
     };
 
     /**
      * Show the editor.
      */
     this.show = () => {
-        _output.getOverlay().show();
-        _input.getPcbEditor().show();
-        _input.getLibrary().show();
-        _input.getToolbar().show();
+        _input.show();
+        _output.show();
     };
 
     /**
@@ -77,28 +69,29 @@ export function Editor(renderContext, world, game) {
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _input.getPcbEditor().update(timeStep);
+        _output.update(timeStep);
+        _input.update(timeStep);
     };
 
     /**
      * Render the editor.
      */
     this.draw = () => {
-        _input.getPcbEditor().draw(_input.getLibrary().getWidth());
+        _input.draw();
     };
 
     /**
      * Press the mouse.
      */
     this.onMousePress = () => {
-        _input.getPcbEditor().onMousePress();
+        _input.onMousePress();
     };
 
     /**
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        _input.getPcbEditor().onMouseRelease();
+        _input.onMouseRelease();
     };
 
     /**
@@ -109,16 +102,16 @@ export function Editor(renderContext, world, game) {
     this.onMouseMove = (x, y) => {
         if (x <= renderContext.getViewport().getSplitX()) {
             if (_editorHover) {
-                _input.getPcbEditor().onMouseLeave();
+                _input.onMouseLeave();
                 _editorHover = false;
             }
         }
         else if (!_editorHover) {
-            _input.getPcbEditor().onMouseEnter();
+            _input.onMouseEnter();
             _editorHover = true;
         }
 
-        _input.getPcbEditor().onMouseMove(x - renderContext.getViewport().getSplitX(), y);
+        _input.onMouseMove(x - renderContext.getViewport().getSplitX(), y);
     };
 
     /**
@@ -126,7 +119,7 @@ export function Editor(renderContext, world, game) {
      */
     this.onMouseEnter = () => {
         if (!_editorHover) {
-            _input.getPcbEditor().onMouseEnter();
+            _input.onMouseEnter();
             _editorHover = true;
         }
     };
@@ -136,7 +129,7 @@ export function Editor(renderContext, world, game) {
      */
     this.onMouseLeave = () => {
         if (_editorHover) {
-            _input.getPcbEditor().onMouseLeave();
+            _input.onMouseLeave();
             _editorHover = false;
         }
     };
@@ -145,14 +138,14 @@ export function Editor(renderContext, world, game) {
      * Zoom in.
      */
     this.zoomIn = () => {
-        _input.getPcbEditor().zoomIn();
+        _input.zoomIn();
     };
 
     /**
      * Zoom out.
      */
     this.zoomOut = () => {
-        _input.getPcbEditor().zoomOut();
+        _input.zoomOut();
     };
 
     /**
@@ -160,16 +153,14 @@ export function Editor(renderContext, world, game) {
      * @param {String} key A key.
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
-    this.onKeyDown = (key, control) => {
-        _input.getPcbEditor().onKeyDown(key, control);
-        _input.getToolbar().onKeyDown(key);
-    };
+    this.onKeyDown = (key, control) => _input.onKeyDown(key, control);
 
     /**
      * Free all resources occupied by this editor.
      */
     this.free = () => {
-        _input.getPcbEditor().free();
+        _input.free();
+        _output.free();
     };
 
     _view.setOnChanged(onViewChanged);

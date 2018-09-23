@@ -33,8 +33,115 @@ export function EditorInput(renderContext, output, world, view, game) {
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX());
 
+    /**
+     * Show the editors.
+     */
+    this.show = () => {
+        _pcbEditor.show();
+        _library.show();
+        _toolbar.show();
+    };
 
-    this.getPcbEditor = () => _pcbEditor;
-    this.getToolbar = () => _toolbar;
-    this.getLibrary = () => _library;
+    /**
+     * Hide the editors.
+     */
+    this.hide = () => {
+        _toolbar.hide();
+        _library.hide();
+        _pcbEditor.hide();
+    };
+
+    /**
+     * Free all resources.
+     */
+    this.free = () => {
+        _pcbEditor.free();
+    };
+
+    /**
+     * Update the editors.
+     * @param {Number} timeStep The number of seconds passed since the last update.
+     */
+    this.update = timeStep => {
+        _pcbEditor.update(timeStep);
+    };
+
+    /**
+     * Start editing a pcb.
+     * @param {Pcb} pcb A pcb instance to edit.
+     * @param {Number} x The X position in the world in meters.
+     * @param {Number} y The Y position in the world in meters.
+     */
+    this.edit = (pcb, x, y) => {
+        _pcbEditor.edit(pcb, x, y);
+        _toolbar.default();
+    };
+
+    /**
+     * Draw the editor.
+     */
+    this.draw = () => {
+        _pcbEditor.draw();
+    };
+
+    /**
+     * A key is pressed.
+     * @param {String} key A key.
+     * @param {Boolean} control Indicates whether the control button is pressed.
+     */
+    this.onKeyDown = (key, control) => {
+        _pcbEditor.onKeyDown(key, control);
+        _toolbar.onKeyDown(key);
+    };
+
+    /**
+     * Zoom in.
+     */
+    this.zoomIn = () => {
+        _pcbEditor.zoomIn();
+    };
+
+    /**
+     * Zoom out.
+     */
+    this.zoomOut = () => {
+        _pcbEditor.zoomOut();
+    };
+
+    /**
+     * Press the mouse.
+     */
+    this.onMousePress = () => {
+        _pcbEditor.onMousePress();
+    };
+
+    /**
+     * Release the mouse.
+     */
+    this.onMouseRelease = () => {
+        _pcbEditor.onMouseRelease();
+    };
+
+    /**
+     * The mouse enters the editor area.
+     */
+    this.onMouseEnter = () => {
+        _pcbEditor.onMouseEnter();
+    };
+
+    /**
+     * The mouse leaves the editor area.
+     */
+    this.onMouseLeave = () => {
+        _pcbEditor.onMouseLeave();
+    };
+
+    /**
+     * The mouse has moved.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
+     */
+    this.onMouseMove = (x, y) => {
+        _pcbEditor.onMouseMove(x, y);
+    };
 }
