@@ -20,4 +20,4 @@ export function CategoryTitle(title, partList) {
     };
 }
 
-CategoryTitle.CLASS = "title";
+CategoryTitle.CLASS = "category-title";
