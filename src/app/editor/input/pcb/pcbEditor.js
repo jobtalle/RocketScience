@@ -13,8 +13,7 @@ import Myr from "../../../../lib/myr.js";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
- * @param {Myr} myr An instance of the Myriad engine.
- * @param {Sprites} sprites All sprites.
+ * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
  * @param {Number} width The editor width.
@@ -24,7 +23,7 @@ import Myr from "../../../../lib/myr.js";
  * @param {Overlay} overlay The overlay object.
  * @constructor
  */
-export function PcbEditor(myr, sprites, world, view, width, height, x, info, overlay) {
+export function PcbEditor(renderContext, world, view, width, height, x, info, overlay) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -182,13 +181,13 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
-                setEditor(new PcbEditorReshape(sprites, _pcb, _cursor, makeInterface()));
+                setEditor(new PcbEditorReshape(renderContext, _pcb, _cursor, makeInterface()));
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
-                setEditor(new PcbEditorSelect(sprites, _pcb, _cursor, makeInterface(), new Selection(sprites)));
+                setEditor(new PcbEditorSelect(renderContext, _pcb, _cursor, makeInterface(), new Selection(renderContext)));
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
-                setEditor(new PcbEditorEtch(sprites, _pcb, _cursor, makeInterface()));
+                setEditor(new PcbEditorEtch(renderContext, _pcb, _cursor, makeInterface()));
                 break;
         }
     };
@@ -208,14 +207,14 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
      * Draw the pcb editor.
      */
     this.draw = x => {
-        myr.push();
-        myr.translate(x, 0);
-        myr.transform(view.getTransform());
+        renderContext.getMyr().push();
+        renderContext.getMyr().translate(x, 0);
+        renderContext.getMyr().transform(view.getTransform());
 
         _renderer.drawBody(0, 0);
-        _editor.draw(myr);
+        _editor.draw(renderContext.getMyr());
 
-        myr.pop();
+        renderContext.getMyr().pop();
     };
 
     /**
@@ -246,7 +245,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
     this.place = fixtures => {
         _editor.reset();
 
-        setEditor(new PcbEditorPlace(sprites, _pcb, _cursor, makeInterface(), fixtures, null));
+        setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, makeInterface(), fixtures, null));
     };
 
     /**
@@ -277,7 +276,7 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
 
         _pcbPosition.x = x;
         _pcbPosition.y = y;
-        _renderer = new PcbRenderer(myr, sprites, pcb);
+        _renderer = new PcbRenderer(renderContext, pcb);
 
         matchWorldPosition();
         revalidate();

@@ -6,14 +6,14 @@ import {OverlayRulerDefinition} from "../../output/overlay/rulers/overlayRulerDe
 
 /**
  * An extend editor, able to extend the current PCB.
- * @param {Sprites} sprites A sprites instance.
+ * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @param {Selection} selection A selection.
  * @constructor
  */
-export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
+export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
     const _cursorDrag = new Myr.Vector(0, 0);
     let _selectable = false;
     let _dragging = false;
@@ -33,7 +33,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         editor.overlay.clearRulers();
         selection.move(cursor.x - start.x, cursor.y - start.y);
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, moveFixtures, selection));
+        editor.replace(new PcbEditorPlace(renderContext, pcb, cursor, editor, moveFixtures, selection));
     };
 
     const copy = () => {
@@ -48,7 +48,7 @@ export function PcbEditorSelect(sprites, pcb, cursor, editor, selection) {
         editor.overlay.clearRulers();
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
 
-        editor.replace(new PcbEditorPlace(sprites, pcb, cursor, editor, placeFixtures, selection));
+        editor.replace(new PcbEditorPlace(renderContext, pcb, cursor, editor, placeFixtures, selection));
     };
 
     const isPartSelected = part => {

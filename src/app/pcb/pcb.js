@@ -5,11 +5,10 @@ import {Pin} from "../part/pin";
 
 /**
  * Defines a PCB.
- * @param {Myr} myr A Myriad instance.
- * @param {Sprites} sprites The sprites library.
+ * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function Pcb(myr, sprites) {
+export function Pcb(renderContext) {
     const _fixtures = [];
     const _points = [];
     const _air = [];
@@ -222,7 +221,7 @@ export function Pcb(myr, sprites) {
      * @returns {Pcb} A deep copy of this Pcb.
      */
     this.copy = () => {
-        const newPcb = new Pcb(myr, sprites);
+        const newPcb = new Pcb(renderContext);
 
         for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x) {
             const point = this.getPoint(x, y);

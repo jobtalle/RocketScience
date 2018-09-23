@@ -2,40 +2,40 @@ import * as Myr from "../../../lib/myr";
 
 /**
  * A pcb path renderer, used for rendering etched states of PCB points.
- * @param {Sprites} sprites The sprites library.
+ * @param {RenderContext} renderContext A render context.
  * @param {Boolean} isPlan A boolean indicating whether this path is a planned path or an existing path.
  * @param {Object} [mode] If this renderer is a plan, a valid mode constant should be given to denote the kind of plan.
  * @constructor
  */
-export function PcbPointRenderer(sprites, isPlan, mode) {
+export function PcbPointRenderer(renderContext, isPlan, mode) {
     let SPRITE_JUNCTION;
     let SPRITE_NODE;
     let SPRITES_PATHS;
 
     if (isPlan) {
-        SPRITE_JUNCTION = sprites.getSprite("pcbPathPlanJunction");
-        SPRITE_NODE = sprites.getSprite("pcbPathPlan");
+        SPRITE_JUNCTION = renderContext.getSprites().getSprite("pcbPathPlanJunction");
+        SPRITE_NODE = renderContext.getSprites().getSprite("pcbPathPlan");
         SPRITES_PATHS = [
-            sprites.getSprite("pcbPathPlanR"),
-            sprites.getSprite("pcbPathPlanRT"),
-            sprites.getSprite("pcbPathPlanT"),
-            sprites.getSprite("pcbPathPlanLT"),
-            sprites.getSprite("pcbPathPlanL"),
-            sprites.getSprite("pcbPathPlanLB"),
-            sprites.getSprite("pcbPathPlanB"),
-            sprites.getSprite("pcbPathPlanRB")];
+            renderContext.getSprites().getSprite("pcbPathPlanR"),
+            renderContext.getSprites().getSprite("pcbPathPlanRT"),
+            renderContext.getSprites().getSprite("pcbPathPlanT"),
+            renderContext.getSprites().getSprite("pcbPathPlanLT"),
+            renderContext.getSprites().getSprite("pcbPathPlanL"),
+            renderContext.getSprites().getSprite("pcbPathPlanLB"),
+            renderContext.getSprites().getSprite("pcbPathPlanB"),
+            renderContext.getSprites().getSprite("pcbPathPlanRB")];
     } else {
-        SPRITE_JUNCTION = sprites.getSprite("pcbPathJunction");
-        SPRITE_NODE = sprites.getSprite("pcbPath");
+        SPRITE_JUNCTION = renderContext.getSprites().getSprite("pcbPathJunction");
+        SPRITE_NODE = renderContext.getSprites().getSprite("pcbPath");
         SPRITES_PATHS = [
-            sprites.getSprite("pcbPathR"),
-            sprites.getSprite("pcbPathRT"),
-            sprites.getSprite("pcbPathT"),
-            sprites.getSprite("pcbPathLT"),
-            sprites.getSprite("pcbPathL"),
-            sprites.getSprite("pcbPathLB"),
-            sprites.getSprite("pcbPathB"),
-            sprites.getSprite("pcbPathRB")];
+            renderContext.getSprites().getSprite("pcbPathR"),
+            renderContext.getSprites().getSprite("pcbPathRT"),
+            renderContext.getSprites().getSprite("pcbPathT"),
+            renderContext.getSprites().getSprite("pcbPathLT"),
+            renderContext.getSprites().getSprite("pcbPathL"),
+            renderContext.getSprites().getSprite("pcbPathLB"),
+            renderContext.getSprites().getSprite("pcbPathB"),
+            renderContext.getSprites().getSprite("pcbPathRB")];
     }
 
     /**

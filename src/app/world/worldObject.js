@@ -5,16 +5,15 @@ import * as Myr from "../../lib/myr";
 
 /**
  * An object in the world.
- * @param {Myr} myr Myriad instance.
- * @param {Sprites} sprites SpriteList.
+ * @param {RenderContext} renderContext A render context.
  * @param {Physics} physics Physics engine.
  * @param {Pcb} pcb Circuit to simulate.
  * @param {Number} x Horizontal coordinate.
  * @param {Number} y Vertical coordinate.
  * @constructor
  */
-export function WorldObject(myr, sprites, physics, pcb, x, y) {
-    const _renderer = new PcbRenderer(myr, sprites, pcb);
+export function WorldObject(renderContext, physics, pcb, x, y) {
+    const _renderer = new PcbRenderer(renderContext, pcb);
     const _transform = new Myr.Transform();
 
     let _state = null;

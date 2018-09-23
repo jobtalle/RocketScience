@@ -10,7 +10,7 @@ import {Pin} from "../../../part/pin";
 
 /**
  * A placement editor used to place a part on a pcb.
- * @param {Sprites} sprites A sprites instance.
+ * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
@@ -18,7 +18,7 @@ import {Pin} from "../../../part/pin";
  * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
  * @constructor
  */
-export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection) {
+export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, selection) {
     const _lastCursor = cursor.copy();
     const _renderers = [];
     let _configurationIndex = 0;
@@ -29,9 +29,9 @@ export function PcbEditorPlace(sprites, pcb, cursor, editor, fixtures, selection
 
         for (const fixture of fixtures) {
             if (fixture.isInstance())
-                _renderers.push(new PartRenderer(sprites, fixture.part.getConfiguration()));
+                _renderers.push(new PartRenderer(renderContext, fixture.part.getConfiguration()));
             else
-                _renderers.push(new PartRenderer(sprites, fixture.part.configurations[_configurationIndex]));
+                _renderers.push(new PartRenderer(renderContext, fixture.part.configurations[_configurationIndex]));
         }
     };
 

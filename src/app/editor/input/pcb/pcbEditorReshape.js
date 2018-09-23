@@ -5,15 +5,15 @@ import {OverlayRulerDefinition} from "../../output/overlay/rulers/overlayRulerDe
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.
- * @param {Sprites} sprites A sprites instance.
+ * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @constructor
  */
-export function PcbEditorReshape(sprites, pcb, cursor, editor) {
-    const SPRITE_EXTEND = sprites.getSprite("pcbExtend");
-    const SPRITE_DELETE = sprites.getSprite("pcbDelete");
+export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
+    const SPRITE_EXTEND = renderContext.getSprites().getSprite("pcbExtend");
+    const SPRITE_DELETE = renderContext.getSprites().getSprite("pcbDelete");
 
     const _cursorDragPoints = [];
     const _cursorDrag = new Myr.Vector(0, 0);

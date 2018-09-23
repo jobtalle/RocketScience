@@ -7,16 +7,16 @@ import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
- * @param {Sprites} sprites A sprites instance.
+ * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {Object} editor An interface provided by the Editor to influence the editor.
  * @constructor
  */
-export function PcbEditorEtch(sprites, pcb, cursor, editor) {
-    const SPRITE_ETCH = sprites.getSprite("pcbEtch");
+export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
+    const SPRITE_ETCH = renderContext.getSprites().getSprite("pcbEtch");
 
-    const _pointRenderer = new PcbPointRenderer(sprites, true, PcbPointRenderer.MODE_SELECT);
+    const _pointRenderer = new PcbPointRenderer(renderContext, true, PcbPointRenderer.MODE_SELECT);
     const _pathRenderer = new PcbPathRenderer(_pointRenderer);
 
     let _fixture = null;

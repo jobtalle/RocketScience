@@ -4,12 +4,14 @@ import {Library} from "./library/library";
 
 /**
  * Input elements of the editor.
+ * @param {RenderContext} renderContext A render context;
+ * @param {EditorOutput} output The output part of the editor.
+ * @param {Viewport} viewport A viewport.
  * @constructor
  */
-export function EditorInput(output, viewport, myr, sprites, world, view, game) {
+export function EditorInput(renderContext, output, viewport, world, view, game) {
     const _pcbEditor = new PcbEditor(
-        myr,
-        sprites,
+        renderContext,
         world,
         view,
         viewport.getWidth() - viewport.getSplitX(),

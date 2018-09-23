@@ -2,25 +2,55 @@ import {Pcb} from "../../../pcb/pcb";
 
 /**
  * A drawable selection rectangle.
- * @param {Sprites} sprites A sprites instance.
+ * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function Selection(sprites) {
-    const SPRITE_SELECT = [sprites.getSprite("pcbSelect"), sprites.getSprite("pcbSelected")];
-    const SPRITE_SELECT_LT = [sprites.getSprite("pcbSelectLT"), sprites.getSprite("pcbSelectedLT")];
-    const SPRITE_SELECT_RT = [sprites.getSprite("pcbSelectRT"), sprites.getSprite("pcbSelectedRT")];
-    const SPRITE_SELECT_LB = [sprites.getSprite("pcbSelectLB"), sprites.getSprite("pcbSelectedLB")];
-    const SPRITE_SELECT_RB = [sprites.getSprite("pcbSelectRB"), sprites.getSprite("pcbSelectedRB")];
-    const SPRITE_SELECT_T = [sprites.getSprite("pcbSelectT"), sprites.getSprite("pcbSelectedT")];
-    const SPRITE_SELECT_B = [sprites.getSprite("pcbSelectB"), sprites.getSprite("pcbSelectedB")];
-    const SPRITE_SELECT_L = [sprites.getSprite("pcbSelectL"), sprites.getSprite("pcbSelectedL")];
-    const SPRITE_SELECT_R = [sprites.getSprite("pcbSelectR"), sprites.getSprite("pcbSelectedR")];
-    const SPRITE_SELECT_LRT = [sprites.getSprite("pcbSelectLRT"), sprites.getSprite("pcbSelectedLRT")];
-    const SPRITE_SELECT_LR = [sprites.getSprite("pcbSelectLR"), sprites.getSprite("pcbSelectedLR")];
-    const SPRITE_SELECT_LRB = [sprites.getSprite("pcbSelectLRB"), sprites.getSprite("pcbSelectedLRB")];
-    const SPRITE_SELECT_LTB = [sprites.getSprite("pcbSelectLTB"), sprites.getSprite("pcbSelectedLTB")];
-    const SPRITE_SELECT_TB = [sprites.getSprite("pcbSelectTB"), sprites.getSprite("pcbSelectedTB")];
-    const SPRITE_SELECT_RTB = [sprites.getSprite("pcbSelectRTB"), sprites.getSprite("pcbSelectedRTB")];
+export function Selection(renderContext) {
+    const SPRITE_SELECT = [
+        renderContext.getSprites().getSprite("pcbSelect"),
+        renderContext.getSprites().getSprite("pcbSelected")];
+    const SPRITE_SELECT_LT = [
+        renderContext.getSprites().getSprite("pcbSelectLT"),
+        renderContext.getSprites().getSprite("pcbSelectedLT")];
+    const SPRITE_SELECT_RT = [
+        renderContext.getSprites().getSprite("pcbSelectRT"),
+        renderContext.getSprites().getSprite("pcbSelectedRT")];
+    const SPRITE_SELECT_LB = [
+        renderContext.getSprites().getSprite("pcbSelectLB"),
+        renderContext.getSprites().getSprite("pcbSelectedLB")];
+    const SPRITE_SELECT_RB = [
+        renderContext.getSprites().getSprite("pcbSelectRB"),
+        renderContext.getSprites().getSprite("pcbSelectedRB")];
+    const SPRITE_SELECT_T = [
+        renderContext.getSprites().getSprite("pcbSelectT"),
+        renderContext.getSprites().getSprite("pcbSelectedT")];
+    const SPRITE_SELECT_B = [
+        renderContext.getSprites().getSprite("pcbSelectB"),
+        renderContext.getSprites().getSprite("pcbSelectedB")];
+    const SPRITE_SELECT_L = [
+        renderContext.getSprites().getSprite("pcbSelectL"),
+        renderContext.getSprites().getSprite("pcbSelectedL")];
+    const SPRITE_SELECT_R = [
+        renderContext.getSprites().getSprite("pcbSelectR"),
+        renderContext.getSprites().getSprite("pcbSelectedR")];
+    const SPRITE_SELECT_LRT = [
+        renderContext.getSprites().getSprite("pcbSelectLRT"),
+        renderContext.getSprites().getSprite("pcbSelectedLRT")];
+    const SPRITE_SELECT_LR = [
+        renderContext.getSprites().getSprite("pcbSelectLR"),
+        renderContext.getSprites().getSprite("pcbSelectedLR")];
+    const SPRITE_SELECT_LRB = [
+        renderContext.getSprites().getSprite("pcbSelectLRB"),
+        renderContext.getSprites().getSprite("pcbSelectedLRB")];
+    const SPRITE_SELECT_LTB = [
+        renderContext.getSprites().getSprite("pcbSelectLTB"),
+        renderContext.getSprites().getSprite("pcbSelectedLTB")];
+    const SPRITE_SELECT_TB = [
+        renderContext.getSprites().getSprite("pcbSelectTB"),
+        renderContext.getSprites().getSprite("pcbSelectedTB")];
+    const SPRITE_SELECT_RTB = [
+        renderContext.getSprites().getSprite("pcbSelectRTB"),
+        renderContext.getSprites().getSprite("pcbSelectedRTB")];
 
     const _selected = [];
 

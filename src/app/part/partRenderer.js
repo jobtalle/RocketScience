@@ -3,11 +3,11 @@ import {Pcb} from "../pcb/pcb";
 
 /**
  * A part renderer.
- * @param {Sprites} sprites A sprites object to create sprites from.
+ * @param {RenderContext} renderContext A render context.
  * @param {Object} configuration A part configuration.
  * @constructor
  */
-export function PartRenderer(sprites, configuration) {
+export function PartRenderer(renderContext, configuration) {
     const _sprites = [];
     const _transforms = [];
     let _externalThreshold = 0;
@@ -87,7 +87,7 @@ export function PartRenderer(sprites, configuration) {
      * @param {Myr.Transform} transform A transformation for the new sprite.
      */
     this.addSprite = (sprite, transform) => {
-        _sprites.push(sprites.getSprite(sprite));
+        _sprites.push(renderContext.getSprites().getSprite(sprite));
         _transforms.push(transform);
     };
 

@@ -1,56 +1,54 @@
 import "../styles/main.css"
 import "../styles/gui.css"
 
-import Myr from "../lib/myr.js"
 import {Game} from "./game"
-import {Sprites} from "./sprites"
 import {getString} from "./language";
+import {RenderContext} from "./renderContext";
 
 const KEY_CONTROL = "Control";
 
-const canvas = document.getElementById("renderer");
-const overlay = document.getElementById("overlay");
-const myr = new Myr(canvas);
-const sprites = new Sprites(myr);
-const game = new Game(myr, sprites, overlay);
+const renderContext = new RenderContext(
+    document.getElementById("renderer"),
+    document.getElementById("overlay"));
+const game = new Game(renderContext);
 
-let canvasRect = overlay.getBoundingClientRect();
+let canvasRect = renderContext.getOverlay().getBoundingClientRect();
 let keyControl = false;
 
 document.title = getString("TITLE");
-window.onresize = () => canvasRect = overlay.getBoundingClientRect();
+window.onresize = () => canvasRect = renderContext.getOverlay().getBoundingClientRect();
 
-overlay.addEventListener("mousemove", function(event) {
+renderContext.getOverlay().addEventListener("mousemove", function(event) {
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
-overlay.addEventListener("mousedown", function(event) {
-    if (event.target !== overlay)
+renderContext.getOverlay().addEventListener("mousedown", function(event) {
+    if (event.target !== renderContext.getOverlay())
         return;
 
     game.onMousePress();
 });
 
-overlay.addEventListener("mouseup", function(event) {
+renderContext.getOverlay().addEventListener("mouseup", function() {
     game.onMouseRelease();
 });
 
-overlay.addEventListener("mouseenter", function(event) {
-    if (event.target !== overlay)
+renderContext.getOverlay().addEventListener("mouseenter", function(event) {
+    if (event.target !== renderContext.getOverlay())
         return;
 
     game.onMouseEnter(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
 
-overlay.addEventListener("mouseleave", function(event) {
-    if (event.target !== overlay)
+renderContext.getOverlay().addEventListener("mouseleave", function(event) {
+    if (event.target !== renderContext.getOverlay())
         return;
 
     game.onMouseLeave();
 });
 
-overlay.addEventListener("wheel", function(event) {
-    if (event.target !== overlay)
+renderContext.getOverlay().addEventListener("wheel", function(event) {
+    if (event.target !== renderContext.getOverlay())
         return;
 
     if (event.deltaY < 0)

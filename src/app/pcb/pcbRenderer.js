@@ -5,15 +5,14 @@ import {PcbPointRenderer} from "./point/pcbPointRenderer";
 
 /**
  * A PCB renderer.
- * @param {Myr} myr A Myriad instance.
- * @param {Sprites} sprites The sprites library.
+ * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb A pcb.
  * @constructor
  */
-export function PcbRenderer(myr, sprites, pcb) {
-    const SPRITE_POINT = sprites.getSprite("pcbPoint");
+export function PcbRenderer(renderContext, pcb) {
+    const SPRITE_POINT = renderContext.getSprites().getSprite("pcbPoint");
 
-    const _pointRenderer = new PcbPointRenderer(sprites, false);
+    const _pointRenderer = new PcbPointRenderer(renderContext, false);
     const _partRenderers = [];
     const _partPositions = [];
     let _initialized = false;
@@ -23,7 +22,7 @@ export function PcbRenderer(myr, sprites, pcb) {
     const updateSurfaces = () => {
         _initialized = true;
 
-        _layerPcb = new myr.Surface(
+        _layerPcb = new (renderContext.getMyr().Surface)(
             Pcb.PIXELS_PER_POINT * pcb.getWidth(),
             Pcb.PIXELS_PER_POINT * pcb.getHeight());
         _layerPcb.bind();
@@ -47,7 +46,7 @@ export function PcbRenderer(myr, sprites, pcb) {
             if (!point)
                 continue;
 
-            _pointRenderer.render(myr, point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
+            _pointRenderer.render(renderContext.getMyr(), point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
         }
     };
 
@@ -62,7 +61,7 @@ export function PcbRenderer(myr, sprites, pcb) {
             while (insertAt < _partPositions.length && _partPositions[insertAt].y < position.y)
                 ++insertAt;
 
-            _partRenderers.splice(insertAt, 0, new PartRenderer(sprites, fixture.part.getConfiguration()));
+            _partRenderers.splice(insertAt, 0, new PartRenderer(renderContext, fixture.part.getConfiguration()));
             _partPositions.splice(insertAt, 0, position);
         }
     };

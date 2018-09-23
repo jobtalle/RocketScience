@@ -9,20 +9,17 @@ import Myr from "../../lib/myr";
 
 /**
  * Simulates physics and led for all objects in the same space.
- * @param {Myr} myr A Myriad instance.
- * @param {Sprites} sprites An instantiated Sprites object
- * @param {Number} width The viewport width.
- * @param {Number} height The viewport height.
+ * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function World(myr, sprites, width, height) {
+export function World(renderContext) {
     const _objects = [];
     const _physics = new Physics(World.GRAVITY);
-    const _terrain = new Terrain(myr, new TerrainRugged(Math.random(), 100, 0.2, 0.5));
-    const _surface = new myr.Surface(width, height);
+    const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
+    const _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     const _view = new View(
-        width,
-        height,
+        renderContext.getWidth(),
+        renderContext.getHeight(),
         new ZoomProfile(
             ZoomProfile.TYPE_CONTINUOUS,
             World.ZOOM_FACTOR,
@@ -42,7 +39,7 @@ export function World(myr, sprites, width, height) {
      * @param {Number} y The y-position.
      */
     this.addPcb = (pcb, x, y) => {
-        _objects.push(new WorldObject(myr, sprites, _physics, pcb, x, y));
+        _objects.push(new WorldObject(renderContext, _physics, pcb, x, y));
     };
 
     /**
@@ -146,15 +143,15 @@ export function World(myr, sprites, width, height) {
         _surface.bind();
         _surface.clear();
 
-        myr.push();
-        myr.transform(_view.getTransform());
+        renderContext.getMyr().push();
+        renderContext.getMyr().transform(_view.getTransform());
 
         _terrain.draw();
 
         for (let index = 0; index < _objects.length; index++)
-            _objects[index].draw(myr);
+            _objects[index].draw( renderContext.getMyr());
 
-        myr.pop();
+        renderContext.getMyr().pop();
     };
 
     /**

@@ -1,27 +1,27 @@
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
-import * as Myr from "../../lib/myr";
 import {Viewport} from "./viewport";
 import {EditorOutput} from "./output/editorOutput";
 import {EditorInput} from "./input/editorInput";
+import * as Myr from "../../lib/myr";
 
 /**
  * Provides a grid editor.
- * @param {Myr} myr A Myriad instance.
- * @param {Sprites} sprites All sprites.
- * @param {HTMLElement} overlay An overlay element for HTML GUI.
+ * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
- * @param {Number} width The width.
- * @param {Number} height The height.
  * @param {Object} game An interface to interact with the game object.
  * @constructor
  */
-export function Editor(myr, sprites, overlay, world, width, height, game) {
-    const _viewport = new Viewport(width, height, Editor.EDITOR_WIDTH, overlay);
+export function Editor(renderContext, world, game) {
+    const _viewport = new Viewport(
+        renderContext.getWidth(),
+        renderContext.getHeight(),
+        Editor.EDITOR_WIDTH,
+        renderContext.getOverlay());
     const _view = new View(
         _viewport.getWidth() - _viewport.getSplitX(),
-        height,
+        _viewport.getHeight(),
         new ZoomProfile(
             ZoomProfile.TYPE_ROUND,
             Editor.ZOOM_FACTOR,
@@ -30,7 +30,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
     const _output = new EditorOutput(_viewport);
-    const _input = new EditorInput(_output, _viewport, myr, sprites, world, _view, game);
+    const _input = new EditorInput(renderContext, _output, _viewport, world, _view, game);
 
     let _editorHover = false;
     let _pcbScreenPosition = new Myr.Vector(0, 0);

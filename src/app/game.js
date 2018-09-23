@@ -6,12 +6,10 @@ import {Terrain} from "./world/terrain/terrain";
 
 /**
  * This class contains the game views.
- * @param {Myr} myr A constructed Myriad engine.
- * @param {Sprites} sprites All sprites.
- * @param {Object} overlay The HTML overlay div.
+ * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function Game(myr, sprites, overlay) {
+export function Game(renderContext) {
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
@@ -26,8 +24,8 @@ export function Game(myr, sprites, overlay) {
     };
 
     const render = () => {
-        myr.bind();
-        myr.clear();
+        renderContext.getMyr().bind();
+        renderContext.getMyr().clear();
 
         if(_world)
             _world.draw();
@@ -35,7 +33,7 @@ export function Game(myr, sprites, overlay) {
         if(_editor)
             _editor.draw();
 
-        myr.flush();
+        renderContext.getMyr().flush();
     };
 
     const toggleEdit = () => {
@@ -79,10 +77,10 @@ export function Game(myr, sprites, overlay) {
     this.startCreate = () => {
         stop();
 
-        _world = new World(myr, sprites, myr.getWidth(), myr.getHeight());
-        _editor = new Editor(myr, sprites, overlay, _world, myr.getWidth(), myr.getHeight(), makeInterface());
+        _world = new World(renderContext);
+        _editor = new Editor(renderContext, _world, makeInterface());
 
-        const pcb = new Pcb(myr, sprites);
+        const pcb = new Pcb(renderContext);
         pcb.initialize();
 
         _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT - 2);
@@ -194,14 +192,14 @@ export function Game(myr, sprites, overlay) {
 
     };
 
-    myr.utils.loop(function(timeStep) {
+    renderContext.getMyr().utils.loop(function(timeStep) {
         update(timeStep);
         render();
 
         return true;
     });
 
-    _menu.show(overlay);
+    _menu.show(renderContext.getOverlay());
 }
 
 Game.KEY_TOGGLE_EDIT = " ";
