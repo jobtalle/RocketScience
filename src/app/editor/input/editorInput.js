@@ -6,30 +6,32 @@ import {Library} from "./library/library";
  * Input elements of the editor.
  * @param {RenderContext} renderContext A render context;
  * @param {EditorOutput} output The output part of the editor.
- * @param {Viewport} viewport A viewport.
+ * @param {World} world A world.
+ * @param {View} view The view.
+ * @param {Object} game An interface to the Game object.
  * @constructor
  */
-export function EditorInput(renderContext, output, viewport, world, view, game) {
+export function EditorInput(renderContext, output, world, view, game) {
     const _pcbEditor = new PcbEditor(
         renderContext,
         world,
         view,
-        viewport.getWidth() - viewport.getSplitX(),
-        viewport.getHeight(),
-        viewport.getSplitX(),
+        renderContext.getWidth() - renderContext.getViewport().getSplitX(),
+        renderContext.getHeight(),
+        renderContext.getViewport().getSplitX(),
         output.getInfo(),
         output.getOverlay());
     const _toolbar = new Toolbar(
         _pcbEditor,
-        viewport.getElement(),
-        viewport.getSplitX(),
+        renderContext.getViewport().getElement(),
+        renderContext.getViewport().getSplitX(),
         game);
     const _library = new Library(
         _pcbEditor,
         _toolbar,
         output.getInfo(),
-        viewport.getElement(),
-        viewport.getSplitX());
+        renderContext.getViewport().getElement(),
+        renderContext.getViewport().getSplitX());
 
 
     this.getPcbEditor = () => _pcbEditor;

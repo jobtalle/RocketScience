@@ -3,11 +3,11 @@ import {Info} from "./info/info";
 
 /**
  * Output elements of the editor.
- * @param {Viewport} viewport A viewport.
+ * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function EditorOutput(viewport) {
-    const _overlay = new Overlay(viewport.getElement(), viewport.getSplitX());
+export function EditorOutput(renderContext) {
+    const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
     const _info = new Info(_overlay);
 
     /**

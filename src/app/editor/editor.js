@@ -14,14 +14,9 @@ import * as Myr from "../../lib/myr";
  * @constructor
  */
 export function Editor(renderContext, world, game) {
-    const _viewport = new Viewport(
-        renderContext.getWidth(),
-        renderContext.getHeight(),
-        Editor.EDITOR_WIDTH,
-        renderContext.getOverlay());
     const _view = new View(
-        _viewport.getWidth() - _viewport.getSplitX(),
-        _viewport.getHeight(),
+        renderContext.getWidth() - renderContext.getViewport().getSplitX(),
+        renderContext.getHeight(),
         new ZoomProfile(
             ZoomProfile.TYPE_ROUND,
             Editor.ZOOM_FACTOR,
@@ -29,8 +24,8 @@ export function Editor(renderContext, world, game) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
-    const _output = new EditorOutput(_viewport);
-    const _input = new EditorInput(renderContext, _output, _viewport, world, _view, game);
+    const _output = new EditorOutput(renderContext);
+    const _input = new EditorInput(renderContext, _output, world, _view, game);
 
     let _editorHover = false;
     let _pcbScreenPosition = new Myr.Vector(0, 0);
@@ -112,7 +107,7 @@ export function Editor(renderContext, world, game) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        if (x <= _viewport.getSplitX()) {
+        if (x <= renderContext.getViewport().getSplitX()) {
             if (_editorHover) {
                 _input.getPcbEditor().onMouseLeave();
                 _editorHover = false;
@@ -123,7 +118,7 @@ export function Editor(renderContext, world, game) {
             _editorHover = true;
         }
 
-        _input.getPcbEditor().onMouseMove(x - _viewport.getSplitX(), y);
+        _input.getPcbEditor().onMouseMove(x - renderContext.getViewport().getSplitX(), y);
     };
 
     /**

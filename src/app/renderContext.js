@@ -1,5 +1,6 @@
 import Myr from "../lib/myr.js"
 import {Sprites} from "./sprites";
+import {Viewport} from "./editor/viewport";
 
 /**
  * The render context provides access to all objects that allow rendering.
@@ -10,6 +11,13 @@ import {Sprites} from "./sprites";
 export function RenderContext(canvas, overlay) {
     const _myr = new Myr(canvas);
     const _sprites = new Sprites(_myr);
+    const _viewport = new Viewport(_myr.getWidth(), RenderContext.INTERFACE_SPLIT, overlay);
+
+    /**
+     * Get the viewport for this render context.
+     * @returns {Viewport} The viewport of this render context.
+     */
+    this.getViewport = () => _viewport;
 
     /**
      * Get the Myriad instance of this render context.
@@ -41,3 +49,5 @@ export function RenderContext(canvas, overlay) {
      */
     this.getHeight = () => _myr.getHeight();
 }
+
+RenderContext.INTERFACE_SPLIT = 0.3;
