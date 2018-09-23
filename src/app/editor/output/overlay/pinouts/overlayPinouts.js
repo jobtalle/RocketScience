@@ -1,7 +1,7 @@
-import {Pcb} from "../../../pcb/pcb";
+import {Pcb} from "../../../../pcb/pcb";
 import {OverlayPinoutsPin} from "./overlayPinoutsPin";
-import * as Myr from "../../../../lib/myr";
-import {Pin} from "../../../part/pin";
+import * as Myr from "../../../../../lib/myr";
+import {Pin} from "../../../../part/pin";
 
 /**
  * A pinouts overlay.

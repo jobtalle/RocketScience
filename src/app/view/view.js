@@ -20,7 +20,7 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
 
     const updateTransform = () => {
         _transform.identity();
-        _transform.translate(viewWidth * 0.5, viewHeight * 0.5);
+        _transform.translate(Math.round(viewWidth * 0.5), Math.round(viewHeight * 0.5));
         _transform.scale(zoomProfile.getZoom(), zoomProfile.getZoom());
         _transform.translate(shiftProfile.getShift().x, shiftProfile.getShift().y);
 

@@ -1,15 +1,15 @@
-import {Terrain} from "../../world/terrain/terrain";
-import {World} from "../../world/world";
-import {Pcb} from "../../pcb/pcb";
-import {PcbRenderer} from "../../pcb/pcbRenderer";
-import {View} from "../../view/view";
+import {Terrain} from "../../../world/terrain/terrain";
+import {World} from "../../../world/world";
+import {Pcb} from "../../../pcb/pcb";
+import {PcbRenderer} from "../../../pcb/pcbRenderer";
+import {View} from "../../../view/view";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
-import {Editor} from "../editor";
-import Myr from "../../../lib/myr.js";
+import {Editor} from "../../editor";
+import Myr from "../../../../lib/myr.js";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -289,12 +289,6 @@ export function PcbEditor(myr, sprites, world, view, width, height, x, info, ove
      * @returns {Number} The width of the editor in pixels.
      */
     this.getWidth = () => width;
-
-    /**
-     * Get the PCB position.
-     * @returns {Myr.Vector} The PCB position.
-     */
-    this.getPCBPosition = () => _pcbPosition;
 
     /**
      * Press the mouse.

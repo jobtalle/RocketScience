@@ -1,6 +1,6 @@
 import {InfoPinoutEntry} from "./infoPinoutEntry";
-import {Pin} from "../../../part/pin";
-import {getString} from "../../../language";
+import {Pin} from "../../../../part/pin";
+import {getString} from "../../../../language";
 import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
 
 /**

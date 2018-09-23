@@ -1,12 +1,12 @@
-import {PartRenderer} from "../../part/partRenderer";
-import {Pcb} from "../../pcb/pcb";
-import * as Myr from "../../../lib/myr";
-import {Part} from "../../part/part";
-import "../../part/objects"
-import {PcbPath} from "../../pcb/point/pcbPath";
+import {PartRenderer} from "../../../part/partRenderer";
+import {Pcb} from "../../../pcb/pcb";
+import * as Myr from "../../../../lib/myr";
+import {Part} from "../../../part/part";
+import "../../../part/objects"
+import {PcbPath} from "../../../pcb/point/pcbPath";
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
-import {Pin} from "../../part/pin";
+import {Pin} from "../../../part/pin";
 
 /**
  * A placement editor used to place a part on a pcb.

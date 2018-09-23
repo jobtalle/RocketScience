@@ -1,5 +1,5 @@
 import {CategoryTitle} from "./categoryTitle";
-import {getString} from "../../language";
+import {getString} from "../../../language";
 import {CategoryPartList} from "./categoryPartList";
 
 /**

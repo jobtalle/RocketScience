@@ -1,9 +1,9 @@
-import "../../../styles/library.css"
-import parts from "../../../assets/parts.json"
+import "../../../../styles/library.css"
+import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
 import {Toolbar} from "../toolbar/toolbar";
-import {Info} from "../info/info";
+import {Info} from "../../output/info/info";
 
 /**
  * An HTML based part library.

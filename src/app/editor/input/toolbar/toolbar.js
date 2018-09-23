@@ -1,4 +1,4 @@
-import "../../../styles/toolbar.css"
+import "../../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 

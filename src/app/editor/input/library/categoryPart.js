@@ -1,4 +1,4 @@
-import {getString} from "../../language";
+import {getString} from "../../../language";
 
 const showPartInfo = (part, setInfo) => {
     if (part)

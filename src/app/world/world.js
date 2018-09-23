@@ -45,6 +45,10 @@ export function World(myr, sprites, width, height) {
         _objects.push(new WorldObject(myr, sprites, _physics, pcb, x, y));
     };
 
+    /**
+     * Get the view object.
+     * @returns {View} The view object applied to this world.
+     */
     this.getView = () => _view;
 
     /**

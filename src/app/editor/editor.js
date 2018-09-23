@@ -1,18 +1,16 @@
-import {PcbEditor} from "./pcb/pcbEditor";
-import {Library} from "./library/library";
-import {Toolbar} from "./toolbar/toolbar";
-import {Info} from "./info/info";
-import {Overlay} from "./overlay/overlay";
 import {View} from "../view/view";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
 import * as Myr from "../../lib/myr";
+import {Viewport} from "./viewport";
+import {EditorOutput} from "./output/editorOutput";
+import {EditorInput} from "./input/editorInput";
 
 /**
  * Provides a grid editor.
  * @param {Myr} myr A Myriad instance.
  * @param {Sprites} sprites All sprites.
- * @param {Object} overlay An overlay element for HTML GUI.
+ * @param {HTMLElement} overlay An overlay element for HTML GUI.
  * @param {World} world A world instance to interact with.
  * @param {Number} width The width.
  * @param {Number} height The height.
@@ -20,9 +18,9 @@ import * as Myr from "../../lib/myr";
  * @constructor
  */
 export function Editor(myr, sprites, overlay, world, width, height, game) {
-    const _editorWidth = Math.floor(width * Editor.EDITOR_WIDTH);
+    const _viewport = new Viewport(width, height, Editor.EDITOR_WIDTH, overlay);
     const _view = new View(
-        _editorWidth,
+        _viewport.getWidth() - _viewport.getSplitX(),
         height,
         new ZoomProfile(
             ZoomProfile.TYPE_ROUND,
@@ -31,20 +29,8 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
-    const _overlay = new Overlay(overlay, width - _editorWidth);
-    const _info = new Info(_overlay);
-    const _pcbEditor = new PcbEditor(
-        myr,
-        sprites,
-        world,
-        _view,
-        _editorWidth,
-        height,
-        width - _editorWidth,
-        _info,
-        _overlay);
-    const _toolbar = new Toolbar(_pcbEditor, overlay, width - _pcbEditor.getWidth(), game);
-    const _library = new Library(_pcbEditor, _toolbar, _info, overlay, width - _pcbEditor.getWidth());
+    const _output = new EditorOutput(_viewport);
+    const _input = new EditorInput(_output, _viewport, myr, sprites, world, _view, game);
 
     let _editorHover = false;
     let _pcbScreenPosition = new Myr.Vector(0, 0);
@@ -54,7 +40,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
         _pcbScreenPosition.y = 0;
 
         _view.getInverse().apply(_pcbScreenPosition);
-        _overlay.move(
+        _output.getOverlay().move(
             -_pcbScreenPosition.x,
             -_pcbScreenPosition.y,
             _view.getZoom());
@@ -67,28 +53,28 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * @param {Number} y The Y position in the world in meters.
      */
     this.edit = (pcb, x, y) => {
-        _pcbEditor.edit(pcb, x, y);
-        _toolbar.default();
+        _input.getPcbEditor().edit(pcb, x, y);
+        _input.getToolbar().default();
     };
 
     /**
      * Hide the editor
      */
     this.hide = () => {
-        _overlay.hide();
-        _pcbEditor.hide();
-        _library.hide();
-        _toolbar.hide();
+        _output.getOverlay().hide();
+        _input.getPcbEditor().hide();
+        _input.getLibrary().hide();
+        _input.getToolbar().hide();
     };
 
     /**
      * Show the editor.
      */
     this.show = () => {
-        _overlay.show();
-        _pcbEditor.show();
-        _library.show();
-        _toolbar.show();
+        _output.getOverlay().show();
+        _input.getPcbEditor().show();
+        _input.getLibrary().show();
+        _input.getToolbar().show();
     };
 
     /**
@@ -96,28 +82,28 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _pcbEditor.update(timeStep);
+        _input.getPcbEditor().update(timeStep);
     };
 
     /**
      * Render the editor.
      */
     this.draw = () => {
-        _pcbEditor.draw(_library.getWidth());
+        _input.getPcbEditor().draw(_input.getLibrary().getWidth());
     };
 
     /**
      * Press the mouse.
      */
     this.onMousePress = () => {
-        _pcbEditor.onMousePress();
+        _input.getPcbEditor().onMousePress();
     };
 
     /**
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        _pcbEditor.onMouseRelease();
+        _input.getPcbEditor().onMouseRelease();
     };
 
     /**
@@ -126,18 +112,18 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
-        if (x <= _library.getWidth()) {
+        if (x <= _viewport.getSplitX()) {
             if (_editorHover) {
-                _pcbEditor.onMouseLeave();
+                _input.getPcbEditor().onMouseLeave();
                 _editorHover = false;
             }
         }
         else if (!_editorHover) {
-            _pcbEditor.onMouseEnter();
+            _input.getPcbEditor().onMouseEnter();
             _editorHover = true;
         }
 
-        _pcbEditor.onMouseMove(x - _library.getWidth(), y);
+        _input.getPcbEditor().onMouseMove(x - _viewport.getSplitX(), y);
     };
 
     /**
@@ -145,7 +131,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      */
     this.onMouseEnter = () => {
         if (!_editorHover) {
-            _pcbEditor.onMouseEnter();
+            _input.getPcbEditor().onMouseEnter();
             _editorHover = true;
         }
     };
@@ -155,7 +141,7 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      */
     this.onMouseLeave = () => {
         if (_editorHover) {
-            _pcbEditor.onMouseLeave();
+            _input.getPcbEditor().onMouseLeave();
             _editorHover = false;
         }
     };
@@ -164,14 +150,14 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * Zoom in.
      */
     this.zoomIn = () => {
-        _pcbEditor.zoomIn();
+        _input.getPcbEditor().zoomIn();
     };
 
     /**
      * Zoom out.
      */
     this.zoomOut = () => {
-        _pcbEditor.zoomOut();
+        _input.getPcbEditor().zoomOut();
     };
 
     /**
@@ -180,21 +166,21 @@ export function Editor(myr, sprites, overlay, world, width, height, game) {
      * @param {Boolean} control Indicates whether the control button is pressed.
      */
     this.onKeyDown = (key, control) => {
-        _pcbEditor.onKeyDown(key, control);
-        _toolbar.onKeyDown(key);
+        _input.getPcbEditor().onKeyDown(key, control);
+        _input.getToolbar().onKeyDown(key);
     };
 
     /**
      * Free all resources occupied by this editor.
      */
     this.free = () => {
-        _pcbEditor.free();
+        _input.getPcbEditor().free();
     };
 
     _view.setOnChanged(onViewChanged);
 }
 
-Editor.EDITOR_WIDTH = 0.7;
+Editor.EDITOR_WIDTH = 0.3;
 Editor.ZOOM_DEFAULT = 4;
 Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
