@@ -51,6 +51,10 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
         editor.replace(new PcbEditorPlace(renderContext, pcb, cursor, editor, placeFixtures, selection));
     };
 
+    const moveSelection = direction => {
+
+    };
+
     const isPartSelected = part => {
         for (const fixture of selection.getSelected())
             if (fixture.part === part)
@@ -169,6 +173,18 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
             case PcbEditorSelect.KEY_SELECT_ALL:
                 if (control)
                     selectAll();
+
+                break;
+            case PcbEditorSelect.KEY_LEFT:
+
+                break;
+            case PcbEditorSelect.KEY_UP:
+
+                break;
+            case PcbEditorSelect.KEY_RIGHT:
+
+                break;
+            case PcbEditorSelect.KEY_DOWN:
 
                 break;
         }
@@ -353,3 +369,7 @@ PcbEditorSelect.crop = selection => {
 PcbEditorSelect.KEY_DELETE = "Delete";
 PcbEditorSelect.KEY_COPY = "c";
 PcbEditorSelect.KEY_SELECT_ALL = "a";
+PcbEditorSelect.KEY_LEFT = "ArrowLeft";
+PcbEditorSelect.KEY_UP = "ArrowUp";
+PcbEditorSelect.KEY_RIGHT = "ArrowRight";
+PcbEditorSelect.KEY_DOWN = "ArrowDown";

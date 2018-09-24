@@ -2,6 +2,7 @@ import {PcbPoint} from "./point/pcbPoint";
 import {Fixture} from "../part/fixture";
 import * as Myr from "../../lib/myr";
 import {Pin} from "../part/pin";
+import {PcbPath} from "./point/pcbPath";
 
 /**
  * Defines a PCB.
@@ -164,6 +165,66 @@ export function Pcb(renderContext) {
 
             point.erasePaths(erase);
         }
+    };
+
+    const fitsFootprint = (x, y, footprint) => {
+        for (const point of footprint.points) {
+            const pcbPoint = this.getPoint(point.x + x, point.y + y);
+
+            if (!pcbPoint || pcbPoint.part !== null)
+                return false;
+        }
+
+        if (footprint.space) for (const point of footprint.space) {
+            const pcbPoint = this.getPoint(point.x + x, point.y + y);
+
+            if (!pcbPoint)
+                return false;
+        }
+
+        if (footprint.air) for (const point of footprint.air) {
+            if (this.getPoint(point.x + x, point.y + y))
+                return false;
+
+            if (!this.isAir(point.x + x, point.y + y))
+                return false;
+        }
+
+        return true;
+    };
+
+    const fitsPins = (x, y, pins) => {
+        const paths = [];
+
+        for (const pin of pins) if (pin.type === Pin.TYPE_OUT) {
+            const point = this.getPoint(pin.x + x, pin.y + y);
+
+            if (point.hasPaths()) {
+                for (const path of paths) if (path.containsPosition(pin.x + x, pin.y + y))
+                    return false;
+
+                const path = new PcbPath();
+
+                path.fromPcb(this, new Myr.Vector(pin.x + x, pin.y + y));
+
+                if (path.countOutputs() !== 0)
+                    return false;
+
+                paths.push(path);
+            }
+        }
+
+        return true;
+    };
+
+    /**
+     * Check whether a configuration can be instantiated at a position on this pcb.
+     * @param {Number} x The x position on the board.
+     * @param {Number} y The y position on the board.
+     * @param {Object} configuration A valid part configuration.
+     */
+    this.fits = (x, y, configuration) => {
+        return fitsFootprint(x, y, configuration.footprint) && fitsPins(x, y, configuration.io);
     };
 
     /**

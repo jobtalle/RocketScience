@@ -35,68 +35,6 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         }
     };
 
-    const checkFootprint = (x, y, footprint) => {
-        for (const point of footprint.points) {
-            const pcbPoint = pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y);
-
-            if (!pcbPoint || pcbPoint.part !== null)
-                return false;
-        }
-
-        if (footprint.space) for (const point of footprint.space) {
-            const pcbPoint = pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y);
-
-            if (!pcbPoint)
-                return false;
-        }
-
-        if (footprint.air) for (const point of footprint.air) {
-            if (pcb.getPoint(cursor.x + point.x + x, cursor.y + point.y + y))
-                return false;
-
-            if (!pcb.isAir(cursor.x + point.x + x, cursor.y + point.y + y))
-                return false;
-        }
-
-        return true;
-    };
-
-    const checkPins = (x, y, io) => {
-        const paths = [];
-
-        for (const pin of io) if (pin.type === Pin.TYPE_OUT) {
-            const point = pcb.getPoint(cursor.x + pin.x + x, cursor.y + pin.y + y);
-
-            if (point.hasPaths()) {
-                for (const path of paths) if (path.containsPosition(cursor.x + pin.x + x, cursor.y + pin.y + y))
-                    return false;
-
-                const path = new PcbPath();
-
-                path.fromPcb(pcb, new Myr.Vector(cursor.x + pin.x + x, cursor.y + pin.y + y));
-
-                if (path.countOutputs() !== 0)
-                    return false;
-
-                paths.push(path);
-            }
-        }
-
-        return true;
-    };
-
-    const isSuitable = fixture => {
-        let configuration = null;
-
-        if (fixture.isInstance())
-            configuration = fixture.part.getConfiguration();
-        else
-            configuration = fixture.part.configurations[_configurationIndex];
-
-        return checkFootprint(fixture.x, fixture.y, configuration.footprint) &&
-            checkPins(fixture.x, fixture.y, configuration.io);
-    };
-
     const getConfigurationCount = () => {
         if (fixtures.length > 1)
             return 1;
@@ -150,7 +88,14 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         _suitable = true;
 
         for (const fixture of fixtures) {
-            if (!isSuitable(fixture)) {
+            let configuration = null;
+
+            if (fixture.isInstance())
+                configuration = fixture.part.getConfiguration();
+            else
+                configuration = fixture.part.configurations[_configurationIndex];
+
+            if (!pcb.fits(cursor.x + fixture.x, cursor.y + fixture.y, configuration)) {
                 _suitable = false;
 
                 break;
