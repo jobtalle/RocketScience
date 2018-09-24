@@ -51,8 +51,43 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
         editor.replace(new PcbEditorPlace(renderContext, pcb, cursor, editor, placeFixtures, selection));
     };
 
-    const moveSelection = direction => {
+    const moveSelection = delta => {
+        if (selection.getSelected().length === 0)
+            return;
 
+        const _moveFixtures = [];
+        let _canMove = true;
+
+        editor.undoPush();
+
+        for (const fixture of selection.getSelected()) {
+            _moveFixtures.push(fixture);
+
+            pcb.remove(fixture.part);
+        }
+
+        for (const fixture of selection.getSelected()) {
+            if (!pcb.fits(fixture.x + delta.x, fixture.y + delta.y, fixture.part.getConfiguration())) {
+                _canMove = false;
+
+                break;
+            }
+        }
+
+        if (!_canMove) {
+            delta.x = delta.y = 0;
+
+            editor.undoPushCancel();
+        }
+
+        selection.clearSelected();
+
+        for (const fixture of _moveFixtures)
+            selection.addSelected(pcb.place(fixture.part, fixture.x + delta.x, fixture.y + delta.y));
+
+        selection.move(delta.x, delta.y);
+        updateSelectedInfo();
+        editor.revalidate();
     };
 
     const isPartSelected = part => {
@@ -176,15 +211,19 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
 
                 break;
             case PcbEditorSelect.KEY_LEFT:
+                moveSelection(new Myr.Vector(-1, 0));
 
                 break;
             case PcbEditorSelect.KEY_UP:
+                moveSelection(new Myr.Vector(0, -1));
 
                 break;
             case PcbEditorSelect.KEY_RIGHT:
+                moveSelection(new Myr.Vector(1, 0));
 
                 break;
             case PcbEditorSelect.KEY_DOWN:
+                moveSelection(new Myr.Vector(0, 1));
 
                 break;
         }

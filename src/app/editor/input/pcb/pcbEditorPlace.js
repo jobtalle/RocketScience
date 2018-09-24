@@ -64,6 +64,13 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         this.moveCursor();
     };
 
+    const getConfiguration = fixture => {
+        if (fixture.isInstance())
+            return fixture.part.getConfiguration();
+        else
+            return fixture.part.configurations[_configurationIndex];
+    };
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -88,14 +95,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         _suitable = true;
 
         for (const fixture of fixtures) {
-            let configuration = null;
-
-            if (fixture.isInstance())
-                configuration = fixture.part.getConfiguration();
-            else
-                configuration = fixture.part.configurations[_configurationIndex];
-
-            if (!pcb.fits(cursor.x + fixture.x, cursor.y + fixture.y, configuration)) {
+            if (!pcb.fits(cursor.x + fixture.x, cursor.y + fixture.y, getConfiguration(fixture))) {
                 _suitable = false;
 
                 break;

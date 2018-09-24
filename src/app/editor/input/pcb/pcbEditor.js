@@ -48,6 +48,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
         return {
             revalidate: revalidate,
             undoPush: undoPush,
+            undoPushCancel: undoPushCancel,
             replace: setEditor,
             shift: shift,
             revert: revertEditor,
@@ -92,6 +93,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
 
         if (_undoStack > UNDO_COUNT)
             _undoStack.splice(0, 1);
+
+        _redoStack.length = 0;
+    };
+
+    const undoPushCancel = () => {
+        _undoStack.pop();
 
         _redoStack.length = 0;
     };
