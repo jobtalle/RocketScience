@@ -162,5 +162,17 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
         updateTransform();
     };
 
+    /**
+     * Resize the view.
+     * @param {Number} width The width in pixels.
+     * @param {Number} height The height in pixels.
+     */
+    this.resize = (width, height) => {
+        viewWidth = width;
+        viewHeight = height;
+
+        updateTransform();
+    };
+
     updateTransform();
 }

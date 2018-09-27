@@ -65,6 +65,15 @@ export function Editor(renderContext, world, game) {
     };
 
     /**
+     * Call after the render context has resized.
+     * @param {Number} width The width in pixels.
+     * @param {Number} height The height in pixels.
+     */
+    this.resize = (width, height) => {
+        _view.resize(width - renderContext.getViewport().getSplitX(), height);
+    };
+
+    /**
      * Update the state of the editor.
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */

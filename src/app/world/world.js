@@ -16,7 +16,6 @@ export function World(renderContext) {
     const _objects = [];
     const _physics = new Physics(World.GRAVITY);
     const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
-    const _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -29,6 +28,7 @@ export function World(renderContext) {
         new ShiftProfile(
             0));
 
+    let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
     let _paused = false;
 
@@ -162,11 +162,25 @@ export function World(renderContext) {
     };
 
     /**
+     * Call when the render context has resized.
+     * @param {Number} width The width in pixels.
+     * @param {Number} height The height in pixels.
+     */
+    this.resize = (width, height) => {
+        _view.resize(width, height);
+
+        _surface.free();
+        _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
+        _surface.setClearColor(World.COLOR_CLEAR);
+    };
+
+    /**
      * Free all resources occupied by the world
      */
     this.free = () => {
         this.deactivate();
 
+        _surface.free();
         _physics.free();
     };
 

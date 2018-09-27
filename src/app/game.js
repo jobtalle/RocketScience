@@ -92,6 +92,19 @@ export function Game(renderContext) {
     };
 
     /**
+     * Call after the render context has resized.
+     * @param {Number} width The width in pixels.
+     * @param {Number} height The height in pixels.
+     */
+    this.resize = (width, height) => {
+        if (_world)
+            _world.resize(width, height);
+
+        if (_editor)
+            _editor.resize(width, height);
+    };
+
+    /**
      * Press the mouse.
      */
     this.onMousePress = () => {

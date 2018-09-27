@@ -48,6 +48,15 @@ export function RenderContext(canvas, overlay) {
      * @returns {Number} The height in pixels.
      */
     this.getHeight = () => _myr.getHeight();
+
+    /**
+     * Resize the render context, changing the contexts' canvas size.
+     * @param {Number} width The width in pixels.
+     * @param {Number} height The height in pixels.
+     */
+    this.resize = (width, height) => {
+        _myr.resize(width, height);
+    };
 }
 
 RenderContext.INTERFACE_SPLIT = 0.3;

@@ -12,11 +12,18 @@ const renderContext = new RenderContext(
     document.getElementById("overlay"));
 const game = new Game(renderContext);
 
-let canvasRect = renderContext.getOverlay().getBoundingClientRect();
+let canvasRect;
 let keyControl = false;
 
+const resize = () => {
+    const wrapper = document.getElementById("wrapper");
+
+    canvasRect = renderContext.getOverlay().getBoundingClientRect();
+    renderContext.resize(wrapper.clientWidth, wrapper.clientHeight);
+    game.resize(wrapper.clientWidth, wrapper.clientHeight);
+};
+
 document.title = getString("TITLE");
-window.onresize = () => canvasRect = renderContext.getOverlay().getBoundingClientRect();
 
 renderContext.getOverlay().addEventListener("mousemove", function(event) {
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
@@ -76,3 +83,7 @@ window.onkeyup = event => {
             game.onKeyUp(event.key);
     }
 };
+
+window.onresize = () => resize();
+
+resize();

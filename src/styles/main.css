@@ -1,11 +1,18 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
 #wrapper {
     overflow: hidden;
-    position: relative;
-    width: 1024px;
-    height: 768px;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid black;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
 }
 
 #overlay {
