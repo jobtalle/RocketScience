@@ -59,4 +59,4 @@ export function RenderContext(canvas, overlay) {
     };
 }
 
-RenderContext.INTERFACE_SPLIT = 0.3;
+RenderContext.INTERFACE_SPLIT = 320;
