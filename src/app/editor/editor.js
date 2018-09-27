@@ -9,7 +9,7 @@ import * as Myr from "../../lib/myr";
  * Provides a grid editor.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
- * @param {Object} game An interface to interact with the game object.
+ * @param {Game} game A game.
  * @constructor
  */
 export function Editor(renderContext, world, game) {

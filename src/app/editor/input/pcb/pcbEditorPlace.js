@@ -3,17 +3,15 @@ import {Pcb} from "../../../pcb/pcb";
 import * as Myr from "../../../../lib/myr";
 import {Part} from "../../../part/part";
 import "../../../part/objects"
-import {PcbPath} from "../../../pcb/point/pcbPath";
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
-import {Pin} from "../../../part/pin";
 
 /**
  * A placement editor used to place a part on a pcb.
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
- * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @param {PcbEditor} editor A PCB editor.
  * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
  * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
  * @constructor
@@ -150,7 +148,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
 
             editor.revalidate();
 
-            const revertEditor = editor.revert();
+            const revertEditor = editor.revertEditor();
 
             if (!selection && revertEditor instanceof PcbEditorSelect)
                 revertEditor.select(pcbFixtures);
@@ -161,7 +159,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
             if (selection !== null)
                 selection.clearSelected();
 
-            editor.revert();
+            editor.revertEditor();
 
             return false;
         }

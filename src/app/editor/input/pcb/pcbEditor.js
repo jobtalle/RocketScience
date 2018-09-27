@@ -19,11 +19,10 @@ import Myr from "../../../../lib/myr.js";
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
- * @param {Info} info The info object.
- * @param {Overlay} overlay The overlay object.
+ * @param {EditorOutput} output An EditorOutput object.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, info, overlay) {
+export function PcbEditor(renderContext, world, view, width, height, x, output) {
     const State = function(pcb, position) {
         this.getPcb = () => pcb;
         this.getPosition = () => position;
@@ -44,63 +43,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
     let _stashedEditor = null;
     let _pressLocation = null;
 
-    const makeInterface = () => {
-        return {
-            revalidate: revalidate,
-            undoPush: undoPush,
-            undoPushCancel: undoPushCancel,
-            replace: setEditor,
-            shift: shift,
-            revert: revertEditor,
-            info: info,
-            overlay: overlay
-        };
-    };
-
-    const shift = (dx, dy) => {
-        _pcbPosition.x += dx * Terrain.METERS_PER_PIXEL;
-        _pcbPosition.y += dy * Terrain.METERS_PER_PIXEL;
-
-        view.focus(view.getFocusX() - dx, view.getFocusY() - dy, view.getZoom());
-
-        matchWorldPosition();
-    };
-
-    const setEditor = editor => {
-        _stashedEditor = _editor;
-        _editor = editor;
-        _editor.makeActive();
-
-        moveCursor();
-    };
-
     const matchWorldPosition = () => {
         world.getView().focus(
             view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
             view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
             view.getZoom());
-    };
-
-    const revalidate = () => {
-        if(_renderer)
-            _renderer.revalidate();
-
-        updateCursor();
-    };
-
-    const undoPush = () => {
-        _undoStack.push(new State(_pcb.copy(), _pcbPosition.copy()));
-
-        if (_undoStack > UNDO_COUNT)
-            _undoStack.splice(0, 1);
-
-        _redoStack.length = 0;
-    };
-
-    const undoPushCancel = () => {
-        _undoStack.pop();
-
-        _redoStack.length = 0;
     };
 
     const undoPop = () => {
@@ -169,11 +116,79 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
             _stashedEditor.updatePcb(pcb);
     };
 
-    const revertEditor = () => {
-        setEditor(_stashedEditor);
+    /**
+     * Shift the PCB position.
+     * @param {Number} dx The horizontal movement in pixels.
+     * @param {Number} dy The vertical movement in pixels.
+     */
+    this.shift = (dx, dy) => {
+        _pcbPosition.x += dx * Terrain.METERS_PER_PIXEL;
+        _pcbPosition.y += dy * Terrain.METERS_PER_PIXEL;
+
+        view.focus(view.getFocusX() - dx, view.getFocusY() - dy, view.getZoom());
+
+        matchWorldPosition();
+    };
+
+    /**
+     * Set an editor to be active in this PcbEditor.
+     * @param {Object} editor One of the valid PCB editor objects.
+     */
+    this.setEditor = editor => {
+        _stashedEditor = _editor;
+        _editor = editor;
+        _editor.makeActive();
+
+        moveCursor();
+    };
+
+    /**
+     * Revalidate the editor state and PCB graphics.
+     */
+    this.revalidate = () => {
+        if(_renderer)
+            _renderer.revalidate();
+
+        updateCursor();
+    };
+
+    /**
+     * Push the current PCB state to the undo stack.
+     */
+    this.undoPush = () => {
+        _undoStack.push(new State(_pcb.copy(), _pcbPosition.copy()));
+
+        if (_undoStack > UNDO_COUNT)
+            _undoStack.splice(0, 1);
+
+        _redoStack.length = 0;
+    };
+
+    /**
+     * Cancel pushing the last undo state (using undoPush()).
+     * Use this when an undo state was pushed, but nothing has changed.
+     */
+    this.undoPushCancel = () => {
+        _undoStack.pop();
+
+        _redoStack.length = 0;
+    };
+
+    /**
+     * Revert to the previously active PCB editor.
+     * @returns {Object} The previously active PCB editor.
+     */
+    this.revertEditor = () => {
+        this.setEditor(_stashedEditor);
 
         return _editor;
     };
+
+    /**
+     * Get the output channels associated with this editor.
+     * @returns {EditorOutput} The EditorOutput object.
+     */
+    this.getOutput = () => output;
 
     /**
      * Set the editors edit mode. Possible options are:
@@ -183,18 +198,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
-        info.setPinouts(null);
-        overlay.clearRulers();
+        output.getInfo().setPinouts(null);
+        output.getOverlay().clearRulers();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
-                setEditor(new PcbEditorReshape(renderContext, _pcb, _cursor, makeInterface()));
+                this.setEditor(new PcbEditorReshape(renderContext, _pcb, _cursor, this));
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
-                setEditor(new PcbEditorSelect(renderContext, _pcb, _cursor, makeInterface(), new Selection(renderContext)));
+                this.setEditor(new PcbEditorSelect(renderContext, _pcb, _cursor, this, new Selection(renderContext)));
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
-                setEditor(new PcbEditorEtch(renderContext, _pcb, _cursor, makeInterface()));
+                this.setEditor(new PcbEditorEtch(renderContext, _pcb, _cursor, this));
                 break;
         }
     };
@@ -246,13 +261,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
     };
 
     /**
-     * Start placing a part.
+     * Start placing one or more parts.
      * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
      */
     this.place = fixtures => {
         _editor.reset();
 
-        setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, makeInterface(), fixtures, null));
+        this.setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, this, fixtures, null));
     };
 
     /**
@@ -286,7 +301,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, info, ov
         _renderer = new PcbRenderer(renderContext, pcb);
 
         matchWorldPosition();
-        revalidate();
+        this.revalidate();
         moveCursor();
     };
 

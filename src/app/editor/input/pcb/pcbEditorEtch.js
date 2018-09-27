@@ -10,7 +10,7 @@ import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
- * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @param {PcbEditor} editor A PCB editor.
  * @constructor
  */
 export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
@@ -37,9 +37,9 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         if (fixture) {
             const index = fixture.part.getPinIndexAt(cursor.x - fixture.x, cursor.y - fixture.y);
 
-            editor.info.setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
+            editor.getOutput().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
         } else
-            editor.info.setPinoutsSelected(null);
+            editor.getOutput().getInfo().setPinoutsSelected(null);
     };
 
     const setModeDeletePath = () => {

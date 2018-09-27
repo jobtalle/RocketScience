@@ -7,7 +7,7 @@ import {PcbEditor} from "../pcb/pcbEditor";
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Object} overlay An overlay element for HTML GUI.
  * @param {Number} x The X position of the toolbar in pixels.
- * @param {Object} game An interface to interact with the game object.
+ * @param {Game} game A game.
  * @constructor
  */
 export function Toolbar(editor, overlay, x, game) {

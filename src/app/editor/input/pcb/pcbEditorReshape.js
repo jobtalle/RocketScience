@@ -8,7 +8,7 @@ import {OverlayRulerDefinition} from "../../output/overlay/rulers/overlayRulerDe
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
- * @param {Object} editor An interface provided by the Editor to influence the editor.
+ * @param {PcbEditor} editor A PCB editor.
  * @constructor
  */
 export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
@@ -204,7 +204,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 dragPreventSplit(left, top, right, bottom);
             }
 
-            editor.overlay.makeRulers([
+            editor.getOutput().getOverlay().makeRulers([
                 new OverlayRulerDefinition(
                     _dragPointsLeft,
                     _dragPointsBottom + 1,
@@ -260,7 +260,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
             else
                 erase();
 
-            editor.overlay.clearRulers();
+            editor.getOutput().getOverlay().clearRulers();
 
             _extendable = _deletable = false;
             _dragging = false;

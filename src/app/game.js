@@ -36,7 +36,10 @@ export function Game(renderContext) {
         renderContext.getMyr().flush();
     };
 
-    const toggleEdit = () => {
+    /**
+     * Toggle between editing and running the simulation.
+     */
+    this.toggleEdit = () => {
         if (_editor) {
             _hiddenEditor = _editor;
             _editor.hide();
@@ -48,12 +51,6 @@ export function Game(renderContext) {
             _world.deactivate();
             _editor.show();
         }
-    };
-
-    const makeInterface = () => {
-        return {
-            toggleEdit: toggleEdit
-        };
     };
 
     /**
@@ -78,7 +75,7 @@ export function Game(renderContext) {
         stop();
 
         _world = new World(renderContext);
-        _editor = new Editor(renderContext, _world, makeInterface());
+        _editor = new Editor(renderContext, _world, this);
 
         const pcb = new Pcb(renderContext);
         pcb.initialize();
@@ -174,7 +171,7 @@ export function Game(renderContext) {
             // TODO: All events must go through buttons! Key presses should always be shortcuts for buttons.
             switch (key) {
                 case Game.KEY_TOGGLE_EDIT:
-                    toggleEdit();
+                    this.toggleEdit();
                     break;
                 default:
 
