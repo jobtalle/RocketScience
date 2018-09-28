@@ -11,7 +11,7 @@ import {Viewport} from "./editor/viewport";
 export function RenderContext(canvas, overlay) {
     const _myr = new Myr(canvas);
     const _sprites = new Sprites(_myr);
-    const _viewport = new Viewport(_myr.getWidth(), RenderContext.INTERFACE_SPLIT, overlay);
+    const _viewport = new Viewport(RenderContext.INTERFACE_SPLIT, overlay);
 
     /**
      * Get the viewport for this render context.
@@ -54,9 +54,7 @@ export function RenderContext(canvas, overlay) {
      * @param {Number} width The width in pixels.
      * @param {Number} height The height in pixels.
      */
-    this.resize = (width, height) => {
-        _myr.resize(width, height);
-    };
+    this.resize = (width, height) => _myr.resize(width, height);
 }
 
 RenderContext.INTERFACE_SPLIT = 320;

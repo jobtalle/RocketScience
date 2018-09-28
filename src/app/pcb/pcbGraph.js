@@ -41,11 +41,8 @@ const PartEntry = function(fixture) {
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
                 pathAdder(new PathEntry(path, pinIndex, this));
             }
-            else if (pin.type === "in") {
+            else if (pin.type === "in")
                 pointers.push(0);
-
-                ++used;
-            }
         }
 
         return used;

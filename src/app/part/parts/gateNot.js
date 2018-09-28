@@ -20,11 +20,9 @@ export function GateNot(pins, renderer) {
         if (state[pins[GateNot.PIN_INDEX_POWER]] === 1 &&
             state[pins[GateNot.PIN_INDEX_IN]] === 0) {
             state[pins[GateNot.PIN_INDEX_OUTPUT]] = 1;
-
-            return;
         }
-
-        state[pins[GateNot.PIN_INDEX_OUTPUT]] = 0;
+        else
+            state[pins[GateNot.PIN_INDEX_OUTPUT]] = 0;
     };
 }
 
