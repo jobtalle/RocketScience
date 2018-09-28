@@ -1,7 +1,7 @@
 :root {
-    --font-size-descriptions: 14px;
-    --font-size-headers: 24px;
-    --text-padding: 3px;
+    --font-size-descriptions: 16px;
+    --font-size-headers: 20px;
+    --text-padding: 5px;
     --text-color-dark: black;
     --text-color-light: white;
 }
