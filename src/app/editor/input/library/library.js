@@ -29,10 +29,15 @@ export function Library(editor, toolbar, info, overlay, width) {
         _container.id = Library.ID;
         _container.style.width = width + "px";
 
+        const _parts = document.createElement("div");
+
+        _parts.id = Library.PARTS_ID;
+
         for (const category in parts)
             if (parts.hasOwnProperty(category))
-                _container.appendChild(new Category(parts[category], setPart, info).getElement());
+                _parts.appendChild(new Category(parts[category], setPart, info).getElement());
 
+        _container.appendChild(_parts);
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
     };
@@ -60,3 +65,4 @@ export function Library(editor, toolbar, info, overlay, width) {
 }
 
 Library.ID = "library";
+Library.PARTS_ID = "parts";

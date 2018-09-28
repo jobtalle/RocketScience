@@ -5,27 +5,34 @@
     user-select: none;
     background-color: #dee5ef;
     border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
 }
 
 #library .category-title {
-    padding: 0.2vh;
+    padding: var(--text-padding);
     background-color: #6f747c;
-    color: white;
+    color: var(--text-color-light);
     font-weight: bold;
-    font-size: large;
+    font-size: var(--font-size-headers);
 }
 
-#library .part-list {
+#library #parts {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#library #parts .part-list {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    padding: 1vh;
+    padding: var(--text-padding);
 }
 
-#library .part-list.closed {
+#library #parts .part-list.closed {
     display:none;
 }
 
-#library .part-list .part {
+#library #parts .part-list .part {
     display: block;
 
     cursor: pointer;
