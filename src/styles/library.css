@@ -5,6 +5,8 @@
     user-select: none;
     background-color: #dee5ef;
     border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
 }
 
 #library .category-title {
@@ -15,17 +17,22 @@
     font-size: large;
 }
 
-#library .part-list {
+#library #parts {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#library #parts .part-list {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     padding: 1vh;
 }
 
-#library .part-list.closed {
+#library #parts .part-list.closed {
     display:none;
 }
 
-#library .part-list .part {
+#library #parts .part-list .part {
     display: block;
 
     cursor: pointer;
