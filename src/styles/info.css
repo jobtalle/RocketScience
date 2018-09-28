@@ -12,16 +12,15 @@
 
 #info .title {
     text-align: center;
-    padding: 4px;
-    font-size: 24px;
-    color: black;
+    padding: var(--text-padding);
+    font-size: var(--font-size-headers);
+    color: var(--text-color-dark);
     background-color: transparent;
 }
 
 #info .description {
-    padding: 4px;
-    font-style: italic;
-    font-size: 14px;
+    padding: var(--text-padding);
+    font-size: var(--font-size-descriptions);
 }
 
 #info .pinouts {
@@ -39,24 +38,24 @@
 
 #info .pinouts .pinout {
     font-family: monospace;
-    font-size: 12pt;
+    font-size: var(--font-size-descriptions);
     border-bottom: 1px solid black;
 }
 
 #info .pinouts .pinout .pinout-index {
-    padding: 3px;
+    padding: var(--text-padding);
     border-right: 1px solid black;
-    color: white;
+    color: var(--text-color-light);
 }
 
 #info .pinouts .pinout .pinout-name {
-    padding: 3px;
+    padding: var(--text-padding);
     background-color: white;
 }
 
 #info .pinouts .pinout .pinout-name.selected {
     background-color: gray;
-    color: white;
+    color: var(--text-color-light);
 }
 
 #info .pinouts .inline-description {
@@ -65,7 +64,7 @@
 }
 
 #info .pinouts .pinout-description {
-    padding: 3px;
+    padding: var(--text-padding);
 }
 
 #info-extension {
@@ -73,12 +72,12 @@
     position: absolute;
     bottom: 0;
     width: 75%;
-    height: 30%;
+    height: 250px;
     left: 100%;
 }
 
 #info-extension .pinout-description {
-    padding: 3px;
+    padding: var(--text-padding);
     background-color: white;
     border: 1px solid black;
     width: 100%;

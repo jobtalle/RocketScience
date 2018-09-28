@@ -1,3 +1,4 @@
+import "../styles/constants.css"
 import "../styles/main.css"
 import "../styles/gui.css"
 
