@@ -48,6 +48,7 @@ export function Game(renderContext) {
         }
         else {
             _editor = _hiddenEditor;
+            _hiddenEditor = null;
             _world.deactivate();
             _editor.show();
         }
@@ -102,6 +103,9 @@ export function Game(renderContext) {
 
         if (_editor)
             _editor.resize(width, height);
+
+        if (_hiddenEditor)
+            _hiddenEditor.resize(width, height);
     };
 
     /**
