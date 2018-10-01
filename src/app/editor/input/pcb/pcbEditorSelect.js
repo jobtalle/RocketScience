@@ -179,6 +179,8 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
     this.updatePcb = newPcb => {
         selection.clearSelected();
 
+        updateSelectedInfo();
+
         pcb = newPcb;
     };
 
