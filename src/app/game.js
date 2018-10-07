@@ -78,7 +78,7 @@ export function Game(renderContext) {
         _world = new World(renderContext);
         _editor = new Editor(renderContext, _world, this);
 
-        const pcb = new Pcb(renderContext);
+        const pcb = new Pcb();
         pcb.initialize();
 
         _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT - 2);

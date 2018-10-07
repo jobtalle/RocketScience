@@ -6,10 +6,9 @@ import {PcbPath} from "./point/pcbPath";
 
 /**
  * Defines a PCB.
- * @param {RenderContext} renderContext A render context.
  * @constructor
  */
-export function Pcb(renderContext) {
+export function Pcb() {
     const _fixtures = [];
     const _points = [];
     const _air = [];
@@ -282,7 +281,7 @@ export function Pcb(renderContext) {
      * @returns {Pcb} A deep copy of this Pcb.
      */
     this.copy = () => {
-        const newPcb = new Pcb(renderContext);
+        const newPcb = new Pcb();
 
         for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x) {
             const point = this.getPoint(x, y);

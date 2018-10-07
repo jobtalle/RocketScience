@@ -1,22 +1,120 @@
-import Pako from "pako"
 import {ByteBuffer} from "../utils/byteBuffer";
+import {Pcb} from "./pcb";
 
 /**
  * A storage format for PCB's.
  * Stored PCB's are as small as possible.
+ * @param {Uint8Array} [bytes] A binary source to initialize the file with. Only set this when reading.
  * @constructor
  */
-export function PcbFile() {
-    let bytes = null;
+export function PcbFile(bytes) {
+    const writeChunk = (buffer, points, empty) => {
+        if (points.length === 0)
+            return;
+
+        if (empty)
+            buffer.writeByte(PcbFile.CHUNK_EMPTY_BIT | points.length);
+        else {
+            buffer.writeByte(points.length);
+
+            for (const point of points)
+                buffer.writeByte(point.paths & 0xFF);
+        }
+    };
+
+    const encodeBoard = (buffer, pcb) => {
+        buffer.writeShort(pcb.getWidth());
+
+        let chunkEmpty = false;
+        let chunkPoints = [];
+
+        for(let y = 0; y < pcb.getHeight(); ++y) for(let x = 0; x < pcb.getWidth(); ++x) {
+            const point = pcb.getPoint(x, y);
+            const empty = point === null;
+
+            if (empty !== chunkEmpty || chunkPoints.length === PcbFile.CHUNK_LENGTH_MAX) {
+                writeChunk(buffer, chunkPoints, chunkEmpty);
+
+                chunkEmpty = empty;
+                chunkPoints = [point];
+            }
+            else
+                chunkPoints.push(point);
+        }
+
+        if (chunkPoints.length > 0)
+            writeChunk(buffer, chunkPoints, chunkEmpty);
+
+        buffer.writeByte(PcbFile.CHUNK_LAST);
+    };
+
+    const decodeBoard = (buffer, pcb) => {
+        const width = buffer.readShort();
+
+        let x = 0;
+        let y = 0;
+        let chunkLength;
+
+        while (chunkLength = buffer.readByte(), chunkLength !== PcbFile.CHUNK_LAST) {
+            const empty = (chunkLength & PcbFile.CHUNK_EMPTY_BIT) === PcbFile.CHUNK_EMPTY_BIT;
+
+            chunkLength &= ~PcbFile.CHUNK_EMPTY_BIT;
+
+            for (let i = 0; i < chunkLength; ++i) {
+                if (!empty)
+                    pcb.extend(x, y).paths = buffer.readByte();
+
+                if (++x === width)
+                    x = 0, ++y;
+            }
+        }
+    };
 
     /**
-     * Store a pcb in this file.
+     * Store a pcb in this file. This overwrites the previously stored pcb in this file.
      * @param {Pcb} pcb A pcb.
      */
     this.encode = pcb => {
-        bytes = new ByteBuffer();
+        const buffer = new ByteBuffer();
 
-        console.log(pcb.getWidth());
+        encodeBoard(buffer, pcb);
+
+        bytes = buffer.getBytes();
+
+        console.log(this.toHex());
+    };
+
+    /**
+     * Decode the pcb stored in this file.
+     * The file must be populated with data first!
+     * @returns {Pcb} The pcb that was stored in this file, or null if nothing was stored.
+     */
+    this.decode = () => {
+        if (!bytes)
+            return null;
+
+        const buffer = new ByteBuffer(bytes);
+        const pcb = new Pcb();
+
+        decodeBoard(buffer, pcb);
+
+        return pcb;
+    };
+
+    /**
+     * Convert the data to a hexadecimal string.
+     * @returns {String} A string containing this files' data in hexadecimal format.
+     */
+    this.toHex = () => {
+        if (!bytes)
+            return "";
+
+        let result = "";
+
+        for (const byte of bytes)
+            result += "0" + byte.toString(16);
+
+        return result;
     };
 }
 
@@ -39,3 +137,7 @@ PcbFile.fromPcb = pcb => {
 PcbFile.fromBytes = bytes => {
     return new PcbFile();
 };
+
+PcbFile.CHUNK_LENGTH_MAX = 127;
+PcbFile.CHUNK_EMPTY_BIT = 0x80;
+PcbFile.CHUNK_LAST = 0x00;

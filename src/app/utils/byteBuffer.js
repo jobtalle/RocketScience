@@ -1,9 +1,10 @@
 /**
  * A byte buffer which can be written to and read from.
+ * @param {Uint8Array} [source] A binary source to initialize the buffer with.
  * @constructor
  */
-export function ByteBuffer() {
-    const bytes = [];
+export function ByteBuffer(source) {
+    let bytes;
     let at = 0;
 
     /**
@@ -63,4 +64,9 @@ export function ByteBuffer() {
     this.readInt = () => {
         return (bytes[at++] << 24) | (bytes[at++] << 16) | (bytes[at++] << 8) | bytes[at++];
     };
+
+    if (source)
+        bytes = Array.from(source);
+    else
+        bytes = [];
 }

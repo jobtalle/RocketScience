@@ -416,7 +416,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
                 break;
             case KEY_SAVE:
                 if (control)
-                    PcbFile.fromPcb(_pcb);
+                    this.edit(PcbFile.fromPcb(_pcb).decode(), _pcbPosition.x, _pcbPosition.y);
                 break;
             default:
                 _editor.onKeyDown(key, control);
