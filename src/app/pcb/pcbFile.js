@@ -11,12 +11,12 @@ import {Part} from "../part/part";
  * @constructor
  */
 export function PcbFile(bytes) {
-    const writeChunk = (buffer, points, empty) => {
+    const writeBoardRun = (buffer, points, empty) => {
         if (points.length === 0)
             return;
 
         if (empty)
-            buffer.writeByte(PcbFile.CHUNK_EMPTY_BIT | points.length);
+            buffer.writeByte(PcbFile.BOARD_RUN_EMPTY_BIT | points.length);
         else {
             buffer.writeByte(points.length);
 
@@ -35,8 +35,8 @@ export function PcbFile(bytes) {
             const point = pcb.getPoint(x, y);
             const empty = point === null;
 
-            if (empty !== chunkEmpty || chunkPoints.length === PcbFile.CHUNK_LENGTH_MAX) {
-                writeChunk(buffer, chunkPoints, chunkEmpty);
+            if (empty !== chunkEmpty || chunkPoints.length === PcbFile.BOARD_RUN_LENGTH_MAX) {
+                writeBoardRun(buffer, chunkPoints, chunkEmpty);
 
                 chunkEmpty = empty;
                 chunkPoints = [point];
@@ -46,20 +46,44 @@ export function PcbFile(bytes) {
         }
 
         if (chunkPoints.length > 0)
-            writeChunk(buffer, chunkPoints, chunkEmpty);
+            writeBoardRun(buffer, chunkPoints, chunkEmpty);
 
-        buffer.writeByte(PcbFile.CHUNK_LAST);
+        buffer.writeByte(0);
+    };
+
+    const writePartRun = (buffer, padding, part) => {
+        while (padding > PcbFile.PART_RUN_LENGTH_MAX) {
+            buffer.writeByte(PcbFile.PART_RUN_LENGTH_MAX);
+            buffer.writeByte(PcbFile.PART_ID_VOID);
+
+            padding -= PcbFile.PART_RUN_LENGTH_MAX;
+        }
+
+        buffer.writeByte(padding);
+        buffer.writeByte(getPartId(part.getDefinition().object));
+        buffer.writeByte(part.getConfigurationIndex());
     };
 
     const encodeParts = (buffer, pcb) => {
-        buffer.writeShort(pcb.getFixtures().length);
+        const handled = [];
 
-        for (const fixture of pcb.getFixtures()) {
-            buffer.writeShort(fixture.x);
-            buffer.writeShort(fixture.y);
-            buffer.writeByte(getPartId(fixture.part.getDefinition().object));
-            buffer.writeByte(fixture.part.getConfigurationIndex());
+        let run = 0;
+
+        for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
+            const point = pcb.getPoint(x, y);
+
+            if (point && point.part && !handled.includes(point.part)) {
+                handled.push(point.part);
+
+                writePartRun(buffer, run, point.part);
+
+                run = 1;
+            }
+            else
+                ++run;
         }
+
+        buffer.writeByte(PcbFile.PART_RUN_LENGTH_EOF);
     };
 
     const decodeBoard = (buffer, pcb) => {
@@ -67,14 +91,14 @@ export function PcbFile(bytes) {
 
         let x = 0;
         let y = 0;
-        let chunkLength;
+        let runLength;
 
-        while (chunkLength = buffer.readByte(), chunkLength !== PcbFile.CHUNK_LAST) {
-            const empty = (chunkLength & PcbFile.CHUNK_EMPTY_BIT) === PcbFile.CHUNK_EMPTY_BIT;
+        while (runLength = buffer.readByte(), runLength !== 0) {
+            const empty = (runLength & PcbFile.BOARD_RUN_EMPTY_BIT) === PcbFile.BOARD_RUN_EMPTY_BIT;
 
-            chunkLength &= ~PcbFile.CHUNK_EMPTY_BIT;
+            runLength &= ~PcbFile.BOARD_RUN_EMPTY_BIT;
 
-            for (let i = 0; i < chunkLength; ++i) {
+            for (let i = 0; i < runLength; ++i) {
                 if (!empty)
                     pcb.extend(x, y).paths = buffer.readByte();
 
@@ -85,15 +109,20 @@ export function PcbFile(bytes) {
     };
 
     const decodeParts = (buffer, pcb) => {
-        const partCount = buffer.readShort();
+        let x = 0;
+        let y = 0;
+        let runLength;
 
-        for (let i = 0; i < partCount; ++i) {
-            const x = buffer.readShort();
-            const y = buffer.readShort();
+        while (runLength = buffer.readByte(), runLength !== PcbFile.PART_RUN_LENGTH_EOF) {
+            for (let i = 0; i < runLength; ++i) if (++x === pcb.getWidth())
+                x = 0, ++y;
+
             const id = buffer.readByte();
-            const configuration = buffer.readByte();
 
-            pcb.place(new Part(getPartFromId(id), configuration), x, y);
+            if (id === PcbFile.PART_ID_VOID)
+                continue;
+
+            pcb.place(new Part(getPartFromId(id), buffer.readByte()), x, y);
         }
     };
 
@@ -160,6 +189,8 @@ PcbFile.fromPcb = pcb => {
     return file;
 };
 
-PcbFile.CHUNK_LENGTH_MAX = 127;
-PcbFile.CHUNK_EMPTY_BIT = 0x80;
-PcbFile.CHUNK_LAST = 0x00;
+PcbFile.BOARD_RUN_EMPTY_BIT = 0x80;
+PcbFile.BOARD_RUN_LENGTH_MAX = 127;
+PcbFile.PART_ID_VOID = 0xFF;
+PcbFile.PART_RUN_LENGTH_MAX = 0xFF - 1;
+PcbFile.PART_RUN_LENGTH_EOF = 0xFF;
