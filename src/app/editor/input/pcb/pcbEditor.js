@@ -10,6 +10,7 @@ import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../../editor";
 import Myr from "../../../../lib/myr.js";
+import {PcbFile} from "../../../pcb/pcbFile";
 
 /**
  * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
@@ -30,6 +31,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
+    const KEY_SAVE = "q";
     const UNDO_COUNT = 64;
 
     const _undoStack = [];
@@ -411,6 +413,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
             case KEY_REDO:
                 if (control)
                     redoPop();
+                break;
+            case KEY_SAVE:
+                if (control)
+                    PcbFile.fromPcb(_pcb);
                 break;
             default:
                 _editor.onKeyDown(key, control);
