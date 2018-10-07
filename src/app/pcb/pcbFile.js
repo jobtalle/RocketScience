@@ -1,5 +1,6 @@
 import {ByteBuffer} from "../utils/byteBuffer";
 import {Pcb} from "./pcb";
+import Pako from "pako"
 
 /**
  * A storage format for PCB's.
@@ -79,7 +80,8 @@ export function PcbFile(bytes) {
 
         encodeBoard(buffer, pcb);
 
-        bytes = buffer.getBytes();
+        bytes = Pako.deflate(buffer.getBytes());
+        //console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
 
         console.log(this.toHex());
     };
@@ -93,7 +95,7 @@ export function PcbFile(bytes) {
         if (!bytes)
             return null;
 
-        const buffer = new ByteBuffer(bytes);
+        const buffer = new ByteBuffer(Pako.inflate(bytes));
         const pcb = new Pcb();
 
         decodeBoard(buffer, pcb);
