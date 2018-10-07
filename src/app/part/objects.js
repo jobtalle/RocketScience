@@ -7,15 +7,7 @@ import {GateNot} from "./parts/gateNot";
 import {Wheel} from "./parts/wheel";
 import {SensorTouch} from "./parts/sensorTouch";
 import {Propeller} from "./parts/propeller";
-
-// TODO: Can this be automated? E.G.:
-/*
-var context = require.context(".", true, /\.js$/);
-var obj = {};
-context.keys().forEach(function (key) {
-    obj[key] = context(key);
-});
- */
+import parts from "../../assets/parts.json"
 
 const states = {
     "Led": Led,
@@ -36,4 +28,32 @@ const states = {
  */
 export function getPartObject(name) {
     return states[name];
+}
+
+/**
+ * Get a unique id based on a part name.
+ * @param {String} name The part name.
+ * @returns {Number} A unique id. -1 if the part name is invalid.
+ */
+export function getPartId(name) {
+    return Object.keys(states).indexOf(name);
+}
+
+/**
+ * Get a part definition from parts.json based on its id,
+ * retrieved from the getPartId function.
+ * @param {Number} id A part id retrieved from the getPartId function.
+ * @returns {Object} A valid part configuration. If the id is invalid, null is returned.
+ */
+export function getPartFromId(id) {
+    const object = Object.keys(states)[id];
+
+    for (const category in parts) if (parts.hasOwnProperty(category)) {
+        for (const part of parts[category].parts) {
+            if (part.object === object)
+                return part;
+        }
+    }
+
+    return null;
 }

@@ -1,6 +1,8 @@
 import {ByteBuffer} from "../utils/byteBuffer";
 import {Pcb} from "./pcb";
+import {getPartFromId, getPartId} from "../part/objects";
 import Pako from "pako"
+import {Part} from "../part/part";
 
 /**
  * A storage format for PCB's.
@@ -49,6 +51,17 @@ export function PcbFile(bytes) {
         buffer.writeByte(PcbFile.CHUNK_LAST);
     };
 
+    const encodeParts = (buffer, pcb) => {
+        buffer.writeShort(pcb.getFixtures().length);
+
+        for (const fixture of pcb.getFixtures()) {
+            buffer.writeShort(fixture.x);
+            buffer.writeShort(fixture.y);
+            buffer.writeByte(getPartId(fixture.part.getDefinition().object));
+            buffer.writeByte(fixture.part.getConfigurationIndex());
+        }
+    };
+
     const decodeBoard = (buffer, pcb) => {
         const width = buffer.readShort();
 
@@ -71,6 +84,19 @@ export function PcbFile(bytes) {
         }
     };
 
+    const decodeParts = (buffer, pcb) => {
+        const partCount = buffer.readShort();
+
+        for (let i = 0; i < partCount; ++i) {
+            const x = buffer.readShort();
+            const y = buffer.readShort();
+            const id = buffer.readByte();
+            const configuration = buffer.readByte();
+
+            pcb.place(new Part(getPartFromId(id), configuration), x, y);
+        }
+    };
+
     /**
      * Store a pcb in this file. This overwrites the previously stored pcb in this file.
      * @param {Pcb} pcb A pcb.
@@ -79,9 +105,10 @@ export function PcbFile(bytes) {
         const buffer = new ByteBuffer();
 
         encodeBoard(buffer, pcb);
+        encodeParts(buffer, pcb);
 
         bytes = Pako.deflate(buffer.getBytes());
-        //console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
+        console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
 
         console.log(this.toHex());
     };
@@ -99,6 +126,7 @@ export function PcbFile(bytes) {
         const pcb = new Pcb();
 
         decodeBoard(buffer, pcb);
+        decodeParts(buffer, pcb);
 
         return pcb;
     };
@@ -130,14 +158,6 @@ PcbFile.fromPcb = pcb => {
     file.encode(pcb);
 
     return file;
-};
-
-/**
- * Create a PcbFile from bytes.
- * @param {Uint8Array} bytes The source bytes.
- */
-PcbFile.fromBytes = bytes => {
-    return new PcbFile();
 };
 
 PcbFile.CHUNK_LENGTH_MAX = 127;
