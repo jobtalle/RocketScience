@@ -148,7 +148,7 @@ export function PcbFile(bytes) {
         bytes = Pako.deflate(buffer.getBytes(), {"level": 9, "memLevel": 9});
         console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
 
-        console.log(this.toHex());
+        console.log(this.toString());
     };
 
     /**
@@ -169,19 +169,17 @@ export function PcbFile(bytes) {
     };
 
     /**
-     * Convert the data to a hexadecimal string.
-     * @returns {String} A string containing this files' data in hexadecimal format.
+     * Convert the data to a string.
+     * @returns {String} A string containing this files' data.
      */
-    this.toHex = () => {
-        if (!bytes)
-            return "";
+    this.toString = () => btoa(String.fromCharCode.apply(null, bytes));
 
-        let result = "";
-
-        for (const byte of bytes)
-            result += "0" + byte.toString(16);
-
-        return result;
+    /**
+     * Use the data from a string obtained through the toString method.
+     * @param {String} string A string obtained through the toString method.
+     */
+    this.fromString = string => {
+        bytes = new Uint8Array(atob(string).split("").map(c => c.charCodeAt(0)));
     };
 }
 
