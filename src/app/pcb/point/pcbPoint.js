@@ -70,6 +70,15 @@ PcbPoint.prototype.etchDirection = function(direction) {
 };
 
 /**
+ * Check whether a direction has been etched onto this point.
+ * @param {Number} direction A direction in the range [0, 7].
+ * @returns {Boolean} A boolean which is true if the point contains this direction.
+ */
+PcbPoint.prototype.hasDirection = function(direction) {
+    return ((this.paths >> direction) & 0x01) === 1;
+};
+
+/**
  * Remove an etched path in a direction from this point.
  * @param {Number} direction A direction in the range [0, 7].
  */
@@ -163,7 +172,7 @@ PcbPoint.prototype.withConnected = function(f, exclude) {
         if ((this.paths & bit) === bit) {
             const delta = PcbPoint.directionToDelta(direction);
 
-            f(delta.x, delta.y, (direction + 4) % 8);
+            f(delta.x, delta.y, PcbPoint.invertDirection(direction));
         }
     }
 };
@@ -198,6 +207,13 @@ PcbPoint.deltaToDirection = (dx, dy) => {
 
     return 4 + ((1 + dx) + 1) * dy;
 };
+
+/**
+ * Invert a direction, which means adding 180 degrees to it.
+ * @param {Number} direction A direction in the range [0, 7].
+ * @returns {Number} The inverted direction in the range [0, 7].
+ */
+PcbPoint.invertDirection = direction => (direction + 4) % 8;
 
 PcbPoint.PATHS_MASK = 0xFF;
 PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;

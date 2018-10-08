@@ -3,6 +3,8 @@ import {Pcb} from "./pcb";
 import {getPartFromId, getPartId} from "../part/objects";
 import Pako from "pako"
 import {Part} from "../part/part";
+import {Fixture} from "../part/fixture";
+import {PcbPoint} from "./point/pcbPoint";
 
 /**
  * A storage format for PCB's.
@@ -11,119 +13,127 @@ import {Part} from "../part/part";
  * @constructor
  */
 export function PcbFile(bytes) {
-    const writeBoardRun = (buffer, points, empty) => {
-        if (points.length === 0)
-            return;
+    const encodeHead = (buffer, pcb) => {
+        let head = pcb.getWidth() & PcbFile.HEAD_BITS_WIDTH;
 
-        if (empty)
-            buffer.writeByte(PcbFile.BOARD_RUN_EMPTY_BIT | points.length);
-        else {
-            buffer.writeByte(points.length);
+        if(pcb.getPoint(0, 0) === null)
+            head |= PcbFile.HEAD_BIT_START_EMPTY;
 
-            for (const point of points)
-                buffer.writeByte(point.paths & 0xFF);
-        }
+        buffer.writeShort(head);
     };
 
-    const encodeBoard = (buffer, pcb) => {
-        buffer.writeShort(pcb.getWidth());
+    const encodeRunEmpty = (buffer, length) => {
+        while (length > PcbFile.POINT_RUN_MAX) {
+            buffer.writeByte(PcbFile.POINT_RUN_MAX);
+            buffer.writeByte(PcbFile.POINT_SKIP);
 
-        let chunkEmpty = false;
-        let chunkPoints = [];
+            length -= PcbFile.POINT_RUN_MAX;
+        }
 
-        for(let y = 0; y < pcb.getHeight(); ++y) for(let x = 0; x < pcb.getWidth(); ++x) {
-            const point = pcb.getPoint(x, y);
-            const empty = point === null;
+        buffer.writeByte(length);
+    };
 
-            if (empty !== chunkEmpty || chunkPoints.length === PcbFile.BOARD_RUN_LENGTH_MAX) {
-                writeBoardRun(buffer, chunkPoints, chunkEmpty);
+    const encodeRunPoints = (buffer, points, encodedParts, count, maxCount) => {
+        for (let i = 0; i < points.length; ++i) {
+            const point = points[i];
 
-                chunkEmpty = empty;
-                chunkPoints = [point];
+            let byte = i === points.length - 1?0:PcbFile.POINT_BIT_CHAIN;
+
+            for (let direction = 1; direction < 5; ++direction) if (point.hasDirection(direction))
+                byte |= 1 << (direction - 1);
+
+            if (++count === maxCount)
+                byte |= PcbFile.POINT_BIT_LAST;
+
+            if (point.part !== null && !encodedParts.includes(point.part)) {
+                encodedParts.push(point.part);
+
+                buffer.writeByte(byte | PcbFile.POINT_BIT_PART);
+                buffer.writeByte(getPartId(point.part.getDefinition().object));
+                buffer.writeByte(point.part.getConfigurationIndex());
             }
             else
-                chunkPoints.push(point);
+                buffer.writeByte(byte);
         }
 
-        if (chunkPoints.length > 0)
-            writeBoardRun(buffer, chunkPoints, chunkEmpty);
-
-        buffer.writeByte(0);
+        return count;
     };
 
-    const writePartRun = (buffer, padding, part) => {
-        while (padding > PcbFile.PART_RUN_LENGTH_MAX) {
-            buffer.writeByte(PcbFile.PART_RUN_LENGTH_MAX);
-            buffer.writeByte(PcbFile.PART_ID_VOID);
+    const encode = (buffer, pcb) => {
+        const encodedParts = [];
 
-            padding -= PcbFile.PART_RUN_LENGTH_MAX;
-        }
+        let count = 0;
+        let runEmpty = pcb.getPoint(0, 0) === null;
+        let runPoints = [];
 
-        buffer.writeByte(padding);
-        buffer.writeByte(getPartId(part.getDefinition().object));
-        buffer.writeByte(part.getConfigurationIndex());
-    };
-
-    const encodeParts = (buffer, pcb) => {
-        const handled = [];
-
-        let run = 0;
+        encodeHead(buffer, pcb);
 
         for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
             const point = pcb.getPoint(x, y);
+            const empty = point === null;
 
-            if (point && point.part && !handled.includes(point.part)) {
-                handled.push(point.part);
+            if (empty !== runEmpty) {
+                if (runEmpty)
+                    encodeRunEmpty(buffer, runPoints.length);
+                else
+                    count = encodeRunPoints(buffer, runPoints, encodedParts, count, pcb.getPointCount());
 
-                writePartRun(buffer, run, point.part);
-
-                run = 1;
+                runEmpty = empty;
+                runPoints = [point];
             }
             else
-                ++run;
+                runPoints.push(point);
         }
 
-        buffer.writeByte(PcbFile.PART_RUN_LENGTH_EOF);
+        if (!runEmpty)
+            encodeRunPoints(buffer, runPoints, encodedParts, count, pcb.getPointCount());
     };
 
-    const decodeBoard = (buffer, pcb) => {
-        const width = buffer.readShort();
+    const decode = (buffer, pcb) => {
+        const head = buffer.readShort();
+        const width = head & PcbFile.HEAD_BITS_WIDTH;
+        const fixtures = [];
 
+        let point = head & PcbFile.HEAD_BIT_START_EMPTY?PcbFile.POINT_SKIP:buffer.readByte();
         let x = 0;
         let y = 0;
-        let runLength;
 
-        while (runLength = buffer.readByte(), runLength !== 0) {
-            const empty = (runLength & PcbFile.BOARD_RUN_EMPTY_BIT) === PcbFile.BOARD_RUN_EMPTY_BIT;
+        while (true) {
+            if (point === PcbFile.POINT_SKIP) {
+                const runLength = buffer.readByte();
 
-            runLength &= ~PcbFile.BOARD_RUN_EMPTY_BIT;
+                for (let i = 0; i < runLength; ++i) if (++x === width)
+                    x = 0, ++y;
 
-            for (let i = 0; i < runLength; ++i) {
-                if (!empty)
-                    pcb.extend(x, y).paths = buffer.readByte();
+                point = buffer.readByte();
+            }
+            else {
+                const pcbPoint = pcb.extend(x, y);
+
+                for (let direction = 1; direction < 5; ++direction) if (((point >> (direction - 1)) & 0x01) === 0x01) {
+                    const delta = PcbPoint.directionToDelta(direction);
+
+                    pcbPoint.etchDirection(direction);
+                    pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
+                }
+
+                if ((point & PcbFile.POINT_BIT_PART) === PcbFile.POINT_BIT_PART)
+                    fixtures.push(new Fixture(new Part(getPartFromId(buffer.readByte()), buffer.readByte()), x, y));
 
                 if (++x === width)
                     x = 0, ++y;
+
+                if ((point & PcbFile.POINT_BIT_LAST) === PcbFile.POINT_BIT_LAST)
+                    break;
+                else if ((point & PcbFile.POINT_BIT_CHAIN) === PcbFile.POINT_BIT_CHAIN)
+                    point = buffer.readByte();
+                else
+                    point = PcbFile.POINT_SKIP;
             }
         }
-    };
 
-    const decodeParts = (buffer, pcb) => {
-        let x = 0;
-        let y = 0;
-        let runLength;
-
-        while (runLength = buffer.readByte(), runLength !== PcbFile.PART_RUN_LENGTH_EOF) {
-            for (let i = 0; i < runLength; ++i) if (++x === pcb.getWidth())
-                x = 0, ++y;
-
-            const id = buffer.readByte();
-
-            if (id === PcbFile.PART_ID_VOID)
-                continue;
-
-            pcb.place(new Part(getPartFromId(id), buffer.readByte()), x, y);
-        }
+        for (const fixture of fixtures)
+            pcb.place(fixture.part, fixture.x, fixture.y);
     };
 
     /**
@@ -133,8 +143,7 @@ export function PcbFile(bytes) {
     this.encode = pcb => {
         const buffer = new ByteBuffer();
 
-        encodeBoard(buffer, pcb);
-        encodeParts(buffer, pcb);
+        encode(buffer, pcb);
 
         bytes = Pako.deflate(buffer.getBytes(), {"level": 9, "memLevel": 9});
         console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
@@ -154,8 +163,7 @@ export function PcbFile(bytes) {
         const buffer = new ByteBuffer(Pako.inflate(bytes));
         const pcb = new Pcb();
 
-        decodeBoard(buffer, pcb);
-        decodeParts(buffer, pcb);
+        decode(buffer, pcb);
 
         return pcb;
     };
@@ -189,8 +197,10 @@ PcbFile.fromPcb = pcb => {
     return file;
 };
 
-PcbFile.BOARD_RUN_EMPTY_BIT = 0x80;
-PcbFile.BOARD_RUN_LENGTH_MAX = 127;
-PcbFile.PART_ID_VOID = 0xFF;
-PcbFile.PART_RUN_LENGTH_MAX = 0xFF - 1;
-PcbFile.PART_RUN_LENGTH_EOF = 0xFF;
+PcbFile.HEAD_BIT_START_EMPTY = 0x8000;
+PcbFile.HEAD_BITS_WIDTH = PcbFile.HEAD_BIT_START_EMPTY - 1;
+PcbFile.POINT_RUN_MAX = 0xFF;
+PcbFile.POINT_BIT_CHAIN = 0x10;
+PcbFile.POINT_BIT_PART = 0x20;
+PcbFile.POINT_BIT_LAST = 0x40;
+PcbFile.POINT_SKIP = 0x80;

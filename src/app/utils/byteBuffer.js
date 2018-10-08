@@ -31,17 +31,6 @@ export function ByteBuffer(source) {
     };
 
     /**
-     * Write 32 bits to the buffer.
-     * @param {Number} int An unsigned integer in the range [0, 4294967295].
-     */
-    this.writeInt = int => {
-        bytes.push((int >> 24) & 0xFF);
-        bytes.push((int >> 16) & 0xFF);
-        bytes.push((int >> 8) & 0xFF);
-        bytes.push(int & 0xFF);
-    };
-
-    /**
      * Read 8 bits from the buffer.
      * @returns {Number} An unsigned integer in the range [0, 255].
      */
@@ -55,14 +44,6 @@ export function ByteBuffer(source) {
      */
     this.readShort = () => {
         return (bytes[at++] << 8) | bytes[at++];
-    };
-
-    /**
-     * Read 32 bits from the buffer.
-     * @returns {Number} An unsigned integer in the range [0, 4294967295].
-     */
-    this.readInt = () => {
-        return (bytes[at++] << 24) | (bytes[at++] << 16) | (bytes[at++] << 8) | bytes[at++];
     };
 
     if (source)

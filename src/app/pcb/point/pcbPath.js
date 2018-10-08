@@ -18,7 +18,7 @@ export function PcbPath() {
             _positions[_positions.length - 1].y - _positions[_positions.length - 2].y);
 
         _points[_points.length - 2].etchDirection(direction);
-        _points[_points.length - 1].etchDirection((direction + 4) % 8);
+        _points[_points.length - 1].etchDirection(PcbPoint.invertDirection(direction));
     };
 
     /**

@@ -141,7 +141,7 @@ export function Pcb() {
             if (!point)
                 continue;
 
-            point.clearDirection((direction + 4) % 8);
+            point.clearDirection(PcbPoint.invertDirection(direction));
         }
     };
 
