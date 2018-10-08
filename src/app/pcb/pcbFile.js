@@ -136,7 +136,7 @@ export function PcbFile(bytes) {
         encodeBoard(buffer, pcb);
         encodeParts(buffer, pcb);
 
-        bytes = Pako.deflate(buffer.getBytes());
+        bytes = Pako.deflate(buffer.getBytes(), {"level": 9, "memLevel": 9});
         console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
 
         console.log(this.toHex());
