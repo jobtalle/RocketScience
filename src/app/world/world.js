@@ -43,7 +43,7 @@ export function World(renderContext) {
      * @param {Number} y The y-position.
      */
     this.addPcb = (pcb, x, y) => {
-        _objects.push(new WorldObject(renderContext, _physics, pcb, x, y));
+        _objects.push(new WorldObject(renderContext, _physics, _controllerState, pcb, x, y));
     };
 
     /**

@@ -58,7 +58,7 @@ export function ControllerState() {
     this.getKeyDown = () => _down;
 }
 
-ControllerState.KEY_LEFT = "Left";
-ControllerState.KEY_UP = "Up";
-ControllerState.KEY_RIGHT = "Right";
-ControllerState.KEY_DOWN = "Down";
+ControllerState.KEY_LEFT = "a";
+ControllerState.KEY_UP = "w";
+ControllerState.KEY_RIGHT = "d";
+ControllerState.KEY_DOWN = "s";

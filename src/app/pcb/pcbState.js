@@ -5,9 +5,10 @@ import {PcbGraph} from "./pcbGraph";
  * @param {Pcb} pcb A PCB.
  * @param {PcbRenderer} renderer A pcb renderer to render state to.
  * @param {Object} body A physics body to apply state to.
+ * @param {ControllerState} controllerState A controller state to read input from.
  * @constructor
  */
-export function PcbState(pcb, renderer, body) {
+export function PcbState(pcb, renderer, body, controllerState) {
     let _stateArray = null;
     let _states = null;
 
@@ -18,7 +19,7 @@ export function PcbState(pcb, renderer, body) {
         _states = graph.makeStates(renderer);
 
         for (const state of _states)
-            state.initialize(body);
+            state.initialize(body, controllerState);
     };
 
     /**

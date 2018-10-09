@@ -7,12 +7,13 @@ import * as Myr from "../../lib/myr";
  * An object in the world.
  * @param {RenderContext} renderContext A render context.
  * @param {Physics} physics Physics engine.
+ * @param {ControllerState} controllerState A controller state to read input from.
  * @param {Pcb} pcb Circuit to simulate.
  * @param {Number} x Horizontal coordinate.
  * @param {Number} y Vertical coordinate.
  * @constructor
  */
-export function WorldObject(renderContext, physics, pcb, x, y) {
+export function WorldObject(renderContext, physics, controllerState, pcb, x, y) {
     const _renderer = new PcbRenderer(renderContext, pcb);
     const _transform = new Myr.Transform();
 
@@ -69,6 +70,6 @@ export function WorldObject(renderContext, physics, pcb, x, y) {
     };
 
     _body = generatePhysicsBody();
-    _state = new PcbState(pcb, _renderer, _body);
+    _state = new PcbState(pcb, _renderer, _body, controllerState);
     _renderer.setLevel(PcbRenderer.LEVEL_HULL);
 }
