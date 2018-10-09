@@ -57,5 +57,16 @@
 
   "PART_PROPELLER_NAME": "Propeller",
   "PART_PROPELLER_DESCRIPTION": "A propeller.",
-  "PART_PROPELLER_PIN_DESCRIPTION": "When a high signal is provided, the propeller will rotate and try to propel the craft towards the propeller direction."
+  "PART_PROPELLER_PIN_DESCRIPTION": "When a high signal is provided, the propeller will rotate and try to propel the craft towards the propeller direction.",
+
+  "PART_CONTROLLER_NAME": "Controller",
+  "PART_CONTROLLER_DESCRIPTION": "A receiver for player controls. Keyboard or gamepad actions are received by this controller and can be used to control a machine.",
+  "PART_CONTROLLER_PIN_LEFT_NAME": "Move left",
+  "PART_CONTROLLER_PIN_LEFT_DESCRIPTION": "When the player steers the craft to the left, this pin will output a high signal.",
+  "PART_CONTROLLER_PIN_RIGHT_NAME": "Move right",
+  "PART_CONTROLLER_PIN_RIGHT_DESCRIPTION": "When the player steers the craft to the right, this pin will output a high signal.",
+  "PART_CONTROLLER_PIN_UP_NAME": "Move up",
+  "PART_CONTROLLER_PIN_UP_DESCRIPTION": "When the player steers the craft up, this pin will output a high signal.",
+  "PART_CONTROLLER_PIN_DOWN_NAME": "Move down",
+  "PART_CONTROLLER_PIN_DOWN_DESCRIPTION": "When the player steers the craft down, this pin will output a high signal."
 }

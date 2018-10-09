@@ -1,0 +1,41 @@
+{
+  "label": "PART_CONTROLLER_NAME",
+  "description": "PART_CONTROLLER_DESCRIPTION",
+  "icon": "part-controller",
+  "object": "Controller",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0},
+          {"x": 3, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1},
+          {"x": 2, "y": 1},
+          {"x": 3, "y": 1},
+          {"x": 0, "y": 2},
+          {"x": 1, "y": 2},
+          {"x": 2, "y": 2},
+          {"x": 3, "y": 2}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "out", "signal": "discrete", "name": "PART_CONTROLLER_PIN_LEFT_NAME", "description": "PART_CONTROLLER_PIN_LEFT_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "out", "signal": "discrete", "name": "PART_CONTROLLER_PIN_UP_NAME", "description": "PART_CONTROLLER_PIN_UP_DESCRIPTION"},
+        {"x": 2, "y": 2, "type": "out", "signal": "discrete", "name": "PART_CONTROLLER_PIN_RIGHT_NAME", "description": "PART_CONTROLLER_PIN_RIGHT_DESCRIPTION"},
+        {"x": 3, "y": 2, "type": "out", "signal": "discrete", "name": "PART_CONTROLLER_PIN_DOWN_NAME", "description": "PART_CONTROLLER_PIN_DOWN_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "structural"},
+        {"x": 2, "y": 0, "type": "structural"},
+        {"x": 3, "y": 0, "type": "structural"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partController", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}

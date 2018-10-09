@@ -7,6 +7,7 @@ import {GateNot} from "./parts/gateNot";
 import {Wheel} from "./parts/wheel";
 import {SensorTouch} from "./parts/sensorTouch";
 import {Propeller} from "./parts/propeller";
+import {Controller} from "./parts/controller";
 import parts from "../../assets/parts.json"
 
 const states = {
@@ -18,7 +19,8 @@ const states = {
     "GateNot": GateNot,
     "Wheel": Wheel,
     "SensorTouch": SensorTouch,
-    "Propeller": Propeller
+    "Propeller": Propeller,
+    "Controller": Controller
 };
 
 /**
