@@ -47,6 +47,8 @@ export function Game(renderContext, input) {
 
         if (_editor)
             _editor.onKeyEvent(event);
+        else if (_world)
+            _world.onKeyEvent(event);
     };
 
     const onMouseEvent = event => {

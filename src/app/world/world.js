@@ -5,7 +5,9 @@ import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
 import {TerrainRugged} from "./terrain/terrainRugged";
+import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/MouseEvent";
+import {ControllerState} from "./controllerState";
 import Myr from "../../lib/myr";
 
 /**
@@ -15,6 +17,7 @@ import Myr from "../../lib/myr";
  */
 export function World(renderContext) {
     const _objects = [];
+    const _controllerState = new ControllerState();
     const _physics = new Physics(World.GRAVITY);
     const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
     const _view = new View(
@@ -48,6 +51,14 @@ export function World(renderContext) {
      * @returns {View} The view object applied to this world.
      */
     this.getView = () => _view;
+
+    /**
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
+     */
+    this.onKeyEvent = event => {
+        _controllerState.onKeyEvent(event);
+    };
 
     /**
      * A mouse event has been fired.
