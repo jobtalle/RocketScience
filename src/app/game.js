@@ -49,6 +49,13 @@ export function Game(renderContext, input) {
             _editor.onKeyEvent(event);
     };
 
+    const onMouseEvent = event => {
+        if (_editor)
+            _editor.onMouseEvent(event);
+        else if (_world)
+            _world.onMouseEvent(event);
+    };
+
     /**
      * Toggle between editing and running the simulation.
      */
@@ -80,6 +87,9 @@ export function Game(renderContext, input) {
             _editor.free();
             _editor = null;
         }
+
+        input.getKeyboard().removeListener(onKeyEvent);
+        input.getMouse().removeListener(onMouseEvent);
     };
 
     /**
@@ -88,8 +98,8 @@ export function Game(renderContext, input) {
     this.startCreate = () => {
         stop();
 
-        _world = new World(renderContext);
-        _editor = new Editor(renderContext, _world, this);
+        _world = new World(renderContext, input);
+        _editor = new Editor(renderContext, _world, this, input);
 
         const pcb = new Pcb();
         pcb.initialize();
@@ -121,74 +131,6 @@ export function Game(renderContext, input) {
             _hiddenEditor.resize(width, height);
     };
 
-    /**
-     * Press the mouse.
-     */
-    this.onMousePress = () => {
-        if(_editor)
-            _editor.onMousePress();
-        else
-            _world.onMousePress();
-    };
-
-    /**
-     * Release the mouse.
-     */
-    this.onMouseRelease = () => {
-        if(_editor)
-            _editor.onMouseRelease();
-        else if (_world)
-            _world.onMouseRelease();
-    };
-
-    /**
-     * Move the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
-     */
-    this.onMouseMove = (x, y) => {
-        if (_editor)
-            _editor.onMouseMove(x, y);
-        else if (_world)
-            _world.onMouseMove(x, y);
-    };
-
-    /**
-     * The mouse enters.
-     */
-    this.onMouseEnter = () => {
-        if (_editor)
-            _editor.onMouseEnter();
-    };
-
-    /**
-     * The mouse leaves.
-     */
-    this.onMouseLeave = () => {
-        if (_editor)
-            _editor.onMouseLeave();
-    };
-
-    /**
-     * When zooming in.
-     */
-    this.onZoomIn = () => {
-        if (!_editor)
-            _world.zoomIn();
-        else
-            _editor.zoomIn();
-    };
-
-    /**
-     * When zooming out.
-     */
-    this.onZoomOut = () => {
-        if (!_editor)
-            _world.zoomOut();
-        else
-            _editor.zoomOut();
-    };
-
     renderContext.getMyr().utils.loop(function(timeStep) {
         update(timeStep);
         render();
@@ -197,7 +139,9 @@ export function Game(renderContext, input) {
     });
 
     _menu.show(renderContext.getOverlay());
+
     input.getKeyboard().addListener(onKeyEvent);
+    input.getMouse().addListener(onMouseEvent);
 }
 
 Game.KEY_TOGGLE_EDIT = " ";

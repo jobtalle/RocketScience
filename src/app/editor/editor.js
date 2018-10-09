@@ -3,6 +3,7 @@ import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
 import {EditorOutput} from "./output/editorOutput";
 import {EditorInput} from "./input/editorInput";
+import {MouseEvent} from "../input/mouse/MouseEvent";
 import * as Myr from "../../lib/myr";
 
 /**
@@ -90,71 +91,56 @@ export function Editor(renderContext, world, game) {
     };
 
     /**
-     * Press the mouse.
+     * A mouse event has been fired.
+     * @param {MouseEvent} event A mouse event.
      */
-    this.onMousePress = () => {
-        _input.onMousePress();
-    };
+    this.onMouseEvent = event => {
+        switch (event.type) {
+            case MouseEvent.EVENT_PRESS_LMB:
+                _input.onMousePress();
 
-    /**
-     * Release the mouse.
-     */
-    this.onMouseRelease = () => {
-        _input.onMouseRelease();
-    };
+                break;
+            case MouseEvent.EVENT_RELEASE_LMB:
+                _input.onMouseRelease();
 
-    /**
-     * Move the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
-     */
-    this.onMouseMove = (x, y) => {
-        if (x <= renderContext.getViewport().getSplitX()) {
-            if (_editorHover) {
-                _input.onMouseLeave();
-                _editorHover = false;
-            }
+                break;
+            case MouseEvent.EVENT_SCROLL:
+                if (event.wheelDelta > 0)
+                    _input.zoomIn();
+                else
+                    _input.zoomOut();
+
+                break;
+            case MouseEvent.EVENT_ENTER:
+                if (!_editorHover) {
+                    _input.onMouseEnter();
+                    _editorHover = true;
+                }
+
+                break;
+            case MouseEvent.EVENT_LEAVE:
+                if (_editorHover) {
+                    _input.onMouseLeave();
+                    _editorHover = false;
+                }
+
+                break;
+            case MouseEvent.EVENT_MOVE:
+                if (event.x <= renderContext.getViewport().getSplitX()) {
+                    if (_editorHover) {
+                        _input.onMouseLeave();
+                        _editorHover = false;
+                    }
+                }
+                else if (!_editorHover) {
+                    _input.onMouseEnter();
+                    _editorHover = true;
+                }
+
+                _input.onMouseMove(event.x - renderContext.getViewport().getSplitX(), event.y);
+
+                break;
         }
-        else if (!_editorHover) {
-            _input.onMouseEnter();
-            _editorHover = true;
-        }
-
-        _input.onMouseMove(x - renderContext.getViewport().getSplitX(), y);
-    };
-
-    /**
-     * The mouse enters.
-     */
-    this.onMouseEnter = () => {
-        if (!_editorHover) {
-            _input.onMouseEnter();
-            _editorHover = true;
-        }
-    };
-
-    /**
-     * The mouse leaves.
-     */
-    this.onMouseLeave = () => {
-        if (_editorHover) {
-            _input.onMouseLeave();
-            _editorHover = false;
-        }
-    };
-
-    /**
-     * Zoom in.
-     */
-    this.zoomIn = () => {
-        _input.zoomIn();
-    };
-
-    /**
-     * Zoom out.
-     */
-    this.zoomOut = () => {
-        _input.zoomOut();
     };
 
     /**

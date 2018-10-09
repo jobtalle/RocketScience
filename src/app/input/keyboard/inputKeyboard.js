@@ -6,25 +6,25 @@ import {KeyEvent} from "./keyEvent";
  * @constructor
  */
 export function InputKeyboard(window) {
-    const listeners = [];
+    const _listeners = [];
 
-    let control = false;
-    let shift = false;
+    let _control = false;
+    let _shift = false;
 
     const fireEvent = (key, down) => {
-        const keyEvent = new KeyEvent(key, down, shift, control);
+        const keyEvent = new KeyEvent(key, down, _shift, _control);
 
-        for (const listener of listeners)
+        for (const listener of _listeners)
             listener(keyEvent);
     };
 
     const onkeydown = event => {
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
-                control = true;
+                _control = true;
                 break;
             case InputKeyboard.KEY_SHIFT:
-                shift = true;
+                _shift = true;
                 break;
             default:
                 fireEvent(event.key, true);
@@ -34,10 +34,10 @@ export function InputKeyboard(window) {
     const onkeyup = event => {
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
-                control = false;
+                _control = false;
                 break;
             case InputKeyboard.KEY_SHIFT:
-                shift = false;
+                _shift = false;
                 break;
             default:
                 fireEvent(event.key, false);
@@ -46,16 +46,15 @@ export function InputKeyboard(window) {
 
     /**
      * Add a listener to this object.
-     * The function onKeyEvent(event) will be called on the listener for key events.
      * @param {Function} listener A function to be called on key events.
      */
-    this.addListener = listener => listeners.push(listener);
+    this.addListener = listener => _listeners.push(listener);
 
     /**
      * Remove a listener from this object.
      * @param {Function} listener A listener previously added through the addListener method.
      */
-    this.removeListener = listener => listeners.splice(listeners.indexOf(listener), 1);
+    this.removeListener = listener => _listeners.splice(_listeners.indexOf(listener), 1);
 
     window.onkeydown = onkeydown;
     window.onkeyup = onkeyup;

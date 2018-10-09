@@ -2,21 +2,21 @@ import english from "../assets/text/english"
 import dutch from "../assets/text/dutch"
 
 export function Language() {
-    let language;
+    let _language;
 
     this.set = lang => {
         switch(lang) {
             case Language.ENGLISH:
-                language = english;
+                _language = english;
                 break;
             case Language.DUTCH:
-                language = dutch;
+                _language = dutch;
                 break;
         }
     };
 
     this.get = key => {
-        const text = language[key];
+        const text = _language[key];
 
         if (text === undefined)
             return Language.ERROR_TEXT;

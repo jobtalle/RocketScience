@@ -7,25 +7,27 @@ import {getString} from "./language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 
-const input = new Input(window);
 const renderContext = new RenderContext(
     document.getElementById("renderer"),
     document.getElementById("overlay"));
+const input = new Input(window, renderContext);
 const game = new Game(renderContext, input);
-
-let canvasRect;
-let keyControl = false;
 
 const resize = () => {
     const wrapper = document.getElementById("wrapper");
+    const rect = renderContext.getOverlay().getBoundingClientRect();
 
-    canvasRect = renderContext.getOverlay().getBoundingClientRect();
+    input.getMouse().setOrigin(rect.left, rect.top);
     renderContext.resize(wrapper.clientWidth, wrapper.clientHeight);
     game.resize(wrapper.clientWidth, wrapper.clientHeight);
 };
 
 document.title = getString("TITLE");
+window.onresize = resize;
 
+resize();
+
+/*
 renderContext.getOverlay().addEventListener("mousemove", function(event) {
     game.onMouseMove(event.clientX - canvasRect.left, event.clientY - canvasRect.top);
 });
@@ -64,7 +66,4 @@ renderContext.getOverlay().addEventListener("wheel", function(event) {
     else
         game.onZoomOut();
 });
-
-window.onresize = () => resize();
-
-resize();
+*/

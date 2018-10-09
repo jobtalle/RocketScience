@@ -5,6 +5,7 @@ import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
 import {TerrainRugged} from "./terrain/terrainRugged";
+import {MouseEvent} from "../input/mouse/MouseEvent";
 import Myr from "../../lib/myr";
 
 /**
@@ -49,40 +50,31 @@ export function World(renderContext) {
     this.getView = () => _view;
 
     /**
-     * Press the mouse.
+     * A mouse event has been fired.
+     * @param {MouseEvent} event A mouse event.
      */
-    this.onMousePress = () => {
-        _view.onMousePress();
-    };
+    this.onMouseEvent = event => {
+        switch (event.type) {
+            case MouseEvent.EVENT_SCROLL:
+                if (event.wheelDelta > 0)
+                    _view.zoomIn();
+                else
+                    _view.zoomOut();
 
-    /**
-     * Release the mouse.
-     */
-    this.onMouseRelease = () => {
-        _view.onMouseRelease();
-    };
+                break;
+            case MouseEvent.EVENT_MOVE:
+                _view.onMouseMove(event.x, event.y);
 
-    /**
-     * Move the mouse.
-     * @param {Number} x The mouse x position in pixels.
-     * @param {Number} y The mouse y position in pixels.
-     */
-    this.onMouseMove = (x, y) => {
-        _view.onMouseMove(x, y);
-    };
+                break;
+            case MouseEvent.EVENT_RELEASE_LMB:
+                _view.onMouseRelease();
 
-    /**
-     * Zoom in.
-     */
-    this.zoomIn = () => {
-        _view.zoomIn();
-    };
+                break;
+            case MouseEvent.EVENT_PRESS_LMB:
+                _view.onMousePress();
 
-    /**
-     * Zoom out.
-     */
-    this.zoomOut = () => {
-        _view.zoomOut();
+                break;
+        }
     };
 
     /**
@@ -103,13 +95,15 @@ export function World(renderContext) {
      * Activate the world.
      */
     this.activate = () => {
-
+        this.unpause();
     };
 
     /**
      * Deactivate the world.
      */
     this.deactivate = () => {
+        this.pause();
+
         _view.onMouseRelease();
 
         while (_objects.length > 0)
@@ -179,6 +173,8 @@ export function World(renderContext) {
      */
     this.free = () => {
         this.deactivate();
+
+        input.getMouse().removeListener(onMouseEvent);
 
         _surface.free();
         _physics.free();
