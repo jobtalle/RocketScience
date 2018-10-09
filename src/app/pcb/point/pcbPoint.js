@@ -215,6 +215,20 @@ PcbPoint.deltaToDirection = (dx, dy) => {
  */
 PcbPoint.invertDirection = direction => (direction + 4) % 8;
 
+/**
+ * Increment a direction by one (counter clockwise).
+ * @param {Number} direction A direction in the range [0, 7].
+ * @returns {Number} The incremented direction in the range [0, 7].
+ */
+PcbPoint.incrementDirection = direction => (direction + 1) % 8;
+
+/**
+ * Decrement a direction by one (clockwise).
+ * @param {Number} direction A direction in the range [0, 7].
+ * @returns {Number} The decremented direction in the range [0, 7].
+ */
+PcbPoint.decrementDirection = direction => direction === 0?7:direction - 1;
+
 PcbPoint.PATHS_MASK = 0xFF;
 PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;
 PcbPoint.CONNECTION_BIT_INPUT = 0x200;

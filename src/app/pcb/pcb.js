@@ -159,8 +159,8 @@ export function Pcb() {
 
             const erase = new PcbPoint();
 
-            erase.etchDirection((direction + 5) % 8);
-            erase.etchDirection((direction + 3) % 8);
+            erase.etchDirection(PcbPoint.incrementDirection(PcbPoint.invertDirection(direction)));
+            erase.etchDirection(PcbPoint.decrementDirection(PcbPoint.invertDirection(direction)));
 
             point.erasePaths(erase);
         }
