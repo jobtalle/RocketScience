@@ -1,4 +1,4 @@
-import {Menu} from "./menu";
+import {Menu} from "./menu/menu";
 import {Editor} from "./editor/editor";
 import {World} from "./world/world";
 import {Pcb} from "./pcb/pcb";

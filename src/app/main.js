@@ -5,9 +5,11 @@ import "../styles/gui.css"
 import {Game} from "./game"
 import {getString} from "./language";
 import {RenderContext} from "./renderContext";
+import {Input} from "./input/input";
 
 const KEY_CONTROL = "Control";
 
+const input = new Input(window);
 const renderContext = new RenderContext(
     document.getElementById("renderer"),
     document.getElementById("overlay"));
