@@ -171,11 +171,10 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key, control) => {
+    this.onKeyEvent = event => {
 
     };
 

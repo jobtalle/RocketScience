@@ -15,7 +15,7 @@ export function InputKeyboard(window) {
         const keyEvent = new KeyEvent(key, down, shift, control);
 
         for (const listener of listeners)
-            listener.onKeyDown(keyEvent);
+            listener(keyEvent);
     };
 
     const onkeydown = event => {
@@ -47,13 +47,13 @@ export function InputKeyboard(window) {
     /**
      * Add a listener to this object.
      * The function onKeyEvent(event) will be called on the listener for key events.
-     * @param {Object} listener A listener with a function called onKeyEvent.
+     * @param {Function} listener A function to be called on key events.
      */
     this.addListener = listener => listeners.push(listener);
 
     /**
      * Remove a listener from this object.
-     * @param {Object} listener A listener previously added through the addListener method.
+     * @param {Function} listener A listener previously added through the addListener method.
      */
     this.removeListener = listener => listeners.splice(listeners.indexOf(listener), 1);
 

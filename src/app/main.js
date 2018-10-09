@@ -7,13 +7,11 @@ import {getString} from "./language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 
-const KEY_CONTROL = "Control";
-
 const input = new Input(window);
 const renderContext = new RenderContext(
     document.getElementById("renderer"),
     document.getElementById("overlay"));
-const game = new Game(renderContext);
+const game = new Game(renderContext, input);
 
 let canvasRect;
 let keyControl = false;
@@ -66,26 +64,6 @@ renderContext.getOverlay().addEventListener("wheel", function(event) {
     else
         game.onZoomOut();
 });
-
-window.onkeydown = event => {
-    switch (event.key) {
-        case KEY_CONTROL:
-            keyControl = true;
-            break;
-        default:
-            game.onKeyDown(event.key, keyControl);
-    }
-};
-
-window.onkeyup = event => {
-    switch (event.key) {
-        case KEY_CONTROL:
-            keyControl = false;
-            break;
-        default:
-            game.onKeyUp(event.key);
-    }
-};
 
 window.onresize = () => resize();
 

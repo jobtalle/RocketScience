@@ -20,7 +20,7 @@ export function InfoPinoutEntry(index, pin, selected, description) {
         _row.className = InfoPinoutEntry.CLASS;
         _row.onmouseover = mouseOver;
         _row.onmouseout = mouseOut;
-        _row.style.backgroundColor = Pin.getPinColor(pin).toString();
+        _row.style.backgroundColor = Pin.getPinColor(pin).toHex();
 
         _row.appendChild(makeColumn(new InfoPinoutEntryIndex(index).getElement()));
         _row.appendChild(makeColumn(new InfoPinoutEntryName(getString(pin.name), selected).getElement()));

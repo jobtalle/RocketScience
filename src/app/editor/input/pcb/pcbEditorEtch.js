@@ -224,11 +224,11 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key) => {
-        switch (key) {
+    this.onKeyEvent = event => {
+        switch (event.key) {
             case PcbEditorEtch.KEY_DELETE:
                 if (_pathSelected) {
                     editor.undoPush();

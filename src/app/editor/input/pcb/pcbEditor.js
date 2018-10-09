@@ -400,27 +400,29 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key, control) => {
-        switch(key) {
+    this.onKeyEvent = event => {
+        if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (control)
+                if (event.control)
                     undoPop();
-                break;
+
+                return;
             case KEY_REDO:
-                if (control)
+                if (event.control)
                     redoPop();
-                break;
+
+                return;
             case KEY_SAVE:
-                if (control)
+                if (event.control)
                     this.edit(PcbFile.fromPcb(_pcb).decode(), _pcbPosition.x, _pcbPosition.y);
-                break;
-            default:
-                _editor.onKeyDown(key, control);
+
+                return;
         }
+
+        _editor.onKeyEvent(event);
     };
 
     /**

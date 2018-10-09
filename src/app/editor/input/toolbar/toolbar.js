@@ -75,11 +75,11 @@ export function Toolbar(editor, overlay, x, game) {
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key) => {
-        switch (key) {
+    this.onKeyEvent = event => {
+        if (event.down) switch (event.key) {
             case Toolbar.KEY_PRESS_EXTEND:
                 _buttonExtend.getElement().click();
                 break;

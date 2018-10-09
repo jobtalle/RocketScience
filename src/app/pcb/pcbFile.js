@@ -48,9 +48,14 @@ export function PcbFile(bytes) {
             if (point.part !== null && !encodedParts.includes(point.part)) {
                 encodedParts.push(point.part);
 
+                if (point.part.getConfigurationIndex() !== 0)
+                    byte |= PcbFile.POINT_BIT_CONFIGURED;
+
                 buffer.writeByte(byte | PcbFile.POINT_BIT_PART);
                 buffer.writeByte(getPartId(point.part.getDefinition().object));
-                buffer.writeByte(point.part.getConfigurationIndex());
+
+                if (point.part.getConfigurationIndex() !== 0)
+                    buffer.writeByte(point.part.getConfigurationIndex());
             }
             else
                 buffer.writeByte(byte);
@@ -117,8 +122,16 @@ export function PcbFile(bytes) {
                     pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
                 }
 
-                if ((point & PcbFile.POINT_BIT_PART) === PcbFile.POINT_BIT_PART)
-                    fixtures.push(new Fixture(new Part(getPartFromId(buffer.readByte()), buffer.readByte()), x, y));
+                if ((point & PcbFile.POINT_BIT_PART) === PcbFile.POINT_BIT_PART) {
+                    const id = buffer.readByte();
+
+                    let configuration = 0;
+
+                    if ((point & PcbFile.POINT_BIT_CONFIGURED) === PcbFile.POINT_BIT_CONFIGURED)
+                        configuration = buffer.readByte();
+
+                    fixtures.push(new Fixture(new Part(getPartFromId(id), configuration), x, y));
+                }
 
                 if (++x === width)
                     x = 0, ++y;
@@ -201,4 +214,5 @@ PcbFile.POINT_RUN_MAX = 0xFF;
 PcbFile.POINT_BIT_CHAIN = 0x10;
 PcbFile.POINT_BIT_PART = 0x20;
 PcbFile.POINT_BIT_LAST = 0x40;
-PcbFile.POINT_SKIP = 0x80;
+PcbFile.POINT_BIT_CONFIGURED = 0x80;
+PcbFile.POINT_SKIP = PcbFile.POINT_BIT_CONFIGURED;

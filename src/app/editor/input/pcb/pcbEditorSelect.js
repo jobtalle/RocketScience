@@ -185,12 +185,11 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key, control) => {
-        switch (key) {
+    this.onKeyEvent = event => {
+        switch (event.key) {
             case PcbEditorSelect.KEY_DELETE:
                 if (!editor.getOutput().getInfo().isHovering() && selection.getSelected().length > 0) {
                     deleteSelectedParts();
@@ -208,7 +207,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
 
                 break;
             case PcbEditorSelect.KEY_SELECT_ALL:
-                if (control)
+                if (event.control)
                     selectAll();
 
                 break;

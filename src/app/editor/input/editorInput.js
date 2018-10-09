@@ -84,13 +84,12 @@ export function EditorInput(renderContext, output, world, view, game) {
     };
 
     /**
-     * A key is pressed.
-     * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
+     * A key event has been fired.
+     * @param {KeyEvent} event A key event.
      */
-    this.onKeyDown = (key, control) => {
-        _pcbEditor.onKeyDown(key, control);
-        _toolbar.onKeyDown(key);
+    this.onKeyEvent = event => {
+        _pcbEditor.onKeyEvent(event);
+        _toolbar.onKeyEvent(event);
     };
 
     /**

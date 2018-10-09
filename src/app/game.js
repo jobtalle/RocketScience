@@ -7,9 +7,10 @@ import {Terrain} from "./world/terrain/terrain";
 /**
  * This class contains the game views.
  * @param {RenderContext} renderContext A render context.
+ * @param {Input} input An input controller.
  * @constructor
  */
-export function Game(renderContext) {
+export function Game(renderContext, input) {
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
@@ -34,6 +35,18 @@ export function Game(renderContext) {
             _editor.draw();
 
         renderContext.getMyr().flush();
+    };
+
+    const onKeyEvent = event => {
+        if (event.down) switch (event.key) {
+            case Game.KEY_TOGGLE_EDIT:
+                this.toggleEdit();
+
+                return;
+        }
+
+        if (_editor)
+            _editor.onKeyEvent(event);
     };
 
     /**
@@ -176,36 +189,6 @@ export function Game(renderContext) {
             _editor.zoomOut();
     };
 
-    /**
-     * A key is pressed.
-     * @param {String} key A key.
-     * @param {Boolean} control Indicates whether the control button is pressed.
-     */
-    this.onKeyDown = (key, control) => {
-        if(_editor)
-            _editor.onKeyDown(key, control);
-        else {
-            // TODO: All events must go through buttons! Key presses should always be shortcuts for buttons.
-            switch (key) {
-                case Game.KEY_TOGGLE_EDIT:
-                    this.toggleEdit();
-                    break;
-                default:
-
-
-                    break;
-            }
-        }
-    };
-
-    /**
-     * A key is released.
-     * @param {String} key A key.
-     */
-    this.onKeyUp = key => {
-
-    };
-
     renderContext.getMyr().utils.loop(function(timeStep) {
         update(timeStep);
         render();
@@ -214,6 +197,7 @@ export function Game(renderContext) {
     });
 
     _menu.show(renderContext.getOverlay());
+    input.getKeyboard().addListener(onKeyEvent);
 }
 
 Game.KEY_TOGGLE_EDIT = " ";
