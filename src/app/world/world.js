@@ -129,20 +129,24 @@ export function World(renderContext) {
         if (!_paused) {
             _physics.update(1 / 60);
 
-            let tick = 0;
+            let ticks = 0;
             _tickCounter -= timeStep;
 
             while (_tickCounter < 0) {
                 _tickCounter += World.TICK_DELAY;
-                ++tick;
+
+                ++ticks;
             }
 
             for (let index = 0; index < _objects.length; index++) {
-                for (let i = 0; i < tick; ++i)
+                for (let i = 0; i < ticks; ++i)
                     _objects[index].tick();
 
                 _objects[index].update(timeStep);
             }
+
+            if (ticks)
+                _controllerState.tick();
         }
 
         _surface.bind();
