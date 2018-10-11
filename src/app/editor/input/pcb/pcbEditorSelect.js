@@ -189,7 +189,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
-        switch (event.key) {
+       if (event.down) switch (event.key) {
             case PcbEditorSelect.KEY_DELETE:
                 if (!editor.getOutput().getInfo().isHovering() && selection.getSelected().length > 0) {
                     deleteSelectedParts();
