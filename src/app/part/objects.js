@@ -9,6 +9,7 @@ import {SensorTouch} from "./parts/sensorTouch";
 import {Propeller} from "./parts/propeller";
 import {Controller} from "./parts/controller";
 import parts from "../../assets/parts.json"
+import {Button} from "./parts/button";
 
 const states = {
     "Led": Led,
@@ -20,7 +21,8 @@ const states = {
     "Wheel": Wheel,
     "SensorTouch": SensorTouch,
     "Propeller": Propeller,
-    "Controller": Controller
+    "Controller": Controller,
+    "Button": Button
 };
 
 /**

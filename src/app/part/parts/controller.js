@@ -1,4 +1,5 @@
 /**
+ * A controller chip, which conveys keyboard or gamepad controls to a pcb through its pins.
  * @param {Array} pins An array containing the pin indices.
  * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
