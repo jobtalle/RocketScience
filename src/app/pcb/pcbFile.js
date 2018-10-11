@@ -160,6 +160,7 @@ export function PcbFile(bytes) {
 
         bytes = Pako.deflate(buffer.getBytes(), {"level": 9, "memLevel": 9});
         console.log("Compression ratio: " + Math.round((buffer.getBytes().length / bytes.length) * 100) + "%");
+        console.log(bytes.length + "B");
 
         console.log(this.toString());
     };

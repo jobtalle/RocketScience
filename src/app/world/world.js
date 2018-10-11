@@ -36,6 +36,24 @@ export function World(renderContext) {
     let _tickCounter = 0;
     let _paused = false;
 
+    const clickObject = (x, y) => {
+        let at = new Myr.Vector(x, y);
+
+        _view.getInverse().apply(at);
+
+        for (const object of _objects) {
+            const point = object.contains(at);
+
+            if (point) {
+                _controllerState.onClick(object.getBody(), point);
+
+                return true;
+            }
+        }
+
+        return false;
+    };
+
     /**
      * Add a new pcb to simulate in the world.
      * @param {Pcb} pcb The pcb to add.
@@ -82,7 +100,8 @@ export function World(renderContext) {
 
                 break;
             case MouseEvent.EVENT_PRESS_LMB:
-                _view.onMousePress();
+                if (!clickObject(event.x, event.y))
+                    _view.onMousePress();
 
                 break;
         }
@@ -188,8 +207,6 @@ export function World(renderContext) {
      */
     this.free = () => {
         this.deactivate();
-
-        input.getMouse().removeListener(onMouseEvent);
 
         _surface.free();
         _physics.free();

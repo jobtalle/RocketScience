@@ -1,6 +1,7 @@
 import {PcbRenderer} from "../pcb/pcbRenderer";
 import {PcbShape} from "../pcb/pcbShape";
 import {PcbState} from "../pcb/pcbState";
+import {Pcb} from "../pcb/pcb";
 import * as Myr from "../../lib/myr";
 
 /**
@@ -68,6 +69,34 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
 
         _renderer.free();
     };
+
+    /**
+     * Check whether this object contains a given vector.
+     * @param {Myr.Vector} vector A vector.
+     * @returns {Myr.Vector} The coordinate of the point on this pcb that was clicked, or null if nothing was hit.
+     */
+    this.contains = vector => {
+        const normalized = vector.copy();
+        const inverseTransform = _transform.copy();
+
+        inverseTransform.invert();
+        inverseTransform.apply(normalized);
+
+        const pointX = Math.floor(normalized.x / Pcb.PIXELS_PER_POINT);
+        const pointY = Math.floor(normalized.y / Pcb.PIXELS_PER_POINT);
+        const point = pcb.getPoint(pointX, pointY);
+
+        if (point)
+            return new Myr.Vector(pointX, pointY);
+        else
+            return null;
+    };
+
+    /**
+     * Get this objects physics body.
+     * @returns {Object} A physics body.
+     */
+    this.getBody = () => _body;
 
     _body = generatePhysicsBody();
     _state = new PcbState(pcb, _renderer, _body, controllerState);

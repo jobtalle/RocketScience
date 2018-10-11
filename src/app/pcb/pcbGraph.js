@@ -1,7 +1,7 @@
 import {getPartObject} from "../part/objects";
 import {PcbPath} from "./point/pcbPath";
-import * as Myr from "../../lib/myr";
 import {Pin} from "../part/pin";
+import * as Myr from "../../lib/myr";
 
 const findOutput = (paths, x, y) => {
     for (const path of paths) if (path.contains(x, y))

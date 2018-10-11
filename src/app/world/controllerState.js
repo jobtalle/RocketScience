@@ -3,29 +3,31 @@
  * @constructor
  */
 export function ControllerState() {
+    const Click = function(target, point) {
+        this.target = target;
+        this.point = point;
+    };
+
     let _state = 0;
-    let _down = 0;
+    let _postponedRelease = 0;
+    let _clicks = [];
 
     const press = key => {
         switch (key) {
             case ControllerState.KEY_LEFT:
                 _state |= ControllerState.FLAG_LEFT;
-                _down &= ~ControllerState.FLAG_LEFT;
 
                 break;
             case ControllerState.KEY_UP:
                 _state |= ControllerState.FLAG_UP;
-                _down &= ~ControllerState.FLAG_UP;
 
                 break;
             case ControllerState.KEY_RIGHT:
                 _state |= ControllerState.FLAG_RIGHT;
-                _down &= ~ControllerState.FLAG_RIGHT;
 
                 break;
             case ControllerState.KEY_DOWN:
                 _state |= ControllerState.FLAG_DOWN;
-                _down &= ~ControllerState.FLAG_DOWN;
 
                 break;
         }
@@ -34,19 +36,19 @@ export function ControllerState() {
     const release = key => {
         switch (key) {
             case ControllerState.KEY_LEFT:
-                _down |= ControllerState.FLAG_LEFT;
+                _state &= ~ControllerState.FLAG_LEFT;
 
                 break;
             case ControllerState.KEY_UP:
-                _down |= ControllerState.FLAG_UP;
+                _state &= ~ControllerState.FLAG_UP;
 
                 break;
             case ControllerState.KEY_RIGHT:
-                _down |= ControllerState.FLAG_RIGHT;
+                _state &= ~ControllerState.FLAG_RIGHT;
 
                 break;
             case ControllerState.KEY_DOWN:
-                _down |= ControllerState.FLAG_DOWN;
+                _state &= ~ControllerState.FLAG_DOWN;
 
                 break;
         }
@@ -64,11 +66,27 @@ export function ControllerState() {
     };
 
     /**
+     * Register a click on an object at a certain position.
+     * @param {Object} target The objects' physics body.
+     * @param {Myr.Vector} point The clicked pcb point position on the board.
+     */
+    this.onClick = (target, point) => _clicks.push(new Click(target, point));
+
+    /**
+     * Get all clicks registered since the last tick.
+     * Each tick has a target member which is the physics body of the clicked object,
+     * and a point member which is a Myr.Vector pointing to the clicked point.
+     * @returns {Array} An array of clicks.
+     */
+    this.getClicks = () => _clicks;
+
+    /**
      * Call this function after all parts depending on this controller have ticked.
      */
     this.tick = () => {
-        _state &= ~_down;
-        _down = 0;
+        _state &= ~_postponedRelease;
+        _postponedRelease = 0;
+        _clicks.splice(0, _clicks.length);
     };
 
     /**
