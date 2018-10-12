@@ -248,10 +248,14 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         if (!_suitable)
             myr.setColor(PcbEditorPlace.COLOR_UNSUITABLE);
 
-        for (let i = 0; i < fixtures.length; ++i)
+        for (let i = 0; i < fixtures.length; ++i) {
             _renderers[i].drawInternal(
                 (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
                 (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
+            _renderers[i].drawExternal(
+                (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
+                (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
+        }
 
         if (!_suitable)
             myr.setColor(Myr.Color.WHITE);
