@@ -12,10 +12,9 @@ import {KeyEvent} from "../../../input/keyboard/keyEvent";
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
  * @param {Object} overlay An overlay element for HTML GUI.
- * @param {Number} width The width of the library in pixels.
  * @constructor
  */
-export function Library(editor, toolbar, info, overlay, width) {
+export function Library(editor, toolbar, info, overlay) {
     let _container = null;
 
     const setPart = part => {
@@ -29,7 +28,6 @@ export function Library(editor, toolbar, info, overlay, width) {
     const build = () => {
         _container = document.createElement("div");
         _container.id = Library.ID;
-        _container.style.width = width + "px";
 
         const _parts = document.createElement("div");
 

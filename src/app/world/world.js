@@ -100,9 +100,8 @@ export function World(renderContext) {
 
                 break;
             case MouseEvent.EVENT_PRESS_LMB:
-                clickObject(event.x, event.y);
-
-                _view.onMousePress();
+                if (!clickObject(event.x, event.y))
+                    _view.onMousePress();
 
                 break;
         }

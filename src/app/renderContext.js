@@ -1,6 +1,7 @@
 import Myr from "../lib/myr.js"
 import {Sprites} from "./sprites";
 import {Viewport} from "./editor/viewport";
+import {StyleUtils} from "./utils/styleUtils";
 
 /**
  * The render context provides access to all objects that allow rendering.
@@ -11,7 +12,7 @@ import {Viewport} from "./editor/viewport";
 export function RenderContext(canvas, overlay) {
     const _myr = new Myr(canvas);
     const _sprites = new Sprites(_myr);
-    const _viewport = new Viewport(RenderContext.INTERFACE_SPLIT, overlay);
+    const _viewport = new Viewport(parseInt(StyleUtils.getVariable(RenderContext.VAR_LIBRARY_WIDTH), 10), overlay);
 
     /**
      * Get the viewport for this render context.
@@ -57,4 +58,4 @@ export function RenderContext(canvas, overlay) {
     this.resize = (width, height) => _myr.resize(width, height);
 }
 
-RenderContext.INTERFACE_SPLIT = 320;
+RenderContext.VAR_LIBRARY_WIDTH = "--library-width";

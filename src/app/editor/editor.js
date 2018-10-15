@@ -160,7 +160,6 @@ export function Editor(renderContext, world, game) {
     _view.setOnChanged(onViewChanged);
 }
 
-Editor.EDITOR_WIDTH = 0.3;
 Editor.ZOOM_DEFAULT = 4;
 Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;

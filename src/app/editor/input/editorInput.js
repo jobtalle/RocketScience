@@ -29,8 +29,7 @@ export function EditorInput(renderContext, output, world, view, game) {
         _pcbEditor,
         _toolbar,
         output.getInfo(),
-        renderContext.getViewport().getElement(),
-        renderContext.getViewport().getSplitX());
+        renderContext.getViewport().getElement());
 
     /**
      * Show the editors.

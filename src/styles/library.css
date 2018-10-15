@@ -1,6 +1,7 @@
 #library {
     box-sizing: border-box;
     position: absolute;
+    width: var(--library-width);
     height: 100%;
     user-select: none;
     background-color: #dee5ef;
@@ -24,9 +25,7 @@
 
 #library #parts .part-list {
     display: grid;
-    justify-items: left;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    padding: var(--text-padding);
+    grid-template-columns: repeat(var(--part-grid-cells-per-row), var(--part-grid-cell-size));
 }
 
 #library #parts .part-list.closed {
@@ -38,6 +37,8 @@
 
     cursor: pointer;
     background-color: white;
-    border-radius: 1vh;
-    box-shadow: 0 0.2vh 0.1vh black;
+}
+
+#library #parts .part-list .part:hover {
+    background-color: lightblue;
 }
