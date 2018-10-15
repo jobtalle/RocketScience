@@ -12,6 +12,7 @@ import {InfoPinoutEntryDescription} from "./infoPinoutEntryDescription";
  */
 export function InfoPinouts(configuration, info, pinIndex) {
     const _element = document.createElement("table");
+    let _selectedElement = null;
 
     const makeDescriptionRow = description => {
         const row = document.createElement("tr");
@@ -39,10 +40,16 @@ export function InfoPinouts(configuration, info, pinIndex) {
                 info.appendChild(description);
             }
 
-            _element.appendChild(new InfoPinoutEntry(index + 1, pin, pinIndex === index, description).getElement());
+            const indexElement = new InfoPinoutEntry(index + 1, pin, pinIndex === index, description).getElement();
 
-            if (pinIndex === index)
-                _element.appendChild(makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description))));
+            _element.appendChild(indexElement);
+
+            if (pinIndex === index) {
+                const descriptionElement = makeDescriptionRow(new InfoPinoutEntryDescription(getString(pin.description)));
+
+                _element.appendChild(descriptionElement);
+                _selectedElement = indexElement;
+            }
 
             ++index;
         }
@@ -53,6 +60,12 @@ export function InfoPinouts(configuration, info, pinIndex) {
      * @returns {HTMLElement} The HTML element of this list.
      */
     this.getElement = () => _element;
+
+    /**
+     * If pinIndex was provided, this function returns the selected index div.
+     * @returns {HTMLElement} The HTML element of the selected pin information.
+     */
+    this.getSelectedElement = () => _selectedElement;
 
     make();
 }

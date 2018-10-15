@@ -49,7 +49,7 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} x The x location on the pcb.
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
-     * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide this if all pins must be shown.
+     * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide if all pins must be shown.
      */
     this.makePinouts = (x, y, configuration, highlightIndex) => {
         this.clearPinouts();

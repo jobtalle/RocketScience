@@ -4,6 +4,7 @@ import {PcbPoint} from "../../../pcb/point/pcbPoint";
 import * as Myr from "../../../../lib/myr";
 import {PcbPath} from "../../../pcb/point/pcbPath";
 import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
+import {Pin} from "../../../part/pin";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -37,7 +38,10 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         if (fixture) {
             const index = fixture.part.getPinIndexAt(cursor.x - fixture.x, cursor.y - fixture.y);
 
-            editor.getOutput().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
+            if (fixture.part.getConfiguration().io[index].type !== Pin.TYPE_STRUCTURAL)
+                editor.getOutput().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
+            else
+                editor.getOutput().getInfo().setPinoutsSelected(null);
         } else
             editor.getOutput().getInfo().setPinoutsSelected(null);
     };

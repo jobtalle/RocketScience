@@ -161,10 +161,14 @@ export function Info(overlay) {
         _selectedX = x;
         _selectedY = y;
 
-        if (index !== undefined)
+        _element.appendChild(_pinouts.getElement());
+
+        if (index !== undefined) {
             overlay.makePinouts(_selectedX, _selectedY, _selectedConfiguration, index);
 
-        _element.appendChild(_pinouts.getElement());
+            // TODO: 1 is a magic number here. Define border width in constants.css instead.
+            _element.scrollTop = (_pinouts.getSelectedElement().clientHeight + 1) * index;
+        }
     };
 
     /**
@@ -190,3 +194,4 @@ export function Info(overlay) {
 
 Info.ID = "info";
 Info.ID_EXTENSION = "info-extension";
+Info.VAR_HEIGHT = "--info-height";
