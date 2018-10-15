@@ -22,12 +22,18 @@ export function Controller(pins, renderer) {
      */
     this.tick = state => {
         if (state[pins[Controller.PIN_INDEX_POWER]] === 1) {
+            state[pins[Controller.PIN_INDEX_ACTION_1]] = _controllerState.getKeyAction1()?1:0;
+            state[pins[Controller.PIN_INDEX_ACTION_2]] = _controllerState.getKeyAction2()?1:0;
+            state[pins[Controller.PIN_INDEX_ACTION_3]] = _controllerState.getKeyAction3()?1:0;
             state[pins[Controller.PIN_INDEX_LEFT]] = _controllerState.getKeyLeft()?1:0;
             state[pins[Controller.PIN_INDEX_UP]] = _controllerState.getKeyUp()?1:0;
             state[pins[Controller.PIN_INDEX_RIGHT]] = _controllerState.getKeyRight()?1:0;
             state[pins[Controller.PIN_INDEX_DOWN]] = _controllerState.getKeyDown()?1:0;
         }
         else {
+            state[pins[Controller.PIN_INDEX_ACTION_1]] = 0;
+            state[pins[Controller.PIN_INDEX_ACTION_2]] = 0;
+            state[pins[Controller.PIN_INDEX_ACTION_3]] = 0;
             state[pins[Controller.PIN_INDEX_LEFT]] = 0;
             state[pins[Controller.PIN_INDEX_UP]] = 0;
             state[pins[Controller.PIN_INDEX_RIGHT]] = 0;
@@ -37,7 +43,10 @@ export function Controller(pins, renderer) {
 }
 
 Controller.PIN_INDEX_POWER = 0;
-Controller.PIN_INDEX_LEFT = 1;
-Controller.PIN_INDEX_UP = 2;
-Controller.PIN_INDEX_RIGHT = 3;
-Controller.PIN_INDEX_DOWN = 4;
+Controller.PIN_INDEX_ACTION_1 = 1;
+Controller.PIN_INDEX_ACTION_2 = 2;
+Controller.PIN_INDEX_ACTION_3 = 3;
+Controller.PIN_INDEX_LEFT = 4;
+Controller.PIN_INDEX_UP = 5;
+Controller.PIN_INDEX_RIGHT = 6;
+Controller.PIN_INDEX_DOWN = 7;

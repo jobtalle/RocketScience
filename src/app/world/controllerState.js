@@ -14,6 +14,21 @@ export function ControllerState() {
 
     const press = key => {
         switch (key) {
+            case ControllerState.KEY_ACTION_1:
+                _state |= ControllerState.FLAG_ACTION_1;
+                _postponedRelease &= ~ControllerState.FLAG_ACTION_1;
+
+                break;
+            case ControllerState.KEY_ACTION_2:
+                _state |= ControllerState.FLAG_ACTION_2;
+                _postponedRelease &= ~ControllerState.FLAG_ACTION_2;
+
+                break;
+            case ControllerState.KEY_ACTION_3:
+                _state |= ControllerState.FLAG_ACTION_3;
+                _postponedRelease &= ~ControllerState.FLAG_ACTION_3;
+
+                break;
             case ControllerState.KEY_LEFT:
                 _state |= ControllerState.FLAG_LEFT;
 
@@ -35,6 +50,18 @@ export function ControllerState() {
 
     const release = key => {
         switch (key) {
+            case ControllerState.KEY_ACTION_1:
+                _postponedRelease |= ControllerState.FLAG_ACTION_1;
+
+                break;
+            case ControllerState.KEY_ACTION_2:
+                _postponedRelease |= ControllerState.FLAG_ACTION_2;
+
+                break;
+            case ControllerState.KEY_ACTION_3:
+                _postponedRelease |= ControllerState.FLAG_ACTION_3;
+
+                break;
             case ControllerState.KEY_LEFT:
                 _state &= ~ControllerState.FLAG_LEFT;
 
@@ -90,6 +117,24 @@ export function ControllerState() {
     };
 
     /**
+     * Check whether action key 1 is pressed.
+     * @returns {Boolean} A boolean indicating whether action key 1 is pressed.
+     */
+    this.getKeyAction1 = () => (_state & ControllerState.FLAG_ACTION_1) === ControllerState.FLAG_ACTION_1;
+
+    /**
+     * Check whether action key 2 is pressed.
+     * @returns {Boolean} A boolean indicating whether action key 2 is pressed.
+     */
+    this.getKeyAction2 = () => (_state & ControllerState.FLAG_ACTION_2) === ControllerState.FLAG_ACTION_2;
+
+    /**
+     * Check whether action key 3 is pressed.
+     * @returns {Boolean} A boolean indicating whether action key 3 is pressed.
+     */
+    this.getKeyAction3 = () => (_state & ControllerState.FLAG_ACTION_3) === ControllerState.FLAG_ACTION_3;
+
+    /**
      * Check whether the controller steers left.
      * @returns {Boolean} A boolean indicating whether the controller steers left.
      */
@@ -118,8 +163,14 @@ ControllerState.FLAG_LEFT = 0x01;
 ControllerState.FLAG_UP = 0x02;
 ControllerState.FLAG_RIGHT = 0x04;
 ControllerState.FLAG_DOWN = 0x08;
+ControllerState.FLAG_ACTION_1 = 0x10;
+ControllerState.FLAG_ACTION_2 = 0x20;
+ControllerState.FLAG_ACTION_3 = 0x40;
 
 ControllerState.KEY_LEFT = "a";
 ControllerState.KEY_UP = "w";
 ControllerState.KEY_RIGHT = "d";
 ControllerState.KEY_DOWN = "s";
+ControllerState.KEY_ACTION_1 = "e";
+ControllerState.KEY_ACTION_2 = "f";
+ControllerState.KEY_ACTION_3 = "g";
