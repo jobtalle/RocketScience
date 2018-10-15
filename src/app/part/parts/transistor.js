@@ -19,7 +19,7 @@ export function Transistor(pins, renderer) {
      */
     this.tick = state => {
         if (state[pins[Transistor.PIN_INDEX_BASE]])
-            state[pins[Transistor.PIN_INDEX_EMITTER]] = state[pins[Transistor.PIN_INDEX_BASE]];
+            state[pins[Transistor.PIN_INDEX_EMITTER]] = state[pins[Transistor.PIN_INDEX_COLLECTOR]];
         else
             state[pins[Transistor.PIN_INDEX_EMITTER]] = 0;
     };

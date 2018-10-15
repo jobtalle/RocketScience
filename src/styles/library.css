@@ -24,7 +24,8 @@
 
 #library #parts .part-list {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    justify-items: left;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     padding: var(--text-padding);
 }
 
