@@ -1,0 +1,27 @@
+{
+  "label": "PART_TRANSISTOR_NAME",
+  "description": "PART_TRANSISTOR_DESCRIPTION",
+  "icon": "part-transistor",
+  "object": "Transistor",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "signal": "both", "name": "PART_TRANSISTOR_PIN_COLLECTOR_NAME", "description": "PART_TRANSISTOR_PIN_COLLECTOR_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "in", "signal": "discrete", "name": "PART_TRANSISTOR_PIN_BASE_NAME", "description": "PART_TRANSISTOR_PIN_BASE_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "out", "signal": "both", "name": "PART_TRANSISTOR_PIN_EMITTER_NAME", "description": "PART_TRANSISTOR_PIN_EMITTER_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partTransistor", "x": 0, "y": -1}
+        ]
+      }
+    }
+  ]
+}

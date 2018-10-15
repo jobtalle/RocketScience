@@ -84,5 +84,14 @@
   "PART_SWITCH_NAME": "Switch",
   "PART_SWITCH_DESCRIPTION": "A switch that can be toggled. While toggled on, a signal will flow from its input to its output. When the switch is off, there is no connection between its pins.",
   "PART_SWITCH_PIN_INPUT_DESCRIPTION": "Any kind of signal can be connected to the input pin.",
-  "PART_SWITCH_PIN_OUTPUT_DESCRIPTION": "While the switch is on, this pin will output the input signal. If the switch is off, the output is low"
+  "PART_SWITCH_PIN_OUTPUT_DESCRIPTION": "While the switch is on, this pin will output the input signal. If the switch is off, the output is low",
+
+  "PART_TRANSISTOR_NAME": "Transistor",
+  "PART_TRANSISTOR_DESCRIPTION": "A transistor lets a signal flow from its collector to its emitter if power is supplied to its base.",
+  "PART_TRANSISTOR_PIN_COLLECTOR_NAME": "Collector",
+  "PART_TRANSISTOR_PIN_COLLECTOR_DESCRIPTION": "Any kind of signal can be supplied to the collector. If power is supplied to the base, this signal will flow to the emitter.",
+  "PART_TRANSISTOR_PIN_BASE_NAME": "Base",
+  "PART_TRANSISTOR_PIN_BASE_DESCRIPTION": "If a high signal is provided to the base, a signal will flow from the collector to the emitter",
+  "PART_TRANSISTOR_PIN_EMITTER_NAME": "Emitter",
+  "PART_TRANSISTOR_PIN_EMITTER_DESCRIPTION": "If the base is powered, this pin outputs whatever signal is supplied to the collector. Otherwise, the output is low."
 }

@@ -11,6 +11,7 @@ import {Controller} from "./parts/controller";
 import parts from "../../assets/parts.json"
 import {Button} from "./parts/button";
 import {Switch} from "./parts/switch";
+import {Transistor} from "./parts/transistor";
 
 const states = {
     "Led": Led,
@@ -24,7 +25,8 @@ const states = {
     "Propeller": Propeller,
     "Controller": Controller,
     "Button": Button,
-    "Switch": Switch
+    "Switch": Switch,
+    "Transistor": Transistor
 };
 
 /**
