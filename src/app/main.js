@@ -3,7 +3,7 @@ import "../styles/main.css"
 import "../styles/gui.css"
 
 import {Game} from "./game"
-import {getString} from "./language";
+import {getString} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 

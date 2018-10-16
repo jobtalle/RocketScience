@@ -1,0 +1,11 @@
+.signal {
+    font-weight: bold;
+}
+
+.signal.high {
+    color: red;
+}
+
+.signal.low {
+    color: blue;
+}
