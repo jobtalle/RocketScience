@@ -1,10 +1,10 @@
 import {Pcb} from "../../../pcb/pcb";
 import {PcbPointRenderer} from "../../../pcb/point/pcbPointRenderer";
 import {PcbPoint} from "../../../pcb/point/pcbPoint";
-import * as Myr from "../../../../lib/myr";
 import {PcbPath} from "../../../pcb/point/pcbPath";
 import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 import {Pin} from "../../../part/pin";
+import * as Myr from "../../../../lib/myr";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -219,6 +219,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         this.moveCursor();
     };
 
+    const setXRay = xRay => editor.setXRay(xRay);
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -232,19 +234,33 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
-        switch (event.key) {
-            case PcbEditorEtch.KEY_DELETE:
-                if (_pathSelected) {
-                    editor.undoPush();
+        if (event.down) {
+            switch (event.key) {
+                case PcbEditorEtch.KEY_DELETE:
+                    if (_pathSelected) {
+                        editor.undoPush();
 
-                    deletePath(_pathSelected);
+                        deletePath(_pathSelected);
 
-                    editor.revalidate();
+                        editor.revalidate();
 
-                    _pathSelected = null;
-                }
+                        _pathSelected = null;
+                    }
 
-                break;
+                    break;
+                case PcbEditorEtch.KEY_X_RAY:
+                    setXRay(true);
+
+                    break;
+            }
+        }
+        else {
+            switch (event.key) {
+                case PcbEditorEtch.KEY_X_RAY:
+                    setXRay(false);
+
+                    break;
+            }
         }
     };
 
@@ -395,6 +411,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 }
 
 PcbEditorEtch.KEY_DELETE = "Delete";
+PcbEditorEtch.KEY_X_RAY = "x";
 PcbEditorEtch.SELECT_TYPE_ETCH = 0;
 PcbEditorEtch.SELECT_TYPE_DELETE = 1;
 PcbEditorEtch.SELECT_TYPE_INVALID = 2;

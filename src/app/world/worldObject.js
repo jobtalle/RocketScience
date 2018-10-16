@@ -15,7 +15,7 @@ import * as Myr from "../../lib/myr";
  * @constructor
  */
 export function WorldObject(renderContext, physics, controllerState, pcb, x, y) {
-    const _renderer = new PcbRenderer(renderContext, pcb);
+    const _renderer = new PcbRenderer(renderContext, pcb, PcbRenderer.LEVEL_HULL);
     const _transform = new Myr.Transform();
 
     let _state = null;

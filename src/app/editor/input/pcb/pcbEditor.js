@@ -119,6 +119,17 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
+     * Set X-ray render mode on or off. If turned on, the user will be able to see behind parts.
+     * @param {Boolean} xRay A boolean indicating whether to turn X-ray render mode on or off.
+     */
+    this.setXRay = xRay => {
+        if (xRay)
+            _renderer.setLevel(PcbRenderer.LEVEL_BOARD);
+        else
+            _renderer.setLevel(PcbRenderer.LEVEL_PARTS);
+    };
+
+    /**
      * Shift the PCB position.
      * @param {Number} dx The horizontal movement in pixels.
      * @param {Number} dy The vertical movement in pixels.
@@ -300,7 +311,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
         _pcbPosition.x = x;
         _pcbPosition.y = y;
-        _renderer = new PcbRenderer(renderContext, pcb);
+        _renderer = new PcbRenderer(renderContext, pcb, PcbRenderer.LEVEL_PARTS);
 
         matchWorldPosition();
         this.revalidate();

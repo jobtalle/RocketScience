@@ -7,9 +7,10 @@ import {PcbPointRenderer} from "./point/pcbPointRenderer";
  * A PCB renderer.
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb A pcb.
+ * @param {Object} level A valid render level constant.
  * @constructor
  */
-export function PcbRenderer(renderContext, pcb) {
+export function PcbRenderer(renderContext, pcb, level) {
     const SPRITE_POINT = renderContext.getSprites().getSprite("pcbPoint");
 
     const _pointRenderer = new PcbPointRenderer(renderContext, false);
@@ -17,7 +18,7 @@ export function PcbRenderer(renderContext, pcb) {
     const _partPositions = [];
     let _initialized = false;
     let _layerPcb = null;
-    let _level = PcbRenderer.LEVEL_DEFAULT;
+    let _level = level;
 
     const updateSurfaces = () => {
         _initialized = true;
@@ -161,4 +162,3 @@ export function PcbRenderer(renderContext, pcb) {
 PcbRenderer.LEVEL_BOARD = 0;
 PcbRenderer.LEVEL_PARTS = 1;
 PcbRenderer.LEVEL_HULL = 2;
-PcbRenderer.LEVEL_DEFAULT = PcbRenderer.LEVEL_PARTS;
