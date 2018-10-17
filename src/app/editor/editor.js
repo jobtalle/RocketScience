@@ -113,7 +113,7 @@ export function Editor(renderContext, world, game) {
                 break;
             case MouseEvent.EVENT_ENTER:
                 if (!_editorHover) {
-                    _input.onMouseEnter();
+                    _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
                     _editorHover = true;
                 }
 
@@ -133,7 +133,7 @@ export function Editor(renderContext, world, game) {
                     }
                 }
                 else if (!_editorHover) {
-                    _input.onMouseEnter();
+                    _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
                     _editorHover = true;
                 }
 

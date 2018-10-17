@@ -215,7 +215,10 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {
+        if (selection !== null)
+            selection.clearSelected();
 
+        editor.revertEditor();
     };
 
     /**

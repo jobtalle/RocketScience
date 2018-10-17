@@ -300,7 +300,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     this.cancelAction = () => {
         _dragging = false;
 
-        this.moveCursor();
+        editor.getOutput().getOverlay().clearRulers();
     };
 
     /**

@@ -121,9 +121,11 @@ export function EditorInput(renderContext, output, world, view, game) {
 
     /**
      * The mouse enters the editor area.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = () => {
-        _pcbEditor.onMouseEnter();
+    this.onMouseEnter = (x, y) => {
+        _pcbEditor.onMouseEnter(x, y);
     };
 
     /**

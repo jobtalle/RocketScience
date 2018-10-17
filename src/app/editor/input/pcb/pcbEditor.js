@@ -44,10 +44,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     let _editor = null;
     let _stashedEditor = null;
     let _pressLocation = null;
+    let _hover = true;
 
     const matchWorldPosition = () => {
         world.getView().focus(
-            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - Math.ceil(x * 0.5 / view.getZoom()),
+            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
             view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
             view.getZoom());
     };
@@ -354,6 +355,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseMove = (x, y) => {
+        if (!_hover)
+            return;
+
         view.onMouseMove(x, y);
 
         if (view.isDragging())
@@ -365,23 +369,34 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * The mouse enters.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseEnter = () => {
-        if (!_editor)
-            return;
+    this.onMouseEnter = (x, y) => {
+        if (!_hover) {
+            _hover = true;
 
-        _editor.onMouseEnter();
+            this.onMouseMove(x, y);
+        }
+
+        if (_editor)
+            _editor.onMouseEnter();
     };
 
     /**
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
+        _hover = false;
+
         if (!_editor)
             return;
 
-        _editor.onMouseLeave();
         _editor.cancelAction();
+
+        _cursor.x = _cursor.y = -1;
+        _editor.moveCursor();
+        _editor.onMouseLeave();
 
         view.onMouseRelease();
     };
