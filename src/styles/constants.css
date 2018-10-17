@@ -1,4 +1,5 @@
 :root {
+    --z-index-top: 1;
     --font-size-descriptions: 16px;
     --font-size-headers: 20px;
     --text-padding: 5px;

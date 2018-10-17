@@ -1,5 +1,6 @@
 #toolbar {
     position: absolute;
+    z-index: var(--z-index-top);
 }
 
 #toolbar .button {
