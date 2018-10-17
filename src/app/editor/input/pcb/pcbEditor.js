@@ -47,7 +47,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     const matchWorldPosition = () => {
         world.getView().focus(
-            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
+            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - Math.ceil(x * 0.5 / view.getZoom()),
             view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
             view.getZoom());
     };
