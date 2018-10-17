@@ -27,7 +27,6 @@ export function Editor(renderContext, world, game) {
     const _output = new EditorOutput(renderContext);
     const _input = new EditorInput(renderContext, _output, world, _view, game);
 
-    let _editorHover = false;
     let _pcbScreenPosition = new Myr.Vector(0, 0);
 
     const onViewChanged = () => {
@@ -112,31 +111,14 @@ export function Editor(renderContext, world, game) {
 
                 break;
             case MouseEvent.EVENT_ENTER:
-                if (!_editorHover) {
-                    _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
-                    _editorHover = true;
-                }
+                _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_LEAVE:
-                if (_editorHover) {
-                    _input.onMouseLeave();
-                    _editorHover = false;
-                }
+                _input.onMouseLeave();
 
                 break;
             case MouseEvent.EVENT_MOVE:
-                if (event.x <= renderContext.getViewport().getSplitX()) {
-                    if (_editorHover) {
-                        _input.onMouseLeave();
-                        _editorHover = false;
-                    }
-                }
-                else if (!_editorHover) {
-                    _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
-                    _editorHover = true;
-                }
-
                 _input.onMouseMove(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;

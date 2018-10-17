@@ -172,20 +172,6 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
     };
 
     /**
-     * The mouse enters.
-     */
-    this.onMouseEnter = () => {
-
-    };
-
-    /**
-     * The mouse leaves.
-     */
-    this.onMouseLeave = () => {
-
-    };
-
-    /**
      * Zoom in.
      * @returns {Boolean} A boolean indicating whether this editor handled the action.
      */

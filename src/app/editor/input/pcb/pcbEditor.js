@@ -378,9 +378,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
             this.onMouseMove(x, y);
         }
-
-        if (_editor)
-            _editor.onMouseEnter();
     };
 
     /**
@@ -396,7 +393,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
         _cursor.x = _cursor.y = -1;
         _editor.moveCursor();
-        _editor.onMouseLeave();
 
         view.onMouseRelease();
     };
