@@ -7,6 +7,7 @@ import {MouseEvent} from "./MouseEvent";
  */
 export function InputMouse(element) {
     const _listeners = [];
+    let _hover = true;
     let _x = null;
     let _y = null;
 
@@ -39,6 +40,9 @@ export function InputMouse(element) {
     this.removeListener = listener => _listeners.splice(_listeners.indexOf(listener), 1);
 
     element.addEventListener("mousedown", event => {
+        if (event.target !== element)
+            return;
+
         fireEvent(MouseEvent.makePress(event.clientX - _x, event.clientY - _y));
     });
 
@@ -47,14 +51,35 @@ export function InputMouse(element) {
     });
 
     element.addEventListener("mousemove", event => {
-        fireEvent(MouseEvent.makeMove(event.clientX - _x, event.clientY - _y));
+        if (event.target !== element) {
+            if (_hover) {
+                fireEvent(MouseEvent.makeLeave(event.clientX - _x, event.clientY - _y));
+
+                _hover = false;
+            }
+        }
+        else {
+            if (!_hover) {
+                fireEvent(MouseEvent.makeEnter(event.clientX - _x, event.clientY - _y));
+
+                _hover = true;
+            }
+
+            fireEvent(MouseEvent.makeMove(event.clientX - _x, event.clientY - _y));
+        }
     });
 
     element.addEventListener("mouseenter", event => {
+        if (event.target !== element)
+            return;
+
         fireEvent(MouseEvent.makeEnter(event.clientX - _x, event.clientY - _y));
     });
 
     element.addEventListener("mouseleave", event => {
+        if (event.target !== element)
+            return;
+
         fireEvent(MouseEvent.makeLeave(event.clientX - _x, event.clientY - _y));
     });
 
