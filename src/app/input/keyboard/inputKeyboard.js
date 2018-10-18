@@ -7,7 +7,7 @@ import {KeyEvent} from "./keyEvent";
  */
 export function InputKeyboard(window) {
     const _listeners = [];
-    const _down = new Object();
+    const _down = {};
 
     let _control = false;
     let _shift = false;
