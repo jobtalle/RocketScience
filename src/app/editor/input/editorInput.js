@@ -72,6 +72,8 @@ export function EditorInput(renderContext, output, world, view, game) {
      */
     this.edit = (pcb, x, y) => {
         _pcbEditor.edit(pcb, x, y);
+
+        // Defaulting the toolbar creates the default PCB editor
         _toolbar.default();
     };
 

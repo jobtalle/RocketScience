@@ -219,8 +219,6 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         this.moveCursor();
     };
 
-    const setXRay = xRay => editor.setXRay(xRay);
-
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -246,18 +244,6 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
                         _pathSelected = null;
                     }
-
-                    break;
-                case PcbEditorEtch.KEY_X_RAY:
-                    setXRay(true);
-
-                    break;
-            }
-        }
-        else {
-            switch (event.key) {
-                case PcbEditorEtch.KEY_X_RAY:
-                    setXRay(false);
 
                     break;
             }
@@ -397,7 +383,6 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 }
 
 PcbEditorEtch.KEY_DELETE = "Delete";
-PcbEditorEtch.KEY_X_RAY = "x";
 PcbEditorEtch.SELECT_TYPE_ETCH = 0;
 PcbEditorEtch.SELECT_TYPE_DELETE = 1;
 PcbEditorEtch.SELECT_TYPE_INVALID = 2;

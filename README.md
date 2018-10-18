@@ -10,20 +10,20 @@ The following dependencies are required for building rocket science:
 * [Python](https://www.python.org) for build automation
 * [Aseprite](https://github.com/aseprite/aseprite) for editing and building sprite atlases 
 (please make sure that Aseprite is included in your system path, as the build tools expect it to be available)
-* Several libraries which are installed and managed by NPM
 
 The build process only uses the command line interface of Aseprite.
 
 ## Building
-Before you do anything, run ``npm install`` in the repository root. 
-This command will install all required dependencies managed by NPM.
+Building should be possible in both Linux and Windows environments, provided the aforementioned dependencies are installed.
+First, run ``npm install`` in the repository root.
+This command will install all required NPM packages.
 
-To prepare the assets, run ``prepare_assets.py``. This must be done before the game is built.
+To build the assets, run ``prepare_assets.py``. This must be done before the game is built.
 Atlas files for both the GUI and in-game sprites will be generated, in addition to the part data file.
 
 To compile the program, execute ``npm run pack-dev``
 (or ``pack-prod`` for production builds) from the root of the repository.
-The resulting files will be stored in ``dist``.
+The resulting files will be written to ``dist``.
 
 ## Compatibility
 The game is built to be compatible with _at least_ Firefox and Chrome.

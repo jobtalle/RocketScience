@@ -2,28 +2,48 @@
  * A button for the toolbar.
  * @param {Function} onClick A function to execute when the button is active.
  * @param {String} sprite The sprite class.
+ * @param {Object} type A valid type constant.
  * @param {ToolbarButton.ToggleGroup} [toggleGroup] A toggle group to assign this button to.
  * @constructor
  */
-export function ToolbarButton(onClick, sprite, toggleGroup) {
+export function ToolbarButton(onClick, sprite, type, toggleGroup) {
     const _element = document.createElement("div");
 
     const build = () => {
         _element.classList.add(ToolbarButton.CLASS);
         _element.classList.add("sprite");
         _element.classList.add(sprite);
-        _element.onclick = () => {
-            if (toggleGroup !== undefined) {
-                if (_element.classList.contains("active"))
-                    return;
 
-                toggleGroup.press(_element);
+        switch (type) {
+            case ToolbarButton.TYPE_CLICK:
+                _element.onclick = onClick;
 
-                _element.classList.add("active");
-            }
+                break;
+            case ToolbarButton.TYPE_TOGGLE:
+                _element.onclick = () => {
+                    if (_element.classList.contains(ToolbarButton.CLASS_ACTIVE))
+                        onClick(false);
+                    else
+                        onClick(true);
 
-            onClick();
-        };
+                    _element.classList.toggle(ToolbarButton.CLASS_ACTIVE);
+                };
+
+                break;
+            case ToolbarButton.TYPE_TOGGLE_GROUP:
+                _element.onclick = () => {
+                    if (_element.classList.contains(ToolbarButton.CLASS_ACTIVE))
+                        return;
+
+                    toggleGroup.press(_element);
+
+                    _element.classList.add(ToolbarButton.CLASS_ACTIVE);
+
+                    onClick();
+                };
+
+                break;
+        }
 
         if (toggleGroup !== undefined)
             toggleGroup.add(_element);
@@ -37,6 +57,11 @@ export function ToolbarButton(onClick, sprite, toggleGroup) {
 
     build();
 }
+
+ToolbarButton.TYPE_CLICK = 0;
+ToolbarButton.TYPE_TOGGLE = 1;
+ToolbarButton.TYPE_TOGGLE_GROUP = 2;
+ToolbarButton.CLASS_ACTIVE = "active";
 
 /**
  * Buttons constructed with a reference to this toggle group will become inactive

@@ -15,18 +15,26 @@ export function Toolbar(editor, overlay, x, game) {
     const _buttonExtend = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
         "toolbar-extend",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonSelect = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
         "toolbar-select",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonEtch = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_ETCH),
         "toolbar-etch",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(
         () => game.toggleEdit(),
-        "toolbar-launch");
+        "toolbar-launch",
+        ToolbarButton.TYPE_CLICK);
+    const _buttonXRay = new ToolbarButton(
+        pressed => editor.setXRay(pressed),
+        "toolbar-xray",
+        ToolbarButton.TYPE_TOGGLE);
 
     let _container = null;
 
@@ -50,6 +58,7 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(_buttonEtch.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
+        _container.appendChild(_buttonXRay.getElement());
     };
 
     /**
@@ -82,15 +91,23 @@ export function Toolbar(editor, overlay, x, game) {
         if (event.down) switch (event.key) {
             case Toolbar.KEY_PRESS_EXTEND:
                 _buttonExtend.getElement().click();
+
                 break;
             case Toolbar.KEY_PRESS_SELECT:
                 _buttonSelect.getElement().click();
+
                 break;
             case Toolbar.KEY_PRESS_ETCH:
                 _buttonEtch.getElement().click();
+
                 break;
             case Toolbar.KEY_PRESS_LAUNCH:
                 _buttonLaunch.getElement().click();
+
+                break;
+            case Toolbar.KEY_PRESS_XRAY:
+                _buttonXRay.getElement().click();
+
                 break;
         }
     };
@@ -103,3 +120,4 @@ Toolbar.KEY_PRESS_EXTEND = "1";
 Toolbar.KEY_PRESS_SELECT = "2";
 Toolbar.KEY_PRESS_ETCH = "3";
 Toolbar.KEY_PRESS_LAUNCH = " ";
+Toolbar.KEY_PRESS_XRAY = "x";
