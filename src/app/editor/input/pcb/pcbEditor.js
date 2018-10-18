@@ -281,7 +281,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     this.place = fixtures => {
         _editor.reset();
 
-        this.setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, this, fixtures, null));
+        this.setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, this, fixtures, null, true));
     };
 
     /**
