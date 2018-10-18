@@ -7,6 +7,7 @@ import {KeyEvent} from "./keyEvent";
  */
 export function InputKeyboard(window) {
     const _listeners = [];
+    const _down = new Object();
 
     let _control = false;
     let _shift = false;
@@ -19,6 +20,11 @@ export function InputKeyboard(window) {
     };
 
     const onkeydown = event => {
+        if (_down[event.key])
+            return;
+
+        _down[event.key] = true;
+
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
                 _control = true;
@@ -32,6 +38,8 @@ export function InputKeyboard(window) {
     };
 
     const onkeyup = event => {
+        _down[event.key] = false;
+
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
                 _control = false;
