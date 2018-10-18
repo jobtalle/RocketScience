@@ -324,6 +324,20 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
     this.zoomOut = () => false;
 
     /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+        this.cancelAction();
+    };
+
+    /**
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {

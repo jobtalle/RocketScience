@@ -334,6 +334,20 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     this.zoomOut = () => false;
 
     /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+        this.cancelAction();
+    };
+
+    /**
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {

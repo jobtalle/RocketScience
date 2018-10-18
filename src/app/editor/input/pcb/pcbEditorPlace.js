@@ -19,8 +19,10 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
 export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, selection) {
     const _lastCursor = cursor.copy();
     const _renderers = [];
+
     let _configurationIndex = 0;
     let _suitable = false;
+    let _hover = true;
 
     const makeRenderers = () => {
         _renderers.splice(0, _renderers.length);
@@ -198,6 +200,20 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
     };
 
     /**
+     * The mouse enters.
+     */
+    this.onMouseEnter = () => {
+        _hover = true;
+    };
+
+    /**
+     * The mouse leaves.
+     */
+    this.onMouseLeave = () => {
+        _hover = false;
+    };
+
+    /**
      * Cancel any actions deviating from this editors base state.
      */
     this.cancelAction = () => {
@@ -234,6 +250,9 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
      * @param {Myr} myr A myriad instance.
      */
     this.draw = myr => {
+        if (!_hover)
+            return;
+
         if (!_suitable)
             myr.setColor(PcbEditorPlace.COLOR_UNSUITABLE);
 
