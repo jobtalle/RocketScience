@@ -4,7 +4,6 @@ import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
 import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../../output/info/info";
-import {KeyEvent} from "../../../input/keyboard/keyEvent";
 
 /**
  * An HTML based part library.
@@ -18,9 +17,7 @@ export function Library(editor, toolbar, info, overlay) {
     let _container = null;
 
     const setPart = part => {
-        // Go to select mode through the toolbar
-        // TODO: Fire events through the actual input object
-        toolbar.onKeyEvent(new KeyEvent(Toolbar.KEY_PRESS_SELECT, true, false, false));
+        toolbar.default();
 
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     };

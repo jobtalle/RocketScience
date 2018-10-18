@@ -22,7 +22,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
 
     let _configurationIndex = 0;
     let _suitable = false;
-    let _hover = true;
+    let _hover = false;
 
     const makeRenderers = () => {
         _renderers.splice(0, _renderers.length);
