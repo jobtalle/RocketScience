@@ -218,12 +218,15 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
                 this.setEditor(new PcbEditorReshape(renderContext, _pcb, _cursor, this));
+
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
                 this.setEditor(new PcbEditorSelect(renderContext, _pcb, _cursor, this, new Selection(renderContext)));
+
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
                 this.setEditor(new PcbEditorEtch(renderContext, _pcb, _cursor, this));
+
                 break;
         }
     };

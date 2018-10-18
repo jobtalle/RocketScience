@@ -1,14 +1,13 @@
 import * as Myr from "../../../lib/myr";
-import {Pin} from "../../part/pin";
 
 /**
  * A pcb path renderer, used for rendering etched states of PCB points.
  * @param {RenderContext} renderContext A render context.
  * @param {Boolean} isPlan A boolean indicating whether this path is a planned path or an existing path.
- * @param {Object} [mode] If this renderer is a plan, a valid mode constant should be given to denote the kind of plan.
+ * @param {Myr.Color} [color] If this renderer is a plan, a valid color should be given to denote the kind of plan.
  * @constructor
  */
-export function PcbPointRenderer(renderContext, isPlan, mode) {
+export function PcbPointRenderer(renderContext, isPlan, color) {
     let SPRITE_JUNCTION;
     let SPRITE_NODE;
     let SPRITES_PATHS;
@@ -41,15 +40,15 @@ export function PcbPointRenderer(renderContext, isPlan, mode) {
 
     /**
      * Set a new render mode for this renderer.
-     * @param {Object} newMode A new render mode, one of the valid mode constants of this object.
+     * @param {Myr.Color} newColor A new render mode, one of the valid mode constants of this object.
      */
-    this.setMode = newMode => mode = newMode;
+    this.setColor = newColor => color = newColor;
 
     /**
      * Get the color which should be used for the mode this renderer is in.
      * @returns {Myr.Color} A color, or null if no filter color should be set.
      */
-    this.getModeColor = () => mode;
+    this.getModeColor = () => color;
 
     /**
      * Render an etched state.
@@ -72,10 +71,12 @@ export function PcbPointRenderer(renderContext, isPlan, mode) {
     };
 }
 
-PcbPointRenderer.MODE_SELECT = null;
-PcbPointRenderer.MODE_DELETE = Myr.Color.RED;
-PcbPointRenderer.MODE_INVALID = Myr.Color.BLUE;
+PcbPointRenderer.COLOR_SELECT = null;
+PcbPointRenderer.COLOR_DELETE = Myr.Color.RED;
+PcbPointRenderer.COLOR_INVALID = Myr.Color.BLUE;
+/*
 PcbPointRenderer.MODE_HOVER_NO_INPUT = PcbPointRenderer.MODE_SELECT;
 PcbPointRenderer.MODE_HOVER_DISCRETE = Pin.COLOR_OUT_DISCRETE;
 PcbPointRenderer.MODE_HOVER_CONTINUOUS = Pin.COLOR_OUT_CONTINUOUS;
 PcbPointRenderer.MODE_HOVER_POWER = Pin.COLOR_POWER;
+*/

@@ -17,7 +17,7 @@ import * as Myr from "../../../../lib/myr";
 export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     const SPRITE_ETCH = renderContext.getSprites().getSprite("pcbEtch");
 
-    const _pointRenderer = new PcbPointRenderer(renderContext, true, PcbPointRenderer.MODE_SELECT);
+    const _pointRenderer = new PcbPointRenderer(renderContext, true, PcbPointRenderer.COLOR_SELECT);
     const _pathRenderer = new PcbPathRenderer(_pointRenderer);
 
     let _fixture = null;
@@ -154,14 +154,16 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     const setRenderMode = selectMode => {
         switch (selectMode) {
             case PcbEditorEtch.SELECT_TYPE_DELETE:
-                _pointRenderer.setMode(PcbPointRenderer.MODE_DELETE);
+                _pointRenderer.setColor(PcbPointRenderer.COLOR_DELETE);
+
                 break;
             case PcbEditorEtch.SELECT_TYPE_ETCH:
-                _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
+                _pointRenderer.setColor(PcbPointRenderer.COLOR_SELECT);
 
                 break;
             case PcbEditorEtch.SELECT_TYPE_INVALID:
-                _pointRenderer.setMode(PcbPointRenderer.MODE_INVALID);
+                _pointRenderer.setColor(PcbPointRenderer.COLOR_INVALID);
+
                 break;
         }
     };
@@ -231,10 +233,10 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         this.moveCursor();
     };
 
-    const setPointRenderModeFromPath = path => {
+    const setPointRenderColorFromPath = path => {
         const pinLocation = new Myr.Vector(0, 0);
 
-        let mode = PcbPointRenderer.MODE_HOVER_NO_INPUT;
+        let color = PcbPointRenderer.COLOR_SELECT;
         let fixture = null;
         let ioIndex = -1;
 
@@ -251,14 +253,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 const io = point.part.getConfiguration().io[ioIndex];
 
                 if (io.type === Pin.TYPE_OUT) {
-                    if (io.signal === Pin.SIGNAL_DISCRETE) {
-                        if (io.name.includes(Pin.NAME_POWER))
-                            mode = PcbPointRenderer.MODE_HOVER_POWER;
-                        else
-                            mode = PcbPointRenderer.MODE_HOVER_DISCRETE;
-                    }
-                    else
-                        mode = PcbPointRenderer.MODE_HOVER_CONTINUOUS;
+                    color = Pin.getPinColor(io);
 
                     return false;
                 }
@@ -267,10 +262,10 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
             return true;
         });
 
-        _pointRenderer.setMode(mode);
+        _pointRenderer.setColor(color);
 
         if (!_showingLabel) {
-            if (mode !== PcbPointRenderer.MODE_HOVER_NO_INPUT && ioIndex !== -1)
+            if (color !== PcbPointRenderer.COLOR_SELECT && ioIndex !== -1)
                 editor.getOutput().getInfo().setPinoutsSelected(
                     fixture.part.getConfiguration(),
                     fixture.x,
@@ -346,7 +341,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 _pathSelected = new PcbPath();
                 _pathSelected.fromPcb(pcb, cursor);
 
-                setPointRenderModeFromPath(_pathSelected);
+                setPointRenderColorFromPath(_pathSelected);
             }
             else if (_pathSelected) {
                 if (!_showingLabel)
