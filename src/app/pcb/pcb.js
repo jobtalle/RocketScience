@@ -484,4 +484,4 @@ export function Pcb() {
 
 Pcb.PIXELS_PER_POINT = 6;
 Pcb.DEFAULT_WIDTH = 10;
-Pcb.DEFAULT_HEIGHT = 4;
+Pcb.DEFAULT_HEIGHT = 10;

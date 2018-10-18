@@ -1,4 +1,5 @@
 import * as Myr from "../../../lib/myr";
+import {Pin} from "../../part/pin";
 
 /**
  * A pcb path renderer, used for rendering etched states of PCB points.
@@ -74,3 +75,6 @@ export function PcbPointRenderer(renderContext, isPlan, mode) {
 PcbPointRenderer.MODE_SELECT = null;
 PcbPointRenderer.MODE_DELETE = Myr.Color.RED;
 PcbPointRenderer.MODE_INVALID = Myr.Color.BLUE;
+PcbPointRenderer.MODE_HOVER_NO_INPUT = PcbPointRenderer.MODE_SELECT;
+PcbPointRenderer.MODE_HOVER_DISCRETE = Pin.COLOR_OUT_DISCRETE;
+PcbPointRenderer.MODE_HOVER_CONTINUOUS = Pin.COLOR_OUT_CONTINUOUS;

@@ -28,6 +28,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     let _dragging = false;
     let _etchable = false;
     let _deleting = false;
+    let _showingLabel = false;
 
     const setFixture = fixture => {
         if (fixture === _fixture && fixture === null)
@@ -38,12 +39,22 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         if (fixture) {
             const index = fixture.part.getPinIndexAt(cursor.x - fixture.x, cursor.y - fixture.y);
 
-            if (fixture.part.getConfiguration().io[index].type !== Pin.TYPE_STRUCTURAL)
+            if (fixture.part.getConfiguration().io[index].type !== Pin.TYPE_STRUCTURAL) {
                 editor.getOutput().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
-            else
+
+                _showingLabel = true;
+            }
+            else {
                 editor.getOutput().getInfo().setPinoutsSelected(null);
-        } else
+
+                _showingLabel = false;
+            }
+        }
+        else {
             editor.getOutput().getInfo().setPinoutsSelected(null);
+
+            _showingLabel = false;
+        }
     };
 
     const setModeDeletePath = () => {
@@ -147,6 +158,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 break;
             case PcbEditorEtch.SELECT_TYPE_ETCH:
                 _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
+
                 break;
             case PcbEditorEtch.SELECT_TYPE_INVALID:
                 _pointRenderer.setMode(PcbPointRenderer.MODE_INVALID);
@@ -219,6 +231,48 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         this.moveCursor();
     };
 
+    const setPointRenderModeFromPath = path => {
+        let mode = PcbPointRenderer.MODE_HOVER_NO_INPUT;
+        let fixture = null;
+        let ioIndex = -1;
+
+        path.forPoints((x, y, point) => {
+            if (!point.part)
+                return true;
+
+            fixture = pcb.getFixture(point.part);
+            ioIndex = point.part.getPinIndexAt(x - fixture.x, y - fixture.y);
+
+            if (ioIndex !== -1) {
+                const io = point.part.getConfiguration().io[ioIndex];
+
+                if (io.type === Pin.TYPE_OUT) {
+                    if (io.signal === Pin.SIGNAL_DISCRETE)
+                        mode = PcbPointRenderer.MODE_HOVER_DISCRETE;
+                    else
+                        mode = PcbPointRenderer.MODE_HOVER_CONTINUOUS;
+
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        _pointRenderer.setMode(mode);
+
+        if (!_showingLabel) {
+            if (mode !== PcbPointRenderer.MODE_HOVER_NO_INPUT && ioIndex !== -1)
+                editor.getOutput().getInfo().setPinoutsSelected(
+                    fixture.part.getConfiguration(),
+                    fixture.x,
+                    fixture.y,
+                    ioIndex);
+            else
+                editor.getOutput().getInfo().setPinoutsSelected(null);
+        }
+    };
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.
@@ -283,7 +337,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 _pathSelected = new PcbPath();
                 _pathSelected.fromPcb(pcb, cursor);
 
-                _pointRenderer.setMode(PcbPointRenderer.MODE_SELECT);
+                setPointRenderModeFromPath(_pathSelected);
             }
             else
                 _pathSelected = null;

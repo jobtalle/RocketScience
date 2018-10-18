@@ -17,7 +17,7 @@ export function OverlayPinoutsPin(x, y, index, pin, offset) {
     const _element = document.createElement("div");
 
     const make = () => {
-        const color = Pin.getPinColor(pin);
+        const color = Pin.getPinColor(pin).copy();
 
         color.a = OverlayPinoutsPin.ALPHA;
 

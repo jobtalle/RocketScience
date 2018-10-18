@@ -10,7 +10,8 @@ export const Pin = {
     SIGNAL_BOTH: "both",
 
     COLOR_IN: Myr.Color.fromHex("6699ff"),
-    COLOR_OUT: Myr.Color.fromHex("33cc33"),
+    COLOR_OUT_DISCRETE: Myr.Color.fromHex("33cc33"),
+    COLOR_OUT_CONTINUOUS: Myr.Color.fromHex("cc66ff"),
     COLOR_POWER: Myr.Color.fromHex("ff0000"),
 
     /**
@@ -25,7 +26,10 @@ export const Pin = {
             return Pin.COLOR_IN;
         }
         else if (pin.type === Pin.TYPE_OUT) {
-            return Pin.COLOR_OUT;
+            if (pin.signal === Pin.SIGNAL_CONTINUOUS)
+                return Pin.COLOR_OUT_CONTINUOUS;
+            else
+                return Pin.COLOR_OUT_DISCRETE;
         }
     }
 };
