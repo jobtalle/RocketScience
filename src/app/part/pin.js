@@ -27,10 +27,13 @@ export const Pin = {
         if (pin.type === Pin.TYPE_IN)
             return Pin.COLOR_IN;
         else if (pin.type === Pin.TYPE_OUT) {
-            if (pin.signal === Pin.SIGNAL_CONTINUOUS)
-                return Pin.COLOR_OUT_CONTINUOUS;
-            else
-                return Pin.COLOR_OUT_DISCRETE;
+            switch (pin.signal) {
+                case Pin.SIGNAL_CONTINUOUS:
+                case Pin.SIGNAL_BOTH:
+                    return Pin.COLOR_OUT_CONTINUOUS;
+                case Pin.SIGNAL_DISCRETE:
+                    return Pin.COLOR_OUT_DISCRETE;
+            }
         }
     }
 };

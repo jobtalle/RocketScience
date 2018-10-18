@@ -74,9 +74,3 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
 PcbPointRenderer.COLOR_SELECT = null;
 PcbPointRenderer.COLOR_DELETE = Myr.Color.RED;
 PcbPointRenderer.COLOR_INVALID = Myr.Color.BLUE;
-/*
-PcbPointRenderer.MODE_HOVER_NO_INPUT = PcbPointRenderer.MODE_SELECT;
-PcbPointRenderer.MODE_HOVER_DISCRETE = Pin.COLOR_OUT_DISCRETE;
-PcbPointRenderer.MODE_HOVER_CONTINUOUS = Pin.COLOR_OUT_CONTINUOUS;
-PcbPointRenderer.MODE_HOVER_POWER = Pin.COLOR_POWER;
-*/
