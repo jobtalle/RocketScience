@@ -48,7 +48,8 @@ Language.DEFAULT = Language.ENGLISH;
 Language.ERROR_TEXT = "<string not found>";
 Language.MACROS = [
     new Macro("<high>", "signal high", "MACRO_HIGH"),
-    new Macro("<low>", "signal low", "MACRO_LOW")
+    new Macro("<low>", "signal low", "MACRO_LOW"),
+    new Macro("<varying>", "signal varying", "MACRO_VARYING")
 ];
 
 const language = new Language();

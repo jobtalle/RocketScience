@@ -345,7 +345,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 setPointRenderModeFromPath(_pathSelected);
             }
             else if (_pathSelected) {
-                editor.getOutput().getInfo().setPinoutsSelected(null);
+                if (!_showingLabel)
+                    editor.getOutput().getInfo().setPinoutsSelected(null);
 
                 _pathSelected = null;
             }

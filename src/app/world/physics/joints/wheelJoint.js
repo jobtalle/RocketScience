@@ -45,6 +45,6 @@ export function WheelJoint(world, bodyA, bodyB, locationA, locationB) {
 }
 
 WheelJoint.TORQUE_NEUTRAL = 0.2;
-WheelJoint.TORQUE_MOTOR = 2;
-WheelJoint.TORQUE_BRAKES = 2;
+WheelJoint.TORQUE_MOTOR = 5;
+WheelJoint.TORQUE_BRAKES = 3.5;
 WheelJoint.MOTOR_SPEED = 12;

@@ -9,3 +9,7 @@
 .signal.low {
     color: blue;
 }
+
+.signal.varying {
+    color: #cc66ff;
+}
