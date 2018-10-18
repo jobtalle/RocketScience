@@ -45,7 +45,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     let _stashedEditor = null;
     let _pressLocation = null;
     let _hover = true;
-    let _xRay = false;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -125,14 +124,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * @param {Boolean} xRay A boolean indicating whether to turn X-ray render mode on or off.
      */
     this.setXRay = xRay => {
-        if (xRay !== _xRay) {
-            _xRay = xRay;
-
-            if (xRay)
-                _renderer.setLevel(PcbRenderer.LEVEL_BOARD);
-            else
-                _renderer.setLevel(PcbRenderer.LEVEL_PARTS);
-        }
+        if (xRay)
+            _renderer.setLevel(PcbRenderer.LEVEL_BOARD);
+        else
+            _renderer.setLevel(PcbRenderer.LEVEL_PARTS);
     };
 
     /**
@@ -315,9 +310,16 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
         updatePcb(pcb);
 
+        let lastLevel;
+
+        if (_renderer)
+            lastLevel = _renderer.getLevel();
+        else
+            lastLevel = PcbRenderer.LEVEL_PARTS;
+
         _pcbPosition.x = x;
         _pcbPosition.y = y;
-        _renderer = new PcbRenderer(renderContext, pcb, _xRay?PcbRenderer.LEVEL_BOARD:PcbRenderer.LEVEL_PARTS);
+        _renderer = new PcbRenderer(renderContext, pcb, lastLevel);
 
         matchWorldPosition();
         this.revalidate();

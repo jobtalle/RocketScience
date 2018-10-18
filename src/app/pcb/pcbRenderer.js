@@ -136,6 +136,12 @@ export function PcbRenderer(renderContext, pcb, level) {
     };
 
     /**
+     * Get the current render level.
+     * @returns {Object} A render level constant.
+     */
+    this.getLevel = () => _level;
+
+    /**
      * Update the pcb representation.
      */
     this.revalidate = () => {
