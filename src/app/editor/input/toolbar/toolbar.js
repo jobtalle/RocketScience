@@ -88,27 +88,37 @@ export function Toolbar(editor, overlay, x, game) {
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
-        if (event.down) switch (event.key) {
-            case Toolbar.KEY_PRESS_EXTEND:
-                _buttonExtend.getElement().click();
+        if (event.down) {
+            switch (event.key) {
+                case Toolbar.KEY_PRESS_EXTEND:
+                    _buttonExtend.getElement().click();
 
-                break;
-            case Toolbar.KEY_PRESS_SELECT:
-                _buttonSelect.getElement().click();
+                    break;
+                case Toolbar.KEY_PRESS_SELECT:
+                    _buttonSelect.getElement().click();
 
-                break;
-            case Toolbar.KEY_PRESS_ETCH:
-                _buttonEtch.getElement().click();
+                    break;
+                case Toolbar.KEY_PRESS_ETCH:
+                    _buttonEtch.getElement().click();
 
-                break;
-            case Toolbar.KEY_PRESS_LAUNCH:
-                _buttonLaunch.getElement().click();
+                    break;
+                case Toolbar.KEY_PRESS_LAUNCH:
+                    _buttonLaunch.getElement().click();
 
-                break;
-            case Toolbar.KEY_PRESS_XRAY:
-                _buttonXRay.getElement().click();
+                    break;
+                case Toolbar.KEY_PRESS_XRAY:
+                    _buttonXRay.getElement().click();
 
-                break;
+                    break;
+            }
+        }
+        else {
+            switch (event.key) {
+                case Toolbar.KEY_PRESS_XRAY:
+                    _buttonXRay.getElement().click();
+
+                    break;
+            }
         }
     };
 

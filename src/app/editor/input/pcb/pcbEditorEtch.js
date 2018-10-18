@@ -251,8 +251,12 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 const io = point.part.getConfiguration().io[ioIndex];
 
                 if (io.type === Pin.TYPE_OUT) {
-                    if (io.signal === Pin.SIGNAL_DISCRETE)
-                        mode = PcbPointRenderer.MODE_HOVER_DISCRETE;
+                    if (io.signal === Pin.SIGNAL_DISCRETE) {
+                        if (io.name.includes(Pin.NAME_POWER))
+                            mode = PcbPointRenderer.MODE_HOVER_POWER;
+                        else
+                            mode = PcbPointRenderer.MODE_HOVER_DISCRETE;
+                    }
                     else
                         mode = PcbPointRenderer.MODE_HOVER_CONTINUOUS;
 
