@@ -146,8 +146,9 @@ export function Info(overlay) {
      * @param {Number} [x] The x position of a currently selected configuration.
      * @param {Number} [y] The y position of a currently selected configuration.
      * @param {Number} [index] The selected pin index.
+     * @param {Myr.Vector} [direction] An optional direction for the highlighted pin label.
      */
-    this.setPinoutsSelected = (configuration, x, y, index) => {
+    this.setPinoutsSelected = (configuration, x, y, index, direction) => {
         if (!configuration) {
             this.setPinouts(null);
 
@@ -164,7 +165,7 @@ export function Info(overlay) {
         _element.appendChild(_pinouts.getElement());
 
         if (index !== undefined) {
-            overlay.makePinouts(_selectedX, _selectedY, _selectedConfiguration, index);
+            overlay.makePinouts(_selectedX, _selectedY, _selectedConfiguration, index, direction);
 
             // TODO: 1 is a magic number here. Define border width in constants.css instead.
             _element.scrollTop = (_pinouts.getSelectedElement().clientHeight + 1) * index;

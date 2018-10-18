@@ -50,11 +50,12 @@ export function Overlay(overlay, xOffset) {
      * @param {Number} y The y location on the pcb.
      * @param {Object} configuration A valid part configuration.
      * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide if all pins must be shown.
+     * @param {Myr.Vector} [highlightDirection] An optional direction for the highlighted pin label.
      */
-    this.makePinouts = (x, y, configuration, highlightIndex) => {
+    this.makePinouts = (x, y, configuration, highlightIndex, highlightDirection) => {
         this.clearPinouts();
 
-        _pinouts = new OverlayPinouts(x, y, configuration, highlightIndex).getElement();
+        _pinouts = new OverlayPinouts(x, y, configuration, highlightIndex, highlightDirection).getElement();
         _element.appendChild(_pinouts);
     };
 

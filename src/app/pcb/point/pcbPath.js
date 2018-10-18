@@ -86,21 +86,6 @@ export function PcbPath() {
         return true;
     };
 
-    /**
-     * Check whether this path intersects with another path.
-     * @param {PcbPath} path A path to check intersection with.
-     * @returns {Boolean} A boolean which is true if this path intersects the given path.
-     */
-    this.intersects = path => {
-        if (!this.isValid())
-            return false;
-
-        for (const position of _positions)
-            if (path.containsPosition(position.x, position.y))
-                return true;
-
-        return false;
-    };
 
     /**
      * Trim this path.
@@ -215,6 +200,27 @@ PcbPath.prototype.fromPcb = function(pcb, start) {
     };
 
     addPoint(start.x, start.y);
+};
+
+/**
+ * Get a vector pointing outwards of the path when possible.
+ * @param {Myr.Vector} from A point on this path to point away from.
+ * @returns {Myr.Vector} A unit vector pointing away from the path.
+ */
+PcbPath.prototype.getOutwardVector = function(from) {
+    const right = this.containsPosition(from.x + 1, from.y);
+    const top = this.containsPosition(from.x, from.y - 1);
+    const left = this.containsPosition(from.x - 1, from.y);
+    const bottom = this.containsPosition(from.x, from.y + 1);
+
+    if (!top)
+        return new Myr.Vector(0, -1);
+    else if (!bottom)
+        return new Myr.Vector(0, 1);
+    else if (!right)
+        return new Myr.Vector(1, 0);
+    else
+        return new Myr.Vector(-1, 0);
 };
 
 /**

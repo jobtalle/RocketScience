@@ -232,6 +232,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     const setPointRenderModeFromPath = path => {
+        const pinLocation = new Myr.Vector(0, 0);
+
         let mode = PcbPointRenderer.MODE_HOVER_NO_INPUT;
         let fixture = null;
         let ioIndex = -1;
@@ -241,6 +243,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 return true;
 
             fixture = pcb.getFixture(point.part);
+            pinLocation.x = x;
+            pinLocation.y = y;
             ioIndex = point.part.getPinIndexAt(x - fixture.x, y - fixture.y);
 
             if (ioIndex !== -1) {
@@ -267,7 +271,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                     fixture.part.getConfiguration(),
                     fixture.x,
                     fixture.y,
-                    ioIndex);
+                    ioIndex,
+                    path.getOutwardVector(pinLocation));
             else
                 editor.getOutput().getInfo().setPinoutsSelected(null);
         }
@@ -339,8 +344,11 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
                 setPointRenderModeFromPath(_pathSelected);
             }
-            else
+            else if (_pathSelected) {
+                editor.getOutput().getInfo().setPinoutsSelected(null);
+
                 _pathSelected = null;
+            }
         }
     };
 

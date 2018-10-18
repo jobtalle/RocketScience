@@ -9,9 +9,10 @@ import {Pin} from "../../../../part/pin";
  * @param {Number} y The y location on the pcb.
  * @param {Object} configuration A valid part configuration.
  * @param {Number} [highlightIndex] An optional pin index to highlight. Don't provide this if all pins must be shown.
+ * @param {Myr.Vector} [highlightDirection] An optional direction for the highlighted pin label.
  * @constructor
  */
-export function OverlayPinouts(x, y, configuration, highlightIndex) {
+export function OverlayPinouts(x, y, configuration, highlightIndex, highlightDirection) {
     const _element = document.createElement("div");
 
     const make = () => {
@@ -19,8 +20,11 @@ export function OverlayPinouts(x, y, configuration, highlightIndex) {
         _element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
         _element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
 
-        const directions = OverlayPinouts.makeLabelDirections(configuration);
+        let directions = null;
         let index = 0;
+
+        if (!(highlightIndex !== undefined && highlightDirection !== undefined))
+            directions = OverlayPinouts.makeLabelDirections(configuration);
 
         for (const pin of configuration.io) if (pin.type !== Pin.TYPE_STRUCTURAL) {
             ++index;
@@ -28,7 +32,10 @@ export function OverlayPinouts(x, y, configuration, highlightIndex) {
             if (highlightIndex !== undefined && index !== highlightIndex + 1)
                 continue;
 
-            _element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, index, pin, directions[index - 1]).getElement());
+            if (highlightDirection !== undefined && index === highlightIndex + 1)
+                _element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, index, pin, highlightDirection).getElement());
+            else
+                _element.appendChild(new OverlayPinoutsPin(pin.x, pin.y, index, pin, directions[index - 1]).getElement());
         }
     };
 
