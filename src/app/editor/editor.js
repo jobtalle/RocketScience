@@ -96,7 +96,7 @@ export function Editor(renderContext, world, game) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_PRESS_LMB:
-                _input.onMousePress();
+                _input.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:

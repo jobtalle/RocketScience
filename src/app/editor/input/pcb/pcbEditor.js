@@ -43,7 +43,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
-    let _pressLocation = null;
     let _hover = true;
 
     const matchWorldPosition = () => {
@@ -274,6 +273,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         view.onMouseRelease();
         _editor.reset();
 
+        // TODO: Add all editable PCB's in the current objective
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
     };
 
@@ -337,10 +337,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * Press the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMousePress = () => {
+    this.onMousePress = (x, y) => {
         if (!mouseDown()) {
-            _pressLocation = view.getMouse().copy();
+            view.onMouseMove(x, y);
             view.onMousePress();
         }
     };
@@ -349,12 +351,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * Release the mouse.
      */
     this.onMouseRelease = () => {
-        if (_pressLocation && _pressLocation.equals(view.getMouse()))
-            _editor.reset();
-        else
-            mouseUp();
-
-        _pressLocation = null;
+        mouseUp();
 
         view.onMouseRelease();
     };

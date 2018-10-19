@@ -63,10 +63,11 @@ export function Game(renderContext, input) {
      */
     this.toggleEdit = () => {
         if (_editor) {
-            _hiddenEditor = _editor;
             _editor.hide();
-            _editor = null;
             _world.activate();
+
+            _hiddenEditor = _editor;
+            _editor = null;
         }
         else {
             _editor = _hiddenEditor;
