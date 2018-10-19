@@ -409,11 +409,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * Zoom in.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.zoomIn = () => {
+    this.zoomIn = (x, y) => {
         if (_editor.zoomIn())
             return;
 
+        view.onMouseMove(x, y);
         view.zoomIn();
 
         matchWorldPosition();
@@ -421,11 +424,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * Zoom out.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.zoomOut = () => {
+    this.zoomOut = (x, y) => {
         if (_editor.zoomOut())
             return;
 
+        view.onMouseMove(x, y);
         view.zoomOut();
 
         matchWorldPosition();

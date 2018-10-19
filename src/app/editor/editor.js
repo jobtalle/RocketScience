@@ -105,9 +105,9 @@ export function Editor(renderContext, world, game) {
                 break;
             case MouseEvent.EVENT_SCROLL:
                 if (event.wheelDelta > 0)
-                    _input.zoomIn();
+                    _input.zoomIn(event.x - renderContext.getViewport().getSplitX(), event.y);
                 else
-                    _input.zoomOut();
+                    _input.zoomOut(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_ENTER:

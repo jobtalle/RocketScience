@@ -95,16 +95,20 @@ export function EditorInput(renderContext, output, world, view, game) {
 
     /**
      * Zoom in.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.zoomIn = () => {
-        _pcbEditor.zoomIn();
+    this.zoomIn = (x, y) => {
+        _pcbEditor.zoomIn(x, y);
     };
 
     /**
      * Zoom out.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.zoomOut = () => {
-        _pcbEditor.zoomOut();
+    this.zoomOut = (x, y) => {
+        _pcbEditor.zoomOut(x, y);
     };
 
     /**
