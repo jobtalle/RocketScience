@@ -516,7 +516,7 @@ const Myr = function(canvasElement) {
 
     this.utils.loop = update => {
         let lastDate = new Date();
-        let loopFunction = function(step) {
+        let loopFunction = function() {
             const date = new Date();
 
             if(update((date - lastDate) / 1000))

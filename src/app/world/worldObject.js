@@ -98,6 +98,18 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
      */
     this.getBody = () => _body;
 
+    /**
+     * Get the pcb this world object is constructed off.
+     * @returns {Pcb} A pcb.
+     */
+    this.getPcb = () => pcb;
+
+    /**
+     * Get the state of this object.
+     * @returns {PcbState} A state object.
+     */
+    this.getState = () => _state;
+
     _body = generatePhysicsBody();
     _state = new PcbState(pcb, _renderer, _body, controllerState);
     _renderer.setLevel(PcbRenderer.LEVEL_HULL);

@@ -17,15 +17,18 @@ const PathEntry = function(path, pinIndex, part) {
 };
 
 const PartEntry = function(fixture) {
-    const pointers = [];
-    let hasOutputs = false;
-    let requiredOutputs = 0;
+    const _pointers = [];
+
+    let _hasOutputs = false;
+    let _requiredOutputs = 0;
 
     this.getPins = () => fixture.part.getConfiguration().io;
-    this.addRequiredOutput = () => ++requiredOutputs;
-    this.hasOutputs = () => hasOutputs;
-    this.connectOutput = () => --requiredOutputs === 0;
-    this.getRequiredOutputs = () => requiredOutputs;
+    this.addRequiredOutput = () => ++_requiredOutputs;
+    this.hasOutputs = () => _hasOutputs;
+    this.connectOutput = () => --_requiredOutputs === 0;
+    this.getRequiredOutputs = () => _requiredOutputs;
+    this.getPointers = () => _pointers;
+    this.getFixture = () => fixture;
 
     this.registerPins = (pcb, pathAdder, pinOffset) => {
         let used = 0;
@@ -35,14 +38,14 @@ const PartEntry = function(fixture) {
                 const pinIndex = pinOffset + used++;
                 const path = new PcbPath();
 
-                pointers.push(pinIndex);
-                hasOutputs = true;
+                _pointers.push(pinIndex);
+                _hasOutputs = true;
 
                 path.fromPcb(pcb, new Myr.Vector(fixture.x + pin.x, fixture.y + pin.y));
                 pathAdder(new PathEntry(path, pinIndex, this));
             }
-            else if (pin.type === "in")
-                pointers.push(0);
+            else if (pin.type === Pin.TYPE_IN)
+                _pointers.push(0);
         }
 
         return used;
@@ -50,12 +53,12 @@ const PartEntry = function(fixture) {
 
     this.connectInputs = paths => {
         for (const pin of this.getPins()) {
-            if (pin.type === "in") {
+            if (pin.type === Pin.TYPE_IN) {
                 const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
 
                 if (path) {
                     path.getPartEntry().addRequiredOutput();
-                    pointers[this.getPins().indexOf(pin)] = path.getPinIndex();
+                    _pointers[this.getPins().indexOf(pin)] = path.getPinIndex();
                 }
             }
         }
@@ -64,7 +67,7 @@ const PartEntry = function(fixture) {
     this.getInputs = paths => {
         const inputs = [];
 
-        for (const pin of this.getPins()) if (pin.type === "in") {
+        for (const pin of this.getPins()) if (pin.type === Pin.TYPE_IN) {
             const path = findOutput(paths, fixture.x + pin.x, fixture.y + pin.y);
 
             if (path)
@@ -75,7 +78,7 @@ const PartEntry = function(fixture) {
     };
 
     this.makeState = (pcb, renderer) => new (getPartObject(fixture.part.getDefinition().object))(
-        pointers,
+        _pointers,
         renderer.getPartRenderer(fixture),
         fixture.x,
         fixture.y);
@@ -202,6 +205,18 @@ export function PcbGraph(pcb) {
             states.push(entry.makeState(pcb, renderer));
 
         return states;
+    };
+
+    /**
+     * Get the array of pin pointers of a given fixture.
+     * @param {Fixture} fixture A fixture that exists on the PCB this graph was created from.
+     * @returns {Array} An array of pin pointers pointing towards pins in the state array used by this fixtures' part.
+     */
+    this.getPinPointers = fixture => {
+        for (const part of _parts) if (part.getFixture() === fixture)
+            return part.getPointers();
+
+        return null;
     };
 
     build();

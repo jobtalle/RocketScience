@@ -35,7 +35,7 @@ export function World(renderContext, mission) {
 
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
-    let _paused = false;
+    let _paused = true;
 
     const clickObject = (x, y) => {
         let at = new Myr.Vector(x, y);
@@ -166,6 +166,8 @@ export function World(renderContext, mission) {
 
                 _objects[index].update(timeStep);
             }
+
+            mission.validate();
 
             if (ticks)
                 _controllerState.tick();

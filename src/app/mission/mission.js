@@ -29,6 +29,8 @@ export function Mission(objectives) {
     this.validate = () => {
         for (let i = _checking.length; i-- > 0;) if (_checking[i].validate())
             _finished.push(_checking[i]), _checking.splice(i, 1);
+
+        return _checking.length === 0;
     };
 
     rewind();

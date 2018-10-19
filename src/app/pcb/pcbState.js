@@ -39,5 +39,11 @@ export function PcbState(pcb, renderer, body, controllerState) {
             state.update(timeStep);
     };
 
+    /**
+     * Get this states array.
+     * @returns {Array} An array containing all output pin states.
+     */
+    this.getArray = () => _stateArray;
+
     build();
 }
