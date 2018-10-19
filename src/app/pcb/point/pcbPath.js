@@ -208,16 +208,11 @@ PcbPath.prototype.fromPcb = function(pcb, start) {
  * @returns {Myr.Vector} A unit vector pointing away from the path.
  */
 PcbPath.prototype.getOutwardVector = function(from) {
-    const right = this.containsPosition(from.x + 1, from.y);
-    const top = this.containsPosition(from.x, from.y - 1);
-    const left = this.containsPosition(from.x - 1, from.y);
-    const bottom = this.containsPosition(from.x, from.y + 1);
-
-    if (!top)
+    if (!this.containsPosition(from.x, from.y - 1))
         return new Myr.Vector(0, -1);
-    else if (!bottom)
+    else if (!this.containsPosition(from.x, from.y + 1))
         return new Myr.Vector(0, 1);
-    else if (!right)
+    else if (!this.containsPosition(from.x + 1, from.y))
         return new Myr.Vector(1, 0);
     else
         return new Myr.Vector(-1, 0);
