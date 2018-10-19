@@ -100,8 +100,8 @@ export function Game(renderContext, input) {
     this.startCreate = () => {
         stop();
 
-        _world = new World(renderContext, input);
-        _editor = new Editor(renderContext, _world, this, input);
+        _world = new World(renderContext);
+        _editor = new Editor(renderContext, _world, this);
 
         const pcb = new Pcb();
         pcb.initialize();
