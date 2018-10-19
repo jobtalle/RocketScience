@@ -3,6 +3,10 @@ import {Editor} from "./editor/editor";
 import {World} from "./world/world";
 import {Pcb} from "./pcb/pcb";
 import {Terrain} from "./world/terrain/terrain";
+import {Objective} from "./mission/objective";
+import {Led} from "./part/parts/led";
+import {GoalPinState} from "./mission/goal/goalPinState";
+import {Mission} from "./mission/mission";
 
 /**
  * This class contains the game views.
@@ -101,7 +105,7 @@ export function Game(renderContext, input) {
     this.startCreate = () => {
         stop();
 
-        _world = new World(renderContext);
+        _world = new World(renderContext, new Mission([new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)])]));
         _editor = new Editor(renderContext, _world, this);
 
         const pcb = new Pcb();

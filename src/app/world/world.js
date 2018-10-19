@@ -13,10 +13,10 @@ import Myr from "../../lib/myr";
 /**
  * Simulates physics and led for all objects in the same space.
  * @param {RenderContext} renderContext A render context.
- * @param {Objective} [objective] An objective to complete in this world.
+ * @param {Mission} mission An mission to complete in this world.
  * @constructor
  */
-export function World(renderContext, objective) {
+export function World(renderContext, mission) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(World.GRAVITY);
@@ -127,6 +127,8 @@ export function World(renderContext, objective) {
      */
     this.activate = () => {
         this.unpause();
+
+        mission.prime(_objects);
     };
 
     /**

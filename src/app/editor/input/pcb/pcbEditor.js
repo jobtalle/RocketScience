@@ -273,7 +273,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         view.onMouseRelease();
         _editor.reset();
 
-        // TODO: Add all editable PCB's in the current objective
+        // TODO: Add all editable PCB's in the current mission
         world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
     };
 
