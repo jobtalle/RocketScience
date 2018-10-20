@@ -6,6 +6,12 @@
  */
 export function Objective(goals, name) {
     /**
+     * Get the text describing this objective.
+     * @returns {String} A string describing this objective.
+     */
+    this.getName = () => name;
+
+    /**
      * Prime this objective for operation.
      * @param {Array} objects An array containing all editable PCB's as game objects in order.
      */

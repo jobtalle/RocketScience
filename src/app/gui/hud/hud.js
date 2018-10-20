@@ -8,7 +8,7 @@ import {Checklist} from "../shared/checklist/checklist";
  * @constructor
  */
 export function Hud(renderContext, world, game) {
-    const _checklist = new Checklist(renderContext.getOverlay());
+    const _checklist = new Checklist(world.getMission(), renderContext.getOverlay());
 
     /**
      * Free all resources used by this object.

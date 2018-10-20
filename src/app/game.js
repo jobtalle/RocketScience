@@ -8,6 +8,7 @@ import {Led} from "./part/parts/led";
 import {GoalPinState} from "./mission/goal/goalPinState";
 import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
+import {Switch} from "./part/parts/switch";
 
 /**
  * This class contains the game views.
@@ -115,7 +116,9 @@ export function Game(renderContext, input) {
         stop();
 
         _world = new World(renderContext, new Mission([
-            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")], "Mission 1"));
+            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED"),
+            new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Turn a switch on")
+        ], "Mission 1"));
         _hud = new Hud(renderContext, _world, this);
         _editor = new Editor(renderContext, _world, this);
 

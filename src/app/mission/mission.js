@@ -16,6 +16,12 @@ export function Mission(objectives, title) {
     };
 
     /**
+     * Get this missions title.
+     * @returns {String} The mission title.
+     */
+    this.getTitle = () => title;
+
+    /**
      * Prime this mission for operation.
      * @param {Array} objects An array containing all editable PCB's as game objects in order.
      */
@@ -38,6 +44,12 @@ export function Mission(objectives, title) {
 
         return _checking.length === 0;
     };
+
+    /**
+     * Get the objectives of this mission.
+     * @returns {Array} An array of objectives.
+     */
+    this.getObjectives = () => objectives;
 
     rewind();
 }

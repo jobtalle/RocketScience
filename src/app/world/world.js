@@ -56,6 +56,12 @@ export function World(renderContext, mission) {
     };
 
     /**
+     * Get this world's mission.
+     * @returns {Mission} A mission object.
+     */
+    this.getMission = () => mission;
+
+    /**
      * Add a new pcb to simulate in the world.
      * @param {Pcb} pcb The pcb to add.
      * @param {Number} x The x-position.

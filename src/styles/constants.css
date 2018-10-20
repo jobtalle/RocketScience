@@ -1,13 +1,22 @@
 :root {
     --z-index-top: 1;
+
     --font-size-descriptions: 16px;
     --font-size-headers: 20px;
+
     --text-padding: 5px;
     --text-color-dark: #212121;
     --text-color-light: white;
+
     --info-height: 250px;
+
     --library-width: 321px;
+
     --part-grid-cell-size: 64px;
     --part-grid-cells-per-row: 5;
+
     --hud-padding: 40px;
+
+    --checklist-width: 300px;
+    --checklist-padding: 16px;
 }
