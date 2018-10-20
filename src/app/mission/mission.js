@@ -48,8 +48,8 @@ export function Mission(objectives, title) {
 
         for (let i = _checking.length; i-- > 0;) if (_checking[i].validate()) {
             _finished.push(_checking[i]);
+            _checkMarks[objectives.indexOf(_checking[i])] = _changed = true;
             _checking.splice(i, 1);
-            _checkMarks[i] = _changed = true;
         }
 
         if (_changed && _onChange)
