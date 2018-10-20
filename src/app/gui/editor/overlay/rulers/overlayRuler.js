@@ -1,5 +1,5 @@
 import {OverlayRulerDefinition} from "./overlayRulerDefinition";
-import {Pcb} from "../../../../../pcb/pcb";
+import {Pcb} from "../../../../pcb/pcb";
 
 /**
  * A ruler.

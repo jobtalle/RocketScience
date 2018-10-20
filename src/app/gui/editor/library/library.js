@@ -1,16 +1,16 @@
-import "../../../../../styles/library.css"
-import parts from "../../../../../assets/parts.json"
+import "../../../../styles/library.css"
+import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
 import {Toolbar} from "../toolbar/toolbar";
-import {Info} from "../../output/info/info";
+import {Info} from "../info/info";
 
 /**
  * An HTML based part library.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
- * @param {Object} overlay An overlay element for HTML editor.
+ * @param {Object} overlay An element to place the library on.
  * @constructor
  */
 export function Library(editor, toolbar, info, overlay) {

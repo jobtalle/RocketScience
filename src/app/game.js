@@ -7,6 +7,7 @@ import {Objective} from "./mission/objective";
 import {Led} from "./part/parts/led";
 import {GoalPinState} from "./mission/goal/goalPinState";
 import {Mission} from "./mission/mission";
+import {Hud} from "./gui/hud/hud";
 
 /**
  * This class contains the game views.
@@ -18,6 +19,7 @@ export function Game(renderContext, input) {
     let _menu = new Menu(this);
     let _world = null;
     let _editor = null;
+    let _hud = null;
     let _hiddenEditor = null;
 
     const update = timeStep => {
@@ -68,6 +70,7 @@ export function Game(renderContext, input) {
     this.toggleEdit = () => {
         if (_editor) {
             _editor.hide();
+            _hud.show();
             _world.activate();
 
             _hiddenEditor = _editor;
@@ -75,6 +78,7 @@ export function Game(renderContext, input) {
         }
         else {
             _editor = _hiddenEditor;
+            _hud.hide();
             _hiddenEditor = null;
             _world.deactivate();
             _editor.show();
@@ -95,6 +99,11 @@ export function Game(renderContext, input) {
             _editor = null;
         }
 
+        if (_hud) {
+            _hud.free();
+            _hud = null;
+        }
+
         input.getKeyboard().removeListener(onKeyEvent);
         input.getMouse().removeListener(onMouseEvent);
     };
@@ -106,7 +115,8 @@ export function Game(renderContext, input) {
         stop();
 
         _world = new World(renderContext, new Mission([
-            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")]));
+            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")], "Mission 1"));
+        _hud = new Hud(renderContext, _world, this);
         _editor = new Editor(renderContext, _world, this);
 
         const pcb = new Pcb();

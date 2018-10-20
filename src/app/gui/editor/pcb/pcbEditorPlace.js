@@ -1,8 +1,8 @@
-import {PartRenderer} from "../../../../part/partRenderer";
-import {Pcb} from "../../../../pcb/pcb";
-import * as Myr from "../../../../../lib/myr";
-import {Part} from "../../../../part/part";
-import "../../../../part/objects"
+import {PartRenderer} from "../../../part/partRenderer";
+import {Pcb} from "../../../pcb/pcb";
+import * as Myr from "../../../../lib/myr";
+import {Part} from "../../../part/part";
+import "../../../part/objects"
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 

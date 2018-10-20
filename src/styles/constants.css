@@ -9,4 +9,5 @@
     --library-width: 321px;
     --part-grid-cell-size: 64px;
     --part-grid-cells-per-row: 5;
+    --hud-padding: 40px;
 }

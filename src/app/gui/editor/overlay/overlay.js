@@ -1,4 +1,4 @@
-import "../../../../../styles/overlay.css"
+import "../../../../styles/overlay.css"
 import {OverlayPinouts} from "./pinouts/overlayPinouts";
 import {OverlayRulers} from "./rulers/overlayRulers";
 

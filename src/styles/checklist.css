@@ -1,0 +1,12 @@
+#checklist {
+    position: absolute;
+    top: var(--hud-padding);
+    right: var(--hud-padding);
+    width: 300px;
+    height: 500px;
+    background-color: cyan;
+}
+
+#checklist .objective {
+
+}

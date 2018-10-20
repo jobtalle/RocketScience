@@ -1,8 +1,8 @@
-import {Pcb} from "../../../../../pcb/pcb";
+import {Pcb} from "../../../../pcb/pcb";
 import {InfoPinouts} from "../../info/pinouts/infoPinouts";
-import {ColorUtils} from "../../../../../utils/colorUtils";
-import * as Myr from "../../../../../../lib/myr";
-import {Pin} from "../../../../../part/pin";
+import {ColorUtils} from "../../../../utils/colorUtils";
+import * as Myr from "../../../../../lib/myr";
+import {Pin} from "../../../../part/pin";
 
 /**
  * A pin number pointing towards the pin.

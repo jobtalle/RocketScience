@@ -1,16 +1,16 @@
-import {Terrain} from "../../../../world/terrain/terrain";
-import {World} from "../../../../world/world";
-import {Pcb} from "../../../../pcb/pcb";
-import {PcbRenderer} from "../../../../pcb/pcbRenderer";
-import {View} from "../../../../view/view";
+import {Terrain} from "../../../world/terrain/terrain";
+import {World} from "../../../world/world";
+import {Pcb} from "../../../pcb/pcb";
+import {PcbRenderer} from "../../../pcb/pcbRenderer";
+import {View} from "../../../view/view";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
-import {Editor} from "../../editor";
-import Myr from "../../../../../lib/myr.js";
-import {PcbFile} from "../../../../pcb/pcbFile";
+import {Editor} from "../editor";
+import Myr from "../../../../lib/myr.js";
+import {PcbFile} from "../../../pcb/pcbFile";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.

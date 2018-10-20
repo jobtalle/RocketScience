@@ -1,13 +1,13 @@
 import {View} from "../../view/view";
 import {ZoomProfile} from "../../view/zoomProfile";
 import {ShiftProfile} from "../../view/shiftProfile";
-import {EditorOutput} from "./output/editorOutput";
-import {EditorInput} from "./input/editorInput";
+import {EditorOutput} from "./editorOutput";
+import {EditorInput} from "./editorInput";
 import {MouseEvent} from "../../input/mouse/MouseEvent";
 import * as Myr from "../../../lib/myr";
 
 /**
- * Provides a editor for editing PCB's.
+ * Provides am editor for editing PCB's.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.

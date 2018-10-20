@@ -1,16 +1,17 @@
-import "../../../../../styles/toolbar.css"
+import "../../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 
 /**
  * A toolbar containing buttons for the PCB editor.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
- * @param {Object} overlay An overlay element for HTML editor.
+ * @param {HTMLElement} overlay The element to place the toolbar on.
  * @param {Number} x The X position of the toolbar in pixels.
  * @param {Game} game A game.
  * @constructor
  */
 export function Toolbar(editor, overlay, x, game) {
+    const _container = document.createElement("div");
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
@@ -36,8 +37,6 @@ export function Toolbar(editor, overlay, x, game) {
         "toolbar-xray",
         ToolbarButton.TYPE_TOGGLE);
 
-    let _container = null;
-
     const makeSpacer = () => {
         const element = document.createElement("div");
 
@@ -49,7 +48,6 @@ export function Toolbar(editor, overlay, x, game) {
     };
 
     const build = () => {
-        _container = document.createElement("div");
         _container.id = Toolbar.ID;
         _container.style.left = x + "px";
 
