@@ -1,7 +1,7 @@
 # Rocket Science :rocket:
-A game where you connect parts to build large contraptions to solve problems.
+A game where you engineer your way through problems and challenges.
 
-The game is written in **ES6**, **HTML5** and **CSS3**. Most graphics are rendered using [Myr.js](https://github.com/jobtalle/myr.js).
+The game is written in **ES6**, **HTML5** and **CSS3**. Real time graphics are rendered using [Myr.js](https://github.com/jobtalle/myr.js).
 
 ## Dependencies
 The following dependencies are required for building rocket science:

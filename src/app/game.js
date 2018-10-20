@@ -105,7 +105,8 @@ export function Game(renderContext, input) {
     this.startCreate = () => {
         stop();
 
-        _world = new World(renderContext, new Mission([new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)])]));
+        _world = new World(renderContext, new Mission([
+            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")]));
         _editor = new Editor(renderContext, _world, this);
 
         const pcb = new Pcb();

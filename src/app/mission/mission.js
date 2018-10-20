@@ -6,10 +6,12 @@
 export function Mission(objectives) {
     let _checking = null;
     let _finished = null;
+    let _checkMarks = null;
 
     const rewind = () => {
         _checking = objectives.slice();
         _finished = [];
+        _checkMarks = new Array(objectives.length).fill(false);
     };
 
     /**
@@ -27,8 +29,11 @@ export function Mission(objectives) {
      * Check all unfinished objectives.
      */
     this.validate = () => {
-        for (let i = _checking.length; i-- > 0;) if (_checking[i].validate())
-            _finished.push(_checking[i]), _checking.splice(i, 1);
+        for (let i = _checking.length; i-- > 0;) if (_checking[i].validate()) {
+            _finished.push(_checking[i]);
+            _checking.splice(i, 1);
+            _checkMarks[i] = true;
+        }
 
         return _checking.length === 0;
     };

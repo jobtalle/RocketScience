@@ -1,3 +1,5 @@
+import {PcbGraph} from "../../pcb/pcbGraph";
+
 /**
  * Check if a part exists of which a certain pin's value matches a given value.
  * @param {String} part A valid part name; the goal will check all parts of this type.
@@ -5,8 +7,6 @@
  * @param {Number} pinValue The value this pin must have for the goal to succeed.
  * @constructor
  */
-import {PcbGraph} from "../../pcb/pcbGraph";
-
 export function GoalPinState(part, pinIndex, pinValue) {
     const PinCheck = function(state, index) {
         this.check = value => state[index] === value;

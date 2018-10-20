@@ -1,9 +1,10 @@
 /**
  * An objective made up of a number of goals.
  * @param {Array} goals An array of valid goals to complete.
+ * @param {String} name A name describing this objective.
  * @constructor
  */
-export function Objective(goals) {
+export function Objective(goals, name) {
     /**
      * Prime this objective for operation.
      * @param {Array} objects An array containing all editable PCB's as game objects in order.
