@@ -5,10 +5,9 @@ import {ChecklistTitle} from "./checklistTitle";
 /**
  * A checklist displaying all mission objectives.
  * @param {Mission} mission A mission to create a checklist for.
- * @param {HTMLElement} overlay The element to place the checklist on.
  * @constructor
  */
-export function Checklist(mission, overlay) {
+export function Checklist(mission) {
     const _container = document.createElement("div");
     const _objectives = [];
 
@@ -25,19 +24,14 @@ export function Checklist(mission, overlay) {
         }
     };
 
-    /**
-     * Show this checklist.
-     */
-    this.show = () => {
-        overlay.appendChild(_container);
+    const update = checkMarks => {
+        for (let i = 0; i < _objectives.length; ++i) if (checkMarks[i])
+            _objectives[i].check();
     };
 
-    /**
-     * Hide this checklist.
-     */
-    this.hide = () => {
-        overlay.removeChild(_container);
-    };
+    this.getElement = () => _container;
+
+    mission.setOnChange(update);
 
     build();
 }

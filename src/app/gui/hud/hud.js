@@ -8,7 +8,7 @@ import {Checklist} from "../shared/checklist/checklist";
  * @constructor
  */
 export function Hud(renderContext, world, game) {
-    const _checklist = new Checklist(world.getMission(), renderContext.getOverlay());
+    let _checklist = null;
 
     /**
      * Free all resources used by this object.
@@ -21,13 +21,15 @@ export function Hud(renderContext, world, game) {
      * Show the HUD.
      */
     this.show = () => {
-        _checklist.show();
+        _checklist = new Checklist(world.getMission());
+
+        renderContext.getOverlay().appendChild(_checklist.getElement());
     };
 
     /**
      * Hide the HUD.
      */
     this.hide = () => {
-        _checklist.hide();
+        renderContext.getOverlay().removeChild(_checklist.getElement());
     };
 }

@@ -8,12 +8,20 @@ export function Mission(objectives, title) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
+    let _onChange=  null;
 
     const rewind = () => {
         _checking = objectives.slice();
         _finished = [];
         _checkMarks = new Array(objectives.length).fill(false);
     };
+
+    /**
+     * Set the function that should be executed when a change in passed objectives occurs.
+     * The function will get one parameter which is a boolean array mapping on the objectives of this mission.
+     * @param {Function} onChange A function to call when a change in passed objectives occurs.
+     */
+    this.setOnChange = onChange => _onChange = onChange;
 
     /**
      * Get this missions title.
@@ -36,11 +44,16 @@ export function Mission(objectives, title) {
      * Check all unfinished objectives.
      */
     this.validate = () => {
+        let _changed = false;
+
         for (let i = _checking.length; i-- > 0;) if (_checking[i].validate()) {
             _finished.push(_checking[i]);
             _checking.splice(i, 1);
-            _checkMarks[i] = true;
+            _checkMarks[i] = _changed = true;
         }
+
+        if (_changed && _onChange)
+            _onChange(_checkMarks);
 
         return _checking.length === 0;
     };
