@@ -164,12 +164,10 @@ PcbPoint.prototype.erasePaths = function(point) {
  */
 PcbPoint.prototype.withConnected = function(f, exclude) {
     for (let direction = 0; direction < 8; ++direction) {
-        if (exclude && exclude === direction)
+        if (exclude === direction)
             continue;
 
-        const bit = 1 << direction;
-
-        if ((this.paths & bit) === bit) {
+        if (((this.paths >> direction) & 1) === 1) {
             const delta = PcbPoint.directionToDelta(direction);
 
             f(delta.x, delta.y, PcbPoint.invertDirection(direction));

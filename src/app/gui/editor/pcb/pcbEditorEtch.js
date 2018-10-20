@@ -57,10 +57,10 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
         }
     };
 
-    const setModeDeletePath = () => {
+    const setModeDeletePath = (start, end, etchPathValid) => {
         const routePath = new PcbPath();
 
-        routePath.fromRoute(pcb, _pathEtch.getStart(), _pathEtch.getEnd());
+        routePath.fromRoute(pcb, start, end);
 
         if (routePath.isValid()) {
             _pathEtch = routePath;
@@ -68,7 +68,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
             return PcbEditorEtch.SELECT_TYPE_DELETE;
         }
 
-        return setModeExtend();
+        if (etchPathValid)
+            return setModeExtend();
     };
 
     const setModeExtend = () => {
@@ -113,6 +114,9 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     const setModeDrag = () => {
+        if (!_pathEtch)
+            return;
+
         let overlapped = null;
         let length = 0;
 
@@ -143,10 +147,18 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     const determineMode = () => {
-        if (_deleting &&
-            pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
-            pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths())
-            return setModeDeletePath();
+        if (_deleting) {
+            if (_pathEtch) {
+                if (pcb.getPoint(_pathEtch.getStart().x, _pathEtch.getStart().y).hasPaths() &&
+                    pcb.getPoint(_pathEtch.getEnd().x, _pathEtch.getEnd().y).hasPaths())
+                    return setModeDeletePath(_pathEtch.getStart(), _pathEtch.getEnd(), true);
+            }
+            else {
+                if (pcb.getPoint(_startPoint.x, _startPoint.y) &&
+                    pcb.getPoint(cursor.x, cursor.y))
+                    return setModeDeletePath(_startPoint, cursor, false);
+            }
+        }
 
         return setModeDrag();
     };
@@ -319,12 +331,9 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
             if (point) {
                 _pathEtch = makePath(_startPoint, cursor);
+                _selectMode = determineMode();
 
-                if (_pathEtch) {
-                    _selectMode = determineMode();
-
-                    setRenderMode(_selectMode);
-                }
+                setRenderMode(_selectMode);
             }
             else
                 _pathEtch = null;

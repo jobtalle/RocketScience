@@ -117,7 +117,7 @@ export function Game(renderContext, input) {
 
         _world = new World(renderContext, new Mission([
             new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED"),
-            new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Turn a switch on")
+            new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Flip a switch")
         ], "Mission 1"));
         _hud = new Hud(renderContext, _world, this);
         _editor = new Editor(renderContext, _world, this);
