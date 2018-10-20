@@ -1,5 +1,5 @@
 import {Menu} from "./menu/menu";
-import {Editor} from "./editor/editor";
+import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
 import {Pcb} from "./pcb/pcb";
 import {Terrain} from "./world/terrain/terrain";

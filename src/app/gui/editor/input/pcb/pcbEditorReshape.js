@@ -1,5 +1,5 @@
-import * as Myr from "../../../../lib/myr";
-import {Pcb} from "../../../pcb/pcb";
+import * as Myr from "../../../../../lib/myr";
+import {Pcb} from "../../../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 import {OverlayRulerDefinition} from "../../output/overlay/rulers/overlayRulerDefinition";
 

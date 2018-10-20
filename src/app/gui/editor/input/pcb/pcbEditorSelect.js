@@ -1,5 +1,5 @@
-import {Pcb} from "../../../pcb/pcb";
-import * as Myr from "../../../../lib/myr";
+import {Pcb} from "../../../../pcb/pcb";
+import * as Myr from "../../../../../lib/myr";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {Selection} from "./selection";
 import {OverlayRulerDefinition} from "../../output/overlay/rulers/overlayRulerDefinition";

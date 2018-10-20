@@ -1,10 +1,10 @@
-import "../../../../styles/overlay.css"
+import "../../../../../styles/overlay.css"
 import {OverlayPinouts} from "./pinouts/overlayPinouts";
 import {OverlayRulers} from "./rulers/overlayRulers";
 
 /**
  * An overlay for the PCB editor.
- * @param {Object} overlay An overlay element for HTML GUI.
+ * @param {Object} overlay An overlay element for HTML editor.
  * @param {Number} xOffset The editor view x offset.
  * @constructor
  */

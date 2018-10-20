@@ -1,13 +1,13 @@
-import {View} from "../view/view";
-import {ZoomProfile} from "../view/zoomProfile";
-import {ShiftProfile} from "../view/shiftProfile";
+import {View} from "../../view/view";
+import {ZoomProfile} from "../../view/zoomProfile";
+import {ShiftProfile} from "../../view/shiftProfile";
 import {EditorOutput} from "./output/editorOutput";
 import {EditorInput} from "./input/editorInput";
-import {MouseEvent} from "../input/mouse/MouseEvent";
-import * as Myr from "../../lib/myr";
+import {MouseEvent} from "../../input/mouse/MouseEvent";
+import * as Myr from "../../../lib/myr";
 
 /**
- * Provides a grid editor.
+ * Provides a editor for editing PCB's.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.
@@ -49,7 +49,7 @@ export function Editor(renderContext, world, game) {
     this.edit = (pcb, x, y) => _input.edit(pcb, x, y);
 
     /**
-     * Hide the editor
+     * Hide the editor.
      */
     this.hide = () => {
         _output.hide();

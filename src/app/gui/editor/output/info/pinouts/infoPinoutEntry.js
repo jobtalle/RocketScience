@@ -1,7 +1,7 @@
 import {InfoPinoutEntryIndex} from "./infoPinoutEntryIndex";
-import {getString} from "../../../../text/language";
+import {getString} from "../../../../../text/language";
 import {InfoPinoutEntryName} from "./infoPinoutEntryName";
-import {Pin} from "../../../../part/pin";
+import {Pin} from "../../../../../part/pin";
 
 /**
  * A pinout entry.

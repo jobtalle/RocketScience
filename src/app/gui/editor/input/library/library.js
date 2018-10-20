@@ -1,5 +1,5 @@
-import "../../../../styles/library.css"
-import parts from "../../../../assets/parts.json"
+import "../../../../../styles/library.css"
+import parts from "../../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Category} from "./category";
 import {Toolbar} from "../toolbar/toolbar";
@@ -10,7 +10,7 @@ import {Info} from "../../output/info/info";
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
- * @param {Object} overlay An overlay element for HTML GUI.
+ * @param {Object} overlay An overlay element for HTML editor.
  * @constructor
  */
 export function Library(editor, toolbar, info, overlay) {

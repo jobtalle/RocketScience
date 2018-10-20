@@ -1,4 +1,4 @@
-import "../../../../styles/info.css"
+import "../../../../../styles/info.css"
 import {InfoTitle} from "./description/InfoTitle";
 import {InfoDescription} from "./description/InfoDescription";
 import {InfoPinouts} from "./pinouts/infoPinouts";

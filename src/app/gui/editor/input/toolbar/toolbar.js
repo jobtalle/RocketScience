@@ -1,11 +1,11 @@
-import "../../../../styles/toolbar.css"
+import "../../../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 
 /**
  * A toolbar containing buttons for the PCB editor.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
- * @param {Object} overlay An overlay element for HTML GUI.
+ * @param {Object} overlay An overlay element for HTML editor.
  * @param {Number} x The X position of the toolbar in pixels.
  * @param {Game} game A game.
  * @constructor
@@ -62,7 +62,7 @@ export function Toolbar(editor, overlay, x, game) {
     };
 
     /**
-     * Set all buttons to their defaults. Make sure to default after the pcb editor has initialized.
+     * Set all buttons to their defaults. Make sure to default after the PCB editor has initialized.
      */
     this.default = () => {
         _buttonSelect.getElement().click();

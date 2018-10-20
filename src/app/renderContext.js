@@ -1,12 +1,12 @@
 import Myr from "../lib/myr.js"
 import {Sprites} from "./sprites";
-import {Viewport} from "./editor/viewport";
+import {Viewport} from "./gui/viewport";
 import {StyleUtils} from "./utils/styleUtils";
 
 /**
  * The render context provides access to all objects that allow rendering.
  * @param {HTMLElement} canvas A canvas to render real time graphics to.
- * @param {HTMLElement} overlay An HTML element to render the GUI to.
+ * @param {HTMLElement} overlay An HTML element to render the editor to.
  * @constructor
  */
 export function RenderContext(canvas, overlay) {

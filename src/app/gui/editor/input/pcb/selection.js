@@ -1,4 +1,4 @@
-import {Pcb} from "../../../pcb/pcb";
+import {Pcb} from "../../../../pcb/pcb";
 
 /**
  * A drawable selection rectangle.

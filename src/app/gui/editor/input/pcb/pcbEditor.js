@@ -1,19 +1,19 @@
-import {Terrain} from "../../../world/terrain/terrain";
-import {World} from "../../../world/world";
-import {Pcb} from "../../../pcb/pcb";
-import {PcbRenderer} from "../../../pcb/pcbRenderer";
-import {View} from "../../../view/view";
+import {Terrain} from "../../../../world/terrain/terrain";
+import {World} from "../../../../world/world";
+import {Pcb} from "../../../../pcb/pcb";
+import {PcbRenderer} from "../../../../pcb/pcbRenderer";
+import {View} from "../../../../view/view";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../../editor";
-import Myr from "../../../../lib/myr.js";
-import {PcbFile} from "../../../pcb/pcbFile";
+import Myr from "../../../../../lib/myr.js";
+import {PcbFile} from "../../../../pcb/pcbFile";
 
 /**
- * The interactive Pcb editor which takes care of sizing & modifying a Pcb.
+ * The interactive PCB editor which takes care of sizing & modifying a Pcb.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
@@ -231,7 +231,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * Update the state of the pcb editor.
+     * Update the state of the PCB editor.
      * @param timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
@@ -242,7 +242,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * Draw the pcb editor.
+     * Draw the PCB editor.
      */
     this.draw = () => {
         renderContext.getMyr().push();
@@ -256,7 +256,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * Show the pcb editor.
+     * Show the PCB editor.
      */
     this.show = () => {
         matchWorldPosition();
@@ -267,7 +267,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * Hide the pcb editor.
+     * Hide the PCB editor.
      */
     this.hide = () => {
         view.onMouseRelease();
@@ -330,7 +330,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     /**
-     * Get the pcb editor width
+     * Get the PCB editor width
      * @returns {Number} The width of the editor in pixels.
      */
     this.getWidth = () => width;
