@@ -144,6 +144,7 @@ export function World(renderContext, mission) {
         this.pause();
 
         _view.onMouseRelease();
+        _controllerState.reset();
 
         while (_objects.length > 0)
             _objects.pop().free();

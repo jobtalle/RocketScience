@@ -82,6 +82,14 @@ export function ControllerState() {
     };
 
     /**
+     * Reset the controller state.
+     */
+    this.reset = () => {
+        _state = 0;
+        _clicks.splice(0, _clicks.length);
+    };
+
+    /**
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */

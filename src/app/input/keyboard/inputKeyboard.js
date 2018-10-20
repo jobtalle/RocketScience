@@ -38,6 +38,7 @@ export function InputKeyboard(window) {
     };
 
     const onkeyup = event => {
+        console.log("up");
         _down[event.key] = false;
 
         switch (event.key) {
