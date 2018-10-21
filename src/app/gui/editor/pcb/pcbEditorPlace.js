@@ -118,7 +118,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
      */
     this.mouseDown = () => {
         if (_suitable) {
-            editor.undoPush();
+            editor.getEditable().undoPush();
 
             if (selection)
                 selection.clearSelected();

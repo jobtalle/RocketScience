@@ -60,6 +60,15 @@ export function Editable(region, pcb, pcbOffset, budget) {
     };
 
     /**
+     * Cancel pushing the last undo state.
+     * Use this when an undo state was pushed, but nothing was changed in the new state.
+     */
+    this.undoPushCancel = () => {
+        _undoStack.pop();
+        _redoStack.splice(0, _redoStack.length);
+    };
+
+    /**
      * Undo an action if the undo stack is not empty.
      * @returns {Boolean} A boolean indicating whether the operation succeeded.
      */

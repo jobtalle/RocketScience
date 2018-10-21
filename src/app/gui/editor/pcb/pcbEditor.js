@@ -44,16 +44,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
             view.getZoom());
     };
 
-    const undoPop = () => {
-        if (_editable.undoPop())
-            this.edit(_editable);
-    };
-
-    const redoPop = () => {
-        if (_editable.redoPop())
-            this.edit(_editable);
-    };
-
     const updateCursor = () => {
         const oldX = _cursor.x;
         const oldY = _cursor.y;
@@ -143,23 +133,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
             _renderer.revalidate();
 
         updateCursor();
-    };
-
-    /**
-     * Push the current PCB state to the undo stack.
-     */
-    this.undoPush = () => {
-        _editable.undoPush();
-    };
-
-    /**
-     * Cancel pushing the last undo state (using undoPush()).
-     * Use this when an undo state was pushed, but nothing has changed.
-     */
-    this.undoPushCancel = () => {
-        _undoStack.pop();
-
-        _redoStack.length = 0;
     };
 
     /**
@@ -268,7 +241,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      */
     this.edit = editable => {
         if (_renderer) {
-            // Unused currently:
             _renderer.free();
 
             const dx = (_editable.getRegion().getOrigin().x - editable.getRegion().getOrigin().x) * Terrain.PIXELS_PER_METER;
@@ -278,7 +250,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
                 view.getFocusX() - dx,
                 view.getFocusY() - dy,
                 view.getZoom());
-            // End unused
         }
         else
             view.focus(
@@ -287,6 +258,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;
+
         updatePcb(editable.getPcb());
 
         let lastLevel;
@@ -304,6 +276,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         this.revalidate();
         moveCursor();
     };
+
+    /**
+     * Get the current editable object.
+     * @returns {Editable} The editable.
+     */
+    this.getEditable = () => _editable;
 
     /**
      * Get the PCB editor width
@@ -420,13 +398,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (event.control)
-                    undoPop();
+                if (event.control) if (_editable.undoPop())
+                    this.edit(_editable);
 
                 return;
             case KEY_REDO:
-                if (event.control)
-                    redoPop();
+                if (event.control) if (_editable.redoPop())
+                    this.edit(_editable);
 
                 return;
             case KEY_SAVE:
