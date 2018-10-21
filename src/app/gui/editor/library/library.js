@@ -43,11 +43,12 @@ export function Library(editor, toolbar, info, overlay) {
 
     /**
      * Set the part budget the library should respect.
-     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {BudgetInventory} budget A budget, or null if there is no budget.
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
-
+        for (const category of _categories)
+            category.setBudget(budget, summary);
     };
 
     /**

@@ -6,7 +6,7 @@ import Myr from "../../../lib/myr.js";
  * @param {EditableRegion} region The editable region of this editable.
  * @param {Pcb} pcb The default pcb for this editable.
  * @param {Myr.Vector} pcbOffset The PCB's offset within its region.
- * @param {Budget} budget A part budget, or null if there is no budget.
+ * @param {BudgetInventory} budget A part budget, or null if there is no budget.
  * @constructor
  */
 export function Editable(region, pcb, pcbOffset, budget) {
@@ -44,7 +44,7 @@ export function Editable(region, pcb, pcbOffset, budget) {
 
     /**
      * Get the part budget of this editable.
-     * @returns {Budget} A part budget.
+     * @returns {BudgetInventory} A part budget.
      */
     this.getBudget = () => budget;
 

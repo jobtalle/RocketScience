@@ -26,7 +26,7 @@ export function Category(category, setPart, info) {
 
     /**
      * Set the part budget the category should respect.
-     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {BudgetInventory} budget A budget, or null if there is no budget.
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {

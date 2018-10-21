@@ -8,7 +8,7 @@ export function PartSummary(pcb) {
 
     const build = () => {
         for (const fixture of pcb.getFixtures()) if (fixture.part) {
-            const name = fixture.part.getDefinition().name;
+            const name = fixture.part.getDefinition().object;
 
             if (entries[name] === undefined)
                 entries[name] = 1;

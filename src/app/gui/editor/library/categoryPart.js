@@ -1,4 +1,6 @@
 import {getString} from "../../../text/language";
+import {BudgetInventory} from "../../../mission/budget/budgetInventory";
+import {Budget} from "../../../mission/budget/budget";
 
 /**
  * A part button used to instantiate a part.
@@ -30,6 +32,15 @@ export function CategoryPart(part, setPart, info) {
         _element.onmouseout = onLeave;
     };
 
+    const makeCount = count => {
+        const countElement = document.createElement("div");
+
+        countElement.className = CategoryPart.CLASS_COUNT;
+        countElement.innerText = count;
+
+        return countElement;
+    };
+
     /**
      * Get the HTML element of this category.
      * @returns {HTMLElement} The HTML element of this category.
@@ -38,14 +49,35 @@ export function CategoryPart(part, setPart, info) {
 
     /**
      * Set the part budget the category should respect.
-     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {BudgetInventory} budget A budget, or null if there is no budget.
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
+        while (_element.firstChild)
+            _element.removeChild(_element.firstChild);
 
+        _element.classList.remove(CategoryPart.CLASS_NOT_AVAILABLE);
+
+        switch (budget.getType()) {
+            case Budget.TYPE_INVENTORY:
+                const entry = budget.getEntry(part.object);
+                let available = 0;
+
+                if (entry)
+                    available = entry.count - summary.getPartCount(part.object);
+
+                _element.appendChild(makeCount(available));
+
+                if (available === 0)
+                    _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+
+                break;
+        }
     };
 
     make();
 }
 
 CategoryPart.CLASS = "part";
+CategoryPart.CLASS_NOT_AVAILABLE = "not-available";
+CategoryPart.CLASS_COUNT = "count";

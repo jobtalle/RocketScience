@@ -9,7 +9,7 @@ import {GoalPinState} from "./mission/goal/goalPinState";
 import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
 import {Switch} from "./part/parts/switch";
-import {Budget} from "./mission/budget/budget";
+import {BudgetInventory} from "./mission/budget/budgetInventory";
 import {Editable} from "./mission/editable/editable";
 import {EditableRegion} from "./mission/editable/editableRegion";
 import * as Myr from "../lib/myr";
@@ -134,7 +134,12 @@ export function Game(renderContext, input) {
                         new Myr.Vector(5, 5)),
                     pcb,
                     new Myr.Vector(0, 0),
-                    null)
+                    new BudgetInventory([
+                        new BudgetInventory.Entry("Led", 4),
+                        new BudgetInventory.Entry("Battery", 1),
+                        new BudgetInventory.Entry("Switch", 1),
+                        new BudgetInventory.Entry("Button", 1)
+                    ]))
             ],
             "Mission 1"));
         _hud = new Hud(renderContext, _world, this);
