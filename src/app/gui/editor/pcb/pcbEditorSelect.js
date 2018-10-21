@@ -45,6 +45,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
                 fixture.x - selection.getLeft(),
                 fixture.y - selection.getTop()));
 
+        editor.getEditable().undoPush();
         editor.getOutput().getOverlay().clearRulers();
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
 
