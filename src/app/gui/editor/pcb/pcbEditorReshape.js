@@ -2,6 +2,7 @@ import * as Myr from "../../../../lib/myr";
 import {Pcb} from "../../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
+import {Terrain} from "../../../world/terrain/terrain";
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.
@@ -60,7 +61,9 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
 
         const packReport = pcb.pack();
 
-        editor.shift(packReport.left * Pcb.PIXELS_PER_POINT, packReport.top * Pcb.PIXELS_PER_POINT);
+        editor.moveOffset(
+            packReport.left * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            packReport.top * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
         editor.revalidate();
     };
 
@@ -153,7 +156,9 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
             }
         }
 
-        editor.shift(xMin * Pcb.PIXELS_PER_POINT, yMin * Pcb.PIXELS_PER_POINT);
+        editor.moveOffset(
+            xMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            yMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
         pcb.shift(-xMin, -yMin);
 
         for (const cell of negatives)

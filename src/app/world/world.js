@@ -64,8 +64,8 @@ export function World(renderContext, mission) {
     /**
      * Add a new pcb to simulate in the world.
      * @param {Pcb} pcb The pcb to add.
-     * @param {Number} x The x-position.
-     * @param {Number} y The y-position.
+     * @param {Number} x The x-position in meters.
+     * @param {Number} y The y-position in meters.
      */
     this.addPcb = (pcb, x, y) => {
         _objects.push(new WorldObject(renderContext, _physics, _controllerState, pcb, x, y));

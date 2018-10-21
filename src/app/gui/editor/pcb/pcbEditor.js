@@ -29,7 +29,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     const KEY_SAVE = "q";
 
     const _cursor = new Myr.Vector(-1, -1);
-    const _pcbPosition = new Myr.Vector(0, 0);
 
     let _editable = null;
     let _renderer = null;
@@ -39,8 +38,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     const matchWorldPosition = () => {
         world.getView().focus(
-            view.getFocusX() + _pcbPosition.x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
-            view.getFocusY() + _pcbPosition.y * Terrain.PIXELS_PER_METER,
+            view.getFocusX() + _editable.getPosition().x * Terrain.PIXELS_PER_METER - x * 0.5 / view.getZoom(),
+            view.getFocusY() + _editable.getPosition().y * Terrain.PIXELS_PER_METER,
             view.getZoom());
     };
 
@@ -80,12 +79,29 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         _editor.mouseUp();
     };
 
-    const updatePcb = pcb => {
+    const updateRenderer = () => {
+        let lastLevel;
+
+        if (_renderer)
+            lastLevel = _renderer.getLevel();
+        else
+            lastLevel = PcbRenderer.LEVEL_PARTS;
+
+        _renderer = new PcbRenderer(renderContext, _editable.getPcb(), lastLevel);
+    };
+
+    const updatePcb = () => {
         if (_editor)
-            _editor.updatePcb(pcb);
+            _editor.updatePcb(_editable.getPcb());
 
         if (_stashedEditor)
-            _stashedEditor.updatePcb(pcb);
+            _stashedEditor.updatePcb(_editable.getPcb());
+
+        this.revalidate();
+
+        matchWorldPosition();
+        updateRenderer();
+        moveCursor();
     };
 
     /**
@@ -101,14 +117,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * Shift the PCB position.
-     * @param {Number} dx The horizontal movement in pixels.
-     * @param {Number} dy The vertical movement in pixels.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
      */
-    this.shift = (dx, dy) => {
-        _pcbPosition.x += dx * Terrain.METERS_PER_PIXEL;
-        _pcbPosition.y += dy * Terrain.METERS_PER_PIXEL;
-
-        view.focus(view.getFocusX() - dx, view.getFocusY() - dy, view.getZoom());
+    this.moveOffset = (dx, dy) => {
+        _editable.moveOffset(dx, dy);
 
         matchWorldPosition();
     };
@@ -222,7 +235,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         _editor.reset();
 
         // TODO: Add all editable PCB's in the current mission
-        world.addPcb(_editable.getPcb(), _pcbPosition.x, _pcbPosition.y);
+        world.addPcb(_editable.getPcb(), _editable.getPosition().x, _editable.getPosition().y);
     };
 
     /**
@@ -259,22 +272,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
         _editable = editable;
 
-        updatePcb(editable.getPcb());
-
-        let lastLevel;
-
-        if (_renderer)
-            lastLevel = _renderer.getLevel();
-        else
-            lastLevel = PcbRenderer.LEVEL_PARTS;
-
-        _pcbPosition.x = editable.getRegion().getOrigin().x + editable.getOffset().x;
-        _pcbPosition.y = editable.getRegion().getOrigin().y + editable.getOffset().y;
-        _renderer = new PcbRenderer(renderContext, editable.getPcb(), lastLevel);
-
-        matchWorldPosition();
-        this.revalidate();
-        moveCursor();
+        updatePcb();
     };
 
     /**
@@ -399,17 +397,17 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         if (event.down) switch(event.key) {
             case KEY_UNDO:
                 if (event.control) if (_editable.undoPop())
-                    this.edit(_editable);
+                    updatePcb();
 
                 return;
             case KEY_REDO:
                 if (event.control) if (_editable.redoPop())
-                    this.edit(_editable);
+                    updatePcb();
 
                 return;
             case KEY_SAVE:
                 if (event.control)
-                    _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), this.edit(_editable);
+                    _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), updatePcb();
 
                 return;
         }
