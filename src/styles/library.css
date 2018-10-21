@@ -49,16 +49,24 @@
     pointer-events: none;
 }
 
+#library #parts .part-list .part.not-specified {
+    display: none;
+}
+
 #library #parts .part-list .part.not-available:hover {
     background-color: inherit;
 }
 
 #library #parts .part-list .part .count {
-    right: 0;
-    bottom: 0;
     width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
+    border-radius: calc(var(--part-grid-count-size) / 2);
+    border: 1px solid black;
     text-align: center;
-    background-color: red;
+    background-color: white;
+}
+
+#library #parts .part-list .part.not-available .count {
+    background-color: #9f9f9f;
 }

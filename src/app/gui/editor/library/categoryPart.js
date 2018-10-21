@@ -57,19 +57,23 @@ export function CategoryPart(part, setPart, info) {
             _element.removeChild(_element.firstChild);
 
         _element.classList.remove(CategoryPart.CLASS_NOT_AVAILABLE);
+        _element.classList.remove(CategoryPart.CLASS_NOT_SPECIFIED);
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
                 const entry = budget.getEntry(part.object);
                 let available = 0;
 
-                if (entry)
+                if (entry) {
                     available = entry.count - summary.getPartCount(part.object);
 
-                _element.appendChild(makeCount(available));
+                    _element.appendChild(makeCount(available));
 
-                if (available === 0)
-                    _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                    if (available === 0)
+                        _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                }
+                else
+                    _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
 
                 break;
         }
@@ -80,4 +84,5 @@ export function CategoryPart(part, setPart, info) {
 
 CategoryPart.CLASS = "part";
 CategoryPart.CLASS_NOT_AVAILABLE = "not-available";
+CategoryPart.CLASS_NOT_SPECIFIED = "not-specified";
 CategoryPart.CLASS_COUNT = "count";

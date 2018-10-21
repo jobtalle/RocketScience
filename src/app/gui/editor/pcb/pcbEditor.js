@@ -183,7 +183,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
-                this.setEditor(new PcbEditorSelect(renderContext, _editable.getPcb(), _cursor, this, new Selection(renderContext)));
+                this.setEditor(new PcbEditorSelect(
+                    renderContext,
+                    _editable.getPcb(),
+                    _cursor,
+                    this,
+                    new Selection(renderContext),
+                    _editable.getBudget()));
 
                 break;
             case PcbEditor.EDIT_MODE_ETCH:

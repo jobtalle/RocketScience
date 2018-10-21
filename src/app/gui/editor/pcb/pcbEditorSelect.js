@@ -3,6 +3,8 @@ import * as Myr from "../../../../lib/myr";
 import {PcbEditorPlace} from "./pcbEditorPlace";
 import {Selection} from "./selection";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
+import {PartSummary} from "../../../pcb/partSummary";
+import {Budget} from "../../../mission/budget/budget";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -11,9 +13,10 @@ import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {PcbEditor} editor A PCB editor.
  * @param {Selection} selection A selection.
+ * @param {Object} budget A part budget to take into account. May be null.
  * @constructor
  */
-export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
+export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, budget) {
     const _cursorDrag = new Myr.Vector(0, 0);
     let _selectable = false;
     let _dragging = false;
@@ -36,7 +39,36 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
         editor.setEditor(new PcbEditorPlace(renderContext, pcb, cursor, editor, moveFixtures, selection));
     };
 
+    const budgetAllows = fixtures => {
+        if (!budget)
+            return; // TODO: Provide some feedback here
+
+        switch (budget.getType()) {
+            case Budget.TYPE_INVENTORY:
+                const summary = new PartSummary();
+
+                summary.merge(new PartSummary(pcb));
+
+                for (const fixture of fixtures) if (fixture.part)
+                    summary.register(fixture.part.getDefinition().object);
+
+                for (const fixture of fixtures) if (fixture.part) {
+                    const budgetEntry = budget.getEntry(fixture.part.getDefinition().object);
+
+                    if (budgetEntry && budgetEntry.count < summary.getPartCount(fixture.part.getDefinition().object))
+                        return false;
+                }
+
+                break;
+        }
+
+        return true;
+    };
+
     const copy = () => {
+        if (!budgetAllows(selection.getSelected()))
+            return;
+
         const placeFixtures = [];
 
         for (const fixture of selection.getSelected())
