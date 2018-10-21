@@ -208,7 +208,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 dragPreventSplit(left, top, right, bottom);
             }
 
-            editor.getOutput().getOverlay().makeRulers([
+            editor.getEditor().getOverlay().makeRulers([
                 new OverlayRulerDefinition(
                     _dragPointsLeft,
                     _dragPointsBottom + 1,
@@ -264,7 +264,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
             else
                 erase();
 
-            editor.getOutput().getOverlay().clearRulers();
+            editor.getEditor().getOverlay().clearRulers();
 
             _extendable = _deletable = false;
             _dragging = false;
@@ -305,7 +305,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     this.cancelAction = () => {
         _dragging = false;
 
-        editor.getOutput().getOverlay().clearRulers();
+        editor.getEditor().getOverlay().clearRulers();
     };
 
     /**

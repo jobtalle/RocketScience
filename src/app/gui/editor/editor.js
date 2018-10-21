@@ -1,10 +1,13 @@
 import {View} from "../../view/view";
 import {ZoomProfile} from "../../view/zoomProfile";
 import {ShiftProfile} from "../../view/shiftProfile";
-import {EditorOutput} from "./editorOutput";
-import {EditorInput} from "./editorInput";
 import {MouseEvent} from "../../input/mouse/MouseEvent";
 import * as Myr from "../../../lib/myr";
+import {PcbEditor} from "./pcb/pcbEditor";
+import {Toolbar} from "./toolbar/toolbar";
+import {Library} from "./library/library";
+import {Overlay} from "./overlay/overlay";
+import {Info} from "./info/info";
 
 /**
  * Provides am editor for editing PCB's.
@@ -14,6 +17,8 @@ import * as Myr from "../../../lib/myr";
  * @constructor
  */
 export function Editor(renderContext, world, game) {
+    const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
+    const _info = new Info(_overlay);
     const _view = new View(
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
         renderContext.getHeight(),
@@ -24,53 +29,87 @@ export function Editor(renderContext, world, game) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
+    const _pcbEditor = new PcbEditor(
+        renderContext,
+        world,
+        _view,
+        renderContext.getWidth() - renderContext.getViewport().getSplitX(),
+        renderContext.getHeight(),
+        renderContext.getViewport().getSplitX(),
+        this);
+    const _toolbar = new Toolbar(
+        _pcbEditor,
+        renderContext.getViewport().getElement(),
+        renderContext.getViewport().getSplitX(),
+        game);
+    const _library = new Library(
+        _pcbEditor,
+        _toolbar,
+        _info,
+        renderContext.getViewport().getElement());
+    const _pcbScreenPosition = new Myr.Vector(0, 0);
 
-    let _pcbScreenPosition = new Myr.Vector(0, 0);
+    let _editable = null;
 
     const onViewChanged = () => {
         _pcbScreenPosition.x = 0;
         _pcbScreenPosition.y = 0;
 
         _view.getInverse().apply(_pcbScreenPosition);
-        _output.getOverlay().move(
+        _overlay.move(
             -_pcbScreenPosition.x,
             -_pcbScreenPosition.y,
             _view.getZoom());
     };
 
-    this.getOutput = () => _output;
-    this.getInput = () => _input;
+    /**
+     * Get the info output GUI.
+     * @returns {Info} The Info object.
+     */
+    this.getInfo = () => _info;
 
-    const _output = new EditorOutput(renderContext);
-    const _input = new EditorInput(renderContext, this, world, _view, game);
+    /**
+     * Get the overlay output GUI.
+     * @returns {Overlay} The Overlay object.
+     */
+    this.getOverlay = () => _overlay;
 
     /**
      * The PCB has changed.
      */
     this.onPcbChange = () => {
-
+        _library.setBudget(_editable.getBudget(), _editable.getPcb());
     };
 
     /**
      * Start editing a pcb.
      * @param {Editable} editable An editable.
      */
-    this.edit = editable => _input.edit(editable);
+    this.edit = editable => {
+        _editable = editable;
+
+        _pcbEditor.edit(editable);
+        _toolbar.default();
+    };
 
     /**
      * Hide the editor.
      */
     this.hide = () => {
-        _output.hide();
-        _input.hide();
+        _toolbar.hide();
+        _library.hide();
+        _pcbEditor.hide();
+        _overlay.hide();
     };
 
     /**
      * Show the editor.
      */
     this.show = () => {
-        _input.show();
-        _output.show();
+        _pcbEditor.show();
+        _library.show();
+        _toolbar.show();
+        _overlay.show();
     };
 
     /**
@@ -87,15 +126,14 @@ export function Editor(renderContext, world, game) {
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        _output.update(timeStep);
-        _input.update(timeStep);
+        _pcbEditor.update(timeStep);
     };
 
     /**
      * Render the editor.
      */
     this.draw = () => {
-        _input.draw();
+        _pcbEditor.draw();
     };
 
     /**
@@ -105,30 +143,30 @@ export function Editor(renderContext, world, game) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_PRESS_LMB:
-                _input.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
+                _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
-                _input.onMouseRelease();
+                _pcbEditor.onMouseRelease();
 
                 break;
             case MouseEvent.EVENT_SCROLL:
                 if (event.wheelDelta > 0)
-                    _input.zoomIn(event.x - renderContext.getViewport().getSplitX(), event.y);
+                    _pcbEditor.zoomIn(event.x - renderContext.getViewport().getSplitX(), event.y);
                 else
-                    _input.zoomOut(event.x - renderContext.getViewport().getSplitX(), event.y);
+                    _pcbEditor.zoomOut(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_ENTER:
-                _input.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
+                _pcbEditor.onMouseEnter(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_LEAVE:
-                _input.onMouseLeave();
+                _pcbEditor.onMouseLeave();
 
                 break;
             case MouseEvent.EVENT_MOVE:
-                _input.onMouseMove(event.x - renderContext.getViewport().getSplitX(), event.y);
+                _pcbEditor.onMouseMove(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
         }
@@ -138,14 +176,16 @@ export function Editor(renderContext, world, game) {
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */
-    this.onKeyEvent = event => _input.onKeyEvent(event);
+    this.onKeyEvent = event => {
+        _toolbar.onKeyEvent(event);
+        _pcbEditor.onKeyEvent(event);
+    };
 
     /**
      * Free all resources occupied by this editor.
      */
     this.free = () => {
-        _input.free();
-        _output.free();
+        _pcbEditor.free();
     };
 
     _view.setOnChanged(onViewChanged);

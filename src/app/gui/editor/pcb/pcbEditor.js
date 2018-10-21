@@ -161,10 +161,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
-     * Get the output channels associated with this editor.
-     * @returns {EditorOutput} The EditorOutput object.
+     * Get the GUI editor associated with this pcb editor.
+     * @returns {Editor} The Editor object.
      */
-    this.getOutput = () => editor.getOutput();
+    this.getEditor = () => editor;
 
     /**
      * Set the editors edit mode. Possible options are:
@@ -174,8 +174,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
-        editor.getOutput().getInfo().setPinouts(null);
-        editor.getOutput().getOverlay().clearRulers();
+        editor.getInfo().setPinouts(null);
+        editor.getOverlay().clearRulers();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:

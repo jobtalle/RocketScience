@@ -40,18 +40,18 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
             const index = fixture.part.getPinIndexAt(cursor.x - fixture.x, cursor.y - fixture.y);
 
             if (fixture.part.getConfiguration().io[index].type !== Pin.TYPE_STRUCTURAL) {
-                editor.getOutput().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
+                editor.getEditor().getInfo().setPinoutsSelected(fixture.part.getConfiguration(), fixture.x, fixture.y, index);
 
                 _showingLabel = true;
             }
             else {
-                editor.getOutput().getInfo().setPinoutsSelected(null);
+                editor.getEditor().getInfo().setPinoutsSelected(null);
 
                 _showingLabel = false;
             }
         }
         else {
-            editor.getOutput().getInfo().setPinoutsSelected(null);
+            editor.getEditor().getInfo().setPinoutsSelected(null);
 
             _showingLabel = false;
         }
@@ -280,14 +280,14 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
         if (!_showingLabel) {
             if (color !== PcbPointRenderer.COLOR_SELECT && ioIndex !== -1)
-                editor.getOutput().getInfo().setPinoutsSelected(
+                editor.getEditor().getInfo().setPinoutsSelected(
                     fixture.part.getConfiguration(),
                     fixture.x,
                     fixture.y,
                     ioIndex,
                     path.getOutwardVector(pinLocation));
             else
-                editor.getOutput().getInfo().setPinoutsSelected(null);
+                editor.getEditor().getInfo().setPinoutsSelected(null);
         }
     };
 
@@ -356,7 +356,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
             }
             else if (_pathSelected) {
                 if (!_showingLabel)
-                    editor.getOutput().getInfo().setPinoutsSelected(null);
+                    editor.getEditor().getInfo().setPinoutsSelected(null);
 
                 _pathSelected = null;
             }

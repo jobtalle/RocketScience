@@ -30,7 +30,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
 
         deleteSelectedParts();
 
-        editor.getOutput().getOverlay().clearRulers();
+        editor.getEditor().getOverlay().clearRulers();
         selection.move(cursor.x - start.x, cursor.y - start.y);
 
         editor.setEditor(new PcbEditorPlace(renderContext, pcb, cursor, editor, moveFixtures, selection));
@@ -46,7 +46,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
                 fixture.y - selection.getTop()));
 
         editor.getEditable().undoPush();
-        editor.getOutput().getOverlay().clearRulers();
+        editor.getEditor().getOverlay().clearRulers();
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
 
         editor.setEditor(new PcbEditorPlace(renderContext, pcb, cursor, editor, placeFixtures, selection));
@@ -123,15 +123,15 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
 
     const updateSelectedInfo = () => {
         if (selection.getSelected().length === 1)
-            editor.getOutput().getInfo().setPinouts(
+            editor.getEditor().getInfo().setPinouts(
                 selection.getSelected()[0].part.getConfiguration(),
                 selection.getSelected()[0].x,
                 selection.getSelected()[0].y);
         else
-            editor.getOutput().getInfo().setPinouts(null);
+            editor.getEditor().getInfo().setPinouts(null);
 
         if (selection.getSelected().length > 1)
-            editor.getOutput().getOverlay().makeRulers([
+            editor.getEditor().getOverlay().makeRulers([
                 new OverlayRulerDefinition(
                     selection.getLeft(),
                     selection.getBottom() + 1,
@@ -144,7 +144,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
                     selection.getBottom() - selection.getTop() + 1)
             ]);
         else
-            editor.getOutput().getOverlay().clearRulers();
+            editor.getEditor().getOverlay().clearRulers();
     };
 
     const selectAll = () => {
@@ -192,7 +192,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
     this.onKeyEvent = event => {
        if (event.down) switch (event.key) {
             case PcbEditorSelect.KEY_DELETE:
-                if (!editor.getOutput().getInfo().isHovering() && selection.getSelected().length > 0) {
+                if (!editor.getEditor().getInfo().isHovering() && selection.getSelected().length > 0) {
                     deleteSelectedParts();
 
                     selection.clearSelected();
@@ -377,7 +377,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection) {
      * Draw this editor.
      */
     this.draw = () => {
-        if (!editor.getOutput().getInfo().isHovering() && (_selectable || selection.getSelected().length > 0))
+        if (!editor.getEditor().getInfo().isHovering() && (_selectable || selection.getSelected().length > 0))
             selection.draw();
     };
 }
