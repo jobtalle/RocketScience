@@ -138,8 +138,8 @@ export function Game(renderContext, input) {
                         new BudgetInventory.Entry("Led", 4),
                         new BudgetInventory.Entry("Battery", 1),
                         new BudgetInventory.Entry("Switch", 1),
-                        new BudgetInventory.Entry("Button", 1)
-                        //new BudgetInventory.Entry("GateOr", 2)
+                        new BudgetInventory.Entry("Button", 1),
+                        new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE)
                     ]))
             ],
             "Mission 1"));

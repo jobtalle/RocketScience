@@ -5,6 +5,7 @@ import {Selection} from "./selection";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {PartSummary} from "../../../pcb/partSummary";
 import {Budget} from "../../../mission/budget/budget";
+import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -55,7 +56,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
                 for (const fixture of fixtures) if (fixture.part) {
                     const count = budget.getCount(fixture.part.getDefinition().object);
 
-                    if (count !== null && count < summary.getPartCount(fixture.part.getDefinition().object))
+                    if (count !== null && count !== BudgetInventory.COUNT_INFINITE && count < summary.getPartCount(fixture.part.getDefinition().object))
                         return false;
                 }
 

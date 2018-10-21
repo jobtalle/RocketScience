@@ -67,6 +67,7 @@
     font-size: var(--part-grid-count-size);
     border-radius: calc(var(--part-grid-count-size) / 2);
     border: 1px solid black;
+    padding: 1px;
     text-align: center;
     background-color: white;
 }

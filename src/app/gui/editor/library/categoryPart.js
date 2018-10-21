@@ -35,8 +35,11 @@ export function CategoryPart(part, setPart, info) {
     const makeCount = count => {
         const countElement = document.createElement("div");
 
+        if (count <= BudgetInventory.COUNT_INFINITE)
+            count = CategoryPart.TEXT_INFINITE;
+
         countElement.className = CategoryPart.CLASS_COUNT;
-        countElement.innerText = count;
+        countElement.innerHTML = count;
 
         return countElement;
     };
@@ -92,3 +95,4 @@ CategoryPart.CLASS = "part";
 CategoryPart.CLASS_NOT_AVAILABLE = "not-available";
 CategoryPart.CLASS_NOT_SPECIFIED = "not-specified";
 CategoryPart.CLASS_COUNT = "count";
+CategoryPart.TEXT_INFINITE = "&#8734";
