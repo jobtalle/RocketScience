@@ -24,40 +24,44 @@
     flex-grow: 1;
 }
 
-#library #parts .part-list {
+#library #parts .category.empty {
+    display: none;
+}
+
+#library #parts .category .part-list {
     display: grid;
     grid-template-columns: repeat(var(--part-grid-cells-per-row), var(--part-grid-cell-size));
 }
 
-#library #parts .part-list.closed {
+#library #parts .category .part-list.closed {
     display:none;
 }
 
-#library #parts .part-list .part {
+#library #parts .category .part-list .part {
     display: block;
 
     cursor: pointer;
     background-color: white;
 }
 
-#library #parts .part-list .part:hover {
+#library #parts .category .part-list .part:hover {
     background-color: lightblue;
 }
 
-#library #parts .part-list .part.not-available {
+#library #parts .category .part-list .part.not-available {
     background-color: gray;
     pointer-events: none;
 }
 
-#library #parts .part-list .part.not-specified {
+#library #parts .category .part-list .part.not-specified {
     display: none;
 }
 
-#library #parts .part-list .part.not-available:hover {
+#library #parts .category .part-list .part.not-available:hover {
     background-color: inherit;
 }
 
-#library #parts .part-list .part .count {
+#library #parts .category .part-list .part .count {
     width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
@@ -67,6 +71,6 @@
     background-color: white;
 }
 
-#library #parts .part-list .part.not-available .count {
+#library #parts .category .part-list .part.not-available .count {
     background-color: #9f9f9f;
 }

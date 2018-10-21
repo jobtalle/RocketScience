@@ -51,6 +51,7 @@ export function CategoryPart(part, setPart, info) {
      * Set the part budget the category should respect.
      * @param {BudgetInventory} budget A budget, or null if there is no budget.
      * @param {PartSummary} summary A summary of all the currently used parts.
+     * @returns {Boolean} A boolean which is False if the part is not visible.
      */
     this.setBudget = (budget, summary) => {
         while (_element.firstChild)
@@ -72,11 +73,16 @@ export function CategoryPart(part, setPart, info) {
                     if (available === 0)
                         _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
                 }
-                else
+                else {
                     _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
+
+                    return false;
+                }
 
                 break;
         }
+
+        return true;
     };
 
     make();

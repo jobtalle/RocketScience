@@ -37,10 +37,15 @@ export function CategoryPartList(parts, setPart, info) {
      * Set the part budget the category should respect.
      * @param {BudgetInventory} budget A budget, or null if there is no budget.
      * @param {PartSummary} summary A summary of all the currently used parts.
+     * @returns {Boolean} Returns true if any parts exist in this category after filtering by budget.
      */
     this.setBudget = (budget, summary) => {
-        for (const part of _parts)
-            part.setBudget(budget, summary);
+        let hasParts = false;
+
+        for (const part of _parts) if (part.setBudget(budget, summary))
+            hasParts = true;
+
+        return hasParts;
     };
 
     make();

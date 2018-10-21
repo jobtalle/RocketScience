@@ -14,6 +14,7 @@ export function Category(category, setPart, info) {
     const _partList = new CategoryPartList(category.parts, setPart, info);
 
     const build = () => {
+        _element.className = Category.CLASS;
         _element.appendChild(new CategoryTitle(getString(category.label), _partList).getElement());
         _element.appendChild(_partList.getElement());
     };
@@ -30,8 +31,14 @@ export function Category(category, setPart, info) {
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
-        _partList.setBudget(budget, summary);
+        if (_partList.setBudget(budget, summary))
+            _element.classList.remove(Category.CLASS_EMPTY);
+        else
+            _element.classList.add(Category.CLASS_EMPTY);
     };
 
     build();
 }
+
+Category.CLASS = "category";
+Category.CLASS_EMPTY = "empty";
