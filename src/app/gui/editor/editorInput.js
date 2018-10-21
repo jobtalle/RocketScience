@@ -5,13 +5,13 @@ import {Library} from "./library/library";
 /**
  * Input elements of the editor.
  * @param {RenderContext} renderContext A render context;
- * @param {EditorOutput} output The output part of the editor.
+ * @param {Editor} editor The editor.
  * @param {World} world A world.
  * @param {View} view The view.
  * @param {Game} game A game.
  * @constructor
  */
-export function EditorInput(renderContext, output, world, view, game) {
+export function EditorInput(renderContext, editor, world, view, game) {
     const _pcbEditor = new PcbEditor(
         renderContext,
         world,
@@ -19,7 +19,7 @@ export function EditorInput(renderContext, output, world, view, game) {
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
         renderContext.getHeight(),
         renderContext.getViewport().getSplitX(),
-        output);
+        editor);
     const _toolbar = new Toolbar(
         _pcbEditor,
         renderContext.getViewport().getElement(),
@@ -28,7 +28,7 @@ export function EditorInput(renderContext, output, world, view, game) {
     const _library = new Library(
         _pcbEditor,
         _toolbar,
-        output.getInfo(),
+        editor.getOutput().getInfo(),
         renderContext.getViewport().getElement());
 
     /**

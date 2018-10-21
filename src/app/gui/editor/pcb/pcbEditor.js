@@ -20,10 +20,10 @@ import {PcbFile} from "../../../pcb/pcbFile";
  * @param {Number} width The editor width.
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
- * @param {EditorOutput} output An EditorOutput object.
+ * @param {Editor} editor An Editor object.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, output) {
+export function PcbEditor(renderContext, world, view, width, height, x, editor) {
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
     const KEY_SAVE = "q";
@@ -142,6 +142,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * Revalidate the editor state and PCB graphics.
      */
     this.revalidate = () => {
+        editor.onPcbChange();
+
         if(_renderer)
             _renderer.revalidate();
 
@@ -162,7 +164,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * Get the output channels associated with this editor.
      * @returns {EditorOutput} The EditorOutput object.
      */
-    this.getOutput = () => output;
+    this.getOutput = () => editor.getOutput();
 
     /**
      * Set the editors edit mode. Possible options are:
@@ -172,8 +174,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * @param {Object} mode Any of the valid edit modes.
      */
     this.setEditMode = mode => {
-        output.getInfo().setPinouts(null);
-        output.getOverlay().clearRulers();
+        editor.getOutput().getInfo().setPinouts(null);
+        editor.getOutput().getOverlay().clearRulers();
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:

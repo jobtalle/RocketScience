@@ -17,6 +17,16 @@ export function Library(editor, toolbar, info, overlay) {
     const _container = document.createElement("div");
     const _categories = [];
 
+    let _budget = null;
+    let _pcb = null;
+
+    const updateBudget = () => {
+        if (!_budget)
+            return;
+
+
+    };
+
     const setPart = part => {
         toolbar.default();
 
@@ -40,6 +50,13 @@ export function Library(editor, toolbar, info, overlay) {
         _container.appendChild(_parts);
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
+    };
+
+    this.setBudget = (budget, pcb) => {
+        _budget = budget;
+        _pcb = pcb;
+
+        updateBudget();
     };
 
     /**

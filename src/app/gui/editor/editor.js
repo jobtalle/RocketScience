@@ -24,8 +24,6 @@ export function Editor(renderContext, world, game) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
-    const _output = new EditorOutput(renderContext);
-    const _input = new EditorInput(renderContext, _output, world, _view, game);
 
     let _pcbScreenPosition = new Myr.Vector(0, 0);
 
@@ -38,6 +36,19 @@ export function Editor(renderContext, world, game) {
             -_pcbScreenPosition.x,
             -_pcbScreenPosition.y,
             _view.getZoom());
+    };
+
+    this.getOutput = () => _output;
+    this.getInput = () => _input;
+
+    const _output = new EditorOutput(renderContext);
+    const _input = new EditorInput(renderContext, this, world, _view, game);
+
+    /**
+     * The PCB has changed.
+     */
+    this.onPcbChange = () => {
+
     };
 
     /**
