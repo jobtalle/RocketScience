@@ -6,6 +6,13 @@ import {Budget} from "./budget";
  * @constructor
  */
 export function BudgetInventory(entries) {
+    const _entries = {};
+
+    const build = () => {
+        for (const entry of entries)
+            _entries[entry.name] = entry.count;
+    };
+
     /**
      * Get the budget type.
      * @returns {Object} The type constant.
@@ -13,16 +20,20 @@ export function BudgetInventory(entries) {
     this.getType = () => Budget.TYPE_INVENTORY;
 
     /**
-     * Get the entries for this budget.
-     * @param {String} name The name of the part to look for an entry for.
-     * @returns {BudgetInventory.Entry} An entry matching the name, or null if none was found.
+     * Get the budget of a part.
+     * @param {String} name The part name.
+     * @returns {Number} The maximum number of instantiations for this part, or null if this was not specified.
      */
-    this.getEntry = name => {
-        for (const entry of entries) if (entry.name === name)
-            return entry;
+    this.getCount = name => {
+        const budget = _entries[name];
 
-        return null;
+        if (budget === undefined)
+            return null;
+
+        return budget;
     };
+
+    build();
 }
 
 BudgetInventory.COUNT_INFINITE = -1;

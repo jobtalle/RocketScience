@@ -61,11 +61,11 @@ export function CategoryPart(part, setPart, info) {
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
-                const entry = budget.getEntry(part.object);
+                const count = budget.getCount(part.object);
                 let available = 0;
 
-                if (entry) {
-                    available = entry.count - summary.getPartCount(part.object);
+                if (count !== null) {
+                    available = count - summary.getPartCount(part.object);
 
                     _element.appendChild(makeCount(available));
 

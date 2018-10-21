@@ -53,9 +53,9 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
                     summary.register(fixture.part.getDefinition().object);
 
                 for (const fixture of fixtures) if (fixture.part) {
-                    const budgetEntry = budget.getEntry(fixture.part.getDefinition().object);
+                    const count = budget.getCount(fixture.part.getDefinition().object);
 
-                    if (budgetEntry && budgetEntry.count < summary.getPartCount(fixture.part.getDefinition().object))
+                    if (count !== null && count < summary.getPartCount(fixture.part.getDefinition().object))
                         return false;
                 }
 
