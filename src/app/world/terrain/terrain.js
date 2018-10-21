@@ -44,10 +44,6 @@ export function Terrain(myr, recipe) {
                 i * Terrain.PIXELS_PER_SEGMENT, _heights[i] * Terrain.PIXELS_PER_METER,
                 (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Terrain.PIXELS_PER_METER);
 
-        myr.primitives.drawLine(Myr.Color.MAGENTA,
-            _heights.length * Terrain.SEGMENTS_PER_METER * 0.5 * Terrain.PIXELS_PER_METER, -100,
-            _heights.length * Terrain.SEGMENTS_PER_METER * 0.5 * Terrain.PIXELS_PER_METER, 100);
-
         myr.primitives.fillRectangleGradient(
             COLOR_WATER_TOP,
             COLOR_WATER_TOP,

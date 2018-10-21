@@ -70,6 +70,8 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
         if (etchPathValid)
             return setModeExtend();
+        else
+            return PcbEditorEtch.SELECT_TYPE_ETCH;
     };
 
     const setModeExtend = () => {
@@ -115,13 +117,13 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
     const setModeDrag = () => {
         if (!_pathEtch)
-            return;
+            return PcbEditorEtch.SELECT_TYPE_ETCH;
 
         let overlapped = null;
         let length = 0;
 
         _pathEtch.forPoints((x, y, point) => {
-            const overlaps = overlapped===true?
+            const overlaps = overlapped?
                 pcb.getPoint(x, y).pathEquals(point):
                 pcb.getPoint(x, y).pathOverlaps(point);
 

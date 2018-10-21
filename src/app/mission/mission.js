@@ -1,10 +1,11 @@
 /**
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
+ * @param {Array} editables An array of editables.
  * @param {String} title A title for this mission.
  * @constructor
  */
-export function Mission(objectives, title) {
+export function Mission(objectives, editables, title) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;

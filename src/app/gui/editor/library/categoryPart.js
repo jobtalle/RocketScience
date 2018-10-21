@@ -1,12 +1,5 @@
 import {getString} from "../../../text/language";
 
-const showPartInfo = (part, setInfo) => {
-    if (part)
-        setInfo(getString(part.label), getString(part.description));
-    else
-        setInfo("", "");
-};
-
 /**
  * A part button used to instantiate a part.
  * @param {Object} part A part from parts.json.
@@ -15,6 +8,8 @@ const showPartInfo = (part, setInfo) => {
  * @constructor
  */
 export function CategoryPart(part, setPart, info) {
+    const _element = document.createElement("div");
+
     const onClick = () => {
         info.clearText();
 
@@ -25,23 +20,23 @@ export function CategoryPart(part, setPart, info) {
 
     const onLeave = () => info.clearText();
 
+    const make = () => {
+        _element.classList.add(CategoryPart.CLASS);
+        _element.classList.add("sprite");
+        _element.classList.add(part.icon);
+
+        _element.onclick = onClick;
+        _element.onmouseover = onEnter;
+        _element.onmouseout = onLeave;
+    };
+
     /**
      * Get the HTML element of this category.
      * @returns {HTMLElement} The HTML element of this category.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
+    this.getElement = () => _element;
 
-        element.classList.add(CategoryPart.CLASS);
-        element.classList.add("sprite");
-        element.classList.add(part.icon);
-
-        element.onclick = onClick;
-        element.onmouseover = onEnter;
-        element.onmouseout = onLeave;
-
-        return element;
-    };
+    make();
 }
 
 CategoryPart.CLASS = "part";

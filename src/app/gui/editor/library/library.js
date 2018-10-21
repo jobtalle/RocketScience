@@ -14,7 +14,8 @@ import {Info} from "../info/info";
  * @constructor
  */
 export function Library(editor, toolbar, info, overlay) {
-    let _container = null;
+    const _container = document.createElement("div");
+    const _categories = [];
 
     const setPart = part => {
         toolbar.default();
@@ -23,16 +24,18 @@ export function Library(editor, toolbar, info, overlay) {
     };
 
     const build = () => {
-        _container = document.createElement("div");
         _container.id = Library.ID;
 
         const _parts = document.createElement("div");
 
         _parts.id = Library.PARTS_ID;
 
-        for (const category in parts)
-            if (parts.hasOwnProperty(category))
-                _parts.appendChild(new Category(parts[category], setPart, info).getElement());
+        for (const category in parts) if (parts.hasOwnProperty(category)) {
+            const categoryElement = new Category(parts[category], setPart, info);
+
+            _categories.push(categoryElement);
+            _parts.appendChild(categoryElement.getElement());
+        }
 
         _container.appendChild(_parts);
         _container.appendChild(info.getElement());
