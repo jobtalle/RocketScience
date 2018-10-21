@@ -409,7 +409,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
                 return;
             case KEY_SAVE:
                 if (event.control)
-                    this.edit(PcbFile.fromPcb(_pcb).decode(), _pcbPosition.x, _pcbPosition.y);
+                    _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), this.edit(_editable);
 
                 return;
         }
