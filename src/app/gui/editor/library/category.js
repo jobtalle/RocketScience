@@ -10,17 +10,28 @@ import {CategoryPartList} from "./categoryPartList";
  * @constructor
  */
 export function Category(category, setPart, info) {
+    const _element = document.createElement("div");
+    const _partList = new CategoryPartList(category.parts, setPart, info);
+
+    const build = () => {
+        _element.appendChild(new CategoryTitle(getString(category.label), _partList).getElement());
+        _element.appendChild(_partList.getElement());
+    };
+
     /**
      * Get the HTML element of this category.
      * @returns {HTMLElement} The HTML element of this category.
      */
-    this.getElement = () => {
-        const element = document.createElement("div");
-        const partList = new CategoryPartList(category.parts, setPart, info);
+    this.getElement = () => _element;
 
-        element.appendChild(new CategoryTitle(getString(category.label), partList).getElement());
-        element.appendChild(partList.getElement());
-
-        return element;
+    /**
+     * Set the part budget the category should respect.
+     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {PartSummary} summary A summary of all the currently used parts.
+     */
+    this.setBudget = (budget, summary) => {
+        _partList.setBudget(budget, summary);
     };
+
+    build();
 }

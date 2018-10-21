@@ -17,16 +17,6 @@ export function Library(editor, toolbar, info, overlay) {
     const _container = document.createElement("div");
     const _categories = [];
 
-    let _budget = null;
-    let _pcb = null;
-
-    const updateBudget = () => {
-        if (!_budget)
-            return;
-
-
-    };
-
     const setPart = part => {
         toolbar.default();
 
@@ -34,29 +24,30 @@ export function Library(editor, toolbar, info, overlay) {
     };
 
     const build = () => {
+        const categories = document.createElement("div");
+
         _container.id = Library.ID;
-
-        const _parts = document.createElement("div");
-
-        _parts.id = Library.PARTS_ID;
+        categories.id = Library.PARTS_ID;
 
         for (const category in parts) if (parts.hasOwnProperty(category)) {
-            const categoryElement = new Category(parts[category], setPart, info);
+            const newCategory = new Category(parts[category], setPart, info);
 
-            _categories.push(categoryElement);
-            _parts.appendChild(categoryElement.getElement());
+            _categories.push(newCategory);
+            categories.appendChild(newCategory.getElement());
         }
 
-        _container.appendChild(_parts);
+        _container.appendChild(categories);
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
     };
 
-    this.setBudget = (budget, pcb) => {
-        _budget = budget;
-        _pcb = pcb;
+    /**
+     * Set the part budget the library should respect.
+     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {PartSummary} summary A summary of all the currently used parts.
+     */
+    this.setBudget = (budget, summary) => {
 
-        updateBudget();
     };
 
     /**

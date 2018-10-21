@@ -8,6 +8,7 @@ import {Toolbar} from "./toolbar/toolbar";
 import {Library} from "./library/library";
 import {Overlay} from "./overlay/overlay";
 import {Info} from "./info/info";
+import {PartSummary} from "../../pcb/partSummary";
 
 /**
  * Provides am editor for editing PCB's.
@@ -78,7 +79,10 @@ export function Editor(renderContext, world, game) {
      * The PCB has changed.
      */
     this.onPcbChange = () => {
-        _library.setBudget(_editable.getBudget(), _editable.getPcb());
+        if (_editable.getBudget())
+            _library.setBudget(_editable.getBudget(), new PartSummary(_editable.getPcb()));
+        else
+            _library.setBudget(_editable.getBudget(), null);
     };
 
     /**

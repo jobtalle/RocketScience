@@ -9,12 +9,17 @@ import {CategoryPart} from "./categoryPart";
  */
 export function CategoryPartList(parts, setPart, info) {
     const _element = document.createElement("div");
+    const _parts = [];
 
     const make = () => {
         _element.className = CategoryPartList.CLASS;
 
-        for (const part of parts)
-            _element.appendChild(new CategoryPart(part, setPart, info).getElement());
+        for (const part of parts) {
+            const newPart = new CategoryPart(part, setPart, info);
+
+            _element.appendChild(newPart.getElement());
+            _parts.push(newPart);
+        }
     };
 
     /**
@@ -27,6 +32,16 @@ export function CategoryPartList(parts, setPart, info) {
      * @returns {HTMLElement} The HTML element of this part list.
      */
     this.getElement = () => _element;
+
+    /**
+     * Set the part budget the category should respect.
+     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {PartSummary} summary A summary of all the currently used parts.
+     */
+    this.setBudget = (budget, summary) => {
+        for (const part of _parts)
+            part.setBudget(budget, summary);
+    };
 
     make();
 }

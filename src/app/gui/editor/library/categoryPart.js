@@ -36,6 +36,15 @@ export function CategoryPart(part, setPart, info) {
      */
     this.getElement = () => _element;
 
+    /**
+     * Set the part budget the category should respect.
+     * @param {Budget} budget A budget, or null if there is no budget.
+     * @param {PartSummary} summary A summary of all the currently used parts.
+     */
+    this.setBudget = (budget, summary) => {
+
+    };
+
     make();
 }
 
