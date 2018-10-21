@@ -133,6 +133,7 @@ export function Game(renderContext, input) {
                         new Myr.Vector(50, -5),
                         new Myr.Vector(5, 5)),
                     pcb,
+                    new Myr.Vector(0, 0),
                     null)
             ],
             "Mission 1"));

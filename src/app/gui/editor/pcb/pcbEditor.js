@@ -24,22 +24,14 @@ import {PcbFile} from "../../../pcb/pcbFile";
  * @constructor
  */
 export function PcbEditor(renderContext, world, view, width, height, x, output) {
-    const State = function(pcb, position) {
-        this.getPcb = () => pcb;
-        this.getPosition = () => position;
-    };
-
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
     const KEY_SAVE = "q";
-    const UNDO_COUNT = 64;
 
-    const _undoStack = [];
-    const _redoStack = [];
     const _cursor = new Myr.Vector(-1, -1);
     const _pcbPosition = new Myr.Vector(0, 0);
 
-    let _pcb = null;
+    let _editable = null;
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
@@ -53,23 +45,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     const undoPop = () => {
-        const newState = _undoStack.pop();
-
-        if (newState) {
-            _redoStack.push(new State(_pcb.copy(), _pcbPosition.copy()));
-
-            this.edit(newState.getPcb(), newState.getPosition().x, newState.getPosition().y);
-        }
+        if (_editable.undoPop())
+            this.edit(_editable);
     };
 
     const redoPop = () => {
-        const newState = _redoStack.pop();
-
-        if (newState) {
-            _undoStack.push(new State(_pcb.copy(), _pcbPosition.copy()));
-
-            this.edit(newState.getPcb(), newState.getPosition().x, newState.getPosition().y);
-        }
+        if (_editable.redoPop())
+            this.edit(_editable);
     };
 
     const updateCursor = () => {
@@ -109,8 +91,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     };
 
     const updatePcb = pcb => {
-        _pcb = pcb;
-
         if (_editor)
             _editor.updatePcb(pcb);
 
@@ -169,12 +149,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      * Push the current PCB state to the undo stack.
      */
     this.undoPush = () => {
-        _undoStack.push(new State(_pcb.copy(), _pcbPosition.copy()));
-
-        if (_undoStack > UNDO_COUNT)
-            _undoStack.splice(0, 1);
-
-        _redoStack.length = 0;
+        _editable.undoPush();
     };
 
     /**
@@ -216,15 +191,15 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
-                this.setEditor(new PcbEditorReshape(renderContext, _pcb, _cursor, this));
+                this.setEditor(new PcbEditorReshape(renderContext, _editable.getPcb(), _cursor, this));
 
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
-                this.setEditor(new PcbEditorSelect(renderContext, _pcb, _cursor, this, new Selection(renderContext)));
+                this.setEditor(new PcbEditorSelect(renderContext, _editable.getPcb(), _cursor, this, new Selection(renderContext)));
 
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
-                this.setEditor(new PcbEditorEtch(renderContext, _pcb, _cursor, this));
+                this.setEditor(new PcbEditorEtch(renderContext, _editable.getPcb(), _cursor, this));
 
                 break;
         }
@@ -274,7 +249,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         _editor.reset();
 
         // TODO: Add all editable PCB's in the current mission
-        world.addPcb(_pcb, _pcbPosition.x, _pcbPosition.y);
+        world.addPcb(_editable.getPcb(), _pcbPosition.x, _pcbPosition.y);
     };
 
     /**
@@ -284,7 +259,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
     this.place = fixtures => {
         _editor.reset();
 
-        this.setEditor(new PcbEditorPlace(renderContext, _pcb, _cursor, this, fixtures, null, true));
+        this.setEditor(new PcbEditorPlace(renderContext, _editable.getPcb(), _cursor, this, fixtures, null, true));
     };
 
     /**
@@ -293,15 +268,17 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
      */
     this.edit = editable => {
         if (_renderer) {
+            // Unused currently:
             _renderer.free();
 
-            const dx = (x - editable.getRegion().getOrigin().x) * Terrain.PIXELS_PER_METER;
-            const dy = (y - editable.getRegion().getOrigin().y) * Terrain.PIXELS_PER_METER;
+            const dx = (_editable.getRegion().getOrigin().x - editable.getRegion().getOrigin().x) * Terrain.PIXELS_PER_METER;
+            const dy = (_editable.getRegion().getOrigin().y - editable.getRegion().getOrigin().y) * Terrain.PIXELS_PER_METER;
 
             view.focus(
                 view.getFocusX() - dx,
                 view.getFocusY() - dy,
                 view.getZoom());
+            // End unused
         }
         else
             view.focus(
@@ -309,6 +286,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
                 editable.getPcb().getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
                 Editor.ZOOM_DEFAULT);
 
+        _editable = editable;
         updatePcb(editable.getPcb());
 
         let lastLevel;
