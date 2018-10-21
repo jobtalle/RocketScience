@@ -119,22 +119,27 @@ export function Game(renderContext, input) {
     this.startCreate = () => {
         stop();
 
+        const pcb = new Pcb();
+        pcb.initialize();
+
         _world = new World(renderContext,
             new Mission([
                 new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED"),
                 new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Flip a powered switch")
             ],
             [
-                new Editable(new EditableRegion(new Myr.Vector(0, 0), new Myr.Vector(5, 5)), new Pcb(), null)
+                new Editable(
+                    new EditableRegion(
+                        new Myr.Vector(50, -5),
+                        new Myr.Vector(5, 5)),
+                    pcb,
+                    null)
             ],
             "Mission 1"));
         _hud = new Hud(renderContext, _world, this);
         _editor = new Editor(renderContext, _world, this);
 
-        const pcb = new Pcb();
-        pcb.initialize();
-
-        _editor.edit(pcb, 50, -pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT - 2);
+        _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();
     };
 

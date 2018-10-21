@@ -42,11 +42,9 @@ export function Editor(renderContext, world, game) {
 
     /**
      * Start editing a pcb.
-     * @param {Pcb} pcb A pcb instance to edit.
-     * @param {Number} x The X position in the world in meters.
-     * @param {Number} y The Y position in the world in meters.
+     * @param {Editable} editable An editable.
      */
-    this.edit = (pcb, x, y) => _input.edit(pcb, x, y);
+    this.edit = editable => _input.edit(editable);
 
     /**
      * Hide the editor.

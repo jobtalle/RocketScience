@@ -289,16 +289,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
 
     /**
      * Start editing a pcb.
-     * @param {Pcb} pcb A pcb instance to edit.
-     * @param {Number} x The X position in the world in meters.
-     * @param {Number} y The Y position in the world in meters
+     * @param {Editable} editable An editable.
      */
-    this.edit = (pcb, x, y) => {
+    this.edit = editable => {
         if (_renderer) {
             _renderer.free();
 
-            const dx = (x - _pcbPosition.x) * Terrain.PIXELS_PER_METER;
-            const dy = (y - _pcbPosition.y) * Terrain.PIXELS_PER_METER;
+            const dx = (x - editable.getRegion().getOrigin().x) * Terrain.PIXELS_PER_METER;
+            const dy = (y - editable.getRegion().getOrigin().y) * Terrain.PIXELS_PER_METER;
 
             view.focus(
                 view.getFocusX() - dx,
@@ -307,11 +305,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         }
         else
             view.focus(
-                pcb.getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
-                pcb.getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
+                editable.getPcb().getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
+                editable.getPcb().getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
                 Editor.ZOOM_DEFAULT);
 
-        updatePcb(pcb);
+        updatePcb(editable.getPcb());
 
         let lastLevel;
 
@@ -320,9 +318,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, output) 
         else
             lastLevel = PcbRenderer.LEVEL_PARTS;
 
-        _pcbPosition.x = x;
-        _pcbPosition.y = y;
-        _renderer = new PcbRenderer(renderContext, pcb, lastLevel);
+        _pcbPosition.x = editable.getRegion().getOrigin().x + editable.getOffset().x;
+        _pcbPosition.y = editable.getRegion().getOrigin().y + editable.getOffset().y;
+        _renderer = new PcbRenderer(renderContext, editable.getPcb(), lastLevel);
 
         matchWorldPosition();
         this.revalidate();

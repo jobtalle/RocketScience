@@ -1,5 +1,6 @@
 import {Pcb} from "../../pcb/pcb";
 import Myr from "../../../lib/myr.js";
+import {Terrain} from "../../world/terrain/terrain";
 
 /**
  * A definition of an editable PCB (and its part budget).
@@ -10,8 +11,20 @@ import Myr from "../../../lib/myr.js";
  */
 export function Editable(region, pcb, budget) {
     const _pcbOffset = new Myr.Vector(
-        (region.getSize().x - pcb.getWidth() * Pcb.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT) / 2,
-        (region.getSize().y - pcb.getHeight() * Pcb.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT) / 2);
+        (region.getSize().x - pcb.getWidth() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT) / 2,
+        (region.getSize().y - pcb.getHeight() * Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT) / 2);
+
+    /**
+     * Get the region this editable is in.
+     * @returns {EditableRegion}
+     */
+    this.getRegion = () => region;
+
+    /**
+     * Get the PCB of this editable.
+     * @returns {Pcb} A pcb.
+     */
+    this.getPcb = () => pcb;
 
     /**
      * Get the part budget of this editable.

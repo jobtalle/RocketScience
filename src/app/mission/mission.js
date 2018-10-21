@@ -1,7 +1,7 @@
 /**
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
- * @param {Array} editables An array of editables.
+ * @param {Array} editables An array of editables. The first editable will be the default pcb.
  * @param {String} title A title for this mission.
  * @constructor
  */
@@ -64,6 +64,13 @@ export function Mission(objectives, editables, title) {
      * @returns {Array} An array of objectives.
      */
     this.getObjectives = () => objectives;
+
+    /**
+     * Get the editables of this mission.
+     * @returns {Array} An array of editables.
+     */
+    this.getEditables = () => editables;
+
 
     rewind();
 }
