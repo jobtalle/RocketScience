@@ -74,13 +74,19 @@ export function InputMouse(element) {
             return;
 
         fireEvent(MouseEvent.makeEnter(event.clientX - _x, event.clientY - _y));
+
+        _hover = true;
     });
 
     element.addEventListener("mouseleave", event => {
         if (event.target !== element)
             return;
 
-        fireEvent(MouseEvent.makeLeave(event.clientX - _x, event.clientY - _y));
+        if (_hover) {
+            fireEvent(MouseEvent.makeLeave(event.clientX - _x, event.clientY - _y));
+
+            _hover = false;
+        }
     });
 
     element.addEventListener("wheel", event => {

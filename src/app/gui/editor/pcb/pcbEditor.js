@@ -340,14 +340,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMouseEnter = (x, y) => {
-        if (!_hover) {
-            _hover = true;
+        _hover = true;
 
-            this.onMouseMove(x, y);
+        if (_editor)
+            _editor.onMouseEnter();
 
-            if (_editor)
-                _editor.onMouseEnter();
-        }
+        this.onMouseMove(x, y);
     };
 
     /**
