@@ -1,7 +1,7 @@
 import {View} from "../../view/view";
 import {ZoomProfile} from "../../view/zoomProfile";
 import {ShiftProfile} from "../../view/shiftProfile";
-import {MouseEvent} from "../../input/mouse/MouseEvent";
+import {MouseEvent} from "../../input/mouse/mouseEvent";
 import * as Myr from "../../../lib/myr";
 import {PcbEditor} from "./pcb/pcbEditor";
 import {Toolbar} from "./toolbar/toolbar";

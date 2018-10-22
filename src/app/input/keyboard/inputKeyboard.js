@@ -20,7 +20,7 @@ export function InputKeyboard(window) {
     };
 
     const onkeydown = event => {
-        if (_down[event.key])
+        if (_down[event.key] && !InputKeyboard.ALLOW_REPEAT.includes(event.key))
             return;
 
         _down[event.key] = true;
@@ -68,5 +68,6 @@ export function InputKeyboard(window) {
     window.onkeyup = onkeyup;
 }
 
+InputKeyboard.ALLOW_REPEAT = ["z", "y"];
 InputKeyboard.KEY_CONTROL = "Control";
 InputKeyboard.KEY_SHIFT = "Shift";

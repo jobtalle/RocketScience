@@ -1,4 +1,4 @@
-import {MouseEvent} from "./MouseEvent";
+import {MouseEvent} from "./mouseEvent";
 
 /**
  * This object handles mouse input events.
