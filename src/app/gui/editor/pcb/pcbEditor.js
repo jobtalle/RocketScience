@@ -65,18 +65,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         _editor.moveCursor();
     };
 
-    const mouseDown = () => {
+    const mouseDown = (x, y) => {
         if (!_editor)
             return false;
 
-        return _editor.mouseDown();
+        return _editor.mouseDown(x, y);
     };
 
-    const mouseUp = () => {
+    const mouseUp = (x, y) => {
         if (!_editor)
             return;
 
-        _editor.mouseUp();
+        _editor.mouseUp(x, y);
     };
 
     const updateRenderer = () => {
@@ -301,7 +301,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Number} y The mouse y position in pixels.
      */
     this.onMousePress = (x, y) => {
-        if (!mouseDown()) {
+        if (!mouseDown(x, y)) {
             view.onMouseMove(x, y);
             view.onMousePress();
         }
@@ -309,9 +309,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
     /**
      * Release the mouse.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.onMouseRelease = () => {
-        mouseUp();
+    this.onMouseRelease = (x, y) => {
+        mouseUp(x, y);
 
         view.onMouseRelease();
     };

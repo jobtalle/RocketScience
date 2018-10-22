@@ -22,6 +22,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
     let _selectable = false;
     let _dragging = false;
     let _moveStart = null;
+    let _lastMouseDown = new Myr.Vector(0, 0);
 
     const move = start => {
         const moveFixtures = [];
@@ -291,9 +292,14 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
 
     /**
      * Start dragging action.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
-    this.mouseDown = () => {
+    this.mouseDown = (x, y) => {
+        _lastMouseDown.x = x;
+        _lastMouseDown.y = y;
+
         if (selection.getSelected().length > 0 && selection.contains(cursor.x, cursor.y)) {
             _moveStart = cursor.copy();
 
@@ -317,8 +323,10 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
 
     /**
      * Finish the current dragging action.
+     * @param {Number} x The mouse x position in pixels.
+     * @param {Number} y The mouse y position in pixels.
      */
-    this.mouseUp = () => {
+    this.mouseUp = (x, y) => {
         if (_dragging) {
             findSelectedParts();
 
@@ -340,6 +348,11 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
 
             if (selection.getSelected().length > 0)
                 PcbEditorSelect.crop(selection);
+
+            updateSelectedInfo();
+        }
+        else if (_lastMouseDown.x === x && _lastMouseDown.y === y && selection.getSelected().length !== 0) {
+            selection.clearSelected();
 
             updateSelectedInfo();
         }

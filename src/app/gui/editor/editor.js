@@ -151,7 +151,7 @@ export function Editor(renderContext, world, game) {
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
-                _pcbEditor.onMouseRelease();
+                _pcbEditor.onMouseRelease(event.x - renderContext.getViewport().getSplitX(), event.y);
 
                 break;
             case MouseEvent.EVENT_SCROLL:
