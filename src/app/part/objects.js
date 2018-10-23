@@ -56,8 +56,8 @@ export function getPartId(name) {
 export function getPartFromId(id) {
     const object = Object.keys(states)[id];
 
-    for (const category in parts) if (parts.hasOwnProperty(category)) {
-        for (const part of parts[category].parts) {
+    for (const category of parts.categories) {
+        for (const part of category.parts) {
             if (part.object === object)
                 return part;
         }

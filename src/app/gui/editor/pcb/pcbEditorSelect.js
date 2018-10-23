@@ -237,7 +237,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
 
                 break;
             case PcbEditorSelect.KEY_COPY:
-                if (selection.getSelected().length > 0)
+                if (event.control && selection.getSelected().length > 0)
                     copy();
 
                 break;

@@ -29,7 +29,7 @@ export function Library(editor, toolbar, info, overlay) {
         _container.id = Library.ID;
         categories.id = Library.PARTS_ID;
 
-        for (const category of parts[Library.OBJECT_CATEGORIES]) {
+        for (const category of parts.categories) {
             const newCategory = new Category(category, setPart, info);
 
             _categories.push(newCategory);
@@ -75,4 +75,3 @@ export function Library(editor, toolbar, info, overlay) {
 
 Library.ID = "library";
 Library.PARTS_ID = "parts";
-Library.OBJECT_CATEGORIES = "categories";
