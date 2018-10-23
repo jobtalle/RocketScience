@@ -29,8 +29,8 @@ export function Library(editor, toolbar, info, overlay) {
         _container.id = Library.ID;
         categories.id = Library.PARTS_ID;
 
-        for (const category in parts) if (parts.hasOwnProperty(category)) {
-            const newCategory = new Category(parts[category], setPart, info);
+        for (const category of parts[Library.OBJECT_CATEGORIES]) {
+            const newCategory = new Category(category, setPart, info);
 
             _categories.push(newCategory);
             categories.appendChild(newCategory.getElement());
@@ -75,3 +75,4 @@ export function Library(editor, toolbar, info, overlay) {
 
 Library.ID = "library";
 Library.PARTS_ID = "parts";
+Library.OBJECT_CATEGORIES = "categories";

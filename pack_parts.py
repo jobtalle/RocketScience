@@ -4,6 +4,7 @@ import json
 PARTS_DIR = 'src/assets/parts'
 OUT_FILE = 'src/assets/parts.json'
 ORDER_FILE = 'src/assets/parts/order.json'
+CATEGORIES_ARRAY = "categories"
 
 def merge_two_dicts(copyDict, updateDict):
     mergeDict = copyDict.copy()
@@ -49,11 +50,11 @@ def make_category(name):
     return category
 
 def merge_parts():
-    parts = {}
-    for catagoryName in get_category_names():
-        parts[catagoryName] = make_category(catagoryName)
+    array = []
+    for categoryName in get_category_names():
+        array.append(make_category(categoryName))
 
-    return parts
+    return {CATEGORIES_ARRAY: array}
 
 def pack_parts():
     print("Packing parts into '" + OUT_FILE + "' from:")
