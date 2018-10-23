@@ -167,6 +167,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.getEditor = () => editor;
 
     /**
+     * Check if the mouse is hovering over the pcb editor.
+     * @returns {boolean} A boolean indicating whether the mouse is hovering over the pcb editor.
+     */
+    this.getHover = () => _hover;
+
+    /**
      * Set the editors edit mode. Possible options are:
      * PcbEditor.EDIT_MODE_SELECT  for selection dragging.
      * PcbEditor.EDIT_MODE_RESHAPE for PCB reshaping.
@@ -253,7 +259,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.place = fixtures => {
         _editor.reset();
 
-        this.setEditor(new PcbEditorPlace(renderContext, _editable.getPcb(), _cursor, this, fixtures, null, true));
+        this.setEditor(new PcbEditorPlace(renderContext, _editable.getPcb(), _cursor, this, fixtures, null));
     };
 
     /**

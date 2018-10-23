@@ -14,16 +14,14 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
  * @param {PcbEditor} editor A PCB editor.
  * @param {Array} fixtures An array of valid PcbEditorPlace.Fixture instances to place on the PCB.
  * @param {Selection} selection An optional selection which will be reinstated when placement has succeeded.
- * @param {Boolean} [startHidden] A boolean indicating the mouse is not in the editor view initially.
  * @constructor
  */
-export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, selection, startHidden) {
+export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, selection) {
     const _lastCursor = cursor.copy();
     const _renderers = [];
 
     let _configurationIndex = 0;
     let _suitable = false;
-    let _hover = !startHidden;
 
     const makeRenderers = () => {
         _renderers.splice(0, _renderers.length);
@@ -204,14 +202,14 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
      * The mouse enters.
      */
     this.onMouseEnter = () => {
-        _hover = true;
+
     };
 
     /**
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
-        _hover = false;
+
     };
 
     /**
@@ -251,7 +249,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
      * @param {Myr} myr A myriad instance.
      */
     this.draw = myr => {
-        if (!_hover)
+        if (!editor.getHover())
             return;
 
         if (!_suitable)
