@@ -416,13 +416,19 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (event.control) if (_editable.undoPop())
+                if (event.control) if (_editable.undoPop()) {
                     updatePcb();
+
+                    matchWorldPosition();
+                }
 
                 return;
             case KEY_REDO:
-                if (event.control) if (_editable.redoPop())
+                if (event.control) if (_editable.redoPop()) {
                     updatePcb();
+
+                    matchWorldPosition();
+                }
 
                 return;
             case KEY_SAVE:

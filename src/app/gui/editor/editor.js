@@ -140,6 +140,18 @@ export function Editor(renderContext, world, game) {
     this.draw = () => {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
+        renderContext.getMyr().primitives.drawLine(
+            Myr.Color.BLUE,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x + 1) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Terrain.PIXELS_PER_METER);
+        renderContext.getMyr().primitives.drawLine(
+            Myr.Color.BLUE,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y - 1) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Terrain.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y + 1) * Terrain.PIXELS_PER_METER);
         renderContext.getMyr().primitives.drawRectangle(
             Myr.Color.RED,
             _editable.getRegion().getOrigin().x * Terrain.PIXELS_PER_METER,
