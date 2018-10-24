@@ -9,6 +9,7 @@ import {Library} from "./library/library";
 import {Overlay} from "./overlay/overlay";
 import {Info} from "./info/info";
 import {PartSummary} from "../../pcb/partSummary";
+import {Terrain} from "../../world/terrain/terrain";
 
 /**
  * Provides am editor for editing PCB's.
@@ -137,6 +138,17 @@ export function Editor(renderContext, world, game) {
      * Render the editor.
      */
     this.draw = () => {
+        renderContext.getMyr().push();
+        renderContext.getMyr().transform(world.getView().getTransform());
+        renderContext.getMyr().primitives.drawRectangle(
+            Myr.Color.RED,
+            _editable.getRegion().getOrigin().x * Terrain.PIXELS_PER_METER,
+            _editable.getRegion().getOrigin().y * Terrain.PIXELS_PER_METER,
+            _editable.getRegion().getSize().x * Terrain.PIXELS_PER_METER,
+            _editable.getRegion().getSize().y * Terrain.PIXELS_PER_METER);
+
+        renderContext.getMyr().pop();
+
         _pcbEditor.draw();
     };
 
@@ -198,4 +210,4 @@ export function Editor(renderContext, world, game) {
 Editor.ZOOM_DEFAULT = 4;
 Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
-Editor.ZOOM_MAX = 8;
+Editor.ZOOM_MAX = 16;
