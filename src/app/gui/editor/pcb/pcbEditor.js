@@ -121,6 +121,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Number} dy The vertical movement in meters.
      */
     this.moveOffset = (dx, dy) => {
+        /*
         view.focus(
             view.getFocusX() - dx * Terrain.PIXELS_PER_METER,
             view.getFocusY() - dy * Terrain.PIXELS_PER_METER,
@@ -130,6 +131,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
             Math.max(dy, -_editable.getOffset().y));
 
         matchWorldPosition();
+        */
     };
 
     /**
@@ -242,6 +244,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.show = () => {
         matchWorldPosition();
 
+        _hover = true;
         _cursor.x = _cursor.y = -1;
 
         moveCursor();
