@@ -141,6 +141,16 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param dy
      */
     this.moveOffset2 = (dx, dy) => {
+        if (dx < -_editable.getOffset().x)
+            dx = -_editable.getOffset().x;
+        else if (dx > _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().x)
+            dx = _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().x;
+
+        if (dy < -_editable.getOffset().y)
+            dy = -_editable.getOffset().y;
+        else if (dy > _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().y)
+            dy = _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().y;
+
         _editable.moveOffset(dx, dy);
         view.focus(
             view.getFocusX() - dx * Terrain.PIXELS_PER_METER,
