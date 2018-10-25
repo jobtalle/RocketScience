@@ -212,7 +212,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _cursor, this));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this));
 
                 break;
         }

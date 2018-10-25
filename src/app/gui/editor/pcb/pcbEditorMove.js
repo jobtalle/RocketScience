@@ -1,11 +1,18 @@
 /**
  * A move editor moves a PCB within its editable region.
  * @param {RenderContext} renderContext A render context.
+ * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {PcbEditor} editor A PCB editor.
  * @constructor
  */
-export function PcbEditorMove(renderContext, cursor, editor) {
+import {Pcb} from "../../../pcb/pcb";
+
+export function PcbEditorMove(renderContext, pcb, cursor, editor) {
+    const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
+
+    let _movable = false;
+
     /**
      * Change the PCB being edited.
      */
@@ -25,7 +32,7 @@ export function PcbEditorMove(renderContext, cursor, editor) {
      * Tell the editor the cursor has moved.
      */
     this.moveCursor = () => {
-
+        _movable = pcb.getPoint(cursor.x, cursor.y) !== null;
     };
 
     /**
@@ -115,6 +122,9 @@ export function PcbEditorMove(renderContext, cursor, editor) {
      * Draw this editor.
      */
     this.draw = () => {
-
+        if (_movable)
+            SPRITE_MOVE.draw(
+                (cursor.x - 1) * Pcb.PIXELS_PER_POINT,
+                (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
     };
 }
