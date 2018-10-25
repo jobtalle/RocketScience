@@ -11,6 +11,7 @@ import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../editor";
 import Myr from "../../../../lib/myr.js";
 import {PcbFile} from "../../../pcb/pcbFile";
+import {PcbEditorMove} from "./pcbEditorMove";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
@@ -210,6 +211,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 this.setEditor(new PcbEditorEtch(renderContext, _editable.getPcb(), _cursor, this));
 
                 break;
+            case PcbEditor.EDIT_MODE_MOVE:
+                this.setEditor(new PcbEditorMove(renderContext, _cursor, this));
+
+                break;
         }
     };
 
@@ -233,7 +238,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         renderContext.getMyr().transform(view.getTransform());
 
         _renderer.drawBody(0, 0);
-        _editor.draw(renderContext.getMyr());
+        _editor.draw();
 
         renderContext.getMyr().pop();
     };
@@ -456,3 +461,4 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
+PcbEditor.EDIT_MODE_MOVE = 3;

@@ -28,6 +28,11 @@ export function Toolbar(editor, overlay, x, game) {
         "toolbar-etch",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
+    const _buttonMove = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE),
+        "toolbar-move",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
+        _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(
         () => game.toggleEdit(),
         "toolbar-launch",
@@ -54,6 +59,7 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(_buttonExtend.getElement());
         _container.appendChild(_buttonSelect.getElement());
         _container.appendChild(_buttonEtch.getElement());
+        _container.appendChild(_buttonMove.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
         _container.appendChild(_buttonXRay.getElement());
@@ -100,6 +106,10 @@ export function Toolbar(editor, overlay, x, game) {
                     _buttonEtch.getElement().click();
 
                     break;
+                case Toolbar.KEY_PRESS_MOVE:
+                    _buttonMove.getElement().click();
+
+                    break;
                 case Toolbar.KEY_PRESS_LAUNCH:
                     _buttonLaunch.getElement().click();
 
@@ -127,5 +137,6 @@ Toolbar.ID = "toolbar";
 Toolbar.KEY_PRESS_EXTEND = "1";
 Toolbar.KEY_PRESS_SELECT = "2";
 Toolbar.KEY_PRESS_ETCH = "3";
+Toolbar.KEY_PRESS_MOVE = "4";
 Toolbar.KEY_PRESS_LAUNCH = " ";
 Toolbar.KEY_PRESS_XRAY = "x";

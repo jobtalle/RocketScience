@@ -451,18 +451,17 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
     /**
      * Draw this editor.
-     * @param {Myr} myr A myriad instance.
      */
-    this.draw = myr => {
+    this.draw = () => {
         if (_dragging) {
             if (_pathEtch)
-                _pathRenderer.render(myr, _pathEtch);
+                _pathRenderer.render(renderContext.getMyr(), _pathEtch);
 
             if (_startPoint.equals(cursor))
                 SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, _startPoint.y * Pcb.PIXELS_PER_POINT);
         } else if (_etchable) {
             if (_pathSelected)
-                _pathRenderer.render(myr, _pathSelected);
+                _pathRenderer.render(renderContext.getMyr(), _pathSelected);
 
             SPRITE_ETCH.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
         }

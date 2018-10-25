@@ -246,14 +246,13 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
 
     /**
      * Draw this editor.
-     * @param {Myr} myr A myriad instance.
      */
-    this.draw = myr => {
+    this.draw = () => {
         if (!editor.getHover())
             return;
 
         if (!_suitable)
-            myr.setColor(PcbEditorPlace.COLOR_UNSUITABLE);
+            renderContext.getMyr().setColor(PcbEditorPlace.COLOR_UNSUITABLE);
 
         for (let i = 0; i < fixtures.length; ++i) {
             _renderers[i].drawInternal(
@@ -265,7 +264,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
         }
 
         if (!_suitable)
-            myr.setColor(Myr.Color.WHITE);
+            renderContext.getMyr().setColor(Myr.Color.WHITE);
 
         if (selection !== null)
             selection.draw();
