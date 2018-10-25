@@ -136,6 +136,19 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Move the editable origin.
+     * @param dx
+     * @param dy
+     */
+    this.moveOffset2 = (dx, dy) => {
+        _editable.moveOffset(dx, dy);
+        view.focus(
+            view.getFocusX() - dx * Terrain.PIXELS_PER_METER,
+            view.getFocusY() - dy * Terrain.PIXELS_PER_METER,
+            view.getZoom());
+    };
+
+    /**
      * Set an editor to be active in this PcbEditor.
      * @param {Object} editor One of the valid PCB editor objects.
      */
@@ -212,7 +225,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view));
 
                 break;
         }

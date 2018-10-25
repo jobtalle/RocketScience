@@ -1,17 +1,22 @@
+import {Pcb} from "../../../pcb/pcb";
+import * as Myr from "../../../../lib/myr";
+import {Terrain} from "../../../world/terrain/terrain";
+
 /**
  * A move editor moves a PCB within its editable region.
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {PcbEditor} editor A PCB editor.
+ * @param {View} view The editor view.
  * @constructor
  */
-import {Pcb} from "../../../pcb/pcb";
-
-export function PcbEditorMove(renderContext, pcb, cursor, editor) {
+export function PcbEditorMove(renderContext, pcb, cursor, editor, view) {
     const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
 
     let _movable = false;
+    let _dragging = null;
+    let _moveStart = new Myr.Vector(0, 0);
 
     /**
      * Change the PCB being edited.
@@ -41,14 +46,33 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor) {
      * @param {Number} y The mouse position on the screen in pixels.
      */
     this.mouseMove = (x, y) => {
+        if (_dragging) {
+            editor.moveOffset2(
+                (x - _moveStart.x) * Terrain.METERS_PER_PIXEL / view.getZoom(),
+                (y - _moveStart.y) * Terrain.METERS_PER_PIXEL / view.getZoom());
 
+            _moveStart.x = x;
+            _moveStart.y = y;
+        }
     };
 
     /**
      * Start dragging action.
+     * @param {Number} x The mouse position on the screen in pixels.
+     * @param {Number} y The mouse position on the screen in pixels.
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
-    this.mouseDown = () => {
+    this.mouseDown = (x, y) => {
+        if (_movable) {
+            editor.getEditable().undoPush();
+
+            _moveStart.x = x;
+            _moveStart.y = y;
+            _dragging = cursor.copy();
+
+            return true;
+        }
+
         return false;
     };
 
@@ -56,7 +80,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor) {
      * Finish the current dragging action.
      */
     this.mouseUp = () => {
-
+        _dragging = null;
     };
 
     /**
@@ -122,7 +146,11 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor) {
      * Draw this editor.
      */
     this.draw = () => {
-        if (_movable)
+        if (_dragging)
+            SPRITE_MOVE.draw(
+                (_dragging.x - 1) * Pcb.PIXELS_PER_POINT,
+                (_dragging.y - 1) * Pcb.PIXELS_PER_POINT);
+        else if (_movable)
             SPRITE_MOVE.draw(
                 (cursor.x - 1) * Pcb.PIXELS_PER_POINT,
                 (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
