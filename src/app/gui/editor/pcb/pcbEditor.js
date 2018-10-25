@@ -354,6 +354,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
         if (updateCursor())
             moveCursor();
+
+        if (_editor)
+            _editor.mouseMove(x, y);
     };
 
     /**

@@ -364,6 +364,15 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     /**
+     * Tell the editor the mouse has moved.
+     * @param {Number} x The mouse position on the screen in pixels.
+     * @param {Number} y The mouse position on the screen in pixels.
+     */
+    this.mouseMove = (x, y) => {
+
+    };
+
+    /**
      * Start dragging action.
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
