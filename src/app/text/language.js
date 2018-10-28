@@ -10,7 +10,7 @@ function Language() {
 
     const applyMacros = () => {
         for (const key of Object.keys(_language)) for (const macro of Language.MACROS)
-            _language[key] = _language[key].replace(macro.find, macro.getReplaceText());
+            _language[key] = _language[key].replace(new RegExp(macro.find, "g"), macro.getReplaceText());
     };
 
     this.set = lang => {
