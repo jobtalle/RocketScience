@@ -1,13 +1,13 @@
-import {Terrain} from "../terrain/terrain";
 import {getb2Vec2, box2d} from "./internal/box2d";
 import {createCircleShape} from "./internal/shapes/circle";
 import {BodyDefinition} from "./internal/bodyDefinition";
-import * as Myr from "../../../lib/myr";
 import {WheelJoint} from "./joints/wheelJoint";
 import {Channels} from "./channels";
 import {Fixture} from "./internal/fixture";
 import {createSensorShape} from "./internal/shapes/sensor";
 import {Mover} from "./mover";
+import {Scale} from "../scale";
+import * as Myr from "../../../lib/myr";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -21,12 +21,12 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
 
         transform.identity();
         transform.translate(
-            _body.GetPosition().get_x() * Terrain.PIXELS_PER_METER,
-            _body.GetPosition().get_y() * Terrain.PIXELS_PER_METER);
+            _body.GetPosition().get_x() * Scale.PIXELS_PER_METER,
+            _body.GetPosition().get_y() * Scale.PIXELS_PER_METER);
         transform.rotate(-_body.GetAngle());
         transform.translate(
-            -xOrigin * Terrain.PIXELS_PER_METER,
-            -yOrigin * Terrain.PIXELS_PER_METER);
+            -xOrigin * Scale.PIXELS_PER_METER,
+            -yOrigin * Scale.PIXELS_PER_METER);
     };
 
     const getOffset = (dx, dy) => {

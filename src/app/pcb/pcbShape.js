@@ -1,6 +1,7 @@
 import Myr from "../../lib/myr";
 import polyDecomp from "poly-decomp"
 import {Pcb} from "./pcb";
+import {Scale} from "../world/scale";
 
 /**
  * This object builds a minimal collection of convex shapes covering the supplied PCB.
@@ -123,9 +124,9 @@ export function PcbShape(pcb) {
 
         for (const part of _parts)
             for (const point of part.getPoints())
-                point.multiply(Pcb.METERS_PER_POINT);
+                point.multiply(Scale.METERS_PER_POINT);
 
-        _center.multiply(Pcb.METERS_PER_POINT);
+        _center.multiply(Scale.METERS_PER_POINT);
     };
 
     /**

@@ -62,8 +62,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         const packReport = pcb.pack();
 
         editor.moveOffset(
-            packReport.left * Pcb.METERS_PER_POINT,
-            packReport.top * Pcb.METERS_PER_POINT);
+            packReport.left * Scale.METERS_PER_POINT,
+            packReport.top * Scale.METERS_PER_POINT);
         editor.revalidate();
     };
 
@@ -157,8 +157,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         }
 
         editor.moveOffset(
-            xMin * Pcb.METERS_PER_POINT,
-            yMin * Pcb.METERS_PER_POINT);
+            xMin * Scale.METERS_PER_POINT,
+            yMin * Scale.METERS_PER_POINT);
         pcb.shift(-xMin, -yMin);
 
         for (const cell of negatives)

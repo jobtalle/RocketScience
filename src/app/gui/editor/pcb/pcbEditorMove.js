@@ -1,5 +1,4 @@
 import {Pcb} from "../../../pcb/pcb";
-import {Terrain} from "../../../world/terrain/terrain";
 import {Scale} from "../../../world/scale";
 import * as Myr from "../../../../lib/myr";
 
@@ -49,8 +48,8 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view) {
     this.mouseMove = (x, y) => {
         if (_dragging) {
             editor.moveOffset2(
-                (x - _moveStart.x) * Terrain.METERS_PER_PIXEL / view.getZoom(),
-                (y - _moveStart.y) * Terrain.METERS_PER_PIXEL / view.getZoom());
+                (x - _moveStart.x) * Scale.METERS_PER_PIXEL / view.getZoom(),
+                (y - _moveStart.y) * Scale.METERS_PER_PIXEL / view.getZoom());
 
             _moveStart.x = x;
             _moveStart.y = y;

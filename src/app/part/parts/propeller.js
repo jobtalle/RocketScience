@@ -1,5 +1,4 @@
-import {Pcb} from "../../pcb/pcb";
-import {Terrain} from "../../world/terrain/terrain";
+import {Scale} from "../../world/scale";
 import * as Myr from "../../../lib/myr";
 
 /**
@@ -19,8 +18,8 @@ export function Propeller(pins, renderer, x, y) {
      */
     this.initialize = body => {
         mover = body.createMover(
-            (x + 2) * Pcb.METERS_PER_POINT,
-            (y - 0.5) * Pcb.METERS_PER_POINT);
+            (x + 2) * Scale.METERS_PER_POINT,
+            (y - 0.5) * Scale.METERS_PER_POINT);
     };
 
     /**

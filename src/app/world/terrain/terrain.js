@@ -41,8 +41,8 @@ export function Terrain(myr, recipe) {
     this.draw = () => {
         for (let i = 0; i < _heights.length - 1; ++i)
             myr.primitives.drawLine(Myr.Color.BLACK,
-                i * Terrain.PIXELS_PER_SEGMENT, _heights[i] * Terrain.PIXELS_PER_METER,
-                (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Terrain.PIXELS_PER_METER);
+                i * Terrain.PIXELS_PER_SEGMENT, _heights[i] * Scale.PIXELS_PER_METER,
+                (i + 1) * Terrain.PIXELS_PER_SEGMENT, _heights[i + 1] * Scale.PIXELS_PER_METER);
 
         myr.primitives.fillRectangleGradient(
             COLOR_WATER_TOP,
@@ -55,7 +55,5 @@ export function Terrain(myr, recipe) {
 }
 
 Terrain.SEGMENTS_PER_METER = 2;
-Terrain.PIXELS_PER_METER = Scale.PIXELS_PER_POINT * Scale.POINTS_PER_METER;
-Terrain.METERS_PER_PIXEL = 1 / Terrain.PIXELS_PER_METER;
-Terrain.PIXELS_PER_SEGMENT = Terrain.PIXELS_PER_METER / Terrain.SEGMENTS_PER_METER;
+Terrain.PIXELS_PER_SEGMENT = Scale.PIXELS_PER_METER / Terrain.SEGMENTS_PER_METER;
 Terrain.METERS_PER_SEGMENT = 1 / Terrain.SEGMENTS_PER_METER;

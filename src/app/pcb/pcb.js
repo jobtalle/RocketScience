@@ -483,6 +483,5 @@ export function Pcb() {
     };
 }
 
-Pcb.METERS_PER_POINT = Scale.PIXELS_PER_POINT * (1 / (Scale.PIXELS_PER_POINT * Scale.POINTS_PER_METER));
 Pcb.DEFAULT_WIDTH = 10;
 Pcb.DEFAULT_HEIGHT = 10;

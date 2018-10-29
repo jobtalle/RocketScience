@@ -9,7 +9,7 @@ import {Library} from "./library/library";
 import {Overlay} from "./overlay/overlay";
 import {Info} from "./info/info";
 import {PartSummary} from "../../pcb/partSummary";
-import {Terrain} from "../../world/terrain/terrain";
+import {Scale} from "../../world/scale";
 
 /**
  * Provides am editor for editing PCB's.
@@ -142,22 +142,22 @@ export function Editor(renderContext, world, game) {
         renderContext.getMyr().transform(world.getView().getTransform());
         renderContext.getMyr().primitives.drawLine(
             Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x + 1) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Terrain.PIXELS_PER_METER);
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x + 1) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER);
         renderContext.getMyr().primitives.drawLine(
             Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y - 1) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Terrain.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y + 1) * Terrain.PIXELS_PER_METER);
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y - 1) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
+            (_editable.getRegion().getOrigin().y + _editable.getOffset().y + 1) * Scale.PIXELS_PER_METER);
         renderContext.getMyr().primitives.drawRectangle(
             Myr.Color.RED,
-            _editable.getRegion().getOrigin().x * Terrain.PIXELS_PER_METER,
-            _editable.getRegion().getOrigin().y * Terrain.PIXELS_PER_METER,
-            _editable.getRegion().getSize().x * Terrain.PIXELS_PER_METER,
-            _editable.getRegion().getSize().y * Terrain.PIXELS_PER_METER);
+            _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
+            _editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER,
+            _editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
+            _editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
 
         renderContext.getMyr().pop();
 
