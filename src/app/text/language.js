@@ -9,8 +9,13 @@ function Language() {
     let _language;
 
     const applyMacros = () => {
-        for (const key of Object.keys(_language)) for (const macro of Language.MACROS)
-            _language[key] = _language[key].replace(new RegExp(macro.find, "g"), macro.getReplaceText());
+        const expressions = [];
+
+        for (const macro of Language.MACROS)
+            expressions.push(new RegExp(macro.find, "g"));
+
+        for (const key of Object.keys(_language)) for (let i = 0; i < Language.MACROS.length; ++i)
+            _language[key] = _language[key].replace(expressions[i], Language.MACROS[i].getReplaceText());
     };
 
     this.set = lang => {
