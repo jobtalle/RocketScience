@@ -19,8 +19,8 @@ export function Propeller(pins, renderer, x, y) {
      */
     this.initialize = body => {
         mover = body.createMover(
-            (x + 2) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            (y - 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
+            (x + 2) * Pcb.METERS_PER_POINT,
+            (y - 0.5) * Pcb.METERS_PER_POINT);
     };
 
     /**

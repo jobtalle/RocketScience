@@ -12,6 +12,7 @@ import {Editor} from "../editor";
 import Myr from "../../../../lib/myr.js";
 import {PcbFile} from "../../../pcb/pcbFile";
 import {PcbEditorMove} from "./pcbEditorMove";
+import {Scale} from "../../../world/scale";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
@@ -53,8 +54,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
         view.getInverse().apply(_cursor);
 
-        _cursor.x = Math.floor(_cursor.x / Pcb.PIXELS_PER_POINT);
-        _cursor.y = Math.floor(_cursor.y / Pcb.PIXELS_PER_POINT);
+        _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
+        _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
 
         return _cursor.x !== oldX || _cursor.y !== oldY;
     };
@@ -143,13 +144,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.moveOffset2 = (dx, dy) => {
         if (dx < -_editable.getOffset().x)
             dx = -_editable.getOffset().x;
-        else if (dx > _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().x)
-            dx = _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().x;
+        else if (dx > _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.METERS_PER_POINT - _editable.getOffset().x)
+            dx = _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Pcb.METERS_PER_POINT - _editable.getOffset().x;
 
         if (dy < -_editable.getOffset().y)
             dy = -_editable.getOffset().y;
-        else if (dy > _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().y)
-            dy = _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL - _editable.getOffset().y;
+        else if (dy > _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.METERS_PER_POINT - _editable.getOffset().y)
+            dy = _editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Pcb.METERS_PER_POINT - _editable.getOffset().y;
 
         _editable.moveOffset(dx, dy);
         view.focus(
@@ -317,8 +318,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         }
         else
             view.focus(
-                editable.getPcb().getWidth() * 0.5 * Pcb.PIXELS_PER_POINT,
-                editable.getPcb().getHeight() * 0.5 * Pcb.PIXELS_PER_POINT,
+                editable.getPcb().getWidth() * 0.5 * Scale.PIXELS_PER_POINT,
+                editable.getPcb().getHeight() * 0.5 * Scale.PIXELS_PER_POINT,
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;

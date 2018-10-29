@@ -1,5 +1,4 @@
 import {Pcb} from "../../pcb/pcb";
-import {Terrain} from "../../world/terrain/terrain";
 
 /**
  * @param {Array} pins An array containing the pin indices.
@@ -35,9 +34,9 @@ export function Wheel(pins, renderer, x, y) {
      */
     this.initialize = body => {
         joint = body.createWheel(
-            Wheel.RADIUS * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            (x + Wheel.ANCHOR_X) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            (y + Wheel.ANCHOR_Y) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            Wheel.RADIUS * Pcb.METERS_PER_POINT,
+            (x + Wheel.ANCHOR_X) * Pcb.METERS_PER_POINT,
+            (y + Wheel.ANCHOR_Y) * Pcb.METERS_PER_POINT,
             renderer.getTransforms()[Wheel.SPRITE_INDEX_WHEEL]);
     };
 

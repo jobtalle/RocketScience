@@ -1,7 +1,8 @@
 import {Pcb} from "./pcb";
 import {PartRenderer} from "../part/partRenderer";
-import * as Myr from "../../lib/myr";
 import {PcbPointRenderer} from "./point/pcbPointRenderer";
+import {Scale} from "../world/scale";
+import * as Myr from "../../lib/myr";
 
 /**
  * A PCB renderer.
@@ -24,8 +25,8 @@ export function PcbRenderer(renderContext, pcb, level) {
         _initialized = true;
 
         _layerPcb = new (renderContext.getMyr().Surface)(
-            Pcb.PIXELS_PER_POINT * pcb.getWidth(),
-            Pcb.PIXELS_PER_POINT * pcb.getHeight());
+            Scale.PIXELS_PER_POINT * pcb.getWidth(),
+            Scale.PIXELS_PER_POINT * pcb.getHeight());
         _layerPcb.bind();
         _layerPcb.clear();
 
@@ -35,8 +36,8 @@ export function PcbRenderer(renderContext, pcb, level) {
 
             if (point) {
                 SPRITE_POINT.draw(
-                    column * Pcb.PIXELS_PER_POINT,
-                    row * Pcb.PIXELS_PER_POINT);
+                    column * Scale.PIXELS_PER_POINT,
+                    row * Scale.PIXELS_PER_POINT);
             }
         }
 
@@ -47,7 +48,7 @@ export function PcbRenderer(renderContext, pcb, level) {
             if (!point)
                 continue;
 
-            _pointRenderer.render(renderContext.getMyr(), point, column * Pcb.PIXELS_PER_POINT, row * Pcb.PIXELS_PER_POINT);
+            _pointRenderer.render(renderContext.getMyr(), point, column * Scale.PIXELS_PER_POINT, row * Scale.PIXELS_PER_POINT);
         }
     };
 
@@ -56,7 +57,7 @@ export function PcbRenderer(renderContext, pcb, level) {
         _partPositions.splice(0, _partPositions.length);
 
         for (const fixture of pcb.getFixtures()) {
-            const position = new Myr.Vector(fixture.x * Pcb.PIXELS_PER_POINT, fixture.y * Pcb.PIXELS_PER_POINT);
+            const position = new Myr.Vector(fixture.x * Scale.PIXELS_PER_POINT, fixture.y * Scale.PIXELS_PER_POINT);
             let insertAt = 0;
 
             while (insertAt < _partPositions.length && _partPositions[insertAt].y < position.y)
@@ -69,8 +70,8 @@ export function PcbRenderer(renderContext, pcb, level) {
 
     const getFixtureIndex = fixture => {
         for (let i = 0; i < _partPositions.length; ++i) {
-            if (_partPositions[i].x === fixture.x * Pcb.PIXELS_PER_POINT &&
-                _partPositions[i].y === fixture.y * Pcb.PIXELS_PER_POINT)
+            if (_partPositions[i].x === fixture.x * Scale.PIXELS_PER_POINT &&
+                _partPositions[i].y === fixture.y * Scale.PIXELS_PER_POINT)
                 return i;
         }
 

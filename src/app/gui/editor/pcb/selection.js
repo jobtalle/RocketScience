@@ -1,4 +1,4 @@
-import {Pcb} from "../../../pcb/pcb";
+import {Scale} from "../../../world/scale";
 
 /**
  * A drawable selection rectangle.
@@ -86,36 +86,36 @@ export function Selection(renderContext) {
 
         if (_left === _right) {
             if (_top === _bottom)
-                SPRITE_SELECT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT[mode].draw(_left * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
             else {
-                SPRITE_SELECT_LRT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_LRB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_LRT[mode].draw(_left * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
+                SPRITE_SELECT_LRB[mode].draw(_left * Scale.PIXELS_PER_POINT, _bottom * Scale.PIXELS_PER_POINT);
 
                 for (let y = _top + 1; y < _bottom; ++y)
-                    SPRITE_SELECT_LR[mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_SELECT_LR[mode].draw(_left * Scale.PIXELS_PER_POINT, y * Scale.PIXELS_PER_POINT);
             }
         }
         else if (_top === _bottom) {
-            SPRITE_SELECT_LTB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RTB[mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_LTB[mode].draw(_left * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
+            SPRITE_SELECT_RTB[mode].draw(_right * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
 
             for (let x = _left + 1; x < _right; ++x)
-                SPRITE_SELECT_TB[mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_TB[mode].draw(x * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
         }
         else {
-            SPRITE_SELECT_LT[mode].draw(_left * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RT[mode].draw(_right * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_LB[mode].draw(_left * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
-            SPRITE_SELECT_RB[mode].draw(_right * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+            SPRITE_SELECT_LT[mode].draw(_left * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
+            SPRITE_SELECT_RT[mode].draw(_right * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
+            SPRITE_SELECT_LB[mode].draw(_left * Scale.PIXELS_PER_POINT, _bottom * Scale.PIXELS_PER_POINT);
+            SPRITE_SELECT_RB[mode].draw(_right * Scale.PIXELS_PER_POINT, _bottom * Scale.PIXELS_PER_POINT);
 
             for (let x = _left + 1; x < _right; ++x) {
-                SPRITE_SELECT_T[mode].draw(x * Pcb.PIXELS_PER_POINT, _top * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_B[mode].draw(x * Pcb.PIXELS_PER_POINT, _bottom * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_T[mode].draw(x * Scale.PIXELS_PER_POINT, _top * Scale.PIXELS_PER_POINT);
+                SPRITE_SELECT_B[mode].draw(x * Scale.PIXELS_PER_POINT, _bottom * Scale.PIXELS_PER_POINT);
             }
 
             for (let y = _top + 1; y < _bottom; ++y) {
-                SPRITE_SELECT_L[mode].draw(_left * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
-                SPRITE_SELECT_R[mode].draw(_right * Pcb.PIXELS_PER_POINT, y * Pcb.PIXELS_PER_POINT);
+                SPRITE_SELECT_L[mode].draw(_left * Scale.PIXELS_PER_POINT, y * Scale.PIXELS_PER_POINT);
+                SPRITE_SELECT_R[mode].draw(_right * Scale.PIXELS_PER_POINT, y * Scale.PIXELS_PER_POINT);
             }
         }
     };

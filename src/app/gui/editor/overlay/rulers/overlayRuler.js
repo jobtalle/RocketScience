@@ -1,5 +1,5 @@
 import {OverlayRulerDefinition} from "./overlayRulerDefinition";
-import {Pcb} from "../../../../pcb/pcb";
+import {Scale} from "../../../../world/scale";
 
 /**
  * A ruler.
@@ -11,9 +11,9 @@ export function OverlayRuler(definition) {
 
     const make = () => {
         _element.className = OverlayRuler.CLASS;
-        _element.style.width = (definition.length * Pcb.PIXELS_PER_POINT) + "px";
-        _element.style.left = (definition.x * Pcb.PIXELS_PER_POINT) + "px";
-        _element.style.top = (definition.y * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.width = (definition.length * Scale.PIXELS_PER_POINT) + "px";
+        _element.style.left = (definition.x * Scale.PIXELS_PER_POINT) + "px";
+        _element.style.top = (definition.y * Scale.PIXELS_PER_POINT) + "px";
 
         if (definition.direction === OverlayRulerDefinition.DIRECTION_UP)
             _element.classList.add(OverlayRuler.CLASS_UP);

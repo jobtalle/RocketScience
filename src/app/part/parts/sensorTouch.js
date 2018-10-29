@@ -1,5 +1,5 @@
 import {Pcb} from "../../pcb/pcb";
-import {Terrain} from "../../world/terrain/terrain";
+import {Scale} from "../../world/scale";
 import {ContactListener} from "../../world/physics/contactListener";
 
 /**
@@ -23,9 +23,9 @@ export function SensorTouch(pins, renderer, x, y) {
      */
     this.initialize = body => {
         sensor = body.createTouchSensor(
-            (x + 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            (y + 0.5) * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
+            (x + 0.5) * Pcb.METERS_PER_POINT,
+            (y + 0.5) * Pcb.METERS_PER_POINT,
+            Pcb.METERS_PER_POINT,
             -Math.PI * 0.5,
             new ContactListener(beginContact, null));
     };

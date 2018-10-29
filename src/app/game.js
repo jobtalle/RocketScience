@@ -135,6 +135,8 @@ export function Game(renderContext, input) {
                     pcb,
                     new Myr.Vector(0, 0),
                     new BudgetInventory([
+                        new BudgetInventory.Entry("Wheel", 2),
+                        new BudgetInventory.Entry("Propeller", 1),
                         new BudgetInventory.Entry("Led", 4),
                         new BudgetInventory.Entry("Battery", 1),
                         new BudgetInventory.Entry("Switch", 1),

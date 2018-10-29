@@ -1,6 +1,5 @@
 import Myr from "../../lib/myr";
 import polyDecomp from "poly-decomp"
-import {Terrain} from "../world/terrain/terrain";
 import {Pcb} from "./pcb";
 
 /**
@@ -124,9 +123,9 @@ export function PcbShape(pcb) {
 
         for (const part of _parts)
             for (const point of part.getPoints())
-                point.multiply(Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
+                point.multiply(Pcb.METERS_PER_POINT);
 
-        _center.multiply(Terrain.METERS_PER_PIXEL * Pcb.PIXELS_PER_POINT);
+        _center.multiply(Pcb.METERS_PER_POINT);
     };
 
     /**

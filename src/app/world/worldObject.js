@@ -2,6 +2,7 @@ import {PcbRenderer} from "../pcb/pcbRenderer";
 import {PcbShape} from "../pcb/pcbShape";
 import {PcbState} from "../pcb/pcbState";
 import {Pcb} from "../pcb/pcb";
+import {Scale} from "./scale";
 import * as Myr from "../../lib/myr";
 
 /**
@@ -82,8 +83,8 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
         inverseTransform.invert();
         inverseTransform.apply(normalized);
 
-        const pointX = Math.floor(normalized.x / Pcb.PIXELS_PER_POINT);
-        const pointY = Math.floor(normalized.y / Pcb.PIXELS_PER_POINT);
+        const pointX = Math.floor(normalized.x / Scale.PIXELS_PER_POINT);
+        const pointY = Math.floor(normalized.y / Scale.PIXELS_PER_POINT);
         const point = pcb.getPoint(pointX, pointY);
 
         if (point)

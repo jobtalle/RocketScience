@@ -1,5 +1,5 @@
-import {Pcb} from "../../pcb/pcb";
 import Myr from "../../../lib/myr";
+import {Scale} from "../scale";
 
 /**
  * An environment to place bots in.
@@ -55,8 +55,7 @@ export function Terrain(myr, recipe) {
 }
 
 Terrain.SEGMENTS_PER_METER = 2;
-Terrain.POINTS_PER_METER = 8;
-Terrain.PIXELS_PER_METER = Pcb.PIXELS_PER_POINT * Terrain.POINTS_PER_METER;
+Terrain.PIXELS_PER_METER = Scale.PIXELS_PER_POINT * Scale.POINTS_PER_METER;
 Terrain.METERS_PER_PIXEL = 1 / Terrain.PIXELS_PER_METER;
 Terrain.PIXELS_PER_SEGMENT = Terrain.PIXELS_PER_METER / Terrain.SEGMENTS_PER_METER;
 Terrain.METERS_PER_SEGMENT = 1 / Terrain.SEGMENTS_PER_METER;

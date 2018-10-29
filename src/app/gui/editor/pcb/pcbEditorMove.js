@@ -1,6 +1,7 @@
 import {Pcb} from "../../../pcb/pcb";
-import * as Myr from "../../../../lib/myr";
 import {Terrain} from "../../../world/terrain/terrain";
+import {Scale} from "../../../world/scale";
+import * as Myr from "../../../../lib/myr";
 
 /**
  * A move editor moves a PCB within its editable region.
@@ -148,11 +149,11 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view) {
     this.draw = () => {
         if (_dragging)
             SPRITE_MOVE.draw(
-                (_dragging.x - 1) * Pcb.PIXELS_PER_POINT,
-                (_dragging.y - 1) * Pcb.PIXELS_PER_POINT);
+                (_dragging.x - 1) * Scale.PIXELS_PER_POINT,
+                (_dragging.y - 1) * Scale.PIXELS_PER_POINT);
         else if (_movable)
             SPRITE_MOVE.draw(
-                (cursor.x - 1) * Pcb.PIXELS_PER_POINT,
-                (cursor.y - 1) * Pcb.PIXELS_PER_POINT);
+                (cursor.x - 1) * Scale.PIXELS_PER_POINT,
+                (cursor.y - 1) * Scale.PIXELS_PER_POINT);
     };
 }

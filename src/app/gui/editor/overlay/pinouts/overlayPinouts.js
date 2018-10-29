@@ -1,4 +1,4 @@
-import {Pcb} from "../../../../pcb/pcb";
+import {Scale} from "../../../../world/scale";
 import {OverlayPinoutsPin} from "./overlayPinoutsPin";
 import * as Myr from "../../../../../lib/myr";
 import {Pin} from "../../../../part/pin";
@@ -17,8 +17,8 @@ export function OverlayPinouts(x, y, configuration, highlightIndex, highlightDir
 
     const make = () => {
         _element.className = OverlayPinouts.CLASS;
-        _element.style.left = (x * Pcb.PIXELS_PER_POINT) + "px";
-        _element.style.top = (y * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.left = (x * Scale.PIXELS_PER_POINT) + "px";
+        _element.style.top = (y * Scale.PIXELS_PER_POINT) + "px";
 
         let directions = null;
         let index = 0;

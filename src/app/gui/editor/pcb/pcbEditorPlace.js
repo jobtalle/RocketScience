@@ -1,10 +1,11 @@
 import {PartRenderer} from "../../../part/partRenderer";
 import {Pcb} from "../../../pcb/pcb";
-import * as Myr from "../../../../lib/myr";
 import {Part} from "../../../part/part";
 import "../../../part/objects"
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
+import {Scale} from "../../../world/scale";
+import * as Myr from "../../../../lib/myr";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -265,11 +266,11 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
 
         for (let i = 0; i < fixtures.length; ++i) {
             _renderers[i].drawInternal(
-                (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
-                (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
+                (cursor.x + fixtures[i].x) * Scale.PIXELS_PER_POINT,
+                (cursor.y + fixtures[i].y) * Scale.PIXELS_PER_POINT);
             _renderers[i].drawExternal(
-                (cursor.x + fixtures[i].x) * Pcb.PIXELS_PER_POINT,
-                (cursor.y + fixtures[i].y) * Pcb.PIXELS_PER_POINT);
+                (cursor.x + fixtures[i].x) * Scale.PIXELS_PER_POINT,
+                (cursor.y + fixtures[i].y) * Scale.PIXELS_PER_POINT);
         }
 
         if (!_suitable)

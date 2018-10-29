@@ -1,4 +1,4 @@
-import {Pcb} from "../pcb";
+import {Scale} from "../../world/scale";
 import * as Myr from "../../../lib/myr";
 
 /**
@@ -13,8 +13,8 @@ export function PcbPathRenderer(pointRenderer) {
         pointRenderer.render(
             _myr,
             point,
-            x * Pcb.PIXELS_PER_POINT,
-            y * Pcb.PIXELS_PER_POINT);
+            x * Scale.PIXELS_PER_POINT,
+            y * Scale.PIXELS_PER_POINT);
 
         return true;
     };

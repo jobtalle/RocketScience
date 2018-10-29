@@ -2,7 +2,7 @@ import * as Myr from "../../../../lib/myr";
 import {Pcb} from "../../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
-import {Terrain} from "../../../world/terrain/terrain";
+import {Scale} from "../../../world/scale";
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.
@@ -62,8 +62,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         const packReport = pcb.pack();
 
         editor.moveOffset(
-            packReport.left * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            packReport.top * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
+            packReport.left * Pcb.METERS_PER_POINT,
+            packReport.top * Pcb.METERS_PER_POINT);
         editor.revalidate();
     };
 
@@ -157,8 +157,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         }
 
         editor.moveOffset(
-            xMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL,
-            yMin * Pcb.PIXELS_PER_POINT * Terrain.METERS_PER_PIXEL);
+            xMin * Pcb.METERS_PER_POINT,
+            yMin * Pcb.METERS_PER_POINT);
         pcb.shift(-xMin, -yMin);
 
         for (const cell of negatives)
@@ -347,16 +347,16 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         if (_dragging) {
             if (_extendable) {
                 for (const cell of _cursorDragPoints)
-                    SPRITE_EXTEND.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_EXTEND.draw(cell.x * Scale.PIXELS_PER_POINT, cell.y * Scale.PIXELS_PER_POINT);
             }
             else {
                 for (const cell of _cursorDragPoints)
-                    SPRITE_DELETE.draw(cell.x * Pcb.PIXELS_PER_POINT, cell.y * Pcb.PIXELS_PER_POINT);
+                    SPRITE_DELETE.draw(cell.x * Scale.PIXELS_PER_POINT, cell.y * Scale.PIXELS_PER_POINT);
             }
         }
         else if (_extendable)
-            SPRITE_EXTEND.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+            SPRITE_EXTEND.draw(cursor.x * Scale.PIXELS_PER_POINT, cursor.y * Scale.PIXELS_PER_POINT);
         else if (_deletable)
-            SPRITE_DELETE.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+            SPRITE_DELETE.draw(cursor.x * Scale.PIXELS_PER_POINT, cursor.y * Scale.PIXELS_PER_POINT);
     };
 }

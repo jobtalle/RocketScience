@@ -1,4 +1,4 @@
-import {Pcb} from "../../../../pcb/pcb";
+import {Scale} from "../../../../world/scale";
 import {InfoPinouts} from "../../info/pinouts/infoPinouts";
 import {ColorUtils} from "../../../../utils/colorUtils";
 import * as Myr from "../../../../../lib/myr";
@@ -22,8 +22,8 @@ export function OverlayPinoutsPin(x, y, index, pin, offset) {
         color.a = OverlayPinoutsPin.ALPHA;
 
         _element.className = OverlayPinoutsPin.CLASS;
-        _element.style.left = ((x + offset.x * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
-        _element.style.top = ((y + offset.y * 1.5) * Pcb.PIXELS_PER_POINT) + "px";
+        _element.style.left = ((x + offset.x * 1.5) * Scale.PIXELS_PER_POINT) + "px";
+        _element.style.top = ((y + offset.y * 1.5) * Scale.PIXELS_PER_POINT) + "px";
         _element.style.backgroundColor = ColorUtils.toCss(color);
         _element.innerText = InfoPinouts.formatIndex(index);
 
@@ -41,8 +41,8 @@ export function OverlayPinoutsPin(x, y, index, pin, offset) {
 
 OverlayPinoutsPin.makeArrow = (vector, color) => {
     const element = document.createElement("div");
-    const borderSide = (Pcb.PIXELS_PER_POINT * 0.5) + "px solid transparent";
-    const borderFrom = Pcb.PIXELS_PER_POINT + "px solid " + ColorUtils.toCss(color);
+    const borderSide = (Scale.PIXELS_PER_POINT * 0.5) + "px solid transparent";
+    const borderFrom = Scale.PIXELS_PER_POINT + "px solid " + ColorUtils.toCss(color);
 
     element.className = OverlayPinoutsPin.CLASS_ARROW;
     element.style.width = "0";
@@ -55,7 +55,7 @@ OverlayPinoutsPin.makeArrow = (vector, color) => {
             element.style.borderTop = borderFrom;
         else {
             element.style.borderBottom = borderFrom;
-            element.style.bottom = Pcb.PIXELS_PER_POINT + "px";
+            element.style.bottom = Scale.PIXELS_PER_POINT + "px";
         }
     }
     else {
@@ -64,10 +64,10 @@ OverlayPinoutsPin.makeArrow = (vector, color) => {
 
         if (vector.x === -1) {
             element.style.borderLeft = borderFrom;
-            element.style.left = Pcb.PIXELS_PER_POINT + "px";
+            element.style.left = Scale.PIXELS_PER_POINT + "px";
         } else {
             element.style.borderRight = borderFrom;
-            element.style.right = Pcb.PIXELS_PER_POINT + "px";
+            element.style.right = Scale.PIXELS_PER_POINT + "px";
         }
     }
 

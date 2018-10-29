@@ -1,5 +1,5 @@
 import * as Myr from "../../lib/myr";
-import {Pcb} from "../pcb/pcb";
+import {Scale} from "../world/scale";
 
 /**
  * A part renderer.
@@ -17,8 +17,8 @@ export function PartRenderer(renderContext, configuration) {
         const transform = new Myr.Transform();
 
         transform.translate(
-            sprite.x * Pcb.PIXELS_PER_POINT,
-            sprite.y * Pcb.PIXELS_PER_POINT);
+            sprite.x * Scale.PIXELS_PER_POINT,
+            sprite.y * Scale.PIXELS_PER_POINT);
 
         this.addSprite(sprite.name, transform);
     };

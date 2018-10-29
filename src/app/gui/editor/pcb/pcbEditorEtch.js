@@ -4,6 +4,7 @@ import {PcbPoint} from "../../../pcb/point/pcbPoint";
 import {PcbPath} from "../../../pcb/point/pcbPath";
 import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 import {Pin} from "../../../part/pin";
+import {Scale} from "../../../world/scale";
 import * as Myr from "../../../../lib/myr";
 
 /**
@@ -467,12 +468,12 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
                 _pathRenderer.render(renderContext.getMyr(), _pathEtch);
 
             if (_startPoint.equals(cursor))
-                SPRITE_ETCH.draw(_startPoint.x * Pcb.PIXELS_PER_POINT, _startPoint.y * Pcb.PIXELS_PER_POINT);
+                SPRITE_ETCH.draw(_startPoint.x * Scale.PIXELS_PER_POINT, _startPoint.y * Scale.PIXELS_PER_POINT);
         } else if (_etchable) {
             if (_pathSelected)
                 _pathRenderer.render(renderContext.getMyr(), _pathSelected);
 
-            SPRITE_ETCH.draw(cursor.x * Pcb.PIXELS_PER_POINT, cursor.y * Pcb.PIXELS_PER_POINT);
+            SPRITE_ETCH.draw(cursor.x * Scale.PIXELS_PER_POINT, cursor.y * Scale.PIXELS_PER_POINT);
         }
     };
 }
