@@ -136,12 +136,13 @@ export function Game(renderContext, input) {
                     new Myr.Vector(0, 0),
                     new BudgetInventory([
                         new BudgetInventory.Entry("Wheel", 2),
-                        new BudgetInventory.Entry("Propeller", 1),
+                        new BudgetInventory.Entry("Propeller", 2),
                         new BudgetInventory.Entry("Led", 4),
                         new BudgetInventory.Entry("Battery", 1),
                         new BudgetInventory.Entry("Switch", 1),
                         new BudgetInventory.Entry("Button", 1),
-                        new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE)
+                        new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE),
+                        new BudgetInventory.Entry("Controller", 1)
                     ]))
             ],
             "Mission 1"));

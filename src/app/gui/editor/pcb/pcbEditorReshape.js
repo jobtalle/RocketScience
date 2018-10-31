@@ -67,6 +67,19 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         editor.revalidate();
     };
 
+    const dragRespectBounds = () => {
+        for (let i = _cursorDragPoints.length; i-- > 0;) {
+            const point = _cursorDragPoints[i];
+
+            if (point.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0 ||
+                point.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0 ||
+                (point.x + 1) * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x ||
+                (point.y + 1) * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y) {
+                _cursorDragPoints.splice(i, 1);
+            }
+        }
+    };
+
     const dragPreventSplit = (left, top, right, bottom) => {
         if (_cursorDragPoints.length === pcb.getPointCount()) {
             dragPointsClear();
@@ -199,6 +212,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
                     if (pcb.isExtendable(x, y))
                         dragPointsAdd(new Myr.Vector(x, y));
+
+                dragRespectBounds();
             }
             else {
                 for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
