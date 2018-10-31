@@ -53,6 +53,28 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         }
     };
 
+    const recalculateDragPointBounds = () => {
+        if (_cursorDragPoints.length === 0)
+            return;
+
+        _dragPointsLeft = _dragPointsRight = _cursorDragPoints[0].x;
+        _dragPointsBottom = _dragPointsTop = _cursorDragPoints[0].y;
+
+        for (let i = 1; i < _cursorDragPoints.length; ++i) {
+            const point = _cursorDragPoints[i];
+
+            if (point.x < _dragPointsLeft)
+                _dragPointsLeft = point.x;
+            else if (point.x > _dragPointsRight)
+                _dragPointsRight = point.x;
+
+            if (point.y < _dragPointsTop)
+                _dragPointsTop = point.y;
+            else if (point.y > _dragPointsBottom)
+                _dragPointsBottom = point.y;
+        }
+    };
+
     const erase = () => {
         editor.getEditable().undoPush();
 
@@ -68,6 +90,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     };
 
     const dragRespectBounds = () => {
+        let invalidatedBounds = false;
+
         for (let i = _cursorDragPoints.length; i-- > 0;) {
             const point = _cursorDragPoints[i];
 
@@ -76,8 +100,13 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 (point.x + 1) * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x ||
                 (point.y + 1) * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y) {
                 _cursorDragPoints.splice(i, 1);
+
+                invalidatedBounds = true;
             }
         }
+
+        if (invalidatedBounds)
+            recalculateDragPointBounds();
     };
 
     const dragPreventSplit = (left, top, right, bottom) => {
@@ -139,6 +168,8 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 for (let i = 0; i < groups[group].points.length; ++i)
                     dragPointsAdd(groups[group].points[i]);
             }
+
+            recalculateDragPointBounds();
         }
     };
 
@@ -223,18 +254,21 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 dragPreventSplit(left, top, right, bottom);
             }
 
-            editor.getEditor().getOverlay().makeRulers([
-                new OverlayRulerDefinition(
-                    _dragPointsLeft,
-                    _dragPointsBottom + 1,
-                    OverlayRulerDefinition.DIRECTION_RIGHT,
-                    _dragPointsRight - _dragPointsLeft + 1),
-                new OverlayRulerDefinition(
-                    _dragPointsRight + 1,
-                    _dragPointsBottom + 1,
-                    OverlayRulerDefinition.DIRECTION_UP,
-                    _dragPointsBottom - _dragPointsTop + 1)
-            ]);
+            if (_cursorDragPoints.length > 0)
+                editor.getEditor().getOverlay().makeRulers([
+                    new OverlayRulerDefinition(
+                        _dragPointsLeft,
+                        _dragPointsBottom + 1,
+                        OverlayRulerDefinition.DIRECTION_RIGHT,
+                        _dragPointsRight - _dragPointsLeft + 1),
+                    new OverlayRulerDefinition(
+                        _dragPointsRight + 1,
+                        _dragPointsBottom + 1,
+                        OverlayRulerDefinition.DIRECTION_UP,
+                        _dragPointsBottom - _dragPointsTop + 1)
+                ]);
+            else
+                editor.getEditor().getOverlay().clearRulers();
         }
         else {
             _extendable =
