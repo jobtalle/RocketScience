@@ -79,7 +79,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
                 fixture.x - selection.getLeft(),
                 fixture.y - selection.getTop()));
 
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
         editor.getEditor().getOverlay().clearRulers();
         selection.move(cursor.x - selection.getLeft(), cursor.y - selection.getTop());
 
@@ -93,7 +93,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
         const _moveFixtures = [];
         let _canMove = true;
 
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
 
         for (const fixture of selection.getSelected()) {
             _moveFixtures.push(fixture);
@@ -112,7 +112,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
         if (!_canMove) {
             delta.x = delta.y = 0;
 
-            editor.getEditable().undoPushCancel();
+            editor.getUndoStack().pushCancel();
         }
 
         selection.clearSelected();
@@ -147,7 +147,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
     };
 
     const deleteSelectedParts = () => {
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
 
         for (const fixture of selection.getSelected())
             pcb.remove(fixture.part);

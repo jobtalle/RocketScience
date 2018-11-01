@@ -76,7 +76,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     };
 
     const erase = () => {
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
 
         for (const point of _cursorDragPoints)
             pcb.erase(point.x, point.y);
@@ -174,7 +174,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
     };
 
     const extend = () => {
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
 
         const negatives = [];
 

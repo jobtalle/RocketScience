@@ -64,7 +64,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view) {
      */
     this.mouseDown = (x, y) => {
         if (_movable) {
-            editor.getEditable().undoPush();
+            editor.getUndoStack().push();
 
             _moveStart.x = x;
             _moveStart.y = y;

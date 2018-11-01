@@ -228,7 +228,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     const applyPath = () => {
-        editor.getEditable().undoPush();
+        editor.getUndoStack().push();
 
         switch (_selectMode) {
             case PcbEditorEtch.SELECT_TYPE_ETCH:
@@ -309,7 +309,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
             switch (event.key) {
                 case PcbEditorEtch.KEY_DELETE:
                     if (_pathSelected) {
-                        editor.getEditable().undoPush();
+                        editor.getUndoStack().push();
 
                         deletePath(_pathSelected);
 

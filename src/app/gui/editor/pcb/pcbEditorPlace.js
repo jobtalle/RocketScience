@@ -129,7 +129,7 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
             if (selection)
                 selection.clearSelected();
             else
-                editor.getEditable().undoPush();
+                editor.getUndoStack().push();
 
             const pcbFixtures = [];
 

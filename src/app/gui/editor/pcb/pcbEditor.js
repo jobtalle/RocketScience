@@ -11,6 +11,7 @@ import Myr from "../../../../lib/myr.js";
 import {PcbFile} from "../../../pcb/pcbFile";
 import {PcbEditorMove} from "./pcbEditorMove";
 import {Scale} from "../../../world/scale";
+import {UndoStack} from "./undoStack";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
@@ -31,6 +32,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     const _cursor = new Myr.Vector(-1, -1);
 
     let _editable = null;
+    let _undoStack = null;
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
@@ -321,6 +323,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;
+        _undoStack = new UndoStack(_editable);
 
         updatePcb();
     };
@@ -330,6 +333,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @returns {Editable} The editable.
      */
     this.getEditable = () => _editable;
+
+    /**
+     * Get the undo stack.
+     * @returns {UndoStack} An undo stack.
+     */
+    this.getUndoStack = () => _undoStack;
 
     /**
      * Get the PCB editor width
@@ -449,7 +458,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (event.control) if (_editable.undoPop()) {
+                if (event.control) if (_undoStack.undo()) {
                     updatePcb();
 
                     matchWorldPosition();
@@ -457,7 +466,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 return;
             case KEY_REDO:
-                if (event.control) if (_editable.redoPop()) {
+                if (event.control) if (_undoStack.redo()) {
                     updatePcb();
 
                     matchWorldPosition();
