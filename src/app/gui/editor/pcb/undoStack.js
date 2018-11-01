@@ -9,13 +9,14 @@ export function UndoStack(editable) {
 
     const applyState = state => {
         editable.setPcb(state.pcb);
+        editable.setOffset(state.offset);
     };
 
     /**
      * Push the state onto the undo stack.
      */
     this.push = () => {
-        _undoStack.push(new UndoStack.State(editable.getPcb().copy()));
+        _undoStack.push(new UndoStack.State(editable));
 
         if (_undoStack.length > UndoStack.CAPACITY)
             _undoStack.shift();
@@ -39,7 +40,7 @@ export function UndoStack(editable) {
         const state = _undoStack.pop();
 
         if (state) {
-            _redoStack.push(new UndoStack.State(editable.getPcb().copy()));
+            _redoStack.push(new UndoStack.State(editable));
 
             applyState(state);
 
@@ -57,7 +58,7 @@ export function UndoStack(editable) {
         const state = _redoStack.pop();
 
         if (state) {
-            _undoStack.push(new UndoStack.State(editable.getPcb().copy()));
+            _undoStack.push(new UndoStack.State(editable));
 
             applyState(state);
 
@@ -70,6 +71,7 @@ export function UndoStack(editable) {
 
 UndoStack.CAPACITY = 100;
 
-UndoStack.State = function(pcb) {
-    this.pcb = pcb;
+UndoStack.State = function(editable) {
+    this.pcb = editable.getPcb().copy();
+    this.offset = editable.getOffset().copy();
 };
