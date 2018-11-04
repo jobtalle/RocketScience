@@ -95,6 +95,7 @@ export function Editor(renderContext, world, game) {
     this.edit = editable => {
         _editable = editable;
 
+        _editables.setCurrent(editable);
         _pcbEditor.edit(editable);
         _toolbar.default();
     };

@@ -267,8 +267,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         view.onMouseRelease();
         _editor.reset();
 
-        // TODO: Add all editable PCB's in the current mission
-        world.addPcb(_editable.getPcb(), _editable.getPosition().x, _editable.getPosition().y);
+        for (const editable of world.getMission().getEditables())
+            world.addPcb(editable.getPcb(), editable.getPosition().x, editable.getPosition().y);
     };
 
     /**
