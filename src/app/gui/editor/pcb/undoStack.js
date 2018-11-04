@@ -7,9 +7,9 @@ export function UndoStack(editable) {
     const _undoStack = [];
     const _redoStack = [];
 
-    const applyState = state => {
+    const applyState = (state, editor) => {
+        editor.moveOffset(state.offset.x - editable.getOffset().x, state.offset.y - editable.getOffset().y);
         editable.setPcb(state.pcb);
-        editable.setOffset(state.offset);
     };
 
     /**
@@ -34,15 +34,16 @@ export function UndoStack(editable) {
 
     /**
      * Go back to the last pushed state.
+     * @param {PcbEditor} editor The pcb editor.
      * @returns {Boolean} A boolean indicating whether the operation succeeded.
      */
-    this.undo = () => {
+    this.undo = editor => {
         const state = _undoStack.pop();
 
         if (state) {
             _redoStack.push(new UndoStack.State(editable));
 
-            applyState(state);
+            applyState(state, editor);
 
             return true;
         }
@@ -52,15 +53,16 @@ export function UndoStack(editable) {
 
     /**
      * Redo the last undo.
+     * @param {PcbEditor} editor The pcb editor.
      * @returns {Boolean} A boolean indicating whether the operation succeeded.
      */
-    this.redo = () => {
+    this.redo = editor => {
         const state = _redoStack.pop();
 
         if (state) {
             _undoStack.push(new UndoStack.State(editable));
 
-            applyState(state);
+            applyState(state, editor);
 
             return true;
         }

@@ -47,7 +47,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view) {
      */
     this.mouseMove = (x, y) => {
         if (_dragging) {
-            editor.moveOffset2(
+            editor.moveOffset(
                 (x - _moveStart.x) * Scale.METERS_PER_PIXEL / view.getZoom(),
                 (y - _moveStart.y) * Scale.METERS_PER_PIXEL / view.getZoom());
 

@@ -123,25 +123,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Number} dy The vertical movement in meters.
      */
     this.moveOffset = (dx, dy) => {
-        /*
-        view.focus(
-            view.getFocusX() - dx * Scale.PIXELS_PER_METER,
-            view.getFocusY() - dy * Scale.PIXELS_PER_METER,
-            view.getZoom());
-        _editable.moveOffset(
-            Math.max(dx, -_editable.getOffset().x),
-            Math.max(dy, -_editable.getOffset().y));
-
-        matchWorldPosition();
-        */
-    };
-
-    /**
-     * Move the editable origin.
-     * @param dx
-     * @param dy
-     */
-    this.moveOffset2 = (dx, dy) => {
         if (dx < -_editable.getOffset().x)
             dx = -_editable.getOffset().x;
         else if (dx > _editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x)
@@ -458,7 +439,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (event.control) if (_undoStack.undo()) {
+                if (event.control) if (_undoStack.undo(this)) {
                     updatePcb();
 
                     matchWorldPosition();
@@ -466,7 +447,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 return;
             case KEY_REDO:
-                if (event.control) if (_undoStack.redo()) {
+                if (event.control) if (_undoStack.redo(this)) {
                     updatePcb();
 
                     matchWorldPosition();
