@@ -2,7 +2,6 @@ import {Menu} from "./menu/menu";
 import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
 import {Pcb} from "./pcb/pcb";
-import {Terrain} from "./world/terrain/terrain";
 import {Objective} from "./mission/objective";
 import {Led} from "./part/parts/led";
 import {GoalPinState} from "./mission/goal/goalPinState";
@@ -133,7 +132,14 @@ export function Game(renderContext, input) {
                         new Myr.Vector(50, -5),
                         new Myr.Vector(5, 5)),
                     pcb,
-                    new Myr.Vector(0, 0),
+                    new Myr.Vector(1, 1),
+                    null),
+                new Editable(
+                    new EditableRegion(
+                        new Myr.Vector(60, -5),
+                        new Myr.Vector(5, 5)),
+                    pcb.copy(),
+                    new Myr.Vector(1, 1),
                     new BudgetInventory([
                         new BudgetInventory.Entry("Wheel", 2),
                         new BudgetInventory.Entry("Propeller", 2),

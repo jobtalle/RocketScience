@@ -63,6 +63,9 @@ export function CategoryPart(part, setPart, info) {
         _element.classList.remove(CategoryPart.CLASS_NOT_AVAILABLE);
         _element.classList.remove(CategoryPart.CLASS_NOT_SPECIFIED);
 
+        if (!budget)
+            return true;
+
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
                 const count = budget.getCount(part.object);

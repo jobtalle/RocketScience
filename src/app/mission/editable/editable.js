@@ -48,16 +48,6 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getOffset = () => pcbOffset;
 
     /**
-     * Set the offset of the pcb in the editable region.
-     * @param {Myr.Vector} offset The offset in meters.
-     */
-    this.setOffset = offset => {
-        pcbOffset = offset;
-
-        calculatePosition();
-    };
-
-    /**
      * Move the PCB offset in the editable region.
      * @param {Number} dx The horizontal movement in meters.
      * @param {Number} dy The vertical movement in meters.
