@@ -49,15 +49,14 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
 
     /**
      * Draw the world object in its current state.
-     * @param {Myr} myr A Myriad instance.
      */
-    this.draw = myr => {
-        myr.push();
-        myr.transform(_transform);
+    this.draw = () => {
+        renderContext.getMyr().push();
+        renderContext.getMyr().transform(_transform);
 
         _renderer.drawBody(0, 0);
 
-        myr.pop();
+        renderContext.getMyr().pop();
 
         _renderer.drawSeparate();
     };

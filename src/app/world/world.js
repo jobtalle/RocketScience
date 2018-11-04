@@ -189,7 +189,7 @@ export function World(renderContext, mission) {
         _terrain.draw();
 
         for (let index = 0; index < _objects.length; index++)
-            _objects[index].draw( renderContext.getMyr());
+            _objects[index].draw();
 
         renderContext.getMyr().pop();
     };

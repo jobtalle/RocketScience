@@ -10,6 +10,7 @@ import {Overlay} from "./overlay/overlay";
 import {Info} from "./info/info";
 import {PartSummary} from "../../pcb/partSummary";
 import {Scale} from "../../world/scale";
+import {Editables} from "./editables";
 
 /**
  * Provides am editor for editing PCB's.
@@ -51,6 +52,7 @@ export function Editor(renderContext, world, game) {
         renderContext.getViewport().getElement());
     const _pcbScreenPosition = new Myr.Vector(0, 0);
 
+    const _editables = new Editables(renderContext, world);
     let _editable = null;
 
     const onViewChanged = () => {
@@ -140,6 +142,9 @@ export function Editor(renderContext, world, game) {
     this.draw = () => {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
+
+        _editables.draw();
+
         renderContext.getMyr().primitives.drawLine(
             Myr.Color.BLUE,
             (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Scale.PIXELS_PER_METER,
