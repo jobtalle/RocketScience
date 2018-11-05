@@ -11,13 +11,13 @@ import {Extendability} from "./extendability";
  * @constructor
  */
 export function Pcb() {
-    const _extendability = new Extendability();
     const _fixtures = [];
     const _points = [];
     const _air = [];
 
     let _width = 0;
     let _pointCount = 0;
+    let _extendability = new Extendability();
 
     const moveFixtures = (x, y) => {
         for (const fixture of _fixtures) {
@@ -226,6 +226,12 @@ export function Pcb() {
     this.getExtendability = () => _extendability;
 
     /**
+     * Set an extendability profile for this pcb.
+     * @param {Extendability} extendability An extendability profile.
+     */
+    this.setExtendability = extendability => _extendability = extendability;
+
+    /**
      * Check whether a configuration can be instantiated at a position on this pcb.
      * @param {Number} x The x position on the board.
      * @param {Number} y The y position on the board.
@@ -301,6 +307,8 @@ export function Pcb() {
 
         for (const fixture of _fixtures)
             newPcb.place(fixture.part.copy(), fixture.x, fixture.y);
+
+        newPcb.setExtendability(_extendability.copy());
 
         return newPcb;
     };
@@ -399,6 +407,12 @@ export function Pcb() {
         if (this.getPoint(x, y))
             return false;
 
+        if ((!_extendability.getLeft() && x < 0) ||
+            (!_extendability.getUp() && y < 0) ||
+            (!_extendability.getRight() && x >= this.getWidth()) ||
+            (!_extendability.getDown() && y >= this.getHeight()))
+            return false;
+
         for (const fixture of _fixtures) if (fixture.part.getConfiguration().footprint.air)
             for (const point of fixture.part.getConfiguration().footprint.air)
                 if (fixture.x + point.x === x && fixture.y + point.y === y)
@@ -493,6 +507,8 @@ export function Pcb() {
             this.getPoint(x, 0).lock();
 
         _extendability.setUp(false);
+        _extendability.setLeft(false);
+        _extendability.setRight(false);
     };
 }
 

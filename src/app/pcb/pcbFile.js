@@ -22,6 +22,24 @@ export function PcbFile(bytes) {
         buffer.writeShort(head);
     };
 
+    const encodeExtendability = (buffer, pcb) => {
+        let byte = 0;
+
+        if (pcb.getExtendability().getLeft())
+            byte |= PcbFile.PCB_EXTENDABLE_LEFT;
+
+        if (pcb.getExtendability().getUp())
+            byte |= PcbFile.PCB_EXTENDABLE_UP;
+
+        if (pcb.getExtendability().getRight())
+            byte |= PcbFile.PCB_EXTENDABLE_RIGHT;
+
+        if (pcb.getExtendability().getDown())
+            byte |= PcbFile.PCB_EXTENDABLE_DOWN;
+
+        buffer.writeByte(byte);
+    };
+
     const encodeRunEmpty = (buffer, length) => {
         while (length > PcbFile.POINT_RUN_MAX) {
             buffer.writeByte(PcbFile.POINT_RUN_MAX);
@@ -72,6 +90,7 @@ export function PcbFile(bytes) {
         let runPoints = [];
 
         encodeHead(buffer, pcb);
+        encodeExtendability(buffer, pcb);
 
         for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
             const point = pcb.getPoint(x, y);
@@ -94,10 +113,21 @@ export function PcbFile(bytes) {
             encodeRunPoints(buffer, runPoints, encodedParts, count, pcb.getPointCount());
     };
 
+    const decodeExtendability = (buffer, pcb) => {
+        const byte = buffer.readByte();
+
+        pcb.getExtendability().setLeft((byte & PcbFile.PCB_EXTENDABLE_LEFT) !== 0);
+        pcb.getExtendability().setUp((byte & PcbFile.PCB_EXTENDABLE_UP) !== 0);
+        pcb.getExtendability().setRight((byte & PcbFile.PCB_EXTENDABLE_RIGHT) !== 0);
+        pcb.getExtendability().setDown((byte & PcbFile.PCB_EXTENDABLE_DOWN) !== 0);
+    };
+
     const decode = (buffer, pcb) => {
         const head = buffer.readShort();
         const width = head & PcbFile.HEAD_BITS_WIDTH;
         const fixtures = [];
+
+        decodeExtendability(buffer, pcb);
 
         let point = head & PcbFile.HEAD_BIT_START_EMPTY?PcbFile.POINT_SKIP:buffer.readByte();
         let x = 0;
@@ -210,6 +240,10 @@ PcbFile.fromPcb = pcb => {
 
 PcbFile.HEAD_BIT_START_EMPTY = 0x8000;
 PcbFile.HEAD_BITS_WIDTH = PcbFile.HEAD_BIT_START_EMPTY - 1;
+PcbFile.PCB_EXTENDABLE_LEFT = 0x01;
+PcbFile.PCB_EXTENDABLE_UP = 0x02;
+PcbFile.PCB_EXTENDABLE_RIGHT = 0x04;
+PcbFile.PCB_EXTENDABLE_DOWN = 0x08;
 PcbFile.POINT_RUN_MAX = 0xFF;
 PcbFile.POINT_BIT_CHAIN = 0x10;
 PcbFile.POINT_BIT_PART = 0x20;

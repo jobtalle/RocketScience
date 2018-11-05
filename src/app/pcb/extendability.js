@@ -4,13 +4,12 @@
  * @constructor
  */
 export function Extendability() {
-    let _extendability = 0;
-
+    let _state = Extendability.BIT_LEFT | Extendability.BIT_UP | Extendability.BIT_RIGHT | Extendability.BIT_DOWN;
     /**
      * Check whether extending to the left is allowed.
      * @returns {Boolean} A boolean indicating whether extending to the left is possible.
      */
-    this.getLeft = () => (_extendability & Extendability.BIT_LEFT) !== 0;
+    this.getLeft = () => (_state & Extendability.BIT_LEFT) !== 0;
 
     /**
      * Set whether extending to the left is allowed.
@@ -18,16 +17,16 @@ export function Extendability() {
      */
     this.setLeft = extendable => {
         if (extendable)
-            _extendability |= Extendability.BIT_LEFT;
+            _state |= Extendability.BIT_LEFT;
         else
-            _extendability &= !Extendability.BIT_LEFT;
+            _state &= ~Extendability.BIT_LEFT;
     };
 
     /**
      * Check whether extending up is allowed.
      * @returns {Boolean} A boolean indicating whether extending up is possible.
      */
-    this.getUp = () => (_extendability & Extendability.BIT_UP) !== 0;
+    this.getUp = () => (_state & Extendability.BIT_UP) !== 0;
 
     /**
      * Set whether extending up is allowed.
@@ -35,16 +34,16 @@ export function Extendability() {
      */
     this.setUp = extendable => {
         if (extendable)
-            _extendability |= Extendability.BIT_UP;
+            _state |= Extendability.BIT_UP;
         else
-            _extendability &= !Extendability.BIT_UP;
+            _state &= ~Extendability.BIT_UP;
     };
 
     /**
      * Check whether extending to the right is allowed.
      * @returns {Boolean} A boolean indicating whether extending to the right is possible.
      */
-    this.getRight = () => (_extendability & Extendability.BIT_RIGHT) !== 0;
+    this.getRight = () => (_state & Extendability.BIT_RIGHT) !== 0;
 
     /**
      * Set whether extending to the right is allowed.
@@ -52,16 +51,16 @@ export function Extendability() {
      */
     this.setRight = extendable => {
         if (extendable)
-            _extendability |= Extendability.BIT_RIGHT;
+            _state |= Extendability.BIT_RIGHT;
         else
-            _extendability &= !Extendability.BIT_RIGHT;
+            _state &= ~Extendability.BIT_RIGHT;
     };
 
     /**
      * Check whether extending down is allowed.
      * @returns {Boolean} A boolean indicating whether extending down is possible.
      */
-    this.getDown = () => (_extendability & Extendability.BIT_DOWN) !== 0;
+    this.getDown = () => (_state & Extendability.BIT_DOWN) !== 0;
 
     /**
      * Set whether extending down is allowed.
@@ -69,9 +68,24 @@ export function Extendability() {
      */
     this.setDown = extendable => {
         if (extendable)
-            _extendability |= Extendability.BIT_DOWN;
+            _state |= Extendability.BIT_DOWN;
         else
-            _extendability &= !Extendability.BIT_DOWN;
+            _state &= ~Extendability.BIT_DOWN;
+    };
+
+    /**
+     * Copy this extendability profile.
+     * @returns {Extendability} A new extendability profile.
+     */
+    this.copy = () => {
+        const extendability = new Extendability();
+
+        extendability.setLeft(this.getLeft());
+        extendability.setUp(this.getUp());
+        extendability.setRight(this.getRight());
+        extendability.setDown(this.getDown());
+
+        return extendability;
     };
 }
 
