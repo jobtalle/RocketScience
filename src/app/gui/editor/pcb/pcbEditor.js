@@ -286,17 +286,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Editable} editable An editable.
      */
     this.edit = editable => {
-        if (_renderer) {
+        if (_renderer)
             _renderer.free();
-
-            const dx = (_editable.getRegion().getOrigin().x - editable.getRegion().getOrigin().x) * Scale.PIXELS_PER_METER;
-            const dy = (_editable.getRegion().getOrigin().y - editable.getRegion().getOrigin().y) * Scale.PIXELS_PER_METER;
-
-            view.focus(
-                view.getFocusX() - dx,
-                view.getFocusY() - dy,
-                view.getZoom());
-        }
         else
             view.focus(
                 editable.getPcb().getWidth() * 0.5 * Scale.PIXELS_PER_POINT,

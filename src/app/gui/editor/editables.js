@@ -1,5 +1,6 @@
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {Scale} from "../../world/scale";
+import * as Myr from "../../../lib/myr";
 
 /**
  * The editables in the world that may be edited.
@@ -42,6 +43,29 @@ export function Editables(renderContext, world) {
             _renderers[world.getMission().getEditables().indexOf(_current)].revalidate();
 
         _current = current;
+    };
+
+    /**
+     * Get the editable at a certain world position.
+     * @param {Number} x The x position in the world in meters.
+     * @param {Number} y The y position in the world in meters.
+     * @returns {Editable} The editable found at that position, or null if no editable is under it.
+     */
+    this.getEditableAt = (x, y) => {
+        const at = new Myr.Vector(x, y);
+
+        world.getView().getInverse().apply(at);
+
+        for (const editable of world.getMission().getEditables()) {
+            if (
+                at.x * Scale.METERS_PER_PIXEL >= editable.getRegion().getOrigin().x &&
+                at.y * Scale.METERS_PER_PIXEL >= editable.getRegion().getOrigin().y &&
+                at.x * Scale.METERS_PER_PIXEL <= editable.getRegion().getOrigin().x + editable.getRegion().getSize().x &&
+                at.y * Scale.METERS_PER_PIXEL <= editable.getRegion().getOrigin().y + editable.getRegion().getSize().y)
+                return editable;
+        }
+
+        return null;
     };
 
     makeRenderers();

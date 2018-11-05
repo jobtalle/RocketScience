@@ -38,7 +38,7 @@ export function World(renderContext, mission) {
     let _paused = true;
 
     const clickObject = (x, y) => {
-        let at = new Myr.Vector(x, y);
+        const at = new Myr.Vector(x, y);
 
         _view.getInverse().apply(at);
 

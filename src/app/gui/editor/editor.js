@@ -93,6 +93,16 @@ export function Editor(renderContext, world, game) {
      * @param {Editable} editable An editable.
      */
     this.edit = editable => {
+        if (_editable) {
+            const delta = _editable.getRegion().getOrigin().copy();
+
+            delta.subtract(editable.getRegion().getOrigin());
+            _view.focus(
+                _view.getFocusX() + delta.x * Scale.PIXELS_PER_METER,
+                _view.getFocusY() + delta.y * Scale.PIXELS_PER_METER,
+                _view.getZoom());
+        }
+
         _editable = editable;
 
         _editables.setCurrent(editable);
@@ -177,7 +187,12 @@ export function Editor(renderContext, world, game) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_PRESS_LMB:
-                _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
+                const pressedEditable = _editables.getEditableAt(event.x, event.y);
+
+                if (!pressedEditable || pressedEditable === _editable)
+                    _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
+                else
+                    this.edit(pressedEditable);
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
