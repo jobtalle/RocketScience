@@ -30,13 +30,19 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     const KEY_SAVE = "q";
 
     const _cursor = new Myr.Vector(-1, -1);
+    const _undoStacks = [];
 
-    let _editable = null;
     let _undoStack = null;
+    let _editable = null;
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
     let _hover = true;
+
+    const initializeUndoStacks = () => {
+        for (const editable of world.getMission().getEditables())
+            _undoStacks.push(new UndoStack(editable));
+    };
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -295,7 +301,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;
-        _undoStack = new UndoStack(_editable);
+        _undoStack = _undoStacks[world.getMission().getEditables().indexOf(editable)];
 
         updatePcb();
     };
@@ -430,7 +436,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
             case KEY_UNDO:
-                if (event.control) if (_undoStack.undo(this)) {
+                if (event.control) if (this.getUndoStack().undo(this)) {
                     updatePcb();
 
                     matchWorldPosition();
@@ -438,7 +444,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 return;
             case KEY_REDO:
-                if (event.control) if (_undoStack.redo(this)) {
+                if (event.control) if (this.getUndoStack().redo(this)) {
                     updatePcb();
 
                     matchWorldPosition();
@@ -462,6 +468,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         if (_renderer)
             _renderer.free();
     };
+
+    initializeUndoStacks();
 }
 
 PcbEditor.EDIT_MODE_SELECT = 0;
