@@ -52,13 +52,12 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
 
     /**
      * Render an etched state.
-     * @param {Myr} myr A Myriad instance.
      * @param {PcbPoint} point A point to render the etch state from.
      * @param {Number} x The X position.
      * @param {Number} y The Y position.
      */
-    this.render = (myr, point, x, y) => {
-        if (point.paths === 0)
+    this.render = (point, x, y) => {
+        if (!point.hasPaths() && !point.isConnected())
             return;
 
         for (let direction = 0; direction < 8; ++direction) if (point.hasDirection(direction))

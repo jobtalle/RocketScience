@@ -6,12 +6,9 @@ import * as Myr from "../../../lib/myr";
  * @param {PcbPointRenderer} pointRenderer A point renderer to render a paths points with.
  * @constructor
  */
-export function PcbPathRenderer(pointRenderer) {
-    let _myr = null;
-
+export function PcbPathRenderer(renderContext, pointRenderer) {
     const renderPoint = (x, y, point) => {
         pointRenderer.render(
-            _myr,
             point,
             x * Scale.PIXELS_PER_POINT,
             y * Scale.PIXELS_PER_POINT);
@@ -21,18 +18,15 @@ export function PcbPathRenderer(pointRenderer) {
 
     /**
      * Render a path.
-     * @param {Myr} myr A Myriad instance.
      * @param {PcbPath} path A PCB path to render.
      */
-    this.render = (myr, path) => {
-        _myr = myr;
-
+    this.render = path => {
         if (pointRenderer.getModeColor()) {
-            myr.setColor(pointRenderer.getModeColor());
+            renderContext.getMyr().setColor(pointRenderer.getModeColor());
 
             path.forPoints(renderPoint);
 
-            myr.setColor(Myr.Color.WHITE);
+            renderContext.getMyr().setColor(Myr.Color.WHITE);
         }
         else
             path.forPoints(renderPoint);

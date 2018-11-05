@@ -13,6 +13,7 @@ import * as Myr from "../../lib/myr";
  */
 export function PcbRenderer(renderContext, pcb, level) {
     const SPRITE_POINT = renderContext.getSprites().getSprite("pcbPoint");
+    const SPRITE_POINT_LOCKED = renderContext.getSprites().getSprite("pcbPointLocked");
 
     const _pointRenderer = new PcbPointRenderer(renderContext, false);
     const _partRenderers = [];
@@ -35,9 +36,14 @@ export function PcbRenderer(renderContext, pcb, level) {
             const point = pcb.getPoint(column, row);
 
             if (point) {
-                SPRITE_POINT.draw(
-                    column * Scale.PIXELS_PER_POINT,
-                    row * Scale.PIXELS_PER_POINT);
+                if (point.isLocked())
+                    SPRITE_POINT_LOCKED.draw(
+                        column * Scale.PIXELS_PER_POINT,
+                        row * Scale.PIXELS_PER_POINT);
+                else
+                    SPRITE_POINT.draw(
+                        column * Scale.PIXELS_PER_POINT,
+                        row * Scale.PIXELS_PER_POINT);
             }
         }
 
@@ -48,7 +54,7 @@ export function PcbRenderer(renderContext, pcb, level) {
             if (!point)
                 continue;
 
-            _pointRenderer.render(renderContext.getMyr(), point, column * Scale.PIXELS_PER_POINT, row * Scale.PIXELS_PER_POINT);
+            _pointRenderer.render(point, column * Scale.PIXELS_PER_POINT, row * Scale.PIXELS_PER_POINT);
         }
     };
 
