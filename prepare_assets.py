@@ -3,6 +3,8 @@
 DIR_LANG = "src/assets/text/"
 DIR_DIST = "dist/"
 
+import json
+
 from os import walk
 from shutil import copyfile
 from pack_gui import pack_gui
@@ -16,7 +18,13 @@ def copy_langfiles():
         for file in file_names:
             print("- '" + file + "'")
 
-            copyfile(dir_path + file, DIR_DIST + file)
+            json_src_file = open(dir_path + file)
+
+            json_dest_file = open(DIR_DIST + file, "w")
+            json_dest_file.write(json.dumps(json.load(json_src_file), json_dest_file, indent=None, separators=(",", ":")))
+            json_dest_file.close()
+
+            json_src_file.close()
 
 pack_sprites()
 pack_gui()
