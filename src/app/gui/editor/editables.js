@@ -15,7 +15,7 @@ export function Editables(renderContext, world) {
 
     const makeRenderers = () => {
         for (const editable of world.getMission().getEditables())
-            _renderers.push(new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_PARTS));
+            _renderers.push(new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL));
     };
 
     /**

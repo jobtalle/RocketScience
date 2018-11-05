@@ -96,7 +96,10 @@ export function Editor(renderContext, world, game) {
         if (_editable) {
             const delta = _editable.getRegion().getOrigin().copy();
 
+            delta.add(_editable.getOffset());
             delta.subtract(editable.getRegion().getOrigin());
+            delta.subtract(editable.getOffset());
+
             _view.focus(
                 _view.getFocusX() + delta.x * Scale.PIXELS_PER_METER,
                 _view.getFocusY() + delta.y * Scale.PIXELS_PER_METER,
