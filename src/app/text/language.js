@@ -1,9 +1,6 @@
-import english from "../../assets/text/english";
-import dutch from "../../assets/text/dutch";
 import "../../styles/text.css";
 import {Macro} from "./macro";
-
-const parsedLanguages = [];
+import {request} from "../utils/request";
 
 function Language() {
     let _language;
@@ -18,23 +15,14 @@ function Language() {
             _language[key] = _language[key].replace(expressions[i], Language.MACROS[i].getReplaceText());
     };
 
-    this.set = lang => {
-        switch(lang) {
-            case Language.ENGLISH:
-                _language = english;
-
-                break;
-            case Language.DUTCH:
-                _language = dutch;
-
-                break;
-        }
-
-        if (!parsedLanguages.includes(lang)) {
-            parsedLanguages.push(lang);
+    this.set = (source, onReady, onError) => {
+        request(source, file => {
+            _language = JSON.parse(file);
 
             applyMacros();
-        }
+
+            onReady();
+        }, onError);
     };
 
     this.get = key => {
@@ -47,9 +35,6 @@ function Language() {
     };
 }
 
-Language.ENGLISH = 0;
-Language.DUTCH = 1;
-Language.DEFAULT = Language.ENGLISH;
 Language.ERROR_TEXT = "<string not found>";
 Language.MACROS = [
     new Macro("<high>", "signal high", "MACRO_HIGH"),
@@ -57,16 +42,24 @@ Language.MACROS = [
     new Macro("<varying>", "signal varying", "MACRO_VARYING")
 ];
 
-const language = new Language();
+const _language = new Language();
 
-language.set(Language.DEFAULT);
+/**
+ * All available languages.
+ */
+export const Languages = {
+    ENGLISH: "english.json",
+    DUTCH: "dutch.json"
+};
 
 /**
  * Set the current language.
  * @param {String} language Any valid language constant provided by the Language class.
+ * @param {Function} onReady A function to execute when the language file has been loaded.
+ * @param {Function} onError A function te execute when loading failed.
  */
-export function setLanguage(language) {
-    language.set(language);
+export function setLanguage(language, onReady, onError) {
+    _language.set(language, onReady, onError);
 }
 
 /**
@@ -74,5 +67,5 @@ export function setLanguage(language) {
  * @param {String} key The strings key.
  */
 export function getString(key) {
-    return language.get(key);
+    return _language.get(key);
 }
