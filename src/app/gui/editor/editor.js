@@ -11,6 +11,7 @@ import {Info} from "./info/info";
 import {PartSummary} from "../../pcb/partSummary";
 import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
+import {Checklist} from "../shared/checklist/checklist";
 
 /**
  * Provides am editor for editing PCB's.
@@ -50,6 +51,7 @@ export function Editor(renderContext, world, game) {
         _toolbar,
         _info,
         renderContext.getViewport().getElement());
+    const _checklist = new Checklist(world.getMission());
     const _pcbScreenPosition = new Myr.Vector(0, 0);
 
     const _editables = new Editables(renderContext, world);
@@ -121,6 +123,8 @@ export function Editor(renderContext, world, game) {
         _library.hide();
         _pcbEditor.hide();
         _overlay.hide();
+
+        renderContext.getOverlay().removeChild(_checklist.getElement());
     };
 
     /**
@@ -131,6 +135,8 @@ export function Editor(renderContext, world, game) {
         _library.show();
         _toolbar.show();
         _overlay.show();
+
+        renderContext.getOverlay().appendChild(_checklist.getElement());
     };
 
     /**

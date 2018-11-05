@@ -43,6 +43,7 @@ export function Mission(objectives, editables, title) {
 
     /**
      * Check all unfinished objectives.
+     * @returns {Boolean} A boolean indicating whether all objectives have been completed.
      */
     this.validate = () => {
         let _changed = false;
@@ -70,7 +71,6 @@ export function Mission(objectives, editables, title) {
      * @returns {Array} An array of editables.
      */
     this.getEditables = () => editables;
-
 
     rewind();
 }
