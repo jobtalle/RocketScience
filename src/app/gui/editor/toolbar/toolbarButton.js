@@ -1,18 +1,20 @@
 /**
  * A button for the toolbar.
  * @param {Function} onClick A function to execute when the button is active.
+ * @param {String} toolTip A tool tip message.
  * @param {String} sprite The sprite class.
  * @param {Object} type A valid type constant.
  * @param {ToolbarButton.ToggleGroup} [toggleGroup] A toggle group to assign this button to.
  * @constructor
  */
-export function ToolbarButton(onClick, sprite, type, toggleGroup) {
+export function ToolbarButton(onClick, toolTip, sprite, type, toggleGroup) {
     const _element = document.createElement("div");
 
     const build = () => {
         _element.classList.add(ToolbarButton.CLASS);
         _element.classList.add("sprite");
         _element.classList.add(sprite);
+        _element.title = toolTip;
 
         switch (type) {
             case ToolbarButton.TYPE_CLICK:

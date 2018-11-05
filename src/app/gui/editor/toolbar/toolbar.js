@@ -1,6 +1,7 @@
 import "../../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
+import {getString} from "../../../text/language";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -15,30 +16,36 @@ export function Toolbar(editor, overlay, x, game) {
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
+        getString(Toolbar.TEXT_EXTEND),
         "toolbar-extend",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonSelect = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
+        getString(Toolbar.TEXT_SELECT),
         "toolbar-select",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonEtch = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_ETCH),
+        getString(Toolbar.TEXT_ETCH),
         "toolbar-etch",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonMove = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE),
+        getString(Toolbar.TEXT_MOVE),
         "toolbar-move",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(
         () => game.toggleEdit(),
+        getString(Toolbar.TEXT_LAUNCH),
         "toolbar-launch",
         ToolbarButton.TYPE_CLICK);
     const _buttonXRay = new ToolbarButton(
         pressed => editor.setXRay(pressed),
+        getString(Toolbar.TEXT_X_RAY),
         "toolbar-xray",
         ToolbarButton.TYPE_TOGGLE);
 
@@ -140,3 +147,9 @@ Toolbar.KEY_PRESS_ETCH = "3";
 Toolbar.KEY_PRESS_MOVE = "4";
 Toolbar.KEY_PRESS_LAUNCH = " ";
 Toolbar.KEY_PRESS_XRAY = "x";
+Toolbar.TEXT_EXTEND = "TOOLBAR_EXTEND";
+Toolbar.TEXT_SELECT = "TOOLBAR_SELECT";
+Toolbar.TEXT_ETCH = "TOOLBAR_ETCH";
+Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
+Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
+Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";

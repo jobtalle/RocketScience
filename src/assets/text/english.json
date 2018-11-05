@@ -5,6 +5,13 @@
   "MACRO_LOW": "low",
   "MACRO_VARYING": "varying",
 
+  "TOOLBAR_EXTEND": "Reshape the PCB",
+  "TOOLBAR_SELECT": "Select and move parts on the PCB",
+  "TOOLBAR_ETCH": "Make connections on the PCB",
+  "TOOLBAR_MOVE": "Move the PCB",
+  "TOOLBAR_LAUNCH": "Launch the game",
+  "TOOLBAR_X_RAY": "See through parts on the PCB",
+
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
   "CATEGORY_LOGIC": "Logic",
