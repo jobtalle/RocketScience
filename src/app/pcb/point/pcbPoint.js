@@ -10,6 +10,20 @@ export function PcbPoint() {
 }
 
 /**
+ * Set this point as locked. Locked points may not be removed.
+ */
+PcbPoint.prototype.lock = function() {
+    this.paths |= PcbPoint.BIT_LOCKED;
+};
+
+/**
+ * Set this point as unlocked. Unlocked points may be removed.
+ */
+PcbPoint.prototype.unlock = function() {
+    this.paths &= !PcbPoint.BIT_LOCKED;
+};
+
+/**
  * Mark this point as an input connection.
  */
 PcbPoint.prototype.connectInput = function() {
@@ -52,6 +66,14 @@ PcbPoint.prototype.isOutput = function() {
  */
 PcbPoint.prototype.isConnected = function() {
     return (this.paths & PcbPoint.CONNECTION_BITS) !== 0;
+};
+
+/**
+ * Check if this point is locked.
+ * @returns {Boolean} A boolean indicating whether this point is locked.
+ */
+PcbPoint.prototype.isLocked = function() {
+    return (this.paths & PcbPoint.BIT_LOCKED) !== 0;
 };
 
 /**
@@ -228,6 +250,7 @@ PcbPoint.incrementDirection = direction => (direction + 1) % 8;
 PcbPoint.decrementDirection = direction => direction === 0?7:direction - 1;
 
 PcbPoint.PATHS_MASK = 0xFF;
+PcbPoint.BIT_LOCKED = 0x800;
 PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;
 PcbPoint.CONNECTION_BIT_INPUT = 0x200;
 PcbPoint.CONNECTION_BIT_STRUCTURAL = 0x400;

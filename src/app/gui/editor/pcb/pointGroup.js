@@ -4,6 +4,7 @@
  * @constructor
  */
 export function PointGroup(first) {
+    this.locked = false;
     this.points = [first];
     this.left = first.x - 1;
     this.top = first.y - 1;

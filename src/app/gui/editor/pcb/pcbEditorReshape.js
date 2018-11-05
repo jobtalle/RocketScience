@@ -119,37 +119,57 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
         const groups = [];
 
         for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x) {
-            if (x >= left && x <= right && y >= top && y <= bottom)
+            const point = pcb.getPoint(x, y);
+
+            // Disregard points that are in the selection
+            if (x >= left &&
+                x <= right &&
+                y >= top &&
+                y <= bottom &&
+                (point && !point.isLocked()))
                 continue;
 
-            if (!pcb.getPoint(x, y))
+            if (!point)
                 continue;
 
-            const point = new Myr.Vector(x, y);
+            const pointLocation = new Myr.Vector(x, y);
             const matches = [];
 
+            // Find groups to which the current point belongs
             for (let group = 0; group < groups.length; ++group) {
-                if (groups[group].contains(point))
+                if (groups[group].contains(pointLocation))
                     matches.push(group);
             }
 
+            // Make a new group if the point belongs to no group yet
+            // If it belongs to multiple groups, merge those groups and add it to the merged result
             switch (matches.length) {
                 case 0:
-                    groups.push(new PointGroup(point));
+                    const group = new PointGroup(pointLocation);
+
+                    group.locked = point.isLocked();
+                    groups.push(group);
+
                     break;
                 default:
                     matches.sort();
 
                     for (let i = matches.length; i-- > 1;) {
                         groups[matches[0]].concat(groups[matches[i]]);
+                        groups[matches[0]].locked = groups[matches[0]].locked || groups[matches[i]].locked;
+
                         groups.splice(matches[i], 1);
                     }
                 case 1:
-                    groups[matches[0]].push(point);
+                    groups[matches[0]].push(pointLocation);
+                    groups[matches[0]].locked = groups[matches[0]].locked || point.isLocked();
+
                     break;
             }
         }
 
+        // If multiple groups are created by the removal, keep the largest group and remove the smaller ones
+        // If any of the groups that will be removed contain locked points, abort the operation
         if (groups.length > 1) {
             let largestGroupSize = 0;
             let largestGroup;
@@ -164,6 +184,12 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
             for (let group = 0; group < groups.length; ++group) {
                 if (group === largestGroup)
                     continue;
+
+                if (groups[group].locked) {
+                    dragPointsClear();
+
+                    return;
+                }
 
                 for (let i = 0; i < groups[group].points.length; ++i)
                     dragPointsAdd(groups[group].points[i]);
@@ -247,9 +273,12 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
                 dragRespectBounds();
             }
             else {
-                for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x)
-                    if (pcb.getPoint(x, y))
+                for (let y = top; y <= bottom; ++y) for (let x = left; x <= right; ++x) {
+                    const point = pcb.getPoint(x, y);
+
+                    if (point && !point.isLocked())
                         dragPointsAdd(new Myr.Vector(x, y));
+                }
 
                 dragPreventSplit(left, top, right, bottom);
             }
@@ -281,7 +310,7 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
             if (_extendable)
                 _deletable = false;
             else
-                _deletable = pcb.getPoint(cursor.x, cursor.y) !== null;
+                _deletable = pcb.getPoint(cursor.x, cursor.y) && !pcb.getPoint(cursor.x, cursor.y).isLocked();
         }
     };
 
