@@ -45,11 +45,11 @@ export function PcbFile(bytes) {
             if (++count === maxCount)
                 byte |= PcbFile.POINT_BIT_LAST;
 
+            if (point.isLocked())
+                byte |= PcbFile.POINT_BIT_LOCKED;
+
             if (point.part !== null && !encodedParts.includes(point.part)) {
                 encodedParts.push(point.part);
-
-                if (point.part.getConfigurationIndex() !== 0)
-                    byte |= PcbFile.POINT_BIT_CONFIGURED;
 
                 buffer.writeByte(byte | PcbFile.POINT_BIT_PART);
                 buffer.writeByte(getPartId(point.part.getDefinition().object));
@@ -122,23 +122,22 @@ export function PcbFile(bytes) {
                     pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
                 }
 
-                if ((point & PcbFile.POINT_BIT_PART) === PcbFile.POINT_BIT_PART) {
+                if ((point & PcbFile.POINT_BIT_PART) !== 0) {
                     const id = buffer.readByte();
-
-                    let configuration = 0;
-
-                    if ((point & PcbFile.POINT_BIT_CONFIGURED) === PcbFile.POINT_BIT_CONFIGURED)
-                        configuration = buffer.readByte();
+                    const configuration = buffer.readByte();
 
                     fixtures.push(new Fixture(new Part(getPartFromId(id), configuration), x, y));
                 }
 
+                if ((point & PcbFile.POINT_BIT_LOCKED) !== 0)
+                    pcbPoint.lock();
+
                 if (++x === width)
                     x = 0, ++y;
 
-                if ((point & PcbFile.POINT_BIT_LAST) === PcbFile.POINT_BIT_LAST)
+                if ((point & PcbFile.POINT_BIT_LAST) !== 0)
                     break;
-                else if ((point & PcbFile.POINT_BIT_CHAIN) === PcbFile.POINT_BIT_CHAIN)
+                else if ((point & PcbFile.POINT_BIT_CHAIN) !== 0)
                     point = buffer.readByte();
                 else
                     point = PcbFile.POINT_SKIP;
@@ -215,5 +214,5 @@ PcbFile.POINT_RUN_MAX = 0xFF;
 PcbFile.POINT_BIT_CHAIN = 0x10;
 PcbFile.POINT_BIT_PART = 0x20;
 PcbFile.POINT_BIT_LAST = 0x40;
-PcbFile.POINT_BIT_CONFIGURED = 0x80;
-PcbFile.POINT_SKIP = PcbFile.POINT_BIT_CONFIGURED;
+PcbFile.POINT_BIT_LOCKED = 0x80;
+PcbFile.POINT_SKIP = PcbFile.POINT_BIT_CHAIN | PcbFile.POINT_BIT_LAST;
