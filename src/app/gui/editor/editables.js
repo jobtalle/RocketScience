@@ -40,7 +40,10 @@ export function Editables(renderContext, world) {
      */
     this.setCurrent = current => {
         if (_current)
-            _renderers[world.getMission().getEditables().indexOf(_current)].revalidate();
+            _renderers[world.getMission().getEditables().indexOf(_current)] = new PcbRenderer(
+                renderContext,
+                _current.getPcb(),
+                PcbRenderer.LEVEL_HULL);
 
         _current = current;
     };
