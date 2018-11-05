@@ -38,8 +38,8 @@ export function Editables(renderContext, world) {
      * @param {Editable} current The currently being edited editable, or null if none is being edited.
      */
     this.setCurrent = current => {
-        if (!_current)
-            _renderers[world.getMission().getEditables().indexOf(current)].revalidate();
+        if (_current)
+            _renderers[world.getMission().getEditables().indexOf(_current)].revalidate();
 
         _current = current;
     };

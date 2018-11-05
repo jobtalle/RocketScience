@@ -43,7 +43,7 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
 
     const budgetAllows = fixtures => {
         if (!budget)
-            return; // TODO: Provide some feedback here
+            return true; // TODO: Provide some feedback here
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
