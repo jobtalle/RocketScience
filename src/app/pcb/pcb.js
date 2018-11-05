@@ -3,12 +3,15 @@ import {Fixture} from "../part/fixture";
 import * as Myr from "../../lib/myr";
 import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
+import {Extendability} from "./extendability";
 
 /**
  * Defines a PCB.
+ * A PCB must be populated or initialized before it can be used.
  * @constructor
  */
 export function Pcb() {
+    const _extendability = new Extendability();
     const _fixtures = [];
     const _points = [];
     const _air = [];
@@ -215,6 +218,12 @@ export function Pcb() {
 
         return true;
     };
+
+    /**
+     * Get the extendability profile for this PCB.
+     * @returns {Extendability} An extendability object.
+     */
+    this.getExtendability = () => _extendability;
 
     /**
      * Check whether a configuration can be instantiated at a position on this pcb.
@@ -482,6 +491,8 @@ export function Pcb() {
 
         for (let x = 0; x < Pcb.DEFAULT_WIDTH; ++x)
             this.getPoint(x, 0).lock();
+
+        _extendability.setUp(false);
     };
 }
 
