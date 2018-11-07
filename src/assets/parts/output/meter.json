@@ -26,7 +26,7 @@
           {"name": "partMeterBase", "x": 0, "y": -1}
         ],
         "external": [
-          {"name": "partMeterDial", "x": 0, "y": 0}
+          {"name": "partMeterDial", "x": 0, "y": -0.5}
         ]
       }
     }
