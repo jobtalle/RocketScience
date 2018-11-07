@@ -502,13 +502,6 @@ export function Pcb() {
     this.initialize = () => {
         for (let y = 0; y < Pcb.DEFAULT_HEIGHT; ++y) for (let x = 0; x < Pcb.DEFAULT_WIDTH; ++x)
             this.extend(x, y);
-
-        for (let x = 0; x < Pcb.DEFAULT_WIDTH; ++x)
-            this.getPoint(x, 0).lock();
-
-        _extendability.setUp(false);
-        _extendability.setLeft(false);
-        _extendability.setRight(false);
     };
 }
 

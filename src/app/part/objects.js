@@ -12,6 +12,7 @@ import parts from "../../assets/parts.json"
 import {Button} from "./parts/button";
 import {Switch} from "./parts/switch";
 import {Transistor} from "./parts/transistor";
+import {Meter} from "./parts/meter";
 
 const states = {
     "Led": Led,
@@ -26,7 +27,8 @@ const states = {
     "Controller": Controller,
     "Button": Button,
     "Switch": Switch,
-    "Transistor": Transistor
+    "Transistor": Transistor,
+    "Meter": Meter
 };
 
 /**

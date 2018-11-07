@@ -104,5 +104,9 @@
   "PART_TRANSISTOR_PIN_BASE_NAME": "Base",
   "PART_TRANSISTOR_PIN_BASE_DESCRIPTION": "If a <high> signal is provided to the base, a signal will flow from the collector to the emitter",
   "PART_TRANSISTOR_PIN_EMITTER_NAME": "Emitter",
-  "PART_TRANSISTOR_PIN_EMITTER_DESCRIPTION": "If the base is powered, this pin outputs whatever signal is supplied to the collector. Otherwise, the output is <low>."
+  "PART_TRANSISTOR_PIN_EMITTER_DESCRIPTION": "If the base is powered, this pin outputs whatever signal is supplied to the collector. Otherwise, the output is <low>.",
+
+  "PART_METER_NAME": "Signal meter",
+  "PART_METER_DESCRIPTION": "If a <varying> signal is provided, the meters dial will show its current value.",
+  "PART_METER_PIN_INPUT_DESCRIPTION": "Any signal provided to this pin will be measured."
 }
