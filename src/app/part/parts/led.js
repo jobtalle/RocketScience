@@ -18,7 +18,7 @@ export function Led(pins, renderer) {
      */
     this.tick = state => {
         renderer.getSprites()[Led.SPRITE_INDEX_LIGHT].setFrame(
-            state[pins[Led.PIN_INDEX_POWER]]
+            state[pins[Led.PIN_INDEX_POWER]] === 1?1:0
         );
     };
 }

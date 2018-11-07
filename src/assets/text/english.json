@@ -108,5 +108,10 @@
 
   "PART_METER_NAME": "Signal meter",
   "PART_METER_DESCRIPTION": "If a <varying> signal is provided, the meters dial will show its current value.",
-  "PART_METER_PIN_INPUT_DESCRIPTION": "Any signal provided to this pin will be measured."
+  "PART_METER_PIN_INPUT_DESCRIPTION": "Any signal provided to this pin will be measured.",
+
+  "PART_RESISTOR_NAME": "Resistor",
+  "PART_RESISTOR_DESCRIPTION": "A resistor reduces a signals value by 50%.",
+  "PART_RESISTOR_PIN_INPUT_DESCRIPTION": "Any signal connected to this resistor will be transformed.",
+  "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION": "The output signal will be half the input signal."
 }

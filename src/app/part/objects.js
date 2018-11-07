@@ -13,6 +13,7 @@ import {Button} from "./parts/button";
 import {Switch} from "./parts/switch";
 import {Transistor} from "./parts/transistor";
 import {Meter} from "./parts/meter";
+import {Resistor} from "./parts/resistor";
 
 const states = {
     "Led": Led,
@@ -28,7 +29,8 @@ const states = {
     "Button": Button,
     "Switch": Switch,
     "Transistor": Transistor,
-    "Meter": Meter
+    "Meter": Meter,
+    "Resistor": Resistor
 };
 
 /**

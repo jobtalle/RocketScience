@@ -1,0 +1,26 @@
+{
+  "label": "PART_RESISTOR_NAME",
+  "description": "PART_RESISTOR_DESCRIPTION",
+  "icon": "part-resistor",
+  "object": "Resistor",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "signal": "continuous", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "out", "signal": "continuous", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partResistor", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}
