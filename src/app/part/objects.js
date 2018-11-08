@@ -18,6 +18,7 @@ import {Adder} from "./parts/adder";
 import {Capacitor} from "./parts/capacitor";
 import {Altimeter} from "./parts/altimeter";
 import {Comparator} from "./parts/comparator";
+import {Tilt} from "./parts/tilt";
 
 const states = {
     "Led": Led,
@@ -38,7 +39,8 @@ const states = {
     "Adder": Adder,
     "Capacitor": Capacitor,
     "Altimeter": Altimeter,
-    "Comparator": Comparator
+    "Comparator": Comparator,
+    "Tilt": Tilt
 };
 
 /**

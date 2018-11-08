@@ -16,18 +16,21 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
 
+    let _angle = 0;
+
     const updateTransform = () => {
         if (!transform)
             return;
 
         _position.x = _body.GetPosition().get_x();
         _position.y = _body.GetPosition().get_y();
+        _angle = -_body.GetAngle();
 
         transform.identity();
         transform.translate(
             _position.x * Scale.PIXELS_PER_METER,
             _position.y * Scale.PIXELS_PER_METER);
-        transform.rotate(-_body.GetAngle());
+        transform.rotate(_angle);
         transform.translate(
             -xOrigin * Scale.PIXELS_PER_METER,
             -yOrigin * Scale.PIXELS_PER_METER);
@@ -63,6 +66,12 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @returns {Myr.Vector} A vector containing the position in the world in meters.
      */
     this.getPosition = () => _position;
+
+    /**
+     * Get the angle of this body.
+     * @returns {Number} The rotation in radians.
+     */
+    this.getAngle = () => _angle;
 
     /**
      * Create a wheel on this body.
