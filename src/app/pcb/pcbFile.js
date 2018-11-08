@@ -227,11 +227,25 @@ export function PcbFile(bytes) {
 /**
  * Create a PcbFile from an instantiated PCB.
  * @param {Pcb} pcb A pcb.
+ * @returns {PcbFile} A PcbFile object.
  */
 PcbFile.fromPcb = pcb => {
     const file = new PcbFile();
 
     file.encode(pcb);
+
+    return file;
+};
+
+/**
+ * Create a PcbFile from a string in which a PCB is stored.
+ * @param {String} string A string.
+ * @returns {PcbFile} A PcbFile object.
+ */
+PcbFile.fromString = string => {
+    const file = new PcbFile();
+
+    file.fromString(string);
 
     return file;
 };

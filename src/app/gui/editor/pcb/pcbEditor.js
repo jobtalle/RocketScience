@@ -27,7 +27,8 @@ import {UndoStack} from "./undoStack";
 export function PcbEditor(renderContext, world, view, width, height, x, editor) {
     const KEY_UNDO = "z";
     const KEY_REDO = "y";
-    const KEY_SAVE = "q";
+    const KEY_SAVE = "s";
+    const KEY_LOAD = "l";
 
     const _cursor = new Myr.Vector(-1, -1);
     const _undoStacks = [];
@@ -454,6 +455,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
             case KEY_SAVE:
                 if (event.control)
                     _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), updatePcb();
+
+                return;
+            case KEY_LOAD:
+                if (event.control) {
+                    navigator.clipboard.readText().then(text => {
+                        _editable.setPcb(PcbFile.fromString(text).decode()), updatePcb();
+                    });
+                }
 
                 return;
         }
