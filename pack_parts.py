@@ -61,4 +61,4 @@ def pack_parts():
 
     parts = merge_parts()
     with open(OUT_FILE, 'w') as file:
-        file.write(json.dumps(parts))
+        file.write(json.dumps(parts, indent=None, separators=(",", ":")))
