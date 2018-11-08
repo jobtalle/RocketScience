@@ -17,8 +17,8 @@ export function GateAnd(pins) {
      */
     this.tick = state => {
         if (state[pins[GateAnd.PIN_INDEX_POWER]] === 1 && (
-            state[pins[GateAnd.PIN_INDEX_IN_1]] === 1 &&
-            state[pins[GateAnd.PIN_INDEX_IN_2]] === 1)) {
+            state[pins[GateAnd.PIN_INDEX_IN_1]] !== 0 &&
+            state[pins[GateAnd.PIN_INDEX_IN_2]] !== 0)) {
             state[pins[GateAnd.PIN_INDEX_OUTPUT]] = 1;
 
             return;

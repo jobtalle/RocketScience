@@ -26,7 +26,7 @@ export function Oscillator(pins, renderer) {
             state[pins[Oscillator.PIN_INDEX_PULSE]] = _state;
         }
         else
-            state[pins[Oscillator.PIN_INDEX_PULSE]] = 0;
+            _state = state[pins[Oscillator.PIN_INDEX_PULSE]] = 0;
     };
 }
 
