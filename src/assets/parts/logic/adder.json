@@ -1,0 +1,31 @@
+{
+  "label": "PART_ADDER_NAME",
+  "description": "PART_ADDER_DESCRIPTION",
+  "icon": "part-adder",
+  "object": "Adder",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1},
+          {"x": 0, "y": 2},
+          {"x": 1, "y": 2}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "out", "signal": "discrete", "name": "PIN_OUTPUT_NAME", "description": "PART_ADDER_PIN_1_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "in", "signal": "discrete", "name": "PIN_INPUT_1_NAME", "description": "PART_ADDER_PIN_2_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "in", "signal": "discrete", "name": "PIN_INPUT_2_NAME", "description": "PART_ADDER_PIN_3_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partAdder", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}

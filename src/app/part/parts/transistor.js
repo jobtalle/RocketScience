@@ -18,10 +18,10 @@ export function Transistor(pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[pins[Transistor.PIN_INDEX_BASE]])
-            state[pins[Transistor.PIN_INDEX_EMITTER]] = state[pins[Transistor.PIN_INDEX_COLLECTOR]];
-        else
+        if (state[pins[Transistor.PIN_INDEX_BASE]] === 0)
             state[pins[Transistor.PIN_INDEX_EMITTER]] = 0;
+        else
+            state[pins[Transistor.PIN_INDEX_EMITTER]] = state[pins[Transistor.PIN_INDEX_COLLECTOR]];
     };
 }
 

@@ -113,5 +113,11 @@
   "PART_RESISTOR_NAME": "Resistor",
   "PART_RESISTOR_DESCRIPTION": "A resistor reduces a signals value by 50%.",
   "PART_RESISTOR_PIN_INPUT_DESCRIPTION": "Any signal connected to this resistor will be transformed.",
-  "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION": "The output signal will be half the input signal."
+  "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION": "The output signal will be half the input signal.",
+
+  "PART_ADDER_NAME": "Adder",
+  "PART_ADDER_DESCRIPTION": "An adder. The two input signals are summed and sent to the output pin. The output cannot be higher than a <high> signal.",
+  "PART_ADDER_PIN_1_DESCRIPTION": "Both input signals summed together. The output cannot be higher than a <high> signal. If no power is supplied, this pin will output a <low> signal.",
+  "PART_ADDER_PIN_2_DESCRIPTION": "The first input signal, which must be a value between <low> and <high>.",
+  "PART_ADDER_PIN_3_DESCRIPTION": "The second input signal, which must be a value between <low> and <high>."
 }

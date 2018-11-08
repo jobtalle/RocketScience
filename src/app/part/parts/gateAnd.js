@@ -1,9 +1,8 @@
 /**
  * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
  */
-export function GateAnd(pins, renderer) {
+export function GateAnd(pins) {
     /**
      * Initialize the state.
      * @param {Physics} body A physics body to apply state to.

@@ -20,12 +20,13 @@ export function Oscillator(pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[pins[Oscillator.PIN_INDEX_POWER]] === 0)
-            return;
+        if (state[pins[Oscillator.PIN_INDEX_POWER]] === 1) {
+            _state = 1 - _state;
 
-        _state = 1 - _state;
-
-        state[pins[Oscillator.PIN_INDEX_PULSE]] = _state;
+            state[pins[Oscillator.PIN_INDEX_PULSE]] = _state;
+        }
+        else
+            state[pins[Oscillator.PIN_INDEX_PULSE]] = 0;
     };
 }
 
