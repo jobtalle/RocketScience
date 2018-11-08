@@ -13,8 +13,8 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 0, "type": "in", "signal": "continuous", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
-        {"x": 2, "y": 0, "type": "out", "signal": "continuous", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [
@@ -31,8 +31,8 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 0, "type": "in", "signal": "continuous", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
-        {"x": 0, "y": 2, "type": "out", "signal": "continuous", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [

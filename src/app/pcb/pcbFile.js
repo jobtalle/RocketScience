@@ -71,9 +71,7 @@ export function PcbFile(bytes) {
 
                 buffer.writeByte(byte | PcbFile.POINT_BIT_PART);
                 buffer.writeByte(getPartId(point.part.getDefinition().object));
-
-                if (point.part.getConfigurationIndex() !== 0)
-                    buffer.writeByte(point.part.getConfigurationIndex());
+                buffer.writeByte(point.part.getConfigurationIndex());
             }
             else
                 buffer.writeByte(byte);

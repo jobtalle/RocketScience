@@ -3,7 +3,6 @@
 
   "MACRO_HIGH": "high",
   "MACRO_LOW": "low",
-  "MACRO_VARYING": "varying",
 
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
@@ -56,9 +55,9 @@
   "PART_WHEEL_NAME": "Wheel",
   "PART_WHEEL_DESCRIPTION": "A wheel",
   "PART_WHEEL_PIN_0_NAME": "Left",
-  "PART_WHEEL_PIN_0_DESCRIPTION": "When a <varying> signal is provided, the motor will rotate counter clockwise with the intensity of that signal.",
+  "PART_WHEEL_PIN_0_DESCRIPTION": "When a signal between <low> and <high> is provided, the motor will rotate counter clockwise with the intensity of that signal.",
   "PART_WHEEL_PIN_2_NAME": "Right",
-  "PART_WHEEL_PIN_2_DESCRIPTION": "When a <varying> signal is provided, the motor will rotate clockwise with the intensity of that signal.",
+  "PART_WHEEL_PIN_2_DESCRIPTION": "When a signal between <low> and <high> is provided, the motor will rotate clockwise with the intensity of that signal.",
   "PART_WHEEL_PIN_BRAKES_NAME": "Brake",
   "PART_WHEEL_PIN_BRAKES_DESCRIPTION": "When a <high> signal is provided, the brakes will be active regardless of motor signals.",
 
@@ -73,13 +72,13 @@
   "PART_CONTROLLER_NAME": "Controller",
   "PART_CONTROLLER_DESCRIPTION": "A receiver for player controls. Keyboard or gamepad actions are received by this controller and can be used to control a machine.",
   "PART_CONTROLLER_PIN_LEFT_NAME": "Move left",
-  "PART_CONTROLLER_PIN_LEFT_DESCRIPTION": "When the player steers the craft to the left, this pin will output a <varying> signal depending on how far the joystick moved.",
+  "PART_CONTROLLER_PIN_LEFT_DESCRIPTION": "When the player steers the craft to the left, this pin will output a signal between <low> and <high> depending on how far the joystick moved.",
   "PART_CONTROLLER_PIN_RIGHT_NAME": "Move right",
-  "PART_CONTROLLER_PIN_RIGHT_DESCRIPTION": "When the player steers the craft to the right, this pin will output a <varying> signal depending on how far the joystick moved.",
+  "PART_CONTROLLER_PIN_RIGHT_DESCRIPTION": "When the player steers the craft to the right, this pin will output a signal between <low> and <high> depending on how far the joystick moved.",
   "PART_CONTROLLER_PIN_UP_NAME": "Move up",
-  "PART_CONTROLLER_PIN_UP_DESCRIPTION": "When the player steers the craft up, this pin will output a <varying> signal depending on how far the joystick moved.",
+  "PART_CONTROLLER_PIN_UP_DESCRIPTION": "When the player steers the craft up, this pin will output a signal between <low> and <high> depending on how far the joystick moved.",
   "PART_CONTROLLER_PIN_DOWN_NAME": "Move down",
-  "PART_CONTROLLER_PIN_DOWN_DESCRIPTION": "When the player steers the craft down, this pin will output a <varying> signal depending on how far the joystick moved.",
+  "PART_CONTROLLER_PIN_DOWN_DESCRIPTION": "When the player steers the craft down, this pin will output a signal between <low> and <high> depending on how far the joystick moved.",
   "PART_CONTROLLER_PIN_ACTION_1_NAME": "Action 1",
   "PART_CONTROLLER_PIN_ACTION_1_DESCRIPTION": "When action key 1 is pressed, this pin will output a <high> signal",
   "PART_CONTROLLER_PIN_ACTION_2_NAME": "Action 2",
@@ -107,7 +106,7 @@
   "PART_TRANSISTOR_PIN_EMITTER_DESCRIPTION": "If the base is powered, this pin outputs whatever signal is supplied to the collector. Otherwise, the output is <low>.",
 
   "PART_METER_NAME": "Signal meter",
-  "PART_METER_DESCRIPTION": "If a <varying> signal is provided, the meters dial will show its current value.",
+  "PART_METER_DESCRIPTION": "If a signal is provided, the meters dial will show its current value.",
   "PART_METER_PIN_INPUT_DESCRIPTION": "Any signal provided to this pin will be measured.",
 
   "PART_RESISTOR_NAME": "Resistor",

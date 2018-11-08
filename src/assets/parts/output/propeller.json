@@ -28,8 +28,8 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 1, "type": "in", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
-        {"x": 3, "y": 1, "type": "in", "signal": "discrete", "name": "PIN_INPUT_NAME", "description": "PART_PROPELLER_PIN_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 3, "y": 1, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_PROPELLER_PIN_DESCRIPTION"},
         {"x": 0, "y": 0, "type": "structural"},
         {"x": 3, "y": 0, "type": "structural"}
       ],

@@ -38,8 +38,7 @@ function Language() {
 Language.ERROR_TEXT = "<string not found>";
 Language.MACROS = [
     new Macro("<high>", "signal high", "MACRO_HIGH"),
-    new Macro("<low>", "signal low", "MACRO_LOW"),
-    new Macro("<varying>", "signal varying", "MACRO_VARYING")
+    new Macro("<low>", "signal low", "MACRO_LOW")
 ];
 
 const _language = new Language();

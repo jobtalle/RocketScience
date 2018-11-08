@@ -16,10 +16,10 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 0, "type": "out", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"x": 1, "y": 0, "type": "out", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"x": 0, "y": 2, "type": "out", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"x": 1, "y": 2, "type": "out", "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"}
+        {"x": 0, "y": 0, "type": "out", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "out", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "out", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "out", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [
@@ -39,10 +39,10 @@
         ]
       },
       "io": [
-        {"type": "out", "x": 0, "y": 0, "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"type": "out", "x": 0, "y": 1, "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"type": "out", "x": 2, "y": 0, "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"type": "out", "x": 2, "y": 1, "signal": "discrete", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"}
+        {"type": "out", "x": 0, "y": 0, "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"type": "out", "x": 0, "y": 1, "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"type": "out", "x": 2, "y": 0, "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
+        {"type": "out", "x": 2, "y": 1, "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"}
       ],
       "sprites": {
         "internal": [
