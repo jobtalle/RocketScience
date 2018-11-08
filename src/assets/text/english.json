@@ -127,5 +127,11 @@
 
   "PART_ALTIMETER_NAME": "Altimeter",
   "PART_ALTIMETER_DESCRIPTION": "When powered, the output value of this sensor will relate to the height of this robot. At sea level, the output will be <low>. At 30 meters or more, the output will be <high>.",
-  "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION": "The output will be <low> at sea level, <high> at 30 meters or higher, and increase linearly if the altitude is between these values. If the part is not powered, the output will be <low>."
+  "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION": "The output will be <low> at sea level, <high> at 30 meters or higher, and increase linearly if the altitude is between these values. If the part is not powered, the output will be <low>.",
+
+  "PART_COMPARATOR_NAME": "Comparator",
+  "PART_COMPARATOR_DESCRIPTION": "Compare two signals with each other, and output a <high> signal if the second signal is bigger than the first one.",
+  "PART_COMPARATOR_PIN_1_DESCRIPTION": "This pin will output a <high> signal if the second input pin value is higher than the first input pin value. If this part is not powered, this pin will output a <low> signal.",
+  "PART_COMPARATOR_PIN_2_DESCRIPTION": "The first input signal.",
+  "PART_COMPARATOR_PIN_3_DESCRIPTION": "The second input signal."
 }
