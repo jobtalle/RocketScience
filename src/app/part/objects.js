@@ -15,6 +15,7 @@ import {Transistor} from "./parts/transistor";
 import {Meter} from "./parts/meter";
 import {Resistor} from "./parts/resistor";
 import {Adder} from "./parts/adder";
+import {Capacitor} from "./parts/capacitor";
 
 const states = {
     "Led": Led,
@@ -32,7 +33,8 @@ const states = {
     "Transistor": Transistor,
     "Meter": Meter,
     "Resistor": Resistor,
-    "Adder": Adder
+    "Adder": Adder,
+    "Capacitor": Capacitor
 };
 
 /**

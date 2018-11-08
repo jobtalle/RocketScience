@@ -118,5 +118,10 @@
   "PART_ADDER_DESCRIPTION": "An adder. The two input signals are summed and sent to the output pin. The output cannot be higher than a <high> signal.",
   "PART_ADDER_PIN_1_DESCRIPTION": "Both input signals summed together. The output cannot be higher than a <high> signal. If no power is supplied, this pin will output a <low> signal.",
   "PART_ADDER_PIN_2_DESCRIPTION": "The first input signal, which must be a value between <low> and <high>.",
-  "PART_ADDER_PIN_3_DESCRIPTION": "The second input signal, which must be a value between <low> and <high>."
+  "PART_ADDER_PIN_3_DESCRIPTION": "The second input signal, which must be a value between <low> and <high>.",
+
+  "PART_CAPACITOR_NAME": "Capacitor",
+  "PART_CAPACITOR_DESCRIPTION": "A capacitor charges while a signal is provided to its input. The capacitor will output its input signal when it is fully charged. When no input signal is provided, the capacitor will discharge.",
+  "PART_CAPACITOR_PIN_INPUT_DESCRIPTION": "A signal to charge the capacitor with.",
+  "PART_CAPACITOR_PIN_OUTPUT_DESCRIPTION": "When the capacitor is fully charged, the output signal will be equal to the input signal. Otherwise, the output signal will be <low>."
 }
