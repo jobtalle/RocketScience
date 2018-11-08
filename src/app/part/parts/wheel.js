@@ -11,7 +11,7 @@ export function Wheel(pins, renderer, x, y) {
     let currentState = Wheel.STATE_RELEASED;
     let joint = null;
 
-    const applyState = state => {
+    const applyState = (state, intensity) => {
         switch (state) {
             case Wheel.STATE_RELEASED:
                 joint.release();
@@ -20,10 +20,10 @@ export function Wheel(pins, renderer, x, y) {
                 joint.brakes();
                 break;
             case Wheel.STATE_MOTOR_RIGHT:
-                joint.powerRight();
+                joint.powerRight(intensity);
                 break;
             case Wheel.STATE_MOTOR_LEFT:
-                joint.powerLeft();
+                joint.powerLeft(intensity);
                 break;
         }
     };
@@ -46,14 +46,19 @@ export function Wheel(pins, renderer, x, y) {
      */
     this.tick = state => {
         let newState;
+        let intensity = 0;
 
         if (state[pins[Wheel.PIN_INDEX_POWER]] === 1) {
             if (state[pins[Wheel.PIN_INDEX_BRAKES_1]] === 1 || state[pins[Wheel.PIN_INDEX_BRAKES_2]] === 1)
                 newState = Wheel.STATE_BRAKES;
-            else if (state[pins[Wheel.PIN_INDEX_LEFT]] === 1)
+            else if (state[pins[Wheel.PIN_INDEX_LEFT]] !== 0) {
                 newState = Wheel.STATE_MOTOR_LEFT;
-            else if (state[pins[Wheel.PIN_INDEX_RIGHT]] === 1)
+                intensity = state[pins[Wheel.PIN_INDEX_LEFT]];
+            }
+            else if (state[pins[Wheel.PIN_INDEX_RIGHT]] !== 0) {
                 newState = Wheel.STATE_MOTOR_RIGHT;
+                intensity = state[pins[Wheel.PIN_INDEX_RIGHT]];
+            }
             else
                 newState = Wheel.STATE_RELEASED;
         }
@@ -64,7 +69,7 @@ export function Wheel(pins, renderer, x, y) {
         if (newState !== currentState) {
             currentState = newState;
 
-            applyState(currentState);
+            applyState(currentState, intensity);
         }
     };
 }

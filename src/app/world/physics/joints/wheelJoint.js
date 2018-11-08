@@ -29,14 +29,14 @@ export function WheelJoint(world, bodyA, bodyB, locationA, locationB) {
         joint.SetMotorSpeed(0);
     };
 
-    this.powerRight = () => {
+    this.powerRight = intensity => {
         joint.SetMaxMotorTorque(WheelJoint.TORQUE_MOTOR);
-        joint.SetMotorSpeed(WheelJoint.MOTOR_SPEED);
+        joint.SetMotorSpeed(WheelJoint.MOTOR_SPEED * intensity);
     };
 
-    this.powerLeft = () => {
+    this.powerLeft = intensity => {
         joint.SetMaxMotorTorque(WheelJoint.TORQUE_MOTOR);
-        joint.SetMotorSpeed(-WheelJoint.MOTOR_SPEED);
+        joint.SetMotorSpeed(-WheelJoint.MOTOR_SPEED * intensity);
     };
 
     join();

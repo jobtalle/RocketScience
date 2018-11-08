@@ -27,8 +27,8 @@ export function Propeller(pins, renderer, x, y) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[pins[Propeller.PIN_INDEX_POWER]] === 1 && state[pins[Propeller.PIN_INDEX_ON]] === 1) {
-            mover.setForce(new Myr.Vector(0, -3500));
+        if (state[pins[Propeller.PIN_INDEX_POWER]] === 1 && state[pins[Propeller.PIN_INDEX_INPUT]] !== 0) {
+            mover.setForce(new Myr.Vector(0, Propeller.MAX_FORCE * state[pins[Propeller.PIN_INDEX_INPUT]]));
 
             moving = true;
         }
@@ -50,5 +50,6 @@ export function Propeller(pins, renderer, x, y) {
 }
 
 Propeller.PIN_INDEX_POWER = 0;
-Propeller.PIN_INDEX_ON = 1;
+Propeller.PIN_INDEX_INPUT = 1;
 Propeller.SPRITE_INDEX_PROPELLER = 1;
+Propeller.MAX_FORCE = -3500;
