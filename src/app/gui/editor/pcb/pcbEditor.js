@@ -25,11 +25,6 @@ import {UndoStack} from "./undoStack";
  * @constructor
  */
 export function PcbEditor(renderContext, world, view, width, height, x, editor) {
-    const KEY_UNDO = "z";
-    const KEY_REDO = "y";
-    const KEY_SAVE = "s";
-    const KEY_LOAD = "l";
-
     const _cursor = new Myr.Vector(-1, -1);
     const _undoStacks = [];
 
@@ -436,7 +431,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      */
     this.onKeyEvent = event => {
         if (event.down) switch(event.key) {
-            case KEY_UNDO:
+            case PcbEditor.KEY_UNDO:
                 if (event.control) if (this.getUndoStack().undo(this)) {
                     updatePcb();
 
@@ -444,7 +439,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 }
 
                 return;
-            case KEY_REDO:
+            case PcbEditor.KEY_REDO:
                 if (event.control) if (this.getUndoStack().redo(this)) {
                     updatePcb();
 
@@ -452,12 +447,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 }
 
                 return;
-            case KEY_SAVE:
+            case PcbEditor.KEY_SAVE:
                 if (event.control)
                     _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), updatePcb();
 
                 return;
-            case KEY_LOAD:
+            case PcbEditor.KEY_LOAD:
                 if (event.control) {
                     navigator.clipboard.readText().then(text => {
                         _editable.setPcb(PcbFile.fromString(text).decode()), updatePcb();
@@ -485,3 +480,7 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
+PcbEditor.KEY_UNDO = "z";
+PcbEditor.KEY_REDO = "y";
+PcbEditor.KEY_SAVE = "q";
+PcbEditor.KEY_LOAD = "l";
