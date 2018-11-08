@@ -123,5 +123,9 @@
   "PART_CAPACITOR_NAME": "Capacitor",
   "PART_CAPACITOR_DESCRIPTION": "A capacitor charges while a signal is provided to its input. The capacitor will output its input signal when it is fully charged. When no input signal is provided, the capacitor will discharge.",
   "PART_CAPACITOR_PIN_INPUT_DESCRIPTION": "A signal to charge the capacitor with.",
-  "PART_CAPACITOR_PIN_OUTPUT_DESCRIPTION": "When the capacitor is fully charged, the output signal will be equal to the input signal. Otherwise, the output signal will be <low>."
+  "PART_CAPACITOR_PIN_OUTPUT_DESCRIPTION": "When the capacitor is fully charged, the output signal will be equal to the input signal. Otherwise, the output signal will be <low>.",
+
+  "PART_ALTIMETER_NAME": "Altimeter",
+  "PART_ALTIMETER_DESCRIPTION": "When powered, the output value of this sensor will relate to the height of this robot. At sea level, the output will be <low>. At 30 meters or more, the output will be <high>.",
+  "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION": "The output will be <low> at sea level, <high> at 30 meters or higher, and increase linearly if the altitude is between these values. If the part is not powered, the output will be <low>."
 }

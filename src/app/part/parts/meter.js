@@ -1,4 +1,5 @@
 import {Scale} from "../../world/scale";
+import {SpringApproach} from "../../utils/springApproach";
 
 /**
  * A signal meter.
@@ -7,24 +8,7 @@ import {Scale} from "../../world/scale";
  * @constructor
  */
 export function Meter(pins, renderer) {
-    let _targetAngle = 0;
-    let _angle = _targetAngle;
-    let _angleMomentum = 0;
-
-    const updateAngle = () => {
-        const delta = _targetAngle - _angle;
-
-        _angleMomentum = _angleMomentum * Meter.SPRING_DAMPING + delta * Meter.SPRING_FORCE;
-
-        _angle += _angleMomentum;
-
-        if (_angle < 0)
-            _angle = _angleMomentum = 0;
-        else if (_angle > Math.PI) {
-            _angle = Math.PI;
-            _angleMomentum = 0;
-        }
-    };
+    let _spring = new SpringApproach(0, 0, 0, Math.PI);
 
     /**
      * Initialize the state.
@@ -38,20 +22,21 @@ export function Meter(pins, renderer) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        _targetAngle = state[pins[Meter.PIN_INPUT]] * Math.PI;
+        _spring.setTarget(state[pins[Meter.PIN_INPUT]] * Math.PI);
     };
 
     /**
      * Update the part.
+     * @param {Number} timeStep The current time step.
      */
-    this.update = () => {
-        updateAngle();
+    this.update = timeStep => {
+        _spring.update(timeStep);
 
         const dialTransform = renderer.getTransforms()[Meter.SPRITE_INDEX_DIAL];
 
         dialTransform.identity();
         dialTransform.translate(Scale.PIXELS_PER_POINT, 1);
-        dialTransform.rotate(-_angle);
+        dialTransform.rotate(-_spring.getValue());
         dialTransform.translate(-Scale.PIXELS_PER_POINT, -Scale.PIXELS_PER_POINT * 0.5 - 1);
     };
 }
