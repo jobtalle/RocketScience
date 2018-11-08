@@ -137,5 +137,11 @@
 
   "PART_TILT_NAME": "Tilt sensor",
   "PART_TILT_DESCRIPTION": "This sensor detects the degree of tilt the robot experiences",
-  "PART_TILT_PIN_OUTPUT_DESCRIPTION": "When this part is powered, this pin will output the degree of tilt. If the robot is not tilted, the output will be halfway between <low> and <high>. When the robot is rotated 90 degrees to the left, the output will be <low>. When the robot is rotated 90 degrees to the right, the output will be <high>. When the part is not powered, the output will be <low>."
+  "PART_TILT_PIN_OUTPUT_DESCRIPTION": "When this part is powered, this pin will output the degree of tilt. If the robot is not tilted, the output will be halfway between <low> and <high>. When the robot is rotated 90 degrees to the left, the output will be <low>. When the robot is rotated 90 degrees to the right, the output will be <high>. When the part is not powered, the output will be <low>.",
+
+  "PART_SUBTRACTOR_NAME": "Subtractor",
+  "PART_SUBTRACTOR_DESCRIPTION": "A subtractor. The second input is subtracted from the first one, and the result is sent to the output pin. The output cannot be lower than a <low> signal.",
+  "PART_SUBTRACTOR_PIN_1_DESCRIPTION": "The second input signal subtracted from the first input signal. The output cannot be lower than a <low> signal. If no power is supplied, this pin will output a <low> signal.",
+  "PART_SUBTRACTOR_PIN_2_DESCRIPTION": "The first input signal, which must be a value between <low> and <high>.",
+  "PART_SUBTRACTOR_PIN_3_DESCRIPTION": "The second input signal, which must be a value between <low> and <high>."
 }
