@@ -1,4 +1,4 @@
-import "../../styles/menu.css"
+import "../../../styles/menu.css"
 
 /**
  * The menu object creates an HTML menu which changes Game state.
