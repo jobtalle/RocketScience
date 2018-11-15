@@ -1,6 +1,9 @@
 {
   "TITLE": "Rocket Science",
 
+  "MENU_ROOT_CREATE": "Create",
+  "MENU_ROOT_MISSIONS": "Missions",
+
   "MACRO_HIGH": "high",
   "MACRO_LOW": "low",
 

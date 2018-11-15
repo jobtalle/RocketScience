@@ -1,68 +1,75 @@
 import "../../../styles/menu.css"
+import {MenuTitle} from "./title";
+import {MenuRoot} from "./root/menuRoot";
 
 /**
  * The menu object creates an HTML menu which changes Game state.
  * @param {Game} game A constructed Game object to be controlled.
+ * @param {HTMLElement} parent An HTML element to create the menu on.
  * @constructor
  */
-export function Menu(game) {
-    const ID_ROOT = "menu-root";
-    const ID_BUTTONS = "menu-buttons";
-    const CLASS_BUTTON = "menu-button";
+export function Menu(game, parent) {
+    const _divWrapper = document.createElement("div");
+    const _divTitle = document.createElement("div");
+    const _divContent = document.createElement("div");
 
-    let _parent = null;
-
-    const startCreate = () => {
-        this.hide();
-
-        game.startCreate();
+    const clearContent = () => {
+        while (_divContent.firstChild)
+            _divContent.removeChild(_divContent.firstChild);
     };
 
-    const startChallenge = () => {
-        this.hide();
+    const build = () => {
+        _divWrapper.id = Menu.ID_WRAPPER;
 
-        game.startChallenge();
+        _divTitle.className = Menu.CLASS_TITLE;
+        _divContent.className = Menu.CLASS_CONTENT;
+
+        _divTitle.appendChild(new MenuTitle().getElement());
+
+        _divWrapper.appendChild(_divTitle);
+        _divWrapper.appendChild(_divContent);
     };
 
-    const buildButtons = parent => {
-        const create = document.createElement("button");
-        create.appendChild(document.createTextNode("Create"));
-        create.className = CLASS_BUTTON;
-        create.onclick = () => startCreate();
+    /**
+     * Get the Game object.
+     * This function hides the menu, expecting the user to trigger a game mode. Don't use this to query!
+     * @returns {Game} The Game object.
+     */
+    this.getGame = () => {
+        this.hide();
 
-        const challenge = document.createElement("button");
-        challenge.appendChild(document.createTextNode("Challenge"));
-        challenge.className = CLASS_BUTTON;
-        challenge.onclick = () => startChallenge();
+        return game;
+    };
 
-        parent.appendChild(create);
-        parent.appendChild(challenge);
+    /**
+     * Set the content of this menu.
+     * @param {HTMLElement} element An HTML element to place in the menu content.
+     */
+    this.setContent = element => {
+        clearContent();
+
+        _divContent.appendChild(element);
     };
 
     /**
      * Show the menu.
-     * @param {Object} parent Show the start menu and add the elements to parent.
      */
-    this.show = parent => {
-        _parent = parent;
-
-        const root = document.createElement("div");
-        root.id = ID_ROOT;
-
-        const buttons = document.createElement("div");
-        buttons.id = ID_BUTTONS;
-
-        buildButtons(buttons);
-
-        root.appendChild(buttons);
-        _parent.appendChild(root);
+    this.show = () => {
+        parent.appendChild(_divWrapper);
     };
 
     /**
      * Hide the menu.
      */
     this.hide = () => {
-        while(_parent.firstChild)
-            _parent.removeChild(_parent.firstChild);
+        parent.removeChild(_divWrapper);
     };
-};
+
+    build();
+
+    this.setContent(new MenuRoot(this).getElement());
+}
+
+Menu.ID_WRAPPER = "menu";
+Menu.CLASS_TITLE = "title";
+Menu.CLASS_CONTENT = "content";

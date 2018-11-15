@@ -20,7 +20,7 @@ import * as Myr from "../lib/myr";
  * @constructor
  */
 export function Game(renderContext, input) {
-    let _menu = new Menu(this);
+    let _menu = new Menu(this, renderContext.getOverlay());
     let _world = null;
     let _editor = null;
     let _hud = null;
@@ -189,7 +189,7 @@ export function Game(renderContext, input) {
         return true;
     });
 
-    _menu.show(renderContext.getOverlay());
+    _menu.show();
 
     input.getKeyboard().addListener(onKeyEvent);
     input.getMouse().addListener(onMouseEvent);
