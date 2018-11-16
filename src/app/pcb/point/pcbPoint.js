@@ -1,4 +1,3 @@
-import {getPartFromId, getPartId} from "../../part/objects";
 import {Fixture} from "../../part/fixture";
 import {Part} from "../../part/part";
 import * as Myr from "../../../lib/myr";

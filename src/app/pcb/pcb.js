@@ -568,6 +568,7 @@ export function Pcb() {
 /**
  * Deserialize a PCB from a buffer.
  * @param {ByteBuffer} buffer A byte buffer to serialize a PCB from.
+ * @returns {Pcb} A PCB deserialized from the buffer.
  */
 Pcb.deserialize = buffer => {
     const pcb = new Pcb();

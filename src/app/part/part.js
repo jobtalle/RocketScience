@@ -65,6 +65,7 @@ export function Part(definition, configurationIndex) {
 /**
  * Deserialize a part from a buffer.
  * @param {ByteBuffer} buffer A byte buffer to serialize a part from.
+ * @returns {Part} The deserialized part.
  */
 Part.deserialize = buffer => {
     const id = buffer.readByte();

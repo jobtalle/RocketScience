@@ -101,6 +101,7 @@ export function Extendability() {
 /**
  * Deserialize an extendability profile from a buffer.
  * @param {ByteBuffer} buffer A byte buffer.
+ * @returns {Extendability} The deserialized extendability profile.
  */
 Extendability.deserialize = buffer => {
     const extendability = new Extendability();
