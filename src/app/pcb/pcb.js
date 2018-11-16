@@ -563,52 +563,53 @@ export function Pcb() {
 
         _extendability.serialize(buffer);
     };
+}
 
-    /**
-     * Deserialize this PCB from a buffer.
-     * @param {ByteBuffer} buffer A byte buffer to serialize this PCB from.
-     */
-    this.deserialize = buffer => {
-        const head = buffer.readShort();
-        const width = head & Pcb.SERIALIZE_HEAD_BITS_WIDTH;
-        const fixtures = [];
+/**
+ * Deserialize a PCB from a buffer.
+ * @param {ByteBuffer} buffer A byte buffer to serialize a PCB from.
+ */
+Pcb.deserialize = buffer => {
+    const pcb = new Pcb();
+    const head = buffer.readShort();
+    const width = head & Pcb.SERIALIZE_HEAD_BITS_WIDTH;
+    const fixtures = [];
 
-        let x = 0;
-        let y = 0;
-        let point = null;
-        let pointStatus;
+    let x = 0;
+    let y = 0;
+    let point = null;
+    let pointReport = new PcbPoint.DeserializationReport();
 
-        if (head & Pcb.SERIALIZE_HEAD_BIT_START_EMPTY)
-            pointStatus = PcbPoint.DESERIALIZE_STATE_EMPTY;
-        else
-            pointStatus = (point = new PcbPoint()).deserialize(buffer, fixtures, x, y, this);
+    if ((head & Pcb.SERIALIZE_HEAD_BIT_START_EMPTY) === 0)
+        point = PcbPoint.deserialize(buffer, fixtures, x, y, pcb ,pointReport);
 
-        while (true) {
-            if (point) {
-                this.extend(x, y, point);
+    while (true) {
+        if (point) {
+            pcb.extend(x, y, point);
 
-                if (++x === width)
-                    x = 0, ++y;
-            }
-
-            if (pointStatus === PcbPoint.DESERIALIZE_STATE_EMPTY) {
-                let runLength = buffer.readByte();
-
-                for (let i = 0; i < runLength; ++i) if (++x === width)
-                    x = 0, ++y;
-            }
-            else if (pointStatus === PcbPoint.DESERIALIZE_STATE_LAST)
-                break;
-
-            pointStatus = (point = new PcbPoint()).deserialize(buffer, fixtures, x, y, this);
+            if (++x === width)
+                x = 0, ++y;
         }
 
-        for (const fixture of fixtures)
-            this.place(fixture.part, fixture.x, fixture.y);
+        if (pointReport.state === PcbPoint.DESERIALIZE_STATE_EMPTY) {
+            let runLength = buffer.readByte();
 
-        _extendability.deserialize(buffer);
-    };
-}
+            for (let i = 0; i < runLength; ++i) if (++x === width)
+                x = 0, ++y;
+        }
+        else if (pointReport.state === PcbPoint.DESERIALIZE_STATE_LAST)
+            break;
+
+        point = PcbPoint.deserialize(buffer, fixtures, x, y, pcb ,pointReport);
+    }
+
+    for (const fixture of fixtures)
+        pcb.place(fixture.part, fixture.x, fixture.y);
+
+    pcb.setExtendability(Extendability.deserialize(buffer));
+
+    return pcb;
+};
 
 Pcb.SERIALIZE_HEAD_BIT_START_EMPTY = 0x8000;
 Pcb.SERIALIZE_HEAD_BITS_WIDTH = Pcb.SERIALIZE_HEAD_BIT_START_EMPTY - 1;

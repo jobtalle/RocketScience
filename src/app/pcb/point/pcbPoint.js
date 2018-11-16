@@ -237,30 +237,40 @@ PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
  * @param {Number} x The points x coordinate.
  * @param {Number} y The points y coordinate.
  * @param {Pcb} pcb The pcb this point is a part of.
- * @returns {Object} One of the valid post deserialization states telling the deserializer what comes next.
+ * @param {PcbPoint.DeserializationReport} [report] An optional deserialization report.
+ * @returns {PcbPoint} The deserialized PCB point.
  */
-PcbPoint.prototype.deserialize = function(buffer, fixtures, x, y, pcb) {
-    const point = buffer.readByte();
+PcbPoint.deserialize = function(buffer, fixtures, x, y, pcb, report) {
+    const point = new PcbPoint();
+    const byte = buffer.readByte();
 
-    for (let direction = 1; direction < 5; ++direction) if (((point >> (direction - 1)) & 1) === 1) {
+    for (let direction = 1; direction < 5; ++direction) if (((byte >> (direction - 1)) & 1) === 1) {
         const delta = PcbPoint.directionToDelta(direction);
 
-        this.etchDirection(direction);
+        point.etchDirection(direction);
         pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
     }
 
-    if ((point & PcbPoint.SERIALIZE_BIT_PART) !== 0)
+    if ((byte & PcbPoint.SERIALIZE_BIT_PART) !== 0)
         fixtures.push(new Fixture(Part.deserialize(buffer), x, y));
 
-    if ((point & PcbPoint.SERIALIZE_BIT_LOCKED) !== 0)
-        this.lock();
+    if ((byte & PcbPoint.SERIALIZE_BIT_LOCKED) !== 0)
+        point.lock();
 
-    if ((point & PcbPoint.SERIALIZE_BIT_LAST) !== 0)
-        return PcbPoint.DESERIALIZE_STATE_LAST;
-    else if ((point & PcbPoint.SERIALIZE_BIT_CHAIN) !== 0)
-        return PcbPoint.DESERIALIZE_STATE_CHAIN;
-    else
-        return PcbPoint.DESERIALIZE_STATE_EMPTY;
+    if (report) {
+        if ((byte & PcbPoint.SERIALIZE_BIT_LAST) !== 0)
+            report.state = PcbPoint.DESERIALIZE_STATE_LAST;
+        else if ((byte & PcbPoint.SERIALIZE_BIT_CHAIN) !== 0)
+            report.state = PcbPoint.DESERIALIZE_STATE_CHAIN;
+        else
+            report.state = PcbPoint.DESERIALIZE_STATE_EMPTY;
+    }
+
+    return point;
+};
+
+PcbPoint.DeserializationReport = function() {
+    this.state = PcbPoint.DESERIALIZE_STATE_EMPTY;
 };
 
 const directionDeltas = [

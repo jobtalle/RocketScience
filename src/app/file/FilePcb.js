@@ -25,10 +25,6 @@ export const FilePcb = {
      * @returns {Pcb} A PCB deserialized from the given data file.
      */
     deserialize: data => {
-        const pcb = new Pcb();
-
-        pcb.deserialize(data.getBuffer());
-
-        return pcb;
+        return Pcb.deserialize(data.getBuffer());
     }
 };

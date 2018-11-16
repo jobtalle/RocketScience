@@ -96,15 +96,31 @@ export function Extendability() {
     this.serialize = buffer => {
         buffer.writeByte(_state);
     };
-
-    /**
-     * Deserialize this extendability profile from a buffer.
-     * @param {ByteBuffer} buffer A byte buffer.
-     */
-    this.deserialize = buffer => {
-        _state = buffer.readByte();
-    };
 }
+
+/**
+ * Deserialize an extendability profile from a buffer.
+ * @param {ByteBuffer} buffer A byte buffer.
+ */
+Extendability.deserialize = buffer => {
+    const extendability = new Extendability();
+    const state = buffer.readByte();
+
+    if ((state & Extendability.BIT_LEFT) !== 0)
+        extendability.setLeft(true);
+
+    if ((state & Extendability.BIT_UP) !== 0)
+        extendability.setUp(true);
+
+    if ((state & Extendability.BIT_RIGHT) !== 0)
+        extendability.setRight(true);
+
+    if ((state & Extendability.BIT_DOWN) !== 0)
+        extendability.setDown(true);
+
+
+    return extendability;
+};
 
 Extendability.BIT_LEFT = 0x01;
 Extendability.BIT_UP = 0x02;
