@@ -1,9 +1,9 @@
 import {PcbPoint} from "./point/pcbPoint";
 import {Fixture} from "../part/fixture";
-import * as Myr from "../../lib/myr";
 import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
 import {Extendability} from "./extendability";
+import * as Myr from "../../lib/myr";
 
 /**
  * Defines a PCB.
@@ -506,4 +506,4 @@ export function Pcb() {
 }
 
 Pcb.DEFAULT_WIDTH = 10;
-Pcb.DEFAULT_HEIGHT = 10;
+Pcb.DEFAULT_HEIGHT = 8;
