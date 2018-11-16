@@ -7,12 +7,12 @@ import {PcbEditorReshape} from "./pcbEditorReshape";
 import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../editor";
-import Myr from "../../../../lib/myr.js";
 import {PcbEditorMove} from "./pcbEditorMove";
 import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
 import {FilePcb} from "../../../file/FilePcb";
 import {Data} from "../../../file/Data";
+import Myr from "../../../../lib/myr.js";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.

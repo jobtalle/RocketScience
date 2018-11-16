@@ -1,3 +1,6 @@
+import {getPartFromId, getPartId} from "../../part/objects";
+import {Fixture} from "../../part/fixture";
+import {Part} from "../../part/part";
 import * as Myr from "../../../lib/myr";
 
 /**
@@ -197,6 +200,73 @@ PcbPoint.prototype.withConnected = function(f, exclude) {
     }
 };
 
+/**
+ * Serialize this PCB point to a buffer.
+ * @param {ByteBuffer} buffer A byte buffer to serialize this PCB point to.
+ * @param {Array} encodedParts An array of already encoded parts.
+ * @param {Boolean} isChain A boolean indicating whether a next point comes directly after this one.
+ * @param {Boolean} isLast A boolean indicating whether this point is the last point on a PCB.
+ */
+PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
+    let byte = isChain?PcbPoint.SERIALIZE_BIT_CHAIN:0;
+
+    for (let direction = 1; direction < 5; ++direction) if (this.hasDirection(direction))
+        byte |= 1 << (direction - 1);
+
+    if (isLast)
+        byte |= PcbPoint.SERIALIZE_BIT_LAST;
+
+    if (this.isLocked())
+        byte |= PcbPoint.SERIALIZE_BIT_LOCKED;
+
+    if (this.part !== null && !encodedParts.includes(this.part)) {
+        encodedParts.push(this.part);
+
+        buffer.writeByte(byte | PcbPoint.SERIALIZE_BIT_PART);
+        buffer.writeByte(getPartId(this.part.getDefinition().object));
+        buffer.writeByte(this.part.getConfigurationIndex());
+    }
+    else
+        buffer.writeByte(byte);
+};
+
+/**
+ * Deserialize this PCB point from a buffer.
+ * @param {ByteBuffer} buffer A byte buffer to serialize this PCB point from.
+ * @param {Array} fixtures An array to place new fixtures in.
+ * @param {Number} x The points x coordinate.
+ * @param {Number} y The points y coordinate.
+ * @param {Pcb} pcb The pcb this point is a part of.
+ * @returns {Object} One of the valid post deserialization states telling the deserializer what comes next.
+ */
+PcbPoint.prototype.deserialize = function(buffer, fixtures, x, y, pcb) {
+    const point = buffer.readByte();
+
+    for (let direction = 1; direction < 5; ++direction) if (((point >> (direction - 1)) & 1) === 1) {
+        const delta = PcbPoint.directionToDelta(direction);
+
+        this.etchDirection(direction);
+        pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
+    }
+
+    if ((point & PcbPoint.SERIALIZE_BIT_PART) !== 0) {
+        const id = buffer.readByte();
+        const configuration = buffer.readByte();
+
+        fixtures.push(new Fixture(new Part(getPartFromId(id), configuration), x, y));
+    }
+
+    if ((point & PcbPoint.SERIALIZE_BIT_LOCKED) !== 0)
+        this.lock();
+
+    if ((point & PcbPoint.SERIALIZE_BIT_LAST) !== 0)
+        return PcbPoint.DESERIALIZE_STATE_LAST;
+    else if ((point & PcbPoint.SERIALIZE_BIT_CHAIN) !== 0)
+        return PcbPoint.DESERIALIZE_STATE_CHAIN;
+    else
+        return PcbPoint.DESERIALIZE_STATE_EMPTY;
+};
+
 const directionDeltas = [
     new Myr.Vector(1, 0),
     new Myr.Vector(1, -1),
@@ -249,6 +319,7 @@ PcbPoint.incrementDirection = direction => (direction + 1) % 8;
  */
 PcbPoint.decrementDirection = direction => direction === 0?7:direction - 1;
 
+
 PcbPoint.PATHS_MASK = 0xFF;
 PcbPoint.BIT_LOCKED = 0x800;
 PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;
@@ -258,3 +329,11 @@ PcbPoint.CONNECTION_BITS =
     PcbPoint.CONNECTION_BIT_OUTPUT |
     PcbPoint.CONNECTION_BIT_INPUT |
     PcbPoint.CONNECTION_BIT_STRUCTURAL;
+PcbPoint.SERIALIZE_BIT_CHAIN = 0x10;
+PcbPoint.SERIALIZE_BIT_PART = 0x20;
+PcbPoint.SERIALIZE_BIT_LAST = 0x40;
+PcbPoint.SERIALIZE_BIT_LOCKED = 0x80;
+PcbPoint.SERIALIZE_BITS_SKIP = PcbPoint.SERIALIZE_BIT_CHAIN | PcbPoint.SERIALIZE_BIT_LAST;
+PcbPoint.DESERIALIZE_STATE_LAST = 0;
+PcbPoint.DESERIALIZE_STATE_CHAIN = 1;
+PcbPoint.DESERIALIZE_STATE_EMPTY = 2;
