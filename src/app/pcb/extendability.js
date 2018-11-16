@@ -5,6 +5,7 @@
  */
 export function Extendability() {
     let _state = Extendability.BIT_LEFT | Extendability.BIT_UP | Extendability.BIT_RIGHT | Extendability.BIT_DOWN;
+
     /**
      * Check whether extending to the left is allowed.
      * @returns {Boolean} A boolean indicating whether extending to the left is possible.
@@ -86,6 +87,22 @@ export function Extendability() {
         extendability.setDown(this.getDown());
 
         return extendability;
+    };
+
+    /**
+     * Serialize this extendability profile to a buffer.
+     * @param {ByteBuffer} buffer A byte buffer.
+     */
+    this.serialize = buffer => {
+        buffer.writeByte(_state);
+    };
+
+    /**
+     * Deserialize this extendability profile from a buffer.
+     * @param {ByteBuffer} buffer A byte buffer.
+     */
+    this.deserialize = buffer => {
+        _state = buffer.readByte();
     };
 }
 

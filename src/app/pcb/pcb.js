@@ -4,6 +4,8 @@ import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
 import {Extendability} from "./extendability";
 import * as Myr from "../../lib/myr";
+import {getPartFromId, getPartId} from "../part/objects";
+import {Part} from "../part/part";
 
 /**
  * Defines a PCB.
@@ -503,7 +505,156 @@ export function Pcb() {
         for (let y = 0; y < Pcb.DEFAULT_HEIGHT; ++y) for (let x = 0; x < Pcb.DEFAULT_WIDTH; ++x)
             this.extend(x, y);
     };
+
+    /**
+     * Serialize this PCB to a buffer.
+     * @param {ByteBuffer} buffer A byte buffer to serialize this PCB to.
+     */
+    this.serialize = buffer => {
+        const encodeRunEmpty = (length) => {
+            while (length > Pcb.SERIALIZE_POINT_RUN_MAX) {
+                buffer.writeByte(Pcb.SERIALIZE_POINT_RUN_MAX);
+                buffer.writeByte(Pcb.SERIALIZE_POINT_SKIP);
+
+                length -= Pcb.SERIALIZE_POINT_RUN_MAX;
+            }
+
+            buffer.writeByte(length);
+        };
+
+        const encodeRunPoints = (points, encodedParts, count, maxCount) => {
+            for (let i = 0; i < points.length; ++i) {
+                const point = points[i];
+
+                let byte = i === points.length - 1?0:Pcb.SERIALIZE_POINT_BIT_CHAIN;
+
+                for (let direction = 1; direction < 5; ++direction) if (point.hasDirection(direction))
+                    byte |= 1 << (direction - 1);
+
+                if (++count === maxCount)
+                    byte |= Pcb.SERIALIZE_POINT_BIT_LAST;
+
+                if (point.isLocked())
+                    byte |= Pcb.SERIALIZE_POINT_BIT_LOCKED;
+
+                if (point.part !== null && !encodedParts.includes(point.part)) {
+                    encodedParts.push(point.part);
+
+                    buffer.writeByte(byte | Pcb.SERIALIZE_POINT_BIT_PART);
+                    buffer.writeByte(getPartId(point.part.getDefinition().object));
+                    buffer.writeByte(point.part.getConfigurationIndex());
+                }
+                else
+                    buffer.writeByte(byte);
+            }
+
+            return count;
+        };
+
+        const encodedParts = [];
+
+        let count = 0;
+        let runEmpty = this.getPoint(0, 0) === null;
+        let runPoints = [];
+        let head = this.getWidth() & Pcb.SERIALIZE_HEAD_BITS_WIDTH;
+
+        if (runEmpty)
+            head |= Pcb.SERIALIZE_HEAD_BIT_START_EMPTY;
+
+        buffer.writeShort(head);
+
+        for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x) {
+            const point = this.getPoint(x, y);
+            const empty = point === null;
+
+            if (empty !== runEmpty) {
+                if (runEmpty)
+                    encodeRunEmpty(runPoints.length);
+                else
+                    count = encodeRunPoints(runPoints, encodedParts, count, this.getPointCount());
+
+                runEmpty = empty;
+                runPoints = [point];
+            }
+            else
+                runPoints.push(point);
+        }
+
+        if (!runEmpty)
+            encodeRunPoints(runPoints, encodedParts, count, this.getPointCount());
+
+        _extendability.serialize(buffer);
+    };
+
+    /**
+     * Deserialize this PCB from a buffer.
+     * @param {ByteBuffer} buffer A byte buffer to serialize this PCB from.
+     */
+    this.deserialize = buffer => {
+        const head = buffer.readShort();
+        const width = head & Pcb.SERIALIZE_HEAD_BITS_WIDTH;
+        const fixtures = [];
+
+        let point = head & Pcb.SERIALIZE_HEAD_BIT_START_EMPTY?Pcb.SERIALIZE_POINT_SKIP:buffer.readByte();
+        let x = 0;
+        let y = 0;
+
+        while (true) {
+            if (point === Pcb.SERIALIZE_POINT_SKIP) {
+                const runLength = buffer.readByte();
+
+                for (let i = 0; i < runLength; ++i) if (++x === width)
+                    x = 0, ++y;
+
+                point = buffer.readByte();
+            }
+            else {
+                const pcbPoint = this.extend(x, y);
+
+                for (let direction = 1; direction < 5; ++direction) if (((point >> (direction - 1)) & 1) === 1) {
+                    const delta = PcbPoint.directionToDelta(direction);
+
+                    pcbPoint.etchDirection(direction);
+                    this.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
+                }
+
+                if ((point & Pcb.SERIALIZE_POINT_BIT_PART) !== 0) {
+                    const id = buffer.readByte();
+                    const configuration = buffer.readByte();
+
+                    fixtures.push(new Fixture(new Part(getPartFromId(id), configuration), x, y));
+                }
+
+                if ((point & Pcb.SERIALIZE_POINT_BIT_LOCKED) !== 0)
+                    pcbPoint.lock();
+
+                if (++x === width)
+                    x = 0, ++y;
+
+                if ((point & Pcb.SERIALIZE_POINT_BIT_LAST) !== 0)
+                    break;
+                else if ((point & Pcb.SERIALIZE_POINT_BIT_CHAIN) !== 0)
+                    point = buffer.readByte();
+                else
+                    point = Pcb.SERIALIZE_POINT_SKIP;
+            }
+        }
+
+        for (const fixture of fixtures)
+            this.place(fixture.part, fixture.x, fixture.y);
+
+        _extendability.deserialize(buffer);
+    };
 }
+
+Pcb.SERIALIZE_HEAD_BIT_START_EMPTY = 0x8000;
+Pcb.SERIALIZE_HEAD_BITS_WIDTH = Pcb.SERIALIZE_HEAD_BIT_START_EMPTY - 1;
+Pcb.SERIALIZE_POINT_RUN_MAX = 0xFF;
+Pcb.SERIALIZE_POINT_BIT_CHAIN = 0x10;
+Pcb.SERIALIZE_POINT_BIT_PART = 0x20;
+Pcb.SERIALIZE_POINT_BIT_LAST = 0x40;
+Pcb.SERIALIZE_POINT_BIT_LOCKED = 0x80;
+Pcb.SERIALIZE_POINT_SKIP = Pcb.SERIALIZE_POINT_BIT_CHAIN | Pcb.SERIALIZE_POINT_BIT_LAST;
 
 Pcb.DEFAULT_WIDTH = 10;
 Pcb.DEFAULT_HEIGHT = 8;

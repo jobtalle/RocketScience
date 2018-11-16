@@ -8,7 +8,7 @@ import Pako from "pako"
  * @constructor
  */
 export function Data() {
-    let _buffer = null;
+    let _buffer = new ByteBuffer();
 
     /**
      * Return the buffer to read from or write to this data.
@@ -26,7 +26,14 @@ export function Data() {
      * Get the bytes of this data. The bytes will be compressed.
      * @returns {Uint8Array} The bytes.
      */
-    this.getBytes = () => Pako.deflate(_buffer.getBytes(), Data.PAKO_CONFIG);
+    this.getBytes = () => {
+        const bytes = Pako.deflate(_buffer.getBytes(), Data.PAKO_CONFIG);
+
+        console.log("Compression ratio: " + Math.round((_buffer.getBytes().length / bytes.length) * 100) + "%");
+        console.log(bytes.length + "B");
+
+        return bytes;
+    };
 
     /**
      * Convert the data to a string.

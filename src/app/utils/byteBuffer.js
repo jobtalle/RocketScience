@@ -4,21 +4,21 @@
  * @constructor
  */
 export function ByteBuffer(source) {
-    let bytes;
-    let at = 0;
+    let _bytes;
+    let _at = 0;
 
     /**
      * Get the bytes contained by this buffer.
      * @returns {Uint8Array} The bytes.
      */
-    this.getBytes = () => new Uint8Array(bytes);
+    this.getBytes = () => new Uint8Array(_bytes);
 
     /**
      * Write 8 bits to the buffer.
      * @param {Number} byte An unsigned integer in the range [0, 255].
      */
     this.writeByte = byte => {
-        bytes.push(byte);
+        _bytes.push(byte);
     };
 
     /**
@@ -26,8 +26,8 @@ export function ByteBuffer(source) {
      * @param {Number} short An unsigned integer in the range [0, 65535].
      */
     this.writeShort = short => {
-        bytes.push((short >> 8) & 0xFF);
-        bytes.push(short & 0xFF);
+        _bytes.push((short >> 8) & 0xFF);
+        _bytes.push(short & 0xFF);
     };
 
     /**
@@ -35,7 +35,7 @@ export function ByteBuffer(source) {
      * @returns {Number} An unsigned integer in the range [0, 255].
      */
     this.readByte = () => {
-        return bytes[at++];
+        return _bytes[_at++];
     };
 
     /**
@@ -43,11 +43,11 @@ export function ByteBuffer(source) {
      * @returns {Number} An unsigned integer in the range [0, 65535].
      */
     this.readShort = () => {
-        return (bytes[at++] << 8) | bytes[at++];
+        return (_bytes[_at++] << 8) | _bytes[_at++];
     };
 
     if (source)
-        bytes = Array.from(source);
+        _bytes = Array.from(source);
     else
-        bytes = [];
+        _bytes = [];
 }

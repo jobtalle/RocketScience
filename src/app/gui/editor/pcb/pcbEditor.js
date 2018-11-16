@@ -8,10 +8,11 @@ import {Selection} from "./selection";
 import {PcbEditorEtch} from "./pcbEditorEtch";
 import {Editor} from "../editor";
 import Myr from "../../../../lib/myr.js";
-import {PcbFile} from "../../../pcb/pcbFile";
 import {PcbEditorMove} from "./pcbEditorMove";
 import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
+import {FilePcb} from "../../../file/FilePcb";
+import {Data} from "../../../file/Data";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
@@ -448,14 +449,23 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 return;
             case PcbEditor.KEY_SAVE:
-                if (event.control)
-                    _editable.setPcb(PcbFile.fromPcb(_editable.getPcb()).decode()), updatePcb();
+                if (event.control) {
+                    const data = FilePcb.serialize(_editable.getPcb());
+
+                    console.log(data.toString());
+
+                    _editable.setPcb(FilePcb.deserialize(data)), updatePcb();
+                }
 
                 return;
             case PcbEditor.KEY_LOAD:
                 if (event.control) {
                     navigator.clipboard.readText().then(text => {
-                        _editable.setPcb(PcbFile.fromString(text).decode()), updatePcb();
+                        const data = new Data();
+
+                        data.fromString(text);
+
+                        _editable.setPcb(FilePcb.deserialize(data)), updatePcb();
                     });
                 }
 
