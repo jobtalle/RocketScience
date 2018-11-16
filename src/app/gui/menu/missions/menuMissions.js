@@ -70,5 +70,6 @@ MenuMissions.MISSIONS = [
                     new BudgetInventory.Entry("Controller", 1)
                 ]))
         ],
-        "Led blink")
+        "Hello LED",
+        "Light up a LED using a physical switch.")
 ];

@@ -38,16 +38,25 @@
     cursor: pointer;
 }
 
-#menu .content .missions .mission:hover {
-    background-color: white;
-}
-
 #menu .content .missions .mission .title {
     color: black;
     font-size: 24pt;
     text-align: center;
     background-color: lightgray;
     font-weight: bold;
+}
+
+#menu .content .missions .mission .description {
+    padding: 8px;
+    display: none;
+}
+
+#menu .content .missions .mission:hover {
+    background-color: white;
+}
+
+#menu .content .missions .mission:hover .description {
+    display: block;
 }
 
 #menu .button-centered {

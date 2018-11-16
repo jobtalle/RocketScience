@@ -3,9 +3,10 @@
  * @param {Array} objectives All objectives required to complete this mission.
  * @param {Array} editables An array of editables. The first editable will be the default pcb.
  * @param {String} title A title for this mission.
+ * @param {String} description A description of this mission.
  * @constructor
  */
-export function Mission(objectives, editables, title) {
+export function Mission(objectives, editables, title, description) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
@@ -29,6 +30,12 @@ export function Mission(objectives, editables, title) {
      * @returns {String} The mission title.
      */
     this.getTitle = () => title;
+
+    /**
+     * Get this missions description.
+     * @returns {String} The mission description.
+     */
+    this.getDescription = () => description;
 
     /**
      * Prime this mission for operation.

@@ -5,6 +5,7 @@
  * @constructor
  */
 import {MenuMissionTitle} from "./menuMissionTitle";
+import {MenuMissionDescription} from "./menuMissionDescription";
 
 export function MenuMission(menu, mission) {
     const _element = document.createElement("div");
@@ -16,6 +17,7 @@ export function MenuMission(menu, mission) {
     const make = () => {
         _element.className = MenuMission.CLASS;
         _element.appendChild(new MenuMissionTitle(mission.getTitle()).getElement());
+        _element.appendChild(new MenuMissionDescription(mission.getDescription()).getElement());
         _element.onclick = start;
     };
 
