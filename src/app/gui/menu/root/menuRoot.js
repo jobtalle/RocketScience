@@ -1,5 +1,6 @@
-import {MenuButton} from "../shared/menuButton";
 import {getString} from "../../../text/language";
+import {MenuButtonCentered} from "../shared/menuButtonCentered";
+import {MenuMissions} from "../missions/menuMissions";
 
 /**
  * Content for the Menu root, containing buttons that allow access to other menu's.
@@ -12,17 +13,17 @@ export function MenuRoot(menu) {
     const make = () => {
         _element.className = MenuRoot.CLASS;
 
-        _element.appendChild(new MenuButton(
+        _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_CREATE),
             () => {
                 menu.getGame().startCreate();
             }
         ).getElement());
 
-        _element.appendChild(new MenuButton(
+        _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-
+                menu.setContent(new MenuMissions(menu).getElement());
             }
         ).getElement());
     };

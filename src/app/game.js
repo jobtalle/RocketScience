@@ -116,8 +116,6 @@ export function Game(renderContext, input) {
      * Start free create mode.
      */
     this.startCreate = () => {
-        stop();
-
         const pcb = new Pcb();
         pcb.initialize();
 
@@ -160,10 +158,16 @@ export function Game(renderContext, input) {
     };
 
     /**
-     * Start a challenge.
+     * Start a mission.
+     * @param {Mission} mission A mission to play.
      */
-    this.startChallenge = () => {
-        stop();
+    this.startMission = mission => {
+        _world = new World(renderContext, mission);
+        _hud = new Hud(renderContext, _world, this);
+        _editor = new Editor(renderContext, _world, this);
+
+        _editor.edit(_world.getMission().getEditables()[0]);
+        _editor.show();
     };
 
     /**
