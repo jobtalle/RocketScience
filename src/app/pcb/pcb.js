@@ -4,7 +4,6 @@ import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
 import {Extendability} from "./extendability";
 import * as Myr from "../../lib/myr";
-import {getPartFromId, getPartId} from "../part/objects";
 import {Part} from "../part/part";
 
 /**
@@ -324,7 +323,7 @@ export function Pcb() {
      * @returns {PcbPoint} The newly added PCB point.
      */
     this.extend = (x, y, point) => {
-        const newPoint = point?point:new PcbPoint(); // TODO: Can this be point || new PcbPoint()?
+        const newPoint = point || new PcbPoint();
 
         while(this.getHeight() <= y)
             _points.push([]);

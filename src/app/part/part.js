@@ -1,3 +1,5 @@
+import {getPartFromId, getPartId} from "./objects";
+
 /**
  * Constructs a part.
  * @param {Object} definition A valid part from parts.json.
@@ -49,4 +51,24 @@ export function Part(definition, configurationIndex) {
     this.copy = () => {
         return new Part(definition, configurationIndex);
     };
+
+    /**
+     * Serialize this part to a buffer.
+     * @param {ByteBuffer} buffer A byte buffer to serialize this part to.
+     */
+    this.serialize = buffer => {
+        buffer.writeByte(getPartId(definition.object));
+        buffer.writeByte(configurationIndex);
+    };
 }
+
+/**
+ * Deserialize a part from a buffer.
+ * @param {ByteBuffer} buffer A byte buffer to serialize a part from.
+ */
+Part.deserialize = buffer => {
+    const id = buffer.readByte();
+    const configuration = buffer.readByte();
+
+    return new Part(getPartFromId(id), configuration);
+};

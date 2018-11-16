@@ -223,8 +223,8 @@ PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
         encodedParts.push(this.part);
 
         buffer.writeByte(byte | PcbPoint.SERIALIZE_BIT_PART);
-        buffer.writeByte(getPartId(this.part.getDefinition().object));
-        buffer.writeByte(this.part.getConfigurationIndex());
+
+        this.part.serialize(buffer);
     }
     else
         buffer.writeByte(byte);
@@ -249,12 +249,8 @@ PcbPoint.prototype.deserialize = function(buffer, fixtures, x, y, pcb) {
         pcb.getPoint(x + delta.x, y + delta.y).etchDirection(PcbPoint.invertDirection(direction));
     }
 
-    if ((point & PcbPoint.SERIALIZE_BIT_PART) !== 0) {
-        const id = buffer.readByte();
-        const configuration = buffer.readByte();
-
-        fixtures.push(new Fixture(new Part(getPartFromId(id), configuration), x, y));
-    }
+    if ((point & PcbPoint.SERIALIZE_BIT_PART) !== 0)
+        fixtures.push(new Fixture(Part.deserialize(buffer), x, y));
 
     if ((point & PcbPoint.SERIALIZE_BIT_LOCKED) !== 0)
         this.lock();
