@@ -1,17 +1,8 @@
 import {Menu} from "./gui/menu/menu";
 import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
-import {Pcb} from "./pcb/pcb";
-import {Objective} from "./mission/objective";
-import {Led} from "./part/parts/led";
-import {GoalPinState} from "./mission/goal/goalPinState";
 import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
-import {Switch} from "./part/parts/switch";
-import {BudgetInventory} from "./mission/budget/budgetInventory";
-import {Editable} from "./mission/editable/editable";
-import {EditableRegion} from "./mission/editable/editableRegion";
-import * as Myr from "../lib/myr";
 
 /**
  * This class contains the game views.
@@ -48,6 +39,10 @@ export function Game(renderContext, input) {
     };
 
     const onKeyEvent = event => {
+        // TODO: Use modes!
+        if (_world === null) if (event.down) if (event.key === "Escape")
+            _menu.goBack();
+
         if (event.down) switch (event.key) {
             case Game.KEY_TOGGLE_EDIT:
                 this.toggleEdit();

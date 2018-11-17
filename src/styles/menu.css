@@ -17,7 +17,9 @@
 }
 
 #menu .content {
-    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
 }
 
 #menu .content .root {
@@ -25,7 +27,6 @@
 }
 
 #menu .content .missions {
-    width: 70%;
     margin-left: auto;
     margin-right: auto;
 }

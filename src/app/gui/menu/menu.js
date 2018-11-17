@@ -12,10 +12,18 @@ export function Menu(game, parent) {
     const _divWrapper = document.createElement("div");
     const _divTitle = document.createElement("div");
     const _divContent = document.createElement("div");
+    const _contentStack = [];
 
     const clearContent = () => {
-        while (_divContent.firstChild)
+        const removed = [];
+
+        while (_divContent.firstChild) {
+            removed.push(_divContent.firstChild);
+
             _divContent.removeChild(_divContent.firstChild);
+        }
+
+        return removed;
     };
 
     const build = () => {
@@ -46,9 +54,23 @@ export function Menu(game, parent) {
      * @param {HTMLElement} element An HTML element to place in the menu content.
      */
     this.setContent = element => {
-        clearContent();
+        _contentStack.push(clearContent());
 
         _divContent.appendChild(element);
+    };
+
+    /**
+     * Set the content to the previous configuration if there is one.
+     */
+    this.goBack = () => {
+        const newContent = _contentStack.pop();
+
+        if (newContent) {
+            clearContent();
+
+            for (const element of newContent)
+                _divContent.appendChild(element);
+        }
     };
 
     /**
@@ -67,7 +89,7 @@ export function Menu(game, parent) {
 
     build();
 
-    this.setContent(new MenuRoot(this).getElement());
+    _divContent.appendChild(new MenuRoot(this).getElement());
 }
 
 Menu.ID_WRAPPER = "menu";
