@@ -116,45 +116,7 @@ export function Game(renderContext, input) {
      * Start free create mode.
      */
     this.startCreate = () => {
-        const pcb = new Pcb();
-        pcb.initialize();
 
-        _world = new World(renderContext,
-            new Mission([
-                new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED"),
-                new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Flip a powered switch")
-            ],
-            [
-                new Editable(
-                    new EditableRegion(
-                        new Myr.Vector(50, -5),
-                        new Myr.Vector(5, 5)),
-                    pcb,
-                    new Myr.Vector(1, 1),
-                    null),
-                new Editable(
-                    new EditableRegion(
-                        new Myr.Vector(60, -5),
-                        new Myr.Vector(5, 5)),
-                    pcb.copy(),
-                    new Myr.Vector(1, 1),
-                    new BudgetInventory([
-                        new BudgetInventory.Entry("Wheel", 2),
-                        new BudgetInventory.Entry("Propeller", 2),
-                        new BudgetInventory.Entry("Led", 4),
-                        new BudgetInventory.Entry("Battery", 1),
-                        new BudgetInventory.Entry("Switch", 1),
-                        new BudgetInventory.Entry("Button", 1),
-                        new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE),
-                        new BudgetInventory.Entry("Controller", 1)
-                    ]))
-            ],
-            "Mission 1"));
-        _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this);
-
-        _editor.edit(_world.getMission().getEditables()[0]);
-        _editor.show();
     };
 
     /**

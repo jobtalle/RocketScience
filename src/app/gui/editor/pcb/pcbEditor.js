@@ -10,8 +10,8 @@ import {Editor} from "../editor";
 import {PcbEditorMove} from "./pcbEditorMove";
 import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
-import {FilePcb} from "../../../file/FilePcb";
 import {Data} from "../../../file/Data";
+import {Pcb} from "../../../pcb/pcb";
 import Myr from "../../../../lib/myr.js";
 
 /**
@@ -450,11 +450,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 return;
             case PcbEditor.KEY_SAVE:
                 if (event.control) {
-                    const data = FilePcb.serialize(_editable.getPcb());
+                    const data = new Data();
 
+                    _editable.getPcb().serialize(data.getBuffer());
                     console.log(data.toString());
 
-                    _editable.setPcb(FilePcb.deserialize(data)), updatePcb();
+                    _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
                 }
 
                 return;
@@ -465,7 +466,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                         data.fromString(text);
 
-                        _editable.setPcb(FilePcb.deserialize(data)), updatePcb();
+                        _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
                     });
                 }
 
