@@ -21,7 +21,11 @@ def copy_langfiles():
             json_src_file = open(dir_path + file)
 
             json_dest_file = open(DIR_DIST + file, "w")
-            json_dest_file.write(json.dumps(json.load(json_src_file), indent=None, separators=(",", ":")))
+            json_dest_file.write(json.dumps(
+                json.load(json_src_file),
+                indent=None,
+                separators=(",", ":"),
+                ensure_ascii=False))
             json_dest_file.close()
 
             json_src_file.close()
