@@ -4,7 +4,7 @@
   "repository": {
     "type": "https://github.com/jobtalle/RocketScience"
   },
-  "license": "MIT",
+  "license": "Proprietary",
   "author": "Job Talle, Luc van den Brand",
   "scripts": {
     "pack-dev": "webpack --mode development",
