@@ -40,12 +40,9 @@ export function Menu(game, parent) {
 
     /**
      * Get the Game object.
-     * This function hides the menu, expecting the user to trigger a game mode. Don't use this to query!
      * @returns {Game} The Game object.
      */
     this.getGame = () => {
-        this.hide();
-
         return game;
     };
 

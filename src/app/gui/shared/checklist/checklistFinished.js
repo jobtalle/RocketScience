@@ -1,15 +1,22 @@
 import {getString} from "../../../text/language";
+import {Game} from "../../../game";
 
 /**
  * A button that appears on the checklist once all objectives are met.
+ * @param {Game} game The game object.
  * @constructor
  */
-export function ChecklistFinished() {
+export function ChecklistFinished(game) {
     const _element = document.createElement("div");
 
     const make = () => {
         _element.className = ChecklistFinished.CLASS;
+        _element.onclick = onClick;
         _element.appendChild(document.createTextNode(getString(ChecklistFinished.TEXT)));
+    };
+
+    const onClick = () => {
+        game.setMode(Game.MODE_MENU);
     };
 
     /**

@@ -218,8 +218,6 @@ export function World(renderContext, mission) {
      * Free all resources occupied by the world
      */
     this.free = () => {
-        this.deactivate();
-
         _surface.free();
         _physics.free();
     };

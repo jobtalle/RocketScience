@@ -6,10 +6,11 @@ import {ChecklistFinished} from "./checklistFinished";
 /**
  * A checklist displaying all mission objectives.
  * @param {Mission} mission A mission to create a checklist for.
+ * @param {Game} game The game object.
  * @param {Mission} [listenTo] An optional mission to synchronize the list to.
  * @constructor
  */
-export function Checklist(mission, listenTo) {
+export function Checklist(mission, game, listenTo) {
     const _container = document.createElement("div");
     const _objectives = [];
 
@@ -48,7 +49,7 @@ export function Checklist(mission, listenTo) {
         for (const objective of _objectives)
             objective.check();
 
-        _container.appendChild(new ChecklistFinished().getElement());
+        _container.appendChild(new ChecklistFinished(game).getElement());
         _finished = true;
     };
 

@@ -2,6 +2,7 @@ import "../../../../styles/toolbar.css"
 import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
+import {Game} from "../../../game";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -39,7 +40,7 @@ export function Toolbar(editor, overlay, x, game) {
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(
-        () => game.toggleEdit(),
+        () => game.setMode(Game.MODE_GAME),
         getString(Toolbar.TEXT_LAUNCH),
         "toolbar-launch",
         ToolbarButton.TYPE_CLICK);

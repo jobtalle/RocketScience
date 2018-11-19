@@ -21,7 +21,7 @@ export function Hud(renderContext, world, game) {
      * Show the HUD.
      */
     this.show = () => {
-        _checklist = new Checklist(world.getMission(), world.getMission());
+        _checklist = new Checklist(world.getMission(), game, world.getMission());
 
         renderContext.getOverlay().appendChild(_checklist.getElement());
     };
