@@ -49,6 +49,11 @@ export function Toolbar(editor, overlay, x, game) {
         getString(Toolbar.TEXT_X_RAY),
         "toolbar-xray",
         ToolbarButton.TYPE_TOGGLE);
+    const _buttonExit = new ToolbarButton(
+        () => game.setMode(Game.MODE_MENU),
+        getString(Toolbar.TEXT_EXIT),
+        "toolbar-exit",
+        ToolbarButton.TYPE_CLICK);
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -71,6 +76,8 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
         _container.appendChild(_buttonXRay.getElement());
+        _container.appendChild(makeSpacer());
+        _container.appendChild(_buttonExit.getElement());
     };
 
     /**
@@ -126,6 +133,10 @@ export function Toolbar(editor, overlay, x, game) {
                     _buttonXRay.getElement().click();
 
                     break;
+                case Toolbar.KEY_PRESS_EXIT:
+                    _buttonExit.getElement().click();
+
+                    break;
             }
         }
         else {
@@ -148,9 +159,11 @@ Toolbar.KEY_PRESS_ETCH = "3";
 Toolbar.KEY_PRESS_MOVE = "4";
 Toolbar.KEY_PRESS_LAUNCH = " ";
 Toolbar.KEY_PRESS_XRAY = "x";
+Toolbar.KEY_PRESS_EXIT = "Escape";
 Toolbar.TEXT_EXTEND = "TOOLBAR_EXTEND";
 Toolbar.TEXT_SELECT = "TOOLBAR_SELECT";
 Toolbar.TEXT_ETCH = "TOOLBAR_ETCH";
 Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
 Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
 Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
+Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";

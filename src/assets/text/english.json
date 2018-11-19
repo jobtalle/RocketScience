@@ -15,6 +15,7 @@
   "TOOLBAR_MOVE": "Move the PCB",
   "TOOLBAR_LAUNCH": "Launch the game",
   "TOOLBAR_X_RAY": "See through parts on the PCB",
+  "TOOLBAR_EXIT": "Exit",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
