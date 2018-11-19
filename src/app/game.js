@@ -62,7 +62,7 @@ export function Game(renderContext, input) {
 
                 break;
             case Game.MODE_GAME:
-                _world.onKeyEvent(_world);
+                _world.onKeyEvent(event);
 
                 if (event.down) switch (event.key) {
                     case Game.KEY_TOGGLE_EDIT:
