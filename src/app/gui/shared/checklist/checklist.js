@@ -5,9 +5,10 @@ import {ChecklistTitle} from "./checklistTitle";
 /**
  * A checklist displaying all mission objectives.
  * @param {Mission} mission A mission to create a checklist for.
+ * @param {Mission} [listenTo] An optional mission to synchronize the list to.
  * @constructor
  */
-export function Checklist(mission) {
+export function Checklist(mission, listenTo) {
     const _container = document.createElement("div");
     const _objectives = [];
 
@@ -29,9 +30,14 @@ export function Checklist(mission) {
             _objectives[i].check();
     };
 
+    /**
+     * Get the HTML element.
+     * @returns {HTMLElement} The HTML element.
+     */
     this.getElement = () => _container;
 
-    mission.setOnChange(update);
+    if (listenTo)
+        listenTo.setOnChange(update);
 
     build();
 }

@@ -16,6 +16,9 @@ export function Mission(objectives, editables, title, description) {
         _checking = objectives.slice();
         _finished = [];
         _checkMarks = new Array(objectives.length).fill(false);
+
+        if (_onChange)
+            _onChange(_checkMarks);
     };
 
     /**
