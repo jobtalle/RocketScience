@@ -1,16 +1,16 @@
-import Myr from "../../../lib/myr.js";
 import {getb2Vec2, box2d} from "./internal/box2d";
 import {Body} from "./body";
 import {createPolygonShape} from "./internal/shapes/polygon";
 import {createChainShape} from "./internal/shapes/chain";
+import Myr from "../../../lib/myr.js";
 
 /**
  * An interface for the used physics engine.
- * @param {Number} gravity The gravity constant.
+ * @param {PhysicsConfiguration} configuration The physics configuration.
  * @constructor
  */
-export function Physics(gravity) {
-    const _world = new box2d.b2World(getb2Vec2(0, gravity), true);
+export function Physics(configuration) {
+    const _world = new box2d.b2World(getb2Vec2(0, configuration.getGravity()), true);
     const _bodies = [];
 
     let _terrainBody = null;

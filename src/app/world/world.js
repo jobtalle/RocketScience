@@ -19,7 +19,7 @@ import Myr from "../../lib/myr";
 export function World(renderContext, mission) {
     const _objects = [];
     const _controllerState = new ControllerState();
-    const _physics = new Physics(World.GRAVITY);
+    const _physics = new Physics(mission.getPhysicsConfiguration());
     const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
     const _view = new View(
         renderContext.getWidth(),
@@ -231,6 +231,5 @@ World.COLOR_CLEAR = new Myr.Color(0.5, 0.6, 0.7);
 World.ZOOM_FACTOR = 0.25;
 World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;
-World.GRAVITY = 9.81;
 World.TPS = 15;
 World.TICK_DELAY = 1 / World.TPS;

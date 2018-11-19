@@ -5,10 +5,11 @@ import {Led} from "../../../part/parts/led";
 import {Switch} from "../../../part/parts/switch";
 import {Editable} from "../../../mission/editable/editable";
 import {EditableRegion} from "../../../mission/editable/editableRegion";
-import * as Myr from "../../../../lib/myr";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Pcb} from "../../../pcb/pcb";
 import {MenuMission} from "./mission/menuMission";
+import {PhysicsConfiguration} from "../../../world/physics/physicsConfiguration";
+import * as Myr from "../../../../lib/myr";
 
 /**
  * A selection of missions that can be started.
@@ -70,6 +71,7 @@ MenuMissions.MISSIONS = [
                     new BudgetInventory.Entry("Controller", 1)
                 ]))
         ],
+        new PhysicsConfiguration(1),
         "Hello LED",
         "Light up a LED using a physical switch.")
 ];

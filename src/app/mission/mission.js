@@ -2,11 +2,12 @@
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
  * @param {Array} editables An array of editables. The first editable will be the default pcb.
+ * @param {PhysicsConfiguration} physicsConfiguration The physics configuration.
  * @param {String} title A title for this mission.
  * @param {String} description A description of this mission.
  * @constructor
  */
-export function Mission(objectives, editables, title, description) {
+export function Mission(objectives, editables, physicsConfiguration, title, description) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
@@ -27,6 +28,12 @@ export function Mission(objectives, editables, title, description) {
      * @param {Function} onChange A function to call when a change in passed objectives occurs.
      */
     this.setOnChange = onChange => _onChange = onChange;
+
+    /**
+     * Get the physics configuration.
+     * @returns {PhysicsConfiguration} The physics configuration.
+     */
+    this.getPhysicsConfiguration = () => physicsConfiguration;
 
     /**
      * Get this missions title.
