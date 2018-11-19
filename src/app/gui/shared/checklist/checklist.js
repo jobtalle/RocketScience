@@ -13,6 +13,8 @@ export function Checklist(mission, listenTo) {
     const _container = document.createElement("div");
     const _objectives = [];
 
+    let _finished = false;
+
     const build = () => {
         _container.id = Checklist.ID;
 
@@ -40,10 +42,14 @@ export function Checklist(mission, listenTo) {
      * Set this checklist as completed.
      */
     this.finish = () => {
+        if (_finished)
+            return;
+
         for (const objective of _objectives)
             objective.check();
 
         _container.appendChild(new ChecklistFinished().getElement());
+        _finished = true;
     };
 
     /**
