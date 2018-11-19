@@ -82,5 +82,16 @@ export function Mission(objectives, editables, title, description) {
      */
     this.getEditables = () => editables;
 
+    /**
+     * Check whether this mission is finished.
+     * @returns {Boolean} A boolean indicating whether this mission has finished.
+     */
+    this.isFinished = () => {
+        for (const checkMark of _checkMarks) if (!checkMark)
+            return false;
+
+        return true;
+    };
+
     rewind();
 }

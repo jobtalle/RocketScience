@@ -21,3 +21,17 @@
 #checklist .objective.checked {
     text-decoration: line-through;
 }
+
+#checklist .finished {
+    width: 80%;
+    text-align: center;
+    font-size: var(--font-size-headers);
+    font-weight: bold;
+    padding: 16px 10%;
+    background-color: gray;
+}
+
+#checklist .finished:hover {
+    background-color: white;
+    cursor: pointer;
+}

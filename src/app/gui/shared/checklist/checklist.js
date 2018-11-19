@@ -1,6 +1,7 @@
 import "../../../../styles/checklist.css"
 import {ChecklistObjective} from "./checklistObjective";
 import {ChecklistTitle} from "./checklistTitle";
+import {ChecklistFinished} from "./checklistFinished";
 
 /**
  * A checklist displaying all mission objectives.
@@ -26,8 +27,23 @@ export function Checklist(mission, listenTo) {
     };
 
     const update = checkMarks => {
+        let checked = 0;
+
         for (let i = 0; i < _objectives.length; ++i) if (checkMarks[i])
-            _objectives[i].check();
+            _objectives[i].check(), ++checked;
+
+        if (checked === _objectives.length)
+            this.finish();
+    };
+
+    /**
+     * Set this checklist as completed.
+     */
+    this.finish = () => {
+        for (const objective of _objectives)
+            objective.check();
+
+        _container.appendChild(new ChecklistFinished().getElement());
     };
 
     /**

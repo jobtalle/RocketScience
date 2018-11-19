@@ -2,7 +2,6 @@ import {View} from "../../view/view";
 import {ZoomProfile} from "../../view/zoomProfile";
 import {ShiftProfile} from "../../view/shiftProfile";
 import {MouseEvent} from "../../input/mouse/mouseEvent";
-import * as Myr from "../../../lib/myr";
 import {PcbEditor} from "./pcb/pcbEditor";
 import {Toolbar} from "./toolbar/toolbar";
 import {Library} from "./library/library";
@@ -12,6 +11,7 @@ import {PartSummary} from "../../pcb/partSummary";
 import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
+import * as Myr from "../../../lib/myr";
 
 /**
  * Provides am editor for editing PCB's.
@@ -135,6 +135,9 @@ export function Editor(renderContext, world, game) {
         _library.show();
         _toolbar.show();
         _overlay.show();
+
+        if (world.getMission().isFinished())
+            _checklist.finish();
 
         renderContext.getOverlay().appendChild(_checklist.getElement());
     };
