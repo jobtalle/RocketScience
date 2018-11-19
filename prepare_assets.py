@@ -24,8 +24,7 @@ def copy_langfiles():
             json_dest_file.write(json.dumps(
                 json.load(json_src_file),
                 indent=None,
-                separators=(",", ":"),
-                ensure_ascii=False))
+                separators=(",", ":")).encode("utf-8"))
             json_dest_file.close()
 
             json_src_file.close()
