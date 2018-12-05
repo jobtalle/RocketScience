@@ -8,6 +8,7 @@ import {createSensorShape} from "./internal/shapes/sensor";
 import {Mover} from "./mover";
 import {Scale} from "../scale";
 import * as Myr from "../../../lib/myr";
+import {Ray} from "./ray";
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
@@ -99,9 +100,19 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
     };
 
     /**
+     * Create a ray cast on this body.
+     * @param {Number} xOffset The X offset in meters.
+     * @param {Number} yOffset The Y offset in meters.
+     * @param {Myr.Vector} ray The ray to cast.
+     */
+    this.createRay = (xOffset, yOffset, ray) => {
+        return new Ray(world, this, xOffset, yOffset, ray);
+    };
+
+    /**
      * Create a touch sensor on this body.
-     * @param {Number} xOffset The wheel X offset in meters.
-     * @param {Number} yOffset The wheel Y offset in meters.
+     * @param {Number} xOffset The X offset in meters.
+     * @param {Number} yOffset The Y offset in meters.
      * @param {Number} size The size of the sensor block in meters.
      * @param {Number} direction The direction this sensor is pointing towards in radians.
      * @param {ContactListener} contactListener A contact listener.

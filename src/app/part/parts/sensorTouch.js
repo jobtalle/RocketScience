@@ -18,7 +18,7 @@ export function SensorTouch(pins, renderer, x, y) {
 
     /**
      * Initialize the state.
-     * @param {Physics} body A physics body to apply state to.
+     * @param {Body} body A physics body to apply state to.
      */
     this.initialize = body => {
         sensor = body.createTouchSensor(

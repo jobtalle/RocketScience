@@ -20,6 +20,7 @@ import {Altimeter} from "./parts/altimeter";
 import {Comparator} from "./parts/comparator";
 import {Tilt} from "./parts/tilt";
 import {Subtractor} from "./parts/subtractor";
+import {SensorSonar} from "./parts/sensorSonar";
 
 const states = {
     "Led": Led,
@@ -42,7 +43,8 @@ const states = {
     "Altimeter": Altimeter,
     "Comparator": Comparator,
     "Tilt": Tilt,
-    "Subtractor": Subtractor
+    "Subtractor": Subtractor,
+    "SensorSonar": SensorSonar
 };
 
 /**
