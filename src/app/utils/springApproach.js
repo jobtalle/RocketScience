@@ -16,7 +16,9 @@ export function SpringApproach(value, target, min, max) {
     this.update = timeStep => {
         const delta = target - value;
 
-        _momentum = _momentum * SpringApproach.SPRING_DAMPING + delta * SpringApproach.SPRING_FORCE;
+        _momentum =
+            _momentum * Math.pow(SpringApproach.SPRING_DAMPING, timeStep) +
+            delta * SpringApproach.SPRING_FORCE * timeStep;
         value += _momentum;
 
         if (value < min) {
@@ -46,5 +48,5 @@ export function SpringApproach(value, target, min, max) {
     };
 }
 
-SpringApproach.SPRING_FORCE = 0.2;
-SpringApproach.SPRING_DAMPING = 0.7;
+SpringApproach.SPRING_FORCE = 5;
+SpringApproach.SPRING_DAMPING = 0.0005;

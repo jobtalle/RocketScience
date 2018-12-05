@@ -449,26 +449,22 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 return;
             case PcbEditor.KEY_SAVE:
-                if (event.control) {
-                    const data = new Data();
+                const data = new Data();
 
-                    _editable.getPcb().serialize(data.getBuffer());
-                    console.log(data.toString());
+                _editable.getPcb().serialize(data.getBuffer());
+                console.log(data.toString());
 
-                    _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
-                }
+                _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
 
                 return;
             case PcbEditor.KEY_LOAD:
-                if (event.control) {
-                    navigator.clipboard.readText().then(text => {
-                        const data = new Data();
+                navigator.clipboard.readText().then(text => {
+                    const data = new Data();
 
-                        data.fromString(text);
+                    data.fromString(text);
 
-                        _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
-                    });
-                }
+                    _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
+                });
 
                 return;
         }
