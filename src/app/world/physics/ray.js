@@ -10,22 +10,16 @@ import {box2d, getb2Vec2, getb2Vec2A, getb2Vec2B} from "./internal/box2d";
  * @constructor
  */
 export function Ray(world, body, x, y, ray) {
-    const _rayInput = new box2d.b2RayCastOutput();
-    const _callback = new box2d.JSQueryCallback();
+    const _callback = new box2d.JSRayCastCallback();
 
     const configureCallback = () => {
-        _callback.m_fixture = null;
-        _callback.m_point = new box2d.b2Vec2(0, 0);
-        _callback.m_normal = new box2d.b2Vec2(0, 0);
-        _callback.m_fraction = 0;
         _callback.ReportFixture = function(fixture, point, normal, fraction) {
             const f = box2d.wrapPointer(fixture, box2d.b2Fixture);
-            console.log(f);
 
             _callback.m_fixture = fixture;
 
             if (f)
-                console.log(_callback.m_fraction);
+                console.log(fraction);
 
             return fraction;
         };
