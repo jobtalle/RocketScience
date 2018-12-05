@@ -10,7 +10,7 @@ import {Editor} from "../editor";
 import {PcbEditorMove} from "./pcbEditorMove";
 import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
-import {Data} from "../../../file/Data";
+import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "../../../../lib/myr.js";
 
