@@ -1,4 +1,4 @@
-import {box2d, getb2Vec2, getb2Vec2A, getb2Vec2B} from "./internal/box2d";
+import {box2d, getb2Vec2A, getb2Vec2B} from "./internal/box2d";
 
 /**
  * A ray listener casts a ray into the physics world, the length until the first bounce can be queried.
