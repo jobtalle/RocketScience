@@ -106,7 +106,9 @@ export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) 
      * @param {Myr.Vector} ray The ray to cast.
      */
     this.createRay = (xOffset, yOffset, ray) => {
-        return new Ray(world, this, xOffset, yOffset, ray);
+        const offset = getOffset(xOffset, yOffset);
+
+        return new Ray(world, this, offset.x, offset.y, ray);
     };
 
     /**

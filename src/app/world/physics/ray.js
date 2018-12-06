@@ -13,13 +13,10 @@ export function Ray(world, body, x, y, ray) {
     const _callback = new box2d.JSRayCastCallback();
 
     const configureCallback = () => {
+        _callback.fraction = 0;
         _callback.ReportFixture = function(fixture, point, normal, fraction) {
-            const f = box2d.wrapPointer(fixture, box2d.b2Fixture);
-
-            _callback.m_fixture = fixture;
-
-            if (f)
-                console.log(fraction);
+            if (fraction < _callback.fraction)
+                    _callback.fraction = fraction;
 
             return fraction;
         };
@@ -30,14 +27,14 @@ export function Ray(world, body, x, y, ray) {
      * @returns {Number} The portion of the ray that could be cast in the range [0, 1].
      */
     this.getLength = () => {
-        let from = body._getBody().GetWorldPoint(new box2d.b2Vec2(x, y));
+        const source = body._getBody().GetWorldPoint(getb2Vec2A(x, y));
+        const from = getb2Vec2B(source.get_x(), source.get_y());
+        const to = body._getBody().GetWorldPoint(getb2Vec2A(x + ray.x, y + ray.y));
 
-        world.RayCast(
-            _callback,
-            new box2d.b2Vec2(from.get_x(), from.get_y()),
-            new box2d.b2Vec2(from.get_x() + ray.x, from.get_y() + ray.y));
+        _callback.fraction = 1;
+        world.RayCast(_callback, from, to);
 
-        return 0.5;
+        return _callback.fraction;
     };
 
     configureCallback();

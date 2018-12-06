@@ -10,15 +10,14 @@ import {Scale} from "../../world/scale";
  */
 export function SensorSonar(pins, renderer, x, y) {
     let _ray = null;
-
     /**
      * Initialize the state.
      * @param {Body} body A physics body to apply state to.
      */
     this.initialize = body => {
         _ray = body.createRay(
-            x * Scale.METERS_PER_POINT,
-            y * Scale.METERS_PER_POINT,
+            (x + 1) * Scale.METERS_PER_POINT,
+            (y + 1) * Scale.METERS_PER_POINT,
             new Myr.Vector(5, 0));
     };
 
@@ -27,7 +26,10 @@ export function SensorSonar(pins, renderer, x, y) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        _ray.getLength();
+        if (state[pins[SensorSonar.PIN_INDEX_POWER]] === 1)
+            state[pins[SensorSonar.PIN_INDEX_OUTPUT]] = 1 - _ray.getLength();
+        else
+            state[pins[SensorSonar.PIN_INDEX_OUTPUT]] = 0;
     };
 }
 
