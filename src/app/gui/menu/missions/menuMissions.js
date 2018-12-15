@@ -9,7 +9,7 @@ import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Pcb} from "../../../pcb/pcb";
 import {MenuMission} from "./mission/menuMission";
 import {PhysicsConfiguration} from "../../../world/physics/physicsConfiguration";
-import * as Myr from "../../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A selection of missions that can be started.

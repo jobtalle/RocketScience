@@ -8,7 +8,7 @@ import {TerrainRugged} from "./terrain/terrainRugged";
 import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
-import Myr from "../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * Simulates physics and led for all objects in the same space.

@@ -11,7 +11,7 @@ import {PartSummary} from "../../pcb/partSummary";
 import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
-import * as Myr from "../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * Provides am editor for editing PCB's.

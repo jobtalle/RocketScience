@@ -1,7 +1,7 @@
-import Myr from "../lib/myr.js"
 import {Sprites} from "./sprites";
 import {Viewport} from "./gui/viewport";
 import {StyleUtils} from "./utils/styleUtils";
+import Myr from "myr.js"
 
 /**
  * The render context provides access to all objects that allow rendering.

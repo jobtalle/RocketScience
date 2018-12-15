@@ -1,6 +1,6 @@
 import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
-import * as Myr from "../../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A move editor moves a PCB within its editable region.

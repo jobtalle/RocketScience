@@ -1,6 +1,6 @@
 import {Scale} from "../../../../world/scale";
 import {OverlayPinoutsPin} from "./overlayPinoutsPin";
-import * as Myr from "../../../../../lib/myr";
+import Myr from "myr.js"
 import {Pin} from "../../../../part/pin";
 
 /**

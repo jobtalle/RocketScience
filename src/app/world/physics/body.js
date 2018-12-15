@@ -7,8 +7,8 @@ import {Fixture} from "./internal/fixture";
 import {createSensorShape} from "./internal/shapes/sensor";
 import {Mover} from "./mover";
 import {Scale} from "../scale";
-import * as Myr from "../../../lib/myr";
 import {Ray} from "./ray";
+import Myr from "myr.js"
 
 // Only instantiate bodies through Physics!
 export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {

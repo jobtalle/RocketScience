@@ -1,5 +1,5 @@
 import {Scale} from "../../world/scale";
-import * as Myr from "../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * @param {Array} pins An array containing the pin indices.

@@ -5,7 +5,7 @@ import {PcbPath} from "../../../pcb/point/pcbPath";
 import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 import {Pin} from "../../../part/pin";
 import {Scale} from "../../../world/scale";
-import * as Myr from "../../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * The etch editor, meant for etching connections onto the PCB.

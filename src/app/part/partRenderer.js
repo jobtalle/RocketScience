@@ -1,5 +1,5 @@
-import * as Myr from "../../lib/myr";
 import {Scale} from "../world/scale";
+import Myr from "myr.js"
 
 /**
  * A part renderer.

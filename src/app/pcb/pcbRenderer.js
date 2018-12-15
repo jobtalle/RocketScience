@@ -2,7 +2,7 @@ import {Pcb} from "./pcb";
 import {PartRenderer} from "../part/partRenderer";
 import {PcbPointRenderer} from "./point/pcbPointRenderer";
 import {Scale} from "../world/scale";
-import * as Myr from "../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A PCB renderer.

@@ -1,4 +1,4 @@
-import * as Myr from "../../lib/myr";
+import Myr from "myr.js"
 
 export const Pin = {
     TYPE_STRUCTURAL: "structural",

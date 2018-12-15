@@ -3,7 +3,7 @@ import {PcbShape} from "../pcb/pcbShape";
 import {PcbState} from "../pcb/pcbState";
 import {Pcb} from "../pcb/pcb";
 import {Scale} from "./scale";
-import * as Myr from "../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * An object in the world.

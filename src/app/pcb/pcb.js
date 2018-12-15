@@ -3,8 +3,8 @@ import {Fixture} from "../part/fixture";
 import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
 import {Extendability} from "./extendability";
-import * as Myr from "../../lib/myr";
 import {Part} from "../part/part";
+import Myr from "myr.js"
 
 /**
  * Defines a PCB.

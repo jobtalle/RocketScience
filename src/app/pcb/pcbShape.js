@@ -1,4 +1,4 @@
-import Myr from "../../lib/myr";
+import Myr from "myr.js"
 import polyDecomp from "poly-decomp"
 import {Pcb} from "./pcb";
 import {Scale} from "../world/scale";

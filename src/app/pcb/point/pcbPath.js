@@ -1,5 +1,5 @@
-import * as Myr from "../../../lib/myr";
 import {PcbPoint} from "./pcbPoint";
+import Myr from "myr.js"
 
 /**
  * A path of connected PBC points on a PCB.

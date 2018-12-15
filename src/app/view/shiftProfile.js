@@ -1,4 +1,4 @@
-import Myr from "./../../lib/myr.js"
+import Myr from "myr.js"
 
 /**
  * A profile specifying shift led.

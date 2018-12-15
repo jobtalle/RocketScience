@@ -1,5 +1,5 @@
-import * as Myr from "../../../../../lib/myr";
 import {createPolygonShape} from "./polygon";
+import Myr from "myr.js"
 
 const sensorShape = [
     new Myr.Vector(0.5, -0.5),

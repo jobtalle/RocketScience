@@ -1,5 +1,5 @@
 import {Scale} from "../../world/scale";
-import * as Myr from "../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A renderer for a PcbPath.

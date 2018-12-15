@@ -1,8 +1,8 @@
-import * as Myr from "../../../../lib/myr";
 import {Pcb} from "../../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {Scale} from "../../../world/scale";
+import Myr from "myr.js"
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.

@@ -1,6 +1,6 @@
 import {Fixture} from "../../part/fixture";
 import {Part} from "../../part/part";
-import * as Myr from "../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A point on a pcb which may contain (part of) a component.

@@ -12,7 +12,7 @@ import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
-import Myr from "../../../../lib/myr.js";
+import Myr from "myr.js"
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.

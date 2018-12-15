@@ -5,7 +5,7 @@ import "../../../part/objects"
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {Scale} from "../../../world/scale";
-import * as Myr from "../../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * A placement editor used to place a part on a pcb.

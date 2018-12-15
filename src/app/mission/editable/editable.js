@@ -1,5 +1,5 @@
 import {Pcb} from "../../pcb/pcb";
-import Myr from "../../../lib/myr.js";
+import Myr from "myr.js"
 
 /**
  * A definition of an editable PCB (and its part budget).

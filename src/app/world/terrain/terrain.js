@@ -1,5 +1,5 @@
-import Myr from "../../../lib/myr";
 import {Scale} from "../scale";
+import Myr from "myr.js"
 
 /**
  * An environment to place bots in.

@@ -2,7 +2,7 @@ import {getb2Vec2, box2d} from "./internal/box2d";
 import {Body} from "./body";
 import {createPolygonShape} from "./internal/shapes/polygon";
 import {createChainShape} from "./internal/shapes/chain";
-import Myr from "../../../lib/myr.js";
+import Myr from "myr.js"
 
 /**
  * An interface for the used physics engine.

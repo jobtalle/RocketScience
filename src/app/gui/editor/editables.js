@@ -1,6 +1,6 @@
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {Scale} from "../../world/scale";
-import * as Myr from "../../../lib/myr";
+import Myr from "myr.js"
 
 /**
  * The editables in the world that may be edited.
