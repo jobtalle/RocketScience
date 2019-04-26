@@ -21,12 +21,14 @@ import {Comparator} from "./parts/comparator";
 import {Tilt} from "./parts/tilt";
 import {Subtractor} from "./parts/subtractor";
 import {SensorSonar} from "./parts/sensorSonar";
+import {GateXor} from "./parts/gateXor";
 
 const states = {
     "Led": Led,
     "Oscillator": Oscillator,
     "Battery": Battery,
     "GateOr": GateOr,
+    "GateXor": GateXor,
     "GateAnd": GateAnd,
     "GateNot": GateNot,
     "Wheel": Wheel,
