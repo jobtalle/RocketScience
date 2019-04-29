@@ -43,6 +43,12 @@
   "PART_GATE_OR_PIN_2_DESCRIPTION": "The first input signal.",
   "PART_GATE_OR_PIN_3_DESCRIPTION": "The second input signal.",
 
+  "PART_GATE_XOR_NAME": "XOR gate",
+  "PART_GATE_XOR_DESCRIPTION": "A XOR gate. Its output will be on when only one of its two inputs is on.",
+  "PART_GATE_XOR_PIN_1_DESCRIPTION": "When this part is active, this pin will output a <high> signal when either input one or input two receives a <high> signal.",
+  "PART_GATE_XOR_PIN_2_DESCRIPTION": "The first input signal.",
+  "PART_GATE_XOR_PIN_3_DESCRIPTION": "The second input signal.",
+
   "PART_GATE_AND_NAME": "AND gate",
   "PART_GATE_AND_DESCRIPTION": "An AND gate. Its output will be on, if and only if its two inputs are on.",
   "PART_GATE_AND_PIN_1_DESCRIPTION": "When this part is active, this pin will output a <high> signal when both inputs receive a <high> signal.",
