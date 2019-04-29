@@ -25,6 +25,9 @@ To compile the program, execute ``npm run pack-dev``
 (or ``pack-prod`` for production builds) from the root of the repository.
 The resulting files will be written to ``dist``.
 
+## Documentation
+There is a documentation available online, which gives insight in the project and explains how to work with it. This can be found [here](docs/README.md).
+
 ## Compatibility
 The game is built to be compatible with _at least_ Firefox and Chrome.
 Compatibility issues with these browsers are bugs.
