@@ -31,7 +31,12 @@ export function MenuMissions(menu) {
         const data = new Data();
         MenuMissions.MISSIONS[0].serialize(data.getBuffer());
 
-        const mission = Mission.deserialize(data.getBuffer());
+        const string = data.toString();
+
+        const data2 = new Data();
+        data2.fromString(string);
+
+        const mission = Mission.deserialize(data2.getBuffer());
 
         _element.appendChild(new MenuMission(menu, mission).getElement());
     };
