@@ -7,6 +7,9 @@
  * @param {String} description A description of this mission.
  * @constructor
  */
+import {Objective} from "./objective";
+import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
+
 export function Mission(objectives, editables, physicsConfiguration, title, description) {
     let _checking = null;
     let _finished = null;
@@ -101,4 +104,38 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     };
 
     rewind();
+
+    this.serialize = buffer => {
+        buffer.writeByte(objectives.length);
+        for (const objective of objectives)
+            objective.serialize(buffer);
+
+        buffer.writeByte(editables.length);
+        for (const editable of editables)
+            editable.serialize(buffer);
+
+        physicsConfiguration.serialize(buffer);
+
+        buffer.writeString(title);
+        buffer.writeString(description);
+    };
 }
+
+Mission.deserialize = buffer => {
+    let objectives = [];
+    let objectiveLength = buffer.readByte();
+    for (let idx = 0; idx < objectiveLength; ++idx)
+        objectives.push(Objective.deserialize(buffer));
+
+    let editables = [];
+    let editableLength = buffer.readByte();
+    for (let idx = 0; idx < editableLength; ++idx)
+        editables.push(Editable.deserialize(buffer));
+
+    let physics = PhysicsConfiguration.deserialize(buffer);
+
+    let title = buffer.readString();
+    let descr = buffer.readString();
+
+    return new Mission(objectives, editables, physics, title, descr);
+};

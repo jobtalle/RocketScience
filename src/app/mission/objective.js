@@ -1,9 +1,12 @@
+import {GoalPinState} from "./goal/goalPinState";
+
 /**
  * An objective made up of a number of goals.
  * @param {Array} goals An array of valid goals to complete.
  * @param {String} name A name describing this objective.
  * @constructor
  */
+
 export function Objective(goals, name) {
     /**
      * Get the text describing this objective.
@@ -30,4 +33,24 @@ export function Objective(goals, name) {
 
         return true;
     };
+
+    this.serialize = buffer => {
+        buffer.writeByte(goals.length);
+        for (const goal of goals)
+            goal.serialize(buffer);
+
+        buffer.writeString(name);
+    };
 }
+
+Objective.deserialize = buffer => {
+    let goals = [];
+
+    let goalLength = buffer.readByte();
+    for (let idx = 0; idx < goalLength; ++idx)
+        goals.push(GoalPinState.deserialize(buffer));
+
+    let name = buffer.readString();
+
+    return new Objective(goals, name);
+};

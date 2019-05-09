@@ -29,6 +29,13 @@ export function ByteBuffer(source) {
         _bytes.push((short >> 8) & 0xFF);
         _bytes.push(short & 0xFF);
     };
+    /**
+     * Write a string with unknown length to the buffer.
+     * @param {String} string A string of unknown length.
+     */
+    this.writeString = string => {
+
+    };
 
     /**
      * Read 8 bits from the buffer.
@@ -44,6 +51,10 @@ export function ByteBuffer(source) {
      */
     this.readShort = () => {
         return (_bytes[_at++] << 8) | _bytes[_at++];
+    };
+
+    this.readString = () => {
+
     };
 
     if (source)

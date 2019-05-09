@@ -44,8 +44,8 @@ defaultPcb.initialize();
 
 MenuMissions.MISSIONS = [
     new Mission([
-            new Objective([new GoalPinState("Switch", "PIN_INDEX_OUT", 1)], "Flip a powered switch"),
-            new Objective([new GoalPinState("Led", "PIN_INDEX_POWER", 1)], "Light up a LED")
+            new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Flip a powered switch"),
+            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")
         ],
         [
             new Editable(
@@ -76,7 +76,7 @@ MenuMissions.MISSIONS = [
         "Hello LED",
         "Light up a LED using a physical switch."),
     new Mission([
-            new Objective([new GoalPinState("GateXor", "PIN_INDEX_POWER", 1)], "Mystery objective! :D")
+            new Objective([new GoalPinState("GateXor", GateXor.PIN_INDEX_POWER, 1)], "Mystery objective! :D")
         ],
         [
             new Editable(
