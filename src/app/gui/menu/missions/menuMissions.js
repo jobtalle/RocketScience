@@ -11,6 +11,8 @@ import {Pcb} from "../../../pcb/pcb";
 import {MenuMission} from "./mission/menuMission";
 import {PhysicsConfiguration} from "../../../world/physics/physicsConfiguration";
 import Myr from "myr.js"
+import {Data} from "../../../file/data";
+import {Menu} from "../menu";
 
 /**
  * A selection of missions that can be started.
@@ -25,6 +27,13 @@ export function MenuMissions(menu) {
 
         for (const mission of MenuMissions.MISSIONS)
             _element.appendChild(new MenuMission(menu, mission).getElement());
+
+        const data = new Data();
+        MenuMissions.MISSIONS[0].serialize(data.getBuffer());
+
+        const mission = Mission.deserialize(data.getBuffer());
+
+        _element.appendChild(new MenuMission(menu, mission).getElement());
     };
 
     /**

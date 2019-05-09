@@ -51,8 +51,9 @@ BudgetInventory.deserialize = buffer => {
 
     let entryLength = buffer.readByte();
 
-    for (let idx = 0; idx < entryLength; ++idx)
-        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()), buffer.readByte()));
+    for (let idx = 0; idx < entryLength; ++idx) {
+        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readByte()));
+    }
 
     return new BudgetInventory(entries);
 };

@@ -76,7 +76,11 @@ export function Editable(region, pcb, pcbOffset, budget) {
         buffer.writeByte(this.getOffset().x);
         buffer.writeByte(this.getOffset().y);
 
-        this.getBudget().serialize(buffer);
+        let byte = (this.getBudget() === null)?Editable.SERIALIZE_BIT_BUDGET_NULL:0;
+        buffer.writeByte(byte);
+
+        if (!(byte & Editable.SERIALIZE_BIT_BUDGET_NULL))
+            this.getBudget().serialize(buffer);
     };
 }
 
@@ -84,9 +88,14 @@ Editable.deserialize = buffer => {
     let region = EditableRegion.deserialize(buffer);
     let pcb = Pcb.deserialize(buffer);
     let offset = new Myr.Vector(buffer.readByte(), buffer.readByte());
-    let budget = BudgetInventory.deserialize(buffer);
+    let budget = null;
+
+    let byte = buffer.readByte();
+    if (!(byte & Editable.SERIALIZE_BIT_BUDGET_NULL))
+        budget = BudgetInventory.deserialize(buffer);
 
     return new Editable(region, pcb, offset, budget);
 };
 
 Editable.UNDO_COUNT = 64;
+Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;

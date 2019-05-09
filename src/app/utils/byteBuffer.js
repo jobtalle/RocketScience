@@ -63,7 +63,7 @@ export function ByteBuffer(source) {
         let string = "";
         const length = this.readShort();
         for (let idx = 0; idx < length; ++idx)
-            string.concat(String.fromCharCode(this.readShort()));
+            string += String.fromCharCode(this.readShort());
 
         return string;
     };

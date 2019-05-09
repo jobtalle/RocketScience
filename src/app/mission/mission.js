@@ -8,6 +8,7 @@
  * @constructor
  */
 import {Objective} from "./objective";
+import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
 
 export function Mission(objectives, editables, physicsConfiguration, title, description) {
