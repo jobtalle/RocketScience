@@ -34,7 +34,9 @@ export function ByteBuffer(source) {
      * @param {String} string A string of unknown length.
      */
     this.writeString = string => {
-
+        this.writeShort(string.length);
+        for (let idx = 0; idx < string.length; ++idx)
+            this.writeShort(string.charCodeAt(idx));
     };
 
     /**
@@ -53,8 +55,17 @@ export function ByteBuffer(source) {
         return (_bytes[_at++] << 8) | _bytes[_at++];
     };
 
+    /**
+     * Read a string with unknown length from the buffer.
+     * @returns {String} A UTF-16 string.
+     */
     this.readString = () => {
+        let string = "";
+        const length = this.readShort();
+        for (let idx = 0; idx < length; ++idx)
+            string.concat(String.fromCharCode(this.readShort()));
 
+        return string;
     };
 
     if (source)
