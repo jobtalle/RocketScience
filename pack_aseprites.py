@@ -11,7 +11,8 @@ class PackAseprites():
             "aseprite -b " + path +
             " --data " + output_json +
             " --sheet-pack --sheet " + output_image +
-            " --filename-format " + PackAseprites.NAMING_FORMAT)
+            " --filename-format " + PackAseprites.NAMING_FORMAT +
+            " --shape-padding 1")
     
     @staticmethod
     def contains_sources(files):
