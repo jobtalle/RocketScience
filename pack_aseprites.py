@@ -6,13 +6,17 @@ class PackAseprites():
     NAMING_FORMAT = "{title}_{frame}"
     
     @staticmethod
-    def make_command(path, output_json, output_image):
-        return (
-            "aseprite -b " + path +
-            " --data " + output_json +
-            " --sheet-pack --sheet " + output_image +
-            " --filename-format " + PackAseprites.NAMING_FORMAT +
-            " --shape-padding 1")
+    def make_command(path, output_json, output_image, padding):
+        command =\
+            "aseprite -b " + path +\
+            " --data " + output_json +\
+            " --sheet-pack --sheet " + output_image +\
+            " --filename-format " + PackAseprites.NAMING_FORMAT
+
+        if padding:
+            command += " --shape-padding 1"
+        
+        return command
     
     @staticmethod
     def contains_sources(files):
@@ -22,8 +26,9 @@ class PackAseprites():
         
         return False
     
-    def __init__(self, directory):
+    def __init__(self, directory, padding):
         self._directory = directory
+        self._padding = padding
     
     def pack(self, output_json, output_image):
         print("Packing sprites into '" + output_json + "' and '" + output_image + "' from:")
@@ -42,4 +47,4 @@ class PackAseprites():
                 
                 print("- '" + dir_path + "'")
         
-        call(PackAseprites.make_command(directories, output_json, output_image), shell=True)
+        call(PackAseprites.make_command(directories, output_json, output_image, self._padding), shell=True)

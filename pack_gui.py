@@ -47,7 +47,7 @@ def pack_gui():
     source = "gui.png"
     scale = 2
     
-    packer = PackAseprites("src/assets/gui");
+    packer = PackAseprites("src/assets/gui", False)
     packer.pack(atlas_file, "dist/" + source)
     
     atlas = open(atlas_file)
