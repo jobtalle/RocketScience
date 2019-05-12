@@ -14,7 +14,7 @@ class PackAseprites():
             " --filename-format " + PackAseprites.NAMING_FORMAT
 
         if padding:
-            command += " --shape-padding 1"
+            command += " --border-padding 1 --shape-padding 1"
         
         return command
     
