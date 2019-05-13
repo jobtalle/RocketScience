@@ -25,10 +25,10 @@ export function EditableRegion(origin, size) {
      * @param {ByteBuffer} buffer A byte buffer to serialize this region to.
      */
     this.serialize = buffer => {
-        buffer.writeByte(origin.x);
-        buffer.writeByte(origin.y);
-        buffer.writeByte(size.x);
-        buffer.writeByte(size.y);
+        buffer.writeFloat(origin.x);
+        buffer.writeFloat(origin.y);
+        buffer.writeFloat(size.x);
+        buffer.writeFloat(size.y);
     };
 }
 
@@ -38,8 +38,8 @@ export function EditableRegion(origin, size) {
  * @returns {EditableRegion} The deserialized region.
  */
 EditableRegion.deserialize = buffer => {
-    const origin = new Myr.Vector(buffer.readByte(), buffer.readByte());
-    const size = new Myr.Vector(buffer.readByte(), buffer.readByte());
+    const origin = new Myr.Vector(buffer.readFloat(), buffer.readFloat());
+    const size = new Myr.Vector(buffer.readFloat(), buffer.readFloat());
 
     return new EditableRegion(origin, size);
 };

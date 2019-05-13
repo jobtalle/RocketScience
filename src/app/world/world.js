@@ -21,6 +21,8 @@ export function World(renderContext, mission) {
     const _controllerState = new ControllerState();
     const _physics = new Physics(mission.getPhysicsConfiguration());
     const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
+    console.log(_terrain);
+    console.log(mission.getEditables()[0].getPosition());
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),

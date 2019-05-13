@@ -29,7 +29,7 @@ export function MenuMissions(menu) {
             _element.appendChild(new MenuMission(menu, mission).getElement());
 
         const data = new Data();
-        MenuMissions.MISSIONS[0].serialize(data.getBuffer());
+        MenuMissions.MISSIONS[1].serialize(data.getBuffer());
 
         const string = data.toString();
 
@@ -90,15 +90,15 @@ MenuMissions.MISSIONS = [
         "Hello LED",
         "Light up a LED using a physical switch."),
     new Mission([
-            new Objective([new GoalPinState("GateXor", GateXor.PIN_INDEX_POWER, 1)], "Mystery objective! :D")
+            new Objective([new GoalPinState("GateXor", GateXor.PIN_INDEX_POWER, 1)], "Mystery objective! \u30B7")
         ],
         [
             new Editable(
                 new EditableRegion(
-                    new Myr.Vector(50, -5),
+                    new Myr.Vector(50.2465, -5.7),
                     new Myr.Vector(5, 5)),
                 defaultPcb,
-                new Myr.Vector(1, 1),
+                new Myr.Vector(0.2, 1),
                 null),
             new Editable(
                 new EditableRegion(
