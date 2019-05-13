@@ -4,10 +4,10 @@ To add and create a new part, one must create two sprites, one json file and one
 
 ## Part Types
 There are four part types, in which parts are categorized. The types are listed below:
-- Input
-- Output
-- Logic
-- Power
+- Input (Feeds input into the system)
+- Output (Uses input to perform a physical action in the world)
+- Logic (Performs logic on the given input, and returns this)
+- Power (Delivers power to the desired pins)
 
 ## Sprites
 Two sprites have to be created:
@@ -26,13 +26,12 @@ It holds the following information:
 
 A configuration holds the following information:
 - footprint
-    - points
-    - air
-- io
+    - points (Blocks on the PCB)
+    - air (Blocks in the air)
+- io (The in en output pins of the part)
 - sprites
-    - internal
-    - external
-
+    - internal (Sprites which are only visible on the PCB)
+    - external (Sprites which are visible through the hull)
 
 ## Javascript
 - add js file to src/app/part/parts
