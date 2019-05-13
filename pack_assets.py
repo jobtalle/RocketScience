@@ -10,6 +10,7 @@ from shutil import copyfile
 from pack_gui import pack_gui
 from pack_sprites import pack_sprites
 from pack_parts import pack_parts
+from pack_missions import pack_missions
 
 def copy_langfiles():
     print("Copying language files:")
@@ -34,3 +35,4 @@ pack_sprites()
 pack_gui()
 pack_parts()
 copy_langfiles()
+pack_missions()

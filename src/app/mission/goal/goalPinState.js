@@ -1,4 +1,5 @@
 import {PcbGraph} from "../../pcb/pcbGraph";
+import {getPartFromId, getPartId} from "../../part/objects";
 
 /**
  * Check if a part exists of which a certain pin's value matches a given value.
@@ -37,4 +38,18 @@ export function GoalPinState(part, pinIndex, pinValue) {
 
         return false;
     };
+
+    this.serialize = buffer => {
+        buffer.writeByte(getPartId(part));
+        buffer.writeByte(pinIndex);
+        buffer.writeByte(pinValue);
+    };
 }
+
+GoalPinState.deserialize = buffer => {
+    let part = getPartFromId(buffer.readByte());
+    let pinIndex = buffer.readByte();
+    let pinValue = buffer.readByte();
+
+    return new GoalPinState(part, pinIndex, pinValue);
+};
