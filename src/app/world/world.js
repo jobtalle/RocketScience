@@ -8,8 +8,8 @@ import {TerrainRugged} from "./terrain/terrainRugged";
 import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
+import {CameraSmooth} from "../view/camera/cameraSmooth";
 import Myr from "myr.js"
-import {CameraLocked} from "../view/camera/cameraLocked";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -50,7 +50,7 @@ export function World(renderContext, mission) {
             if (point) {
                 _controllerState.onClick(object.getBody(), point);
 
-                this.setCamera(CameraLocked, [object]);
+                this.setCamera(CameraSmooth, [object]);
 
                 return true;
             }

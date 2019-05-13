@@ -1,14 +1,12 @@
 /**
- * An underdamped spring approaching a value.
+ * A quadratic approach.
  * @param {Number} value The initial value.
  * @param {Number} target The initial target value.
  * @param {Number} min The lower bound.
  * @param {Number} max The upper bound.
  * @constructor
  */
-export function SpringApproach(value, target, min, max) {
-    let _momentum = 0;
-
+export function QuadraticApproach(value, target, min, max) {
     /**
      * Update the motion.
      * @param {Number} timeStep The current time step.
@@ -16,21 +14,14 @@ export function SpringApproach(value, target, min, max) {
     this.update = timeStep => {
         const delta = target - value;
 
-        _momentum =
-            _momentum * Math.pow(SpringApproach.SPRING_DAMPING, timeStep) +
-            delta * SpringApproach.SPRING_FORCE * timeStep;
-        value += _momentum;
+        value += delta * Math.pow(QuadraticApproach.DAMPING, timeStep);
 
-        if (value < min) {
+        if (value < min)
             value = min;
-
-            _momentum = 0;
-        }
-        else if (value > max) {
+        else if (value > max)
             value = max;
 
-            _momentum = 0;
-        }
+        value = target;
     };
 
     /**
@@ -46,5 +37,4 @@ export function SpringApproach(value, target, min, max) {
     this.setTarget = newTarget => target = newTarget;
 }
 
-SpringApproach.SPRING_FORCE = 5;
-SpringApproach.SPRING_DAMPING = 0.0005;
+QuadraticApproach.DAMPING = 0.0005;
