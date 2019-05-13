@@ -97,7 +97,7 @@ MenuMissions.MISSIONS = [
                 new EditableRegion(
                     new Myr.Vector(50.2465, -5.7),
                     new Myr.Vector(5, 5)),
-                defaultPcb,
+                defaultPcb.copy(),
                 new Myr.Vector(0.2, 1),
                 null),
             new Editable(
