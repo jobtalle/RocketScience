@@ -13,6 +13,8 @@ import {PhysicsConfiguration} from "../../../world/physics/physicsConfiguration"
 import Myr from "myr.js"
 import {Data} from "../../../file/data";
 import {Menu} from "../menu";
+import missions from "../../../../assets/missions.json"
+import {requestBinary} from "../../../utils/requestBinary";
 
 /**
  * A selection of missions that can be started.
@@ -25,13 +27,27 @@ export function MenuMissions(menu) {
     const make = () => {
         _element.className = MenuMissions.CLASS;
 
-        for (const mission of MenuMissions.MISSIONS)
-            _element.appendChild(new MenuMission(menu, mission).getElement());
+        for (const category of missions.categories) {
+            for (const mission of category.missions) {
+                const loadData = new Data();
 
-        const data = new Data();
-        MenuMissions.MISSIONS[1].serialize(data.getBuffer());
+                requestBinary(mission, (result) => {
+                    loadData.setBlob(result, () => {
+                        _element.appendChild(new MenuMission(menu, Mission.deserialize(loadData.getBuffer())).getElement());
+                    });
+                }, () => {
+                    console.log("ERROR");
+                });
+            }
+        }
 
-        const string = data.toString();
+        // for (const mission of MenuMissions.MISSIONS)
+        //     _element.appendChild(new MenuMission(menu, mission).getElement());
+        //
+        // const data = new Data();
+        // MenuMissions.MISSIONS[1].serialize(data.getBuffer());
+        //
+        // const string = data.toString();
 
         // const blob = data.getBlob();
         // const fileName = "led.blob";
@@ -54,14 +70,12 @@ export function MenuMissions(menu) {
         //     }
         // }
 
-        
-
-        const data2 = new Data();
-        data2.fromString(string);
-
-        const mission = Mission.deserialize(data2.getBuffer());
-
-        _element.appendChild(new MenuMission(menu, mission).getElement());
+        // const data2 = new Data();
+        // data2.fromString(string);
+        //
+        // const mission = Mission.deserialize(data2.getBuffer());
+        //
+        // _element.appendChild(new MenuMission(menu, mission).getElement());
     };
 
     /**
