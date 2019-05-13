@@ -26,14 +26,7 @@ export function Data() {
      * Get the bytes of this data. The bytes will be compressed.
      * @returns {Uint8Array} The bytes.
      */
-    this.getBytes = () => {
-        const bytes = Pako.deflate(_buffer.getBytes(), Data.PAKO_CONFIG);
-
-        console.log("Compression ratio: " + Math.round((_buffer.getBytes().length / bytes.length) * 100) + "%");
-        console.log(bytes.length + "B");
-
-        return bytes;
-    };
+    this.getBytes = () => Pako.deflate(_buffer.getBytes(), Data.PAKO_CONFIG);
 
     /**
      * Convert the data to a string.
@@ -45,8 +38,29 @@ export function Data() {
      * Use the data from a string obtained through the toString method.
      * @param {String} string A string obtained through the toString method.
      */
-    this.fromString = string => {
-        this.setBytes(new Uint8Array(atob(string).split("").map(c => c.charCodeAt(0))));
+    this.fromString = string => this.setBytes(new Uint8Array(atob(string).split("").map(c => c.charCodeAt(0))));
+
+    /**
+     * Get the compressed bytes contained by this data.
+     * @returns {Blob} An octet-stream blob containing the data.
+     */
+    this.getBlob = () => new Blob([this.getBytes()], {type: "application/octet-stream"});
+
+    /**
+     * Set the bytes of this data from a blob.
+     * @param {Blob} blob An octet-stream blob.
+     * @param {Function} callback A function that will be called once the blob has been loaded.
+     */
+    this.setBlob = (blob, callback) => {
+        const fileReader = new FileReader();
+
+        fileReader.addEventListener("loadend", () => {
+            this.setBytes(new Uint8Array(fileReader.result));
+
+            callback();
+        });
+
+        fileReader.readAsArrayBuffer(blob);
     };
 }
 
