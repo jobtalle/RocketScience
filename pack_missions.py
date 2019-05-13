@@ -11,6 +11,8 @@ MISSION_EXTENSION = 'mission'
 
 
 def pack_missions():
+    print("Packing missions:")
+
     shutil.rmtree(DEST_DIR, True)
     shutil.copytree(SOURCE_DIR, DEST_DIR)
 
@@ -28,7 +30,7 @@ def pack_missions():
                 continue
 
             fileList.append(os.path.join(MISSION_DIR, dirName, fileName))
-            print(os.path.join(MISSION_DIR, dirName, fileName))
+            print('- \'' + os.path.join(MISSION_DIR, dirName, fileName) + '\'')
 
         category['missions'] = fileList
 
