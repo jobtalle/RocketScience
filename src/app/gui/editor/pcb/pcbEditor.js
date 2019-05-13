@@ -452,9 +452,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 const data = new Data();
 
                 _editable.getPcb().serialize(data.getBuffer());
-                console.log(data.toString());
 
-                _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
+                const blob = data.getBlob();
+                const newData = new Data();
+
+                newData.setBlob(blob, () => {
+                    _editable.setPcb(Pcb.deserialize(newData.getBuffer())), updatePcb();
+                });
 
                 return;
             case PcbEditor.KEY_LOAD:
