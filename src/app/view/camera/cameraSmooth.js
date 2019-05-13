@@ -1,6 +1,6 @@
 import * as Myr from "myr.js";
 import {Scale} from "../../world/scale";
-import {QuadraticApproach} from "../../utils/quadraticApproach";
+import {ExponentialApproach} from "../../utils/exponentialApproach";
 
 /**
  * A smooth camera locked to an object. The focus object will always be within the viewport.
@@ -10,14 +10,10 @@ import {QuadraticApproach} from "../../utils/quadraticApproach";
  */
 export function CameraSmooth(view, objects) {
     const _focus = new Myr.Vector(0, 0);
-    const _x = new QuadraticApproach(0, 0, -1000, 1000);
-    const _y = new QuadraticApproach(0, 0, -1000, 1000);
+    const _x = new ExponentialApproach(view.getFocusX(), view.getFocusX(), CameraSmooth.RATE);
+    const _y = new ExponentialApproach(view.getFocusY(), view.getFocusY(), CameraSmooth.RATE);
 
-    /**
-     * Update the camera.
-     * @param {Number} timeStep The number of seconds passed after the previous update.
-     */
-    this.update = timeStep => {
+    const calculateFocus = () => {
         const vector = new Myr.Vector(0, 0);
 
         _focus.x = _focus.y = 0;
@@ -32,6 +28,15 @@ export function CameraSmooth(view, objects) {
         }
 
         _focus.divide(objects.length);
+    };
+
+    /**
+     * Update the camera.
+     * @param {Number} timeStep The number of seconds passed after the previous update.
+     */
+    this.update = timeStep => {
+        calculateFocus();
+
         _x.setTarget(_focus.x);
         _y.setTarget(_focus.y);
 
@@ -78,3 +83,5 @@ export function CameraSmooth(view, objects) {
 
     };
 }
+
+CameraSmooth.RATE = 0.03;

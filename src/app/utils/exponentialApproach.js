@@ -1,12 +1,13 @@
 /**
- * A quadratic approach.
+ * Exponential approach.
  * @param {Number} value The initial value.
  * @param {Number} target The initial target value.
- * @param {Number} min The lower bound.
- * @param {Number} max The upper bound.
+ * @param {Number} rate The remaining delta after one second of approach.
  * @constructor
  */
-export function QuadraticApproach(value, target, min, max) {
+export function ExponentialApproach(value, target, rate) {
+    const _lambda = Math.log(rate);
+
     /**
      * Update the motion.
      * @param {Number} timeStep The current time step.
@@ -14,14 +15,7 @@ export function QuadraticApproach(value, target, min, max) {
     this.update = timeStep => {
         const delta = target - value;
 
-        value += delta * Math.pow(QuadraticApproach.DAMPING, timeStep);
-
-        if (value < min)
-            value = min;
-        else if (value > max)
-            value = max;
-
-        value = target;
+        value = value + delta * (1 - Math.exp(_lambda * timeStep));
     };
 
     /**
@@ -36,5 +30,3 @@ export function QuadraticApproach(value, target, min, max) {
      */
     this.setTarget = newTarget => target = newTarget;
 }
-
-QuadraticApproach.DAMPING = 0.0005;
