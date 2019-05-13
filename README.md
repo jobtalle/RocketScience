@@ -18,7 +18,7 @@ Building should be possible in both Linux and Windows environments, provided the
 First, run ``npm install`` in the repository root.
 This command will install all required NPM packages.
 
-To build the assets, run ``prepare_assets.py``. This must be done before the game is built.
+To build the assets, run ``pack_assets.py``. This must be done before the game is built.
 Atlas files for both the GUI and in-game sprites will be generated, in addition to the part data file.
 
 To compile the program, execute ``npm run pack-dev``

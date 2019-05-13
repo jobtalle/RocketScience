@@ -313,6 +313,7 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
 
                         deletePath(_pathSelected);
 
+                        editor.getEditor().getInfo().setPinoutsSelected(null);
                         editor.revalidate();
 
                         _pathSelected = null;
