@@ -4,30 +4,27 @@ import {Scale} from "../../world/scale";
 /**
  * A camera locked to an object. It will always focus directly on that object without delay.
  * @param {Object} view A View instance to control.
- * @param {Array} objects An array of WorldObject instances to follow.
+ * @param {Object} object An object to follow.
  * @constructor
  */
-export function CameraLocked(view, objects) {
+export function CameraLocked(view, object) {
+    const _focus = new Myr.Vector(0, 0);
+
+    const calculateFocus = () => {
+        _focus.x = object.getPcb().getWidth() * Scale.PIXELS_PER_POINT * 0.5;
+        _focus.y = object.getPcb().getHeight() * Scale.PIXELS_PER_POINT * 0.5;
+
+        object.getTransform().apply(_focus);
+    };
+
     /**
      * Update the camera.
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
-        const vector = new Myr.Vector(0, 0);
-        const focus = new Myr.Vector(0, 0);
+        calculateFocus();
 
-        for (const object of objects) {
-            vector.x = object.getPcb().getWidth() * Scale.PIXELS_PER_POINT * 0.5;
-            vector.y = object.getPcb().getHeight() * Scale.PIXELS_PER_POINT * 0.5;
-
-            object.getTransform().apply(vector);
-
-            focus.add(vector);
-        }
-
-        focus.divide(objects.length);
-
-        view.focus(focus.x, focus.y, view.getZoom());
+        view.focus(_focus.x, _focus.y, view.getZoom());
     };
 
     /**

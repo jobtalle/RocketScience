@@ -5,29 +5,19 @@ import {ExponentialApproach} from "../../utils/exponentialApproach";
 /**
  * A smooth camera locked to an object. The focus object will always be within the viewport.
  * @param {Object} view A View instance to control.
- * @param {Array} objects An array of WorldObject instances to follow.
+ * @param {Object} object An object to follow.
  * @constructor
  */
-export function CameraSmooth(view, objects) {
-    const _focus = new Myr.Vector(0, 0);
-    const _x = new ExponentialApproach(view.getFocusX(), view.getFocusX(), CameraSmooth.RATE);
-    const _y = new ExponentialApproach(view.getFocusY(), view.getFocusY(), CameraSmooth.RATE);
+export function CameraSmooth(view, object) {
+    const _focus = new Myr.Vector(view.getFocusX(), view.getFocusY());
+    const _x = new ExponentialApproach(0, 0, CameraSmooth.RATE);
+    const _y = new ExponentialApproach(0, 0, CameraSmooth.RATE);
 
     const calculateFocus = () => {
-        const vector = new Myr.Vector(0, 0);
+        _focus.x = object.getPcb().getWidth() * Scale.PIXELS_PER_POINT * 0.5;
+        _focus.y = object.getPcb().getHeight() * Scale.PIXELS_PER_POINT * 0.5;
 
-        _focus.x = _focus.y = 0;
-
-        for (const object of objects) {
-            vector.x = object.getPcb().getWidth() * Scale.PIXELS_PER_POINT * 0.5;
-            vector.y = object.getPcb().getHeight() * Scale.PIXELS_PER_POINT * 0.5;
-
-            object.getTransform().apply(vector);
-
-            _focus.add(vector);
-        }
-
-        _focus.divide(objects.length);
+        object.getTransform().apply(_focus);
     };
 
     /**
@@ -35,15 +25,18 @@ export function CameraSmooth(view, objects) {
      * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
+        const xp = _focus.x;
+        const yp = _focus.y;
+
         calculateFocus();
 
-        _x.setTarget(_focus.x);
-        _y.setTarget(_focus.y);
+        _x.setValue(_x.getValue() - (_focus.x - xp));
+        _y.setValue(_y.getValue() - (_focus.y - yp));
 
         _x.update(timeStep);
         _y.update(timeStep);
 
-        view.focus(_x.getValue(), _y.getValue(), view.getZoom());
+        view.focus(_focus.x + _x.getValue(), _focus.y + _y.getValue(), view.getZoom());
     };
 
     /**
@@ -84,4 +77,4 @@ export function CameraSmooth(view, objects) {
     };
 }
 
-CameraSmooth.RATE = 0.03;
+CameraSmooth.RATE = 0.01;

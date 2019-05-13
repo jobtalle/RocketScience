@@ -13,9 +13,7 @@ export function ExponentialApproach(value, target, rate) {
      * @param {Number} timeStep The current time step.
      */
     this.update = timeStep => {
-        const delta = target - value;
-
-        value = value + delta * (1 - Math.exp(_lambda * timeStep));
+        value += (target - value) * (1 - Math.exp(_lambda * timeStep));
     };
 
     /**
@@ -29,4 +27,10 @@ export function ExponentialApproach(value, target, rate) {
      * @param {Number} newTarget The new target value.
      */
     this.setTarget = newTarget => target = newTarget;
+
+    /**
+     * Set the current value.
+     * @param {Number} newValue The new value.
+     */
+    this.setValue = newValue => value = newValue;
 }

@@ -50,7 +50,7 @@ export function World(renderContext, mission) {
             if (point) {
                 _controllerState.onClick(object.getBody(), point);
 
-                this.setCamera(CameraSmooth, [object]);
+                this.setCamera(CameraSmooth, object);
 
                 return true;
             }
@@ -141,13 +141,13 @@ export function World(renderContext, mission) {
     /**
      * Set the camera.
      * @param {Function} camera A valid camera constructor, or null.
-     * @param {Array} [objects] An array of WorldObject instances to follow.
+     * @param {Object} object An object to follow.
      */
-    this.setCamera = (camera, objects) => {
+    this.setCamera = (camera, object) => {
         if (!camera)
             _camera = null;
         else
-            _camera = new camera(_view, objects);
+            _camera = new camera(_view, object);
     };
 
     /**
