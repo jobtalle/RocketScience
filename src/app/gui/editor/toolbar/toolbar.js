@@ -10,9 +10,10 @@ import {Game} from "../../../game";
  * @param {HTMLElement} overlay The element to place the toolbar on.
  * @param {Number} x The X position of the toolbar in pixels.
  * @param {Game} game A game.
+ * @param {Boolean} isMissionEditor switches the toolbar to show extra buttons necessary for the mission editor.
  * @constructor
  */
-export function Toolbar(editor, overlay, x, game) {
+export function Toolbar(editor, overlay, x, game, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(

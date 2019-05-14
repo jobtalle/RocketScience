@@ -18,9 +18,10 @@ import Myr from "myr.js"
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.
+ * @param {Boolean} isMissionEditor Shows whether the editor should show functionality for editing missions.
  * @constructor
  */
-export function Editor(renderContext, world, game) {
+export function Editor(renderContext, world, game, isMissionEditor) {
     const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
     const _info = new Info(_overlay);
     const _view = new View(
@@ -45,7 +46,8 @@ export function Editor(renderContext, world, game) {
         _pcbEditor,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
-        game);
+        game,
+        isMissionEditor);
     const _library = new Library(
         _pcbEditor,
         _toolbar,
