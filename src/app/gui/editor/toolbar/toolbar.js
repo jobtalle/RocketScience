@@ -55,6 +55,18 @@ export function Toolbar(editor, overlay, x, game, isMissionEditor) {
         getString(Toolbar.TEXT_EXIT),
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
+    const _buttonMoveRegion = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE_REGION),
+        getString(Toolbar.TEXT_MOVE_REGION),
+        "toolbar-move",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
+        _toggleGroupSelectMode)
+    const _buttonResizeRegion = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_RESIZE_REGION),
+        getString(Toolbar.TEXT_RESIZE_REGION),
+        "toolbar-move",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
+        _toggleGroupSelectMode);
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -79,6 +91,12 @@ export function Toolbar(editor, overlay, x, game, isMissionEditor) {
         _container.appendChild(_buttonXRay.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonExit.getElement());
+
+        if (isMissionEditor) {
+            _container.appendChild(makeSpacer());
+            _container.appendChild(_buttonMoveRegion.getElement());
+            _container.appendChild(_buttonResizeRegion.getElement());
+        }
     };
 
     /**
@@ -168,3 +186,5 @@ Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
 Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
 Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
 Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";
+Toolbar.TEXT_MOVE_REGION = "TOOLBAR_MOVE_REGION";
+Toolbar.TEXT_RESIZE_REGION = "TOOLBAR_RESIZE_REGION";

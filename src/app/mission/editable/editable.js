@@ -62,6 +62,24 @@ export function Editable(region, pcb, pcbOffset, budget) {
     };
 
     /**
+     * Shift the region position.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
+     */
+    this.moveRegion = (dx, dy) => {
+        region.moveOrigin(dx, dy);
+
+        calculatePosition();
+    };
+
+    /**
+     * Resize the region.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resizeRegion = (dx, dy) => region.resize(dx, dy);
+
+    /**
      * Get the PCB position in the world.
      * @returns {Myr.Vector} The PCB position in the world in meters.
      */
