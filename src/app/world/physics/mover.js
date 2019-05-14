@@ -26,7 +26,8 @@ export function Mover(body, xOffset, yOffset) {
 
             body._getBody().ApplyForce(
                 getb2Vec2(force.x, force.y),
-                forcePosition);
+                forcePosition,
+                true);
         }
     };
 
