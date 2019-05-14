@@ -166,7 +166,7 @@ export function Game(renderContext, input) {
 
         _world = new World(renderContext, mission);
         _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this, false);
+        _editor = new Editor(renderContext, _world, this, true);
 
         _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();

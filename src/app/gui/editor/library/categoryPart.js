@@ -7,9 +7,10 @@ import {Budget} from "../../../mission/budget/budget";
  * @param {Object} part A part from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
+ * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function CategoryPart(part, setPart, info) {
+export function CategoryPart(part, setPart, info, editable) {
     const _element = document.createElement("div");
 
     const onClick = () => {
@@ -80,7 +81,10 @@ export function CategoryPart(part, setPart, info) {
                         _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
                 }
                 else {
-                    _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
+                    if (editable)
+                        _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                    else
+                        _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
 
                     return false;
                 }
