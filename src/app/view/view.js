@@ -46,6 +46,18 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
     };
 
     /**
+     * Get the view width.
+     * @returns {Number} The view width.
+     */
+    this.getWidth = () => viewWidth;
+
+    /**
+     * Get the view height.
+     * @returns {Number} The view height.
+     */
+    this.getHeight = () => viewHeight;
+
+    /**
      * Specify a function that should be executed whenever the view changes.
      * @param {Function} f A function.
      */
