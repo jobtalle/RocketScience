@@ -33,6 +33,7 @@ export function CategoryPartCountSetter(budget, name, counter) {
         const element = document.createElement("input");
 
         element.value = getCount();
+        element.onkeydown = event => event.stopPropagation();
         element.oninput = () => {
             let count;
 
