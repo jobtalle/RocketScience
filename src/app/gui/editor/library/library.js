@@ -11,9 +11,10 @@ import {Info} from "../info/info";
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
  * @param {Object} overlay An element to place the library on.
+ * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function Library(editor, toolbar, info, overlay) {
+export function Library(editor, toolbar, info, overlay, editable) {
     const _container = document.createElement("div");
     const _categories = [];
 
@@ -30,7 +31,7 @@ export function Library(editor, toolbar, info, overlay) {
         categories.id = Library.PARTS_ID;
 
         for (const category of parts.categories) {
-            const newCategory = new Category(category, setPart, info);
+            const newCategory = new Category(category, setPart, info, editable);
 
             _categories.push(newCategory);
             categories.appendChild(newCategory.getElement());

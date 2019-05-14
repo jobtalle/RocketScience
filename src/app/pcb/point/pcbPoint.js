@@ -324,7 +324,6 @@ PcbPoint.incrementDirection = direction => (direction + 1) % 8;
  */
 PcbPoint.decrementDirection = direction => direction === 0?7:direction - 1;
 
-
 PcbPoint.PATHS_MASK = 0xFF;
 PcbPoint.BIT_LOCKED = 0x800;
 PcbPoint.CONNECTION_BIT_OUTPUT = 0x100;

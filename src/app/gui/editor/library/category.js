@@ -7,11 +7,12 @@ import {CategoryPartList} from "./categoryPartList";
  * @param {Object} category A part category from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
+ *  @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function Category(category, setPart, info) {
+export function Category(category, setPart, info, editable) {
     const _element = document.createElement("div");
-    const _partList = new CategoryPartList(category.parts, setPart, info);
+    const _partList = new CategoryPartList(category.parts, setPart, info, editable);
 
     const build = () => {
         _element.className = Category.CLASS;

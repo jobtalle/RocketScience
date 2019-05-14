@@ -54,7 +54,8 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _pcbEditor,
         _toolbar,
         _info,
-        renderContext.getViewport().getElement());
+        renderContext.getViewport().getElement(),
+        isMissionEditor);
     const _checklist = new Checklist(world.getMission(), game);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
 
