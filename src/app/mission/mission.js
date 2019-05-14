@@ -1,3 +1,7 @@
+import {Objective} from "./objective";
+import {Editable} from "./editable/editable";
+import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
+
 /**
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
@@ -7,10 +11,6 @@
  * @param {String} description A description of this mission.
  * @constructor
  */
-import {Objective} from "./objective";
-import {Editable} from "./editable/editable";
-import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
-
 export function Mission(objectives, editables, physicsConfiguration, title, description) {
     let _checking = null;
     let _finished = null;
@@ -104,14 +104,18 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
         return true;
     };
 
-    rewind();
-
+    /**
+     * Serialize this mission.
+     * @param {Object} buffer A byte buffer.
+     */
     this.serialize = buffer => {
         buffer.writeByte(objectives.length);
+
         for (const objective of objectives)
             objective.serialize(buffer);
 
         buffer.writeByte(editables.length);
+
         for (const editable of editables)
             editable.serialize(buffer);
 
@@ -120,6 +124,8 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
         buffer.writeString(title);
         buffer.writeString(description);
     };
+
+    rewind();
 }
 
 Mission.deserialize = buffer => {
