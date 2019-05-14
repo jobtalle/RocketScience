@@ -7,9 +7,11 @@ import {getPartFromId, getPartId} from "../../part/objects";
  * @constructor
  */
 export function BudgetInventory(entries) {
-    const _entries = {};
+    let _entries = {};
 
     const build = () => {
+        _entries = {};
+
         for (const entry of entries)
             _entries[entry.name] = entry.count;
     };
@@ -23,7 +25,7 @@ export function BudgetInventory(entries) {
     /**
      * Get the budget of a part.
      * @param {String} name The part name.
-     * @returns {Number} The maximum number of instantiations for this part, or null if this was not specified.
+     * @returns {Number} The maximum number of instances for this part, or null if this was not specified.
      */
     this.getCount = name => {
         const budget = _entries[name];
@@ -34,8 +36,33 @@ export function BudgetInventory(entries) {
         return budget;
     };
 
-    build();
+    /**
+     * Chance the budget of a part.
+     * @param {String} name The part name.
+     * @param {Number} count The maximum number of instances for this part. If zero, getCount for this part returns null.
+     */
+    this.setCount = (name, count) => {
+        if (count !== 0) {
+            if (!_entries[name])
+                entries.push(new BudgetInventory.Entry(name, count));
+            else {
+                for (const entry of entries) if (entry.name === name)
+                    entry.count = count;
+            }
+        }
+        else for (let i = entries.length; i-- > 0;) if (entries[i].name === name) {
+            entries.splice(i, 1);
 
+            break;
+        }
+
+        build();
+    };
+
+    /**
+     * Serialize this inventory.
+     * @param {Object} buffer A byte buffer to serialize to.
+     */
     this.serialize = buffer => {
         buffer.writeByte(entries.length);
 
@@ -44,11 +71,12 @@ export function BudgetInventory(entries) {
             buffer.writeByteSigned(entry.count);
         }
     };
+
+    build();
 }
 
 BudgetInventory.deserialize = buffer => {
     let entries = [];
-
     let entryLength = buffer.readByte();
 
     for (let idx = 0; idx < entryLength; ++idx) {
