@@ -12,6 +12,8 @@ import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
+import {Data} from "../../file/data";
+import {downloadBinary} from "../../utils/downloadBinary";
 
 /**
  * Provides am editor for editing PCB's.
@@ -242,6 +244,17 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.onKeyEvent = event => {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
+
+        if (event.down) switch(event.key) {
+            case Editor.KEY_MISSION_DOWNLOAD:
+                const missionData = new Data();
+
+                world.getMission().serialize(missionData.getBuffer());
+
+                downloadBinary(missionData.getBlob(), world.getMission().getTitle() + ".bin");
+
+                return;
+        }
     };
 
     /**
@@ -258,3 +271,4 @@ Editor.ZOOM_DEFAULT = 4;
 Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
 Editor.ZOOM_MAX = 16;
+Editor.KEY_MISSION_DOWNLOAD = "m";

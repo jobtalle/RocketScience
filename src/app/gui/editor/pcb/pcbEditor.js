@@ -13,6 +13,7 @@ import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
+import {downloadBinary} from "../../../utils/downloadBinary";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
