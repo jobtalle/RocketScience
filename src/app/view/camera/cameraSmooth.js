@@ -27,16 +27,31 @@ export function CameraSmooth(view, object) {
     this.update = timeStep => {
         const xp = _focus.x;
         const yp = _focus.y;
+        const xd = (view.getWidth() * 0.5 - CameraSmooth.BORDER) / view.getZoom();
+        const yd = (view.getHeight() * 0.5 - CameraSmooth.BORDER) / view.getZoom();
 
         calculateFocus();
 
-        _x.setValue(_x.getValue() - (_focus.x - xp));
-        _y.setValue(_y.getValue() - (_focus.y - yp));
+        let xv = _x.getValue() - (_focus.x - xp);
+        let yv = _y.getValue() - (_focus.y - yp);
+
+        if (xv < -xd)
+            xv = -xd;
+        else if (xv > xd)
+            xv = xd;
+
+        if (yv < -yd)
+            yv = -yd;
+        else if (yv > yd)
+            yv = yd;
+
+        _x.setValue(xv);
+        _y.setValue(yv);
+
+        view.focus(_focus.x + _x.getValue(), _focus.y + _y.getValue(), view.getZoom());
 
         _x.update(timeStep);
         _y.update(timeStep);
-
-        view.focus(_focus.x + _x.getValue(), _focus.y + _y.getValue(), view.getZoom());
     };
 
     /**
@@ -77,4 +92,5 @@ export function CameraSmooth(view, object) {
     };
 }
 
-CameraSmooth.RATE = 0.01;
+CameraSmooth.RATE = 0.005;
+CameraSmooth.BORDER = 100;
