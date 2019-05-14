@@ -2,6 +2,7 @@ import {getString} from "../../../text/language";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Budget} from "../../../mission/budget/budget";
 import {CategoryPartCountSetter} from "./categoryPartCountSetter";
+import {CategoryPartCount} from "./categoryPartCount";
 
 /**
  * A part button used to instantiate a part.
@@ -29,6 +30,9 @@ export function CategoryPart(part, setPart, info, editable) {
 
         element.classList.add("sprite");
         element.classList.add(part.icon);
+        element.onclick = onClick;
+        element.onmouseover = onEnter;
+        element.onmouseout = onLeave;
 
         return element;
     };
@@ -36,22 +40,6 @@ export function CategoryPart(part, setPart, info, editable) {
     const make = () => {
         _element.classList.add(CategoryPart.CLASS);
         _element.appendChild(makeSprite());
-
-        _element.onclick = onClick;
-        _element.onmouseover = onEnter;
-        _element.onmouseout = onLeave;
-    };
-
-    const makeCount = count => {
-        const countElement = document.createElement("div");
-
-        if (count <= BudgetInventory.COUNT_INFINITE)
-            count = CategoryPart.TEXT_INFINITE;
-
-        countElement.className = CategoryPart.CLASS_COUNT;
-        countElement.innerHTML = count;
-
-        return countElement;
     };
 
     /**
@@ -80,16 +68,18 @@ export function CategoryPart(part, setPart, info, editable) {
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
                 if (editable) {
-                    _element.appendChild(new CategoryPartCountSetter(budget, part.object).getElement());
+                    const counter = new CategoryPartCount(budget.getCount(part.object), part.object, summary);
+
+                    _element.appendChild(new CategoryPartCountSetter(budget, part.object, counter).getElement());
+                    _element.appendChild(counter.getElement());
                 }
                 else {
                     const count = budget.getCount(part.object);
-                    let available = 0;
 
                     if (count !== null) {
-                        available = count - summary.getPartCount(part.object);
+                        const available = count - summary.getPartCount(part.object);
 
-                        _element.appendChild(makeCount(available));
+                        _element.appendChild(new CategoryPartCount(count, part.object, summary).getElement());
 
                         if (available === 0)
                             _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
@@ -112,5 +102,3 @@ export function CategoryPart(part, setPart, info, editable) {
 CategoryPart.CLASS = "part";
 CategoryPart.CLASS_NOT_AVAILABLE = "not-available";
 CategoryPart.CLASS_NOT_SPECIFIED = "not-specified";
-CategoryPart.CLASS_COUNT = "count";
-CategoryPart.TEXT_INFINITE = "&#8734";

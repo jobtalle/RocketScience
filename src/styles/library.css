@@ -42,23 +42,24 @@
 
     cursor: pointer;
     background-color: white;
+    position: relative;
 }
 
-#library #parts .category .part-list .part:hover {
+#library #parts .category .part-list .part .sprite:hover {
     background-color: lightblue;
 }
 
-#library #parts .category .part-list .part.not-available {
+#library #parts .category .part-list .part.not-available .sprite {
     background-color: gray;
     pointer-events: none;
 }
 
-#library #parts .category .part-list .part.not-specified {
-    display: none;
+#library #parts .category .part-list .part.not-available .sprite:hover {
+    background-color: inherit;
 }
 
-#library #parts .category .part-list .part.not-available:hover {
-    background-color: inherit;
+#library #parts .category .part-list .part.not-specified {
+    display: none;
 }
 
 #library #parts .category .part-list .part .count {
@@ -70,6 +71,9 @@
     padding: 1px;
     text-align: center;
     background-color: white;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 #library #parts .category .part-list .part.not-available .count {
@@ -77,6 +81,14 @@
 }
 
 #library #parts .category .part-list .part .count-setter {
-    background-color: red;
-    height: 16px;
+    width: 100%;
+}
+
+#library #parts .category .part-list .part .count-setter input {
+    width: 50%;
+    box-sizing: border-box;
+}
+
+#library #parts .category .part-list .part .count-setter button {
+    width: 50%;
 }
