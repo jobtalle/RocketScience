@@ -47,7 +47,7 @@ export function GoalPinState(part, pinIndex, pinValue) {
 }
 
 GoalPinState.deserialize = buffer => {
-    let part = getPartFromId(buffer.readByte());
+    let part = getPartFromId(buffer.readByte()).object;
     let pinIndex = buffer.readByte();
     let pinValue = buffer.readByte();
 
