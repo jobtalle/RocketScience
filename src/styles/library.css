@@ -75,3 +75,8 @@
 #library #parts .category .part-list .part.not-available .count {
     background-color: #9f9f9f;
 }
+
+#library #parts .category .part-list .part .count-setter {
+    background-color: red;
+    height: 16px;
+}

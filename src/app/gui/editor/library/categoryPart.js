@@ -1,6 +1,7 @@
 import {getString} from "../../../text/language";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Budget} from "../../../mission/budget/budget";
+import {CategoryPartCountSetter} from "./categoryPartCountSetter";
 
 /**
  * A part button used to instantiate a part.
@@ -23,10 +24,18 @@ export function CategoryPart(part, setPart, info, editable) {
 
     const onLeave = () => info.clearText();
 
+    const makeSprite = () => {
+        const element = document.createElement("div");
+
+        element.classList.add("sprite");
+        element.classList.add(part.icon);
+
+        return element;
+    };
+
     const make = () => {
         _element.classList.add(CategoryPart.CLASS);
-        _element.classList.add("sprite");
-        _element.classList.add(part.icon);
+        _element.appendChild(makeSprite());
 
         _element.onclick = onClick;
         _element.onmouseover = onEnter;
@@ -61,6 +70,7 @@ export function CategoryPart(part, setPart, info, editable) {
         while (_element.firstChild)
             _element.removeChild(_element.firstChild);
 
+        _element.appendChild(makeSprite());
         _element.classList.remove(CategoryPart.CLASS_NOT_AVAILABLE);
         _element.classList.remove(CategoryPart.CLASS_NOT_SPECIFIED);
 
@@ -69,24 +79,25 @@ export function CategoryPart(part, setPart, info, editable) {
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
-                const count = budget.getCount(part.object);
-                let available = 0;
-
-                if (count !== null) {
-                    available = count - summary.getPartCount(part.object);
-
-                    _element.appendChild(makeCount(available));
-
-                    if (available === 0)
-                        _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                if (editable) {
+                    _element.appendChild(new CategoryPartCountSetter(budget, part.object).getElement());
                 }
                 else {
-                    if (editable)
-                        _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
-                    else
+                    const count = budget.getCount(part.object);
+                    let available = 0;
+
+                    if (count !== null) {
+                        available = count - summary.getPartCount(part.object);
+
+                        _element.appendChild(makeCount(available));
+
+                        if (available === 0)
+                            _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                    } else {
                         _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
 
-                    return false;
+                        return false;
+                    }
                 }
 
                 break;
