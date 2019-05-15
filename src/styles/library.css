@@ -63,7 +63,7 @@
 }
 
 #library #parts .category .part-list .part .count {
-    width: var(--part-grid-count-size);
+    min-width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
     border-radius: calc(var(--part-grid-count-size) / 2);
