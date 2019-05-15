@@ -42,18 +42,20 @@ export function BudgetInventory(entries) {
      * @param {Number} count The maximum number of instances for this part. If zero, getCount for this part returns null.
      */
     this.setCount = (name, count) => {
-        if (count !== 0) {
+        if (count == 0) {
+            for (let i = entries.length; i-- > 0;) if (entries[i].name === name) {
+                entries.splice(i, 1);
+
+                break;
+            }
+        }
+        else {
             if (!_entries[name])
                 entries.push(new BudgetInventory.Entry(name, count));
             else {
                 for (const entry of entries) if (entry.name === name)
                     entry.count = count;
             }
-        }
-        else for (let i = entries.length; i-- > 0;) if (entries[i].name === name) {
-            entries.splice(i, 1);
-
-            break;
         }
 
         build();
