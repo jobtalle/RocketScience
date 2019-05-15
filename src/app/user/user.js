@@ -5,7 +5,8 @@ import {Cookie} from "../storage/cookie";
  * @constructor
  */
 export function User() {
-    let _id = User.ANONIMOUS_USER;
+    let _id = User.ANONYMOUS_USER;
+    let _imageSource = User.IMAGE_SOURCE_ANONYMOUS;
 
     const loadUserFromCookie = () => {
         const cookie = new Cookie();
@@ -35,7 +36,16 @@ export function User() {
         return _id;
     };
 
+    /**
+     * Obtain the source of the user image.
+     * @returns {string} the link to the image.
+     */
+    this.getUserImage = () => {
+        return _imageSource;
+    };
+
     loadUserFromCookie();
 }
 
-User.ANONIMOUS_USER = -1;
+User.ANONYMOUS_USER = -1;
+User.IMAGE_SOURCE_ANONYMOUS = "https://png.pngtree.com/svg/20170829/1d9f83ab9c.svg";

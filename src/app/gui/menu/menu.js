@@ -1,6 +1,8 @@
 import "../../../styles/menu.css"
 import {MenuTitle} from "./title";
 import {MenuRoot} from "./root/menuRoot";
+import {UserIcon} from "./user/userIcon";
+import {User} from "../../user/user";
 
 /**
  * The menu object creates an HTML menu which changes Game state.
@@ -36,6 +38,7 @@ export function Menu(game, parent) {
 
         _divWrapper.appendChild(_divTitle);
         _divWrapper.appendChild(_divContent);
+        _divWrapper.appendChild(new UserIcon(new User(), null).getElement());
     };
 
     /**

@@ -6,8 +6,6 @@ import {Game} from "./game"
 import {getString, Languages, setLanguage} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
-import {Cookie} from "./storage/cookie";
-import {User} from "./user/user";
 
 const start = () => {
     const renderContext = new RenderContext(
@@ -27,9 +25,6 @@ const start = () => {
 
     document.title = getString("TITLE");
     window.onresize = resize;
-
-    //new Cookie();
-    new User();
 
     resize();
 };

@@ -1,4 +1,6 @@
 :root {
+    --image-scale: 2;
+
     --z-index-top: 1;
 
     --font-size-descriptions: 16px;
@@ -20,4 +22,6 @@
 
     --checklist-width: 300px;
     --checklist-padding: 16px;
+
+    --avatar-padding: 10px;
 }
