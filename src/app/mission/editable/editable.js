@@ -126,5 +126,4 @@ Editable.deserialize = buffer => {
     return new Editable(region, pcb, offset, budget);
 };
 
-Editable.UNDO_COUNT = 64;
 Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;

@@ -17,7 +17,7 @@ import {PcbEditorMoveRegion} from "./pcbEditorMoveRegion";
 import {PcbEditorResizeRegion} from "./pcbEditorResizeRegion";
 
 /**
- * The interactive PCB editor which takes care of sizing & modifying a Pcb.
+ * The interactive PCB editor which takes care of editing a Pcb.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
