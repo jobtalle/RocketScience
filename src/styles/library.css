@@ -76,6 +76,10 @@
     top: 0;
 }
 
+#library #parts .category .part-list .part .count.negative {
+    background-color: red;
+}
+
 #library #parts .category .part-list .part.not-available .count {
     background-color: #9f9f9f;
 }

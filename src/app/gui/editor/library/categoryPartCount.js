@@ -19,12 +19,20 @@ export function CategoryPartCount(count, name, summary) {
      * @param {Number} value The count, -1 for infinite, null for unset.
      */
     this.set = value => {
-        if (value < 0)
+        if (value < 0) {
             _element.innerText = CategoryPartCount.TEXT_INFINITE;
-        else if (value === null)
-            _element.innerText = (-summary.getPartCount(name)).toString();
-        else
-            _element.innerText = (value - summary.getPartCount(name)).toString();
+            _element.classList.remove(CategoryPartCount.CLASS_NEGATIVE);
+        }
+        else {
+            const count = value === null ? -summary.getPartCount(name) : value - summary.getPartCount(name);
+
+            if (count < 0)
+                _element.classList.add(CategoryPartCount.CLASS_NEGATIVE);
+            else
+                _element.classList.remove(CategoryPartCount.CLASS_NEGATIVE);
+
+            _element.innerText = count.toString();
+        }
     };
 
     /**
@@ -39,4 +47,5 @@ export function CategoryPartCount(count, name, summary) {
 }
 
 CategoryPartCount.CLASS = "count";
+CategoryPartCount.CLASS_NEGATIVE = "negative";
 CategoryPartCount.TEXT_INFINITE = CategoryPartCountSetter.TEXT_INFINITE;
