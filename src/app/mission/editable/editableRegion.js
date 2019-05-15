@@ -1,4 +1,5 @@
 import * as Myr from "myr.js";
+import {Scale} from "../../world/scale";
 
 /**
  * A region in which a pcb can be placed and edited.
@@ -19,6 +20,33 @@ export function EditableRegion(origin, size) {
      * @returns {Myr.Vector} The width and height of the region.
      */
     this.getSize = () => size;
+
+    /**
+     * Shift the region position.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
+     */
+    this.moveOrigin = (dx, dy) => {
+        origin.x += dx;
+        origin.y += dy;
+    };
+
+    /**
+     * Resize the region.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resize = (dx, dy) => {
+        size.x += dx;
+        size.y += dy;
+    };
+
+    this.containsPoint = (x, y) => {
+        if (x < 0 || x > size.x - Scale.METERS_PER_POINT || y < 0 || y > size.y - Scale.METERS_PER_POINT)
+            return false;
+
+        return true;
+    };
 
     /**
      * Serialize the region to a buffer.

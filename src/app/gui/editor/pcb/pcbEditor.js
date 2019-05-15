@@ -13,6 +13,8 @@ import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
+import {PcbEditorMoveRegion} from "./pcbEditorMoveRegion";
+import {PcbEditorResizeRegion} from "./pcbEditorResizeRegion";
 
 /**
  * The interactive PCB editor which takes care of sizing & modifying a Pcb.
@@ -144,6 +146,35 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Shift the editable region position.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
+     */
+    this.moveRegion = (dx, dy) => {
+        _editable.moveRegion(dx, dy);
+        view.focus(
+            view.getFocusX() - dx * Scale.PIXELS_PER_METER,
+            view.getFocusY() - dy * Scale.PIXELS_PER_METER,
+            view.getZoom());
+    };
+
+    /**
+     * Resize the editable region.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resizeRegion = (dx, dy) => {
+        console.log(dx, dy);
+        if (dx < -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x))
+            dx = -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x);
+
+        if (dy < -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y))
+            dy = -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y);
+
+        _editable.resizeRegion(dx, dy);
+    };
+
+    /**
      * Set an editor to be active in this PcbEditor.
      * @param {Object} editor One of the valid PCB editor objects.
      */
@@ -221,6 +252,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
                 this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view));
+
+                break;
+            case PcbEditor.EDIT_MODE_MOVE_REGION:
+                this.setEditor(new PcbEditorMoveRegion(renderContext, _editable.getPcb(), _cursor, this, view));
+
+                break;
+            case PcbEditor.EDIT_MODE_RESIZE_REGION:
+                this.setEditor(new PcbEditorResizeRegion(renderContext, _editable.getPcb(), _cursor, this, view));
 
                 break;
         }
@@ -491,6 +530,8 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
+PcbEditor.EDIT_MODE_MOVE_REGION = 4;
+PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
 PcbEditor.KEY_UNDO = "z";
 PcbEditor.KEY_REDO = "y";
 PcbEditor.KEY_SAVE = "q";
