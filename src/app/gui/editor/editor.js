@@ -208,8 +208,11 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
                 if (!pressedEditable || pressedEditable === _editable)
                     _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
-                else
+                else {
+                    _pcbEditor.setEditMode(PcbEditor.EDIT_MODE_SELECT);
+
                     this.edit(pressedEditable);
+                }
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
