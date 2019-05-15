@@ -41,11 +41,22 @@ export function EditableRegion(origin, size) {
         size.y += dy;
     };
 
+    /**
+     * Check whether a point is in the region.
+     * @param {Number} x The X coordinate.
+     * @param {Number} y The Y coordinate.
+     * @returns {Boolean} A boolean indicating whether the point is inside this region.
+     */
     this.containsPoint = (x, y) => {
-        if (x < 0 || x > size.x - Scale.METERS_PER_POINT || y < 0 || y > size.y - Scale.METERS_PER_POINT)
-            return false;
+        return !(x < 0 || x > size.x - Scale.METERS_PER_POINT || y < 0 || y > size.y - Scale.METERS_PER_POINT);
+    };
 
-        return true;
+    /**
+     * Make a copy of this region.
+     * @return {Object} A deep copy.
+     */
+    this.copy = () => {
+        return new EditableRegion(origin.copy(), size.copy());
     };
 
     /**

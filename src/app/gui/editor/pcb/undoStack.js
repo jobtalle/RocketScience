@@ -10,6 +10,7 @@ export function UndoStack(editable) {
     const applyState = (state, editor) => {
         editor.moveOffset(state.offset.x - editable.getOffset().x, state.offset.y - editable.getOffset().y);
         editable.setPcb(state.pcb);
+        editable.setRegion(state.region);
     };
 
     /**
@@ -76,4 +77,5 @@ UndoStack.CAPACITY = 100;
 UndoStack.State = function(editable) {
     this.pcb = editable.getPcb().copy();
     this.offset = editable.getOffset().copy();
+    this.region = editable.getRegion().copy();
 };

@@ -164,7 +164,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
      * @param {Number} dy The vertical change in meters.
      */
     this.resizeRegion = (dx, dy) => {
-        console.log(dx, dy);
         if (dx < -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x))
             dx = -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x);
 

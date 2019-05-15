@@ -26,6 +26,12 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getRegion = () => region;
 
     /**
+     * Set the region this editable is in.
+     * @param {EditableRegion} newRegion An EditableRegion instance.
+     */
+    this.setRegion = newRegion => region = newRegion;
+
+    /**
      * Get the PCB of this editable.
      * @returns {Pcb} A pcb.
      */
@@ -85,8 +91,10 @@ export function Editable(region, pcb, pcbOffset, budget) {
      */
     this.getPosition = () => _position;
 
-    calculatePosition();
-
+    /**
+     * Serialize this editable.
+     * @param {ByteBuffer} buffer A byte buffer to serialize to.
+     */
     this.serialize = buffer => {
         let header = (this.getBudget() === null)?Editable.SERIALIZE_BIT_BUDGET_NULL:0;
         buffer.writeByte(header);
@@ -100,6 +108,8 @@ export function Editable(region, pcb, pcbOffset, budget) {
         if (!(header & Editable.SERIALIZE_BIT_BUDGET_NULL))
             this.getBudget().serialize(buffer);
     };
+
+    calculatePosition();
 }
 
 Editable.deserialize = buffer => {
