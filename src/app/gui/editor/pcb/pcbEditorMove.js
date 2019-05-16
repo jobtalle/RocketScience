@@ -15,6 +15,7 @@ import Myr from "myr.js"
  */
 export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, view, isMissionEditor) {
     const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
+    const SPRITE_RESIZE = renderContext.getSprites().getSprite("pcbAreaExtend");
 
     let _mode = PcbEditorMove.NOT_MOVABLE;
     let _dragging = null;
@@ -217,9 +218,29 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
                 break;
             case PcbEditorMove.REGION_RESIZE:
-                SPRITE_MOVE.draw(
-                    (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
-                    (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
+                const posX = (rawCursor.x) * Scale.PIXELS_PER_POINT;
+                const posY = (rawCursor.y) * Scale.PIXELS_PER_POINT;
+                if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT)
+                    if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
+                        SPRITE_RESIZE.drawRotated(posX, posY, 0.75 * Math.PI);
+                    else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
+                        SPRITE_RESIZE.drawRotated(posX, posY, 1.25 * Math.PI);
+                    else
+                        SPRITE_RESIZE.drawRotated(posX, posY, Math.PI);
+                else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_RIGHT)
+                    if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
+                        SPRITE_RESIZE.drawRotated(posX, posY, 0.25 * Math.PI);
+                    else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
+                        SPRITE_RESIZE.drawRotated(posX, posY, 1.75 * Math.PI);
+                    else
+                        SPRITE_RESIZE.drawRotated(posX, posY, 0);
+                else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
+                    SPRITE_RESIZE.drawRotated(posX, posY, 0.5 * Math.PI);
+                else
+                    SPRITE_RESIZE.drawRotated(posX, posY, 1.5 * Math.PI);
+
+
+
 
                 break;
         }
