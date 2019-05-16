@@ -13,8 +13,6 @@ import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
-import {PcbEditorMoveRegion} from "./pcbEditorMoveRegion";
-import {PcbEditorResizeRegion} from "./pcbEditorResizeRegion";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
@@ -29,6 +27,7 @@ import {PcbEditorResizeRegion} from "./pcbEditorResizeRegion";
  */
 export function PcbEditor(renderContext, world, view, width, height, x, editor) {
     const _cursor = new Myr.Vector(-1, -1);
+    const _rawCursor = _cursor.copy();
     const _undoStacks = [];
 
     let _undoStack = null;
@@ -58,6 +57,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         _cursor.y = view.getMouse().y;
 
         view.getInverse().apply(_cursor);
+
+        _rawCursor.x = _cursor.x / Scale.PIXELS_PER_POINT;
+        _rawCursor.y = _cursor.y / Scale.PIXELS_PER_POINT;
 
         _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
@@ -250,15 +252,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view));
-
-                break;
-            case PcbEditor.EDIT_MODE_MOVE_REGION:
-                this.setEditor(new PcbEditorMoveRegion(renderContext, _editable.getPcb(), _cursor, this, view));
-
-                break;
-            case PcbEditor.EDIT_MODE_RESIZE_REGION:
-                this.setEditor(new PcbEditorResizeRegion(renderContext, _editable.getPcb(), _cursor, this, view));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view));
 
                 break;
         }

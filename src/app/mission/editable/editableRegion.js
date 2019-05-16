@@ -42,13 +42,17 @@ export function EditableRegion(origin, size) {
     };
 
     /**
-     * Check whether a point is in the region.
+     * Check whether a point is in the region, with a margin of x POINTs on all sides.
      * @param {Number} x The X coordinate.
      * @param {Number} y The Y coordinate.
+     * @param {Number} margin The amount of POINTs outside the region to count as part of the region.
      * @returns {Boolean} A boolean indicating whether the point is inside this region.
      */
-    this.containsPoint = (x, y) => {
-        return !(x < 0 || x > size.x - Scale.METERS_PER_POINT || y < 0 || y > size.y - Scale.METERS_PER_POINT);
+    this.containsPoint = (x, y, margin=0) => {
+        return !(x + Scale.METERS_PER_POINT * margin < 0
+            || x > size.x + Scale.METERS_PER_POINT * margin
+            || y + Scale.METERS_PER_POINT * margin < 0
+            || y > size.y + Scale.METERS_PER_POINT * margin);
     };
 
     /**
