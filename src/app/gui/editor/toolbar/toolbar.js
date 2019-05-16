@@ -60,7 +60,7 @@ export function Toolbar(editor, overlay, x, game, isMissionEditor) {
         getString(Toolbar.TEXT_MOVE_REGION),
         "toolbar-move",
         ToolbarButton.TYPE_TOGGLE_GROUP,
-        _toggleGroupSelectMode)
+        _toggleGroupSelectMode);
     const _buttonResizeRegion = new ToolbarButton(
         () => editor.setEditMode(PcbEditor.EDIT_MODE_RESIZE_REGION),
         getString(Toolbar.TEXT_RESIZE_REGION),
