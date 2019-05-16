@@ -43,13 +43,13 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
         renderContext.getHeight(),
         renderContext.getViewport().getSplitX(),
-        this);
+        this,
+        isMissionEditor);
     const _toolbar = new Toolbar(
         _pcbEditor,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
-        game,
-        isMissionEditor);
+        game);
     const _library = new Library(
         _pcbEditor,
         _toolbar,

@@ -23,9 +23,10 @@ import Myr from "myr.js"
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
  * @param {Editor} editor An Editor object.
+ * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, editor) {
+export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
     const _rawCursor = _cursor.copy();
     const _undoStacks = [];
@@ -175,6 +176,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         _editable.resizeRegion(dx, dy);
     };
 
+    this.resizeRegionUpLeft = (dx, dy) => {
+        if (dx > _editable.getOffset().x)
+            dx = _editable.getOffset().x;
+
+        if (dy > _editable.getOffset().y)
+            dy = _editable.getOffset().y;
+
+        this.moveRegion(dx, dy);
+        this.moveOffset(-dx, -dy);
+        this.resizeRegion(-dx, -dy);
+    };
+
     /**
      * Set an editor to be active in this PcbEditor.
      * @param {Object} editor One of the valid PCB editor objects.
@@ -252,7 +265,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view, isMissionEditor));
 
                 break;
         }

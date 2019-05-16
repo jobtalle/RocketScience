@@ -10,14 +10,16 @@ import Myr from "myr.js"
  * @param {Myr.Vector} rawCursor The precise cursor position, not rounded down to cells.
  * @param {PcbEditor} editor A PCB editor.
  * @param {View} view The editor view.
+ * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, view) {
+export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, view, isMissionEditor) {
     const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
 
     let _mode = PcbEditorMove.NOT_MOVABLE;
     let _dragging = null;
     let _moveStart = new Myr.Vector(0, 0);
+    let _resizeQuadrant = 0;
 
     /**
      * Change the PCB being edited.
@@ -41,16 +43,28 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
         if (!_dragging)
             if (pcb.getPoint(cursor.x, cursor.y) !== null)
                 _mode = PcbEditorMove.PCB_MOVE;
-            else if (editor.getEditable().getRegion().containsPoint(
+            else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
                 rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x,
                 rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y,
                 1))
                 _mode = PcbEditorMove.REGION_MOVE;
-            else if (editor.getEditable().getRegion().containsPoint(
+            else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
                 rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x,
                 rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y,
-                5))
+                5)) {
                 _mode = PcbEditorMove.REGION_RESIZE;
+
+                _resizeQuadrant = 0;
+                if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
+                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
+                else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x)
+                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_RIGHT;
+
+                if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
+                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
+                else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y)
+                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
+            }
             else
                 _mode = PcbEditorMove.NOT_MOVABLE;
     };
@@ -75,7 +89,15 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
                     break;
                 case PcbEditorMove.REGION_RESIZE:
-                    editor.resizeRegion(dx, dy);
+                    if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT)
+                        editor.resizeRegionUpLeft(dx, 0);
+                    else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_RIGHT)
+                        editor.resizeRegion(dx, 0);
+
+                    if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
+                        editor.resizeRegionUpLeft(0, dy);
+                    else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
+                        editor.resizeRegion(0, dy);
 
                     break;
             }
@@ -175,22 +197,32 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      * Draw this editor.
      */
     this.draw = () => {
-        if (_dragging && _mode === PcbEditorMove.PCB_MOVE)
-            SPRITE_MOVE.draw(
-                (_dragging.x - 1) * Scale.PIXELS_PER_POINT,
-                (_dragging.y - 1) * Scale.PIXELS_PER_POINT);
-        else if (_mode === PcbEditorMove.PCB_MOVE)
-            SPRITE_MOVE.draw(
-                (cursor.x - 1) * Scale.PIXELS_PER_POINT,
-                (cursor.y - 1) * Scale.PIXELS_PER_POINT);
-        else if (_mode === PcbEditorMove.REGION_MOVE)
-            SPRITE_MOVE.draw(
-                (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
-                (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
-        else if (_mode === PcbEditorMove.REGION_RESIZE)
-            SPRITE_MOVE.draw(
-                (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
-                (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
+
+        switch (_mode) {
+            case PcbEditorMove.PCB_MOVE:
+                if (_dragging)
+                    SPRITE_MOVE.draw(
+                        (_dragging.x - 1) * Scale.PIXELS_PER_POINT,
+                        (_dragging.y - 1) * Scale.PIXELS_PER_POINT);
+                else
+                    SPRITE_MOVE.draw(
+                        (cursor.x - 1) * Scale.PIXELS_PER_POINT,
+                        (cursor.y - 1) * Scale.PIXELS_PER_POINT);
+
+                break;
+            case PcbEditorMove.REGION_MOVE:
+                SPRITE_MOVE.draw(
+                    (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
+                    (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
+
+                break;
+            case PcbEditorMove.REGION_RESIZE:
+                SPRITE_MOVE.draw(
+                    (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
+                    (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
+
+                break;
+        }
     };
 }
 
@@ -198,3 +230,8 @@ PcbEditorMove.NOT_MOVABLE = 0;
 PcbEditorMove.PCB_MOVE = 1;
 PcbEditorMove.REGION_MOVE = 2;
 PcbEditorMove.REGION_RESIZE = 3;
+
+PcbEditorMove.BIT_MASK_LEFT = 0x01;
+PcbEditorMove.BIT_MASK_RIGHT = 0x02;
+PcbEditorMove.BIT_MASK_UP = 0x04;
+PcbEditorMove.BIT_MASK_DOWN = 0x08;
