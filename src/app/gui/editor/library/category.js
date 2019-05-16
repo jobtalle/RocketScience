@@ -7,7 +7,7 @@ import {CategoryPartList} from "./categoryPartList";
  * @param {Object} category A part category from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
- *  @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
+ * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
 export function Category(category, setPart, info, editable) {
