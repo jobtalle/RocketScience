@@ -55,18 +55,6 @@ export function Toolbar(editor, overlay, x, game, isMissionEditor) {
         getString(Toolbar.TEXT_EXIT),
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
-    const _buttonMoveRegion = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE_REGION),
-        getString(Toolbar.TEXT_MOVE_REGION),
-        "toolbar-move",
-        ToolbarButton.TYPE_TOGGLE_GROUP,
-        _toggleGroupSelectMode);
-    const _buttonResizeRegion = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_RESIZE_REGION),
-        getString(Toolbar.TEXT_RESIZE_REGION),
-        "toolbar-move",
-        ToolbarButton.TYPE_TOGGLE_GROUP,
-        _toggleGroupSelectMode);
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -91,12 +79,6 @@ export function Toolbar(editor, overlay, x, game, isMissionEditor) {
         _container.appendChild(_buttonXRay.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonExit.getElement());
-
-        if (isMissionEditor) {
-            _container.appendChild(makeSpacer());
-            _container.appendChild(_buttonMoveRegion.getElement());
-            _container.appendChild(_buttonResizeRegion.getElement());
-        }
     };
 
     /**
