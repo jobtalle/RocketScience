@@ -317,6 +317,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Set the part budget for the current editable.
+     * @param {Object} budget A valid part budget or null for an infinite budget.
+     */
+    this.setBudget = budget => {
+        if (_editable) {
+            _editable.setBudget(budget);
+
+            editor.onPcbChange();
+        }
+    };
+
+    /**
      * Start editing a pcb.
      * @param {Editable} editable An editable.
      */

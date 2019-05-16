@@ -8,7 +8,7 @@ import {BudgetInventory} from "../budget/budgetInventory";
  * @param {EditableRegion} region The editable region of this editable.
  * @param {Pcb} pcb The default pcb for this editable.
  * @param {Myr.Vector} pcbOffset The PCB's offset within its region.
- * @param {BudgetInventory} budget A part budget, or null if there is no budget.
+ * @param {Object} budget A part budget, or null if there is no budget.
  * @constructor
  */
 export function Editable(region, pcb, pcbOffset, budget) {
@@ -45,9 +45,15 @@ export function Editable(region, pcb, pcbOffset, budget) {
 
     /**
      * Get the part budget of this editable.
-     * @returns {BudgetInventory} A part budget.
+     * @returns {Object} A part budget.
      */
     this.getBudget = () => budget;
+
+    /**
+     * Set a new budget for this editable.
+     * @param {Object} newBudget A valid budget object or null for an infinite budget.
+     */
+    this.setBudget = newBudget => budget = newBudget;
 
     /**
      * Get the offset of the pcb in the editable region.
