@@ -34,7 +34,7 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
 
     /**
      * Update the state of this object.
-     * @param {Number} timeStep The number of milliseconds passed after the previous update.
+     * @param {Number} timeStep The number of seconds passed after the previous update.
      */
     this.update = timeStep => {
         _state.update(timeStep);
@@ -97,6 +97,12 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
      * @returns {Object} A physics body.
      */
     this.getBody = () => _body;
+
+    /**
+     * Get this objects transformation.
+     * @returns {Myr.Transform} The transformation.
+     */
+    this.getTransform = () => _transform;
 
     /**
      * Get the pcb this world object is constructed off.

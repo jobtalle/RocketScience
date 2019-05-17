@@ -1,16 +1,9 @@
 import {Mission} from "../../../mission/mission";
-import {Objective} from "../../../mission/objective";
-import {GoalPinState} from "../../../mission/goal/goalPinState";
-import {Led} from "../../../part/parts/led";
-import {Switch} from "../../../part/parts/switch";
-import {GateXor} from "../../../part/parts/gateXor";
-import {Editable} from "../../../mission/editable/editable";
-import {EditableRegion} from "../../../mission/editable/editableRegion";
-import {BudgetInventory} from "../../../mission/budget/budgetInventory";
-import {Pcb} from "../../../pcb/pcb";
 import {MenuMission} from "./mission/menuMission";
-import {PhysicsConfiguration} from "../../../world/physics/physicsConfiguration";
-import Myr from "myr.js"
+import {Data} from "../../../file/data";
+import {Menu} from "../menu";
+import missions from "../../../../assets/missions.json"
+import {requestBinary} from "../../../utils/requestBinary";
 
 /**
  * A selection of missions that can be started.
@@ -23,8 +16,19 @@ export function MenuMissions(menu) {
     const make = () => {
         _element.className = MenuMissions.CLASS;
 
-        for (const mission of MenuMissions.MISSIONS)
-            _element.appendChild(new MenuMission(menu, mission).getElement());
+        for (const category of missions.categories) {
+            for (const mission of category.missions) {
+                const loadData = new Data();
+
+                requestBinary(mission, (result) => {
+                    loadData.setBlob(result, () => {
+                        _element.appendChild(new MenuMission(menu, Mission.deserialize(loadData.getBuffer())).getElement());
+                    });
+                }, () => {
+                    console.log("ERROR");
+                });
+            }
+        }
     };
 
     /**
@@ -37,73 +41,3 @@ export function MenuMissions(menu) {
 }
 
 MenuMissions.CLASS = "missions";
-
-// TODO: Load missions from external source
-const defaultPcb = new Pcb();
-defaultPcb.initialize();
-
-MenuMissions.MISSIONS = [
-    new Mission([
-            new Objective([new GoalPinState("Switch", Switch.PIN_INDEX_OUT, 1)], "Flip a powered switch"),
-            new Objective([new GoalPinState("Led", Led.PIN_INDEX_POWER, 1)], "Light up a LED")
-        ],
-        [
-            new Editable(
-                new EditableRegion(
-                    new Myr.Vector(50, -5),
-                    new Myr.Vector(5, 5)),
-                defaultPcb,
-                new Myr.Vector(1, 1),
-                null),
-            new Editable(
-                new EditableRegion(
-                    new Myr.Vector(60, -5),
-                    new Myr.Vector(5, 5)),
-                defaultPcb.copy(),
-                new Myr.Vector(1, 1),
-                new BudgetInventory([
-                    new BudgetInventory.Entry("Wheel", 2),
-                    new BudgetInventory.Entry("Propeller", 2),
-                    new BudgetInventory.Entry("Led", 4),
-                    new BudgetInventory.Entry("Battery", 1),
-                    new BudgetInventory.Entry("Switch", 1),
-                    new BudgetInventory.Entry("Button", 1),
-                    new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE),
-                    new BudgetInventory.Entry("Controller", 1)
-                ]))
-        ],
-        new PhysicsConfiguration(1),
-        "Hello LED",
-        "Light up a LED using a physical switch."),
-    new Mission([
-            new Objective([new GoalPinState("GateXor", GateXor.PIN_INDEX_POWER, 1)], "Mystery objective! :D")
-        ],
-        [
-            new Editable(
-                new EditableRegion(
-                    new Myr.Vector(50, -5),
-                    new Myr.Vector(5, 5)),
-                defaultPcb,
-                new Myr.Vector(1, 1),
-                null),
-            new Editable(
-                new EditableRegion(
-                    new Myr.Vector(60, -5),
-                    new Myr.Vector(5, 5)),
-                defaultPcb.copy(),
-                new Myr.Vector(1, 1),
-                new BudgetInventory([
-                    new BudgetInventory.Entry("Wheel", 2),
-                    new BudgetInventory.Entry("Propeller", 2),
-                    new BudgetInventory.Entry("Led", 4),
-                    new BudgetInventory.Entry("Battery", 1),
-                    new BudgetInventory.Entry("Switch", 1),
-                    new BudgetInventory.Entry("Button", 1),
-                    new BudgetInventory.Entry("GateOr", BudgetInventory.COUNT_INFINITE),
-                    new BudgetInventory.Entry("Controller", 1)
-                ]))
-        ],
-        new PhysicsConfiguration(0),
-        "SPACE",
-        "Free play without gravity")
-];

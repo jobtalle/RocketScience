@@ -8,6 +8,7 @@ import {TerrainRugged} from "./terrain/terrainRugged";
 import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
+import {CameraSmooth} from "../view/camera/cameraSmooth";
 import Myr from "myr.js"
 
 /**
@@ -33,6 +34,7 @@ export function World(renderContext, mission) {
         new ShiftProfile(
             0));
 
+    let _camera = null;
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
     let _paused = true;
@@ -48,9 +50,13 @@ export function World(renderContext, mission) {
             if (point) {
                 _controllerState.onClick(object.getBody(), point);
 
+                this.setCamera(CameraSmooth, object);
+
                 return true;
             }
         }
+
+        this.setCamera(null);
 
         return false;
     };
@@ -92,26 +98,56 @@ export function World(renderContext, mission) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_SCROLL:
-                if (event.wheelDelta > 0)
-                    _view.zoomIn();
-                else
-                    _view.zoomOut();
+                if (event.wheelDelta > 0) {
+                    if (_camera)
+                        _camera.zoomIn();
+                    else
+                        _view.zoomIn();
+                }
+                else {
+                    if (_camera)
+                        _camera.zoomOut();
+                    else
+                        _view.zoomOut();
+                }
 
                 break;
             case MouseEvent.EVENT_MOVE:
+                if (_camera)
+                    _camera.onMouseMove(event.x, event.y);
+
                 _view.onMouseMove(event.x, event.y);
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
-                _view.onMouseRelease();
+                if (_camera)
+                    _camera.onMouseRelease();
+                else
+                    _view.onMouseRelease();
 
                 break;
             case MouseEvent.EVENT_PRESS_LMB:
-                if (!clickObject(event.x, event.y))
-                    _view.onMousePress();
+                if (!clickObject(event.x, event.y)) {
+                    if (_camera)
+                        _camera.onMousePress();
+                    else
+                        _view.onMousePress();
+                }
 
                 break;
         }
+    };
+
+    /**
+     * Set the camera.
+     * @param {Function} camera A valid camera constructor, or null.
+     * @param {Object} object An object to follow.
+     */
+    this.setCamera = (camera, object) => {
+        if (!camera)
+            _camera = null;
+        else
+            _camera = new camera(_view, object);
     };
 
     /**
@@ -143,6 +179,7 @@ export function World(renderContext, mission) {
     this.deactivate = () => {
         this.pause();
 
+        _camera = null;
         _view.onMouseRelease();
         _controllerState.reset();
 
@@ -173,6 +210,9 @@ export function World(renderContext, mission) {
 
                 _objects[index].update(timeStep);
             }
+
+            if (_camera)
+                _camera.update(timeStep);
 
             mission.validate();
 

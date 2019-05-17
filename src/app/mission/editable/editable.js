@@ -1,5 +1,7 @@
 import {Pcb} from "../../pcb/pcb";
 import Myr from "myr.js"
+import {EditableRegion} from "./editableRegion";
+import {BudgetInventory} from "../budget/budgetInventory";
 
 /**
  * A definition of an editable PCB (and its part budget).
@@ -66,6 +68,35 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getPosition = () => _position;
 
     calculatePosition();
+
+    this.serialize = buffer => {
+        let header = (this.getBudget() === null)?Editable.SERIALIZE_BIT_BUDGET_NULL:0;
+        buffer.writeByte(header);
+
+        this.getRegion().serialize(buffer);
+        this.getPcb().serialize(buffer);
+
+        buffer.writeFloat(this.getOffset().x);
+        buffer.writeFloat(this.getOffset().y);
+
+        if (!(header & Editable.SERIALIZE_BIT_BUDGET_NULL))
+            this.getBudget().serialize(buffer);
+    };
 }
 
+Editable.deserialize = buffer => {
+    let header = buffer.readByte();
+
+    let region = EditableRegion.deserialize(buffer);
+    let pcb = Pcb.deserialize(buffer);
+    let offset = new Myr.Vector(buffer.readFloat(), buffer.readFloat());
+    let budget = null;
+
+    if (!(header & Editable.SERIALIZE_BIT_BUDGET_NULL))
+        budget = BudgetInventory.deserialize(buffer);
+
+    return new Editable(region, pcb, offset, budget);
+};
+
 Editable.UNDO_COUNT = 64;
+Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;

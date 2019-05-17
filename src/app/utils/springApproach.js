@@ -43,9 +43,7 @@ export function SpringApproach(value, target, min, max) {
      * Set the current target.
      * @param {Number} newTarget The new target value.
      */
-    this.setTarget = newTarget => {
-        target = newTarget;
-    };
+    this.setTarget = newTarget => target = newTarget;
 }
 
 SpringApproach.SPRING_FORCE = 5;

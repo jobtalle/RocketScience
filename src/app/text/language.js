@@ -1,6 +1,6 @@
 import "../../styles/text.css";
 import {Macro} from "./macro";
-import {request} from "../utils/request";
+import {requestText} from "../utils/requestText";
 
 function Language() {
     let _language;
@@ -16,7 +16,7 @@ function Language() {
     };
 
     this.set = (source, onReady, onError) => {
-        request(source, file => {
+        requestText(source, file => {
             _language = JSON.parse(file);
 
             applyMacros();
