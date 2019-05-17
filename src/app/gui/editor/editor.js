@@ -121,6 +121,18 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     };
 
     /**
+     * Get the currently selected editable.
+     * @returns {Editable} An editable, or null if none is selected.
+     */
+    this.getEditable = () => _editable;
+
+    /**
+     * Get all editables.
+     * @returns {Array} An array of editables.
+     */
+    this.getEditables = () => world.getMission().getEditables();
+
+    /**
      * Hide the editor.
      */
     this.hide = () => {

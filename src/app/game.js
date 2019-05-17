@@ -142,7 +142,11 @@ export function Game(renderContext, input) {
                 break;
             case Game.MODE_GAME:
                 _hud.show();
-                _world.activate();
+
+                if (_editor.getEditable() === null)
+                    _world.activate(-1);
+                else
+                    _world.activate(_editor.getEditables().indexOf(_editor.getEditable()));
 
                 break;
         }

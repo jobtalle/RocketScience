@@ -141,7 +141,7 @@ export function World(renderContext, mission) {
     /**
      * Set the camera.
      * @param {Function} camera A valid camera constructor, or null.
-     * @param {Object} object An object to follow.
+     * @param {Object} [object] An object to follow, if camera was not null.
      */
     this.setCamera = (camera, object) => {
         if (!camera)
@@ -166,11 +166,15 @@ export function World(renderContext, mission) {
 
     /**
      * Activate the world.
+     * @param {Number} focus The index of the currently focused editable, or -1 if nothing is focused.
      */
-    this.activate = () => {
+    this.activate = focus => {
         this.unpause();
 
         mission.prime(_objects);
+
+        if (focus !== -1)
+            this.setCamera(CameraSmooth, _objects[focus]);
     };
 
     /**
