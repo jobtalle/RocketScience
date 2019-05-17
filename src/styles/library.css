@@ -28,7 +28,7 @@
 }
 
 #library #contents {
-    overflow-y: auto;
+    overflow: hidden;
     flex-grow: 1;
 }
 
