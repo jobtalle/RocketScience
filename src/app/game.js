@@ -8,11 +8,12 @@ import {Hud} from "./gui/hud/hud";
  * This class contains the game views.
  * @param {RenderContext} renderContext A render context.
  * @param {Input} input An input controller.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function Game(renderContext, input) {
+export function Game(renderContext, input, user) {
     let _mode = Game.MODE_NONE;
-    let _menu = new Menu(this, renderContext.getOverlay());
+    let _menu = new Menu(this, renderContext.getOverlay(), user);
     let _world = null;
     let _editor = null;
     let _hud = null;

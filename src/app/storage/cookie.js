@@ -27,6 +27,7 @@ export function Cookie() {
     };
 
     const doesCookieExist = () => {
+        // noinspection RedundantIfStatementJS
         if (document.cookie.split(';').filter(
             (item) => item.trim().startsWith(Cookie.COOKIE_KEY_NAME+'=')).length) {
             return true;
@@ -54,8 +55,8 @@ export function Cookie() {
 
     /**
      * Sets the value to the dictionary and saves it to the cookie.
-     * @param key {string} The key of the data in the dictionary.
-     * @param value {*} The value that should be assigned to the key.
+     * @param key {String} The key of the data in the dictionary.
+     * @param value {String} The value that should be assigned to the key.
      */
     this.setValue = (key, value) => {
         cookieValue[key] = value;
@@ -65,8 +66,8 @@ export function Cookie() {
 
     /**
      * Get the value from the cookie dictionary, if it exists.
-     * @param key {string} The key of the data in the dictionary.
-     * @returns {string|null}
+     * @param key {String} The key of the data in the dictionary.
+     * @returns {String|Null}
      */
     this.getValue = (key) => {
         if (cookieValue[key])
@@ -77,8 +78,8 @@ export function Cookie() {
 
     /**
      * Check if the key has a value in the dictionary.
-     * @param key {string} The key of the data in the dictionary.
-     * @returns {boolean}
+     * @param key {String} The key of the data in the dictionary.
+     * @returns {Boolean}
      */
     this.hasValue = (key) => {
         return cookieValue[key]

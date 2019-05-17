@@ -8,9 +8,10 @@ import {User} from "../../user/user";
  * The menu object creates an HTML menu which changes Game state.
  * @param {Game} game A constructed Game object to be controlled.
  * @param {HTMLElement} parent An HTML element to create the menu on.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function Menu(game, parent) {
+export function Menu(game, parent, user) {
     const _divWrapper = document.createElement("div");
     const _divTitle = document.createElement("div");
     const _divContent = document.createElement("div");
@@ -38,7 +39,7 @@ export function Menu(game, parent) {
 
         _divWrapper.appendChild(_divTitle);
         _divWrapper.appendChild(_divContent);
-        _divWrapper.appendChild(new UserIcon(new User(), null).getElement());
+        _divWrapper.appendChild(new UserIcon(user, null).getElement());
     };
 
     /**
@@ -89,7 +90,7 @@ export function Menu(game, parent) {
 
     build();
 
-    _divContent.appendChild(new MenuRoot(this).getElement());
+    _divContent.appendChild(new MenuRoot(this, user).getElement());
 }
 
 Menu.ID_WRAPPER = "menu";

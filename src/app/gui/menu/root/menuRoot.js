@@ -5,9 +5,10 @@ import {MenuMissions} from "../missions/menuMissions";
 /**
  * Content for the Menu root, containing buttons that allow access to other menu's.
  * @param {Menu} menu A menu.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function MenuRoot(menu) {
+export function MenuRoot(menu, user) {
     const _element = document.createElement("div");
 
     const make = () => {
@@ -23,7 +24,7 @@ export function MenuRoot(menu) {
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-                menu.setContent(new MenuMissions(menu).getElement());
+                menu.setContent(new MenuMissions(menu, user).getElement());
             }
         ).getElement());
     };
