@@ -1,4 +1,5 @@
 import {Cookie} from "../storage/cookie";
+import {AvatarSprites} from "./avatarSprites";
 
 /**
  * The user information stored locally and online.
@@ -6,7 +7,7 @@ import {Cookie} from "../storage/cookie";
  */
 export function User() {
     let _id = User.ANONYMOUS_USER;
-    let _imageSource = User.IMAGE_SOURCE_ANONYMOUS;
+    let _avatarSprites = new AvatarSprites();
 
     const loadUserFromCookie = () => {
         const cookie = new Cookie();
@@ -20,7 +21,7 @@ export function User() {
 
     /**
      * Set the user ID of the user.
-     * @param userId
+     * @param userId {int} The user ID
      */
     this.setUserId = (userId) => {
         _id = userId;
@@ -30,22 +31,17 @@ export function User() {
 
     /**
      * Obtain the user ID.
-     * @returns {number}
+     * @returns {number} The user ID
      */
-    this.getUserId = () => {
-        return _id;
-    };
+    this.getUserId = () => _id;
 
     /**
-     * Obtain the source of the user image.
-     * @returns {string} the link to the image.
+     * Obtain the sprites for the avatar
+     * @returns {AvatarSprites} The AvatarSprites object.
      */
-    this.getUserImage = () => {
-        return _imageSource;
-    };
+    this.getAvatarSprites = () => _avatarSprites;
 
     loadUserFromCookie();
 }
 
 User.ANONYMOUS_USER = -1;
-User.IMAGE_SOURCE_ANONYMOUS = "https://png.pngtree.com/svg/20170829/1d9f83ab9c.svg";

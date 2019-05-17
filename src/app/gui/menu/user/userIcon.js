@@ -3,8 +3,8 @@ import {Avatar} from "./avatar";
 
 /**
  * The user icon, which is a portal to the user settings.
- * @param user {User}
- * @param onClick {Function}
+ * @param user {User} The User object
+ * @param onClick {Function} The onClick action
  * @constructor
  */
 export function UserIcon(user, onClick) {
@@ -12,7 +12,7 @@ export function UserIcon(user, onClick) {
 
     const make = () => {
         _element.id = UserIcon.ID;
-        _element.appendChild(new Avatar().getElement());
+        _element.appendChild(new Avatar(user.getAvatarSprites()).getElement());
         _element.onclick = onClick;
     };
 
