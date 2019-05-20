@@ -1,4 +1,4 @@
-export const downloadBinary = (blob, fileName) => {
+export const DownloadBinary = (blob, fileName) => {
     if (navigator.msSaveBlob) { // IE 10+
         navigator.msSaveBlob(blob, fileName);
     } else {

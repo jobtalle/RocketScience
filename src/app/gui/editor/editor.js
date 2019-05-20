@@ -13,7 +13,7 @@ import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
 import {Data} from "../../file/data";
-import {downloadBinary} from "../../utils/downloadBinary";
+import {DownloadBinary} from "../../utils/downloadBinary";
 
 /**
  * Provides am editor for editing PCB's.
@@ -267,7 +267,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
                 world.getMission().serialize(missionData.getBuffer());
 
-                downloadBinary(missionData.getBlob(), world.getMission().getTitle() + ".bin");
+                DownloadBinary(missionData.getBlob(), world.getMission().getTitle() + ".bin");
 
                 return;
         }
