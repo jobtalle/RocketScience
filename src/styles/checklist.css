@@ -23,21 +23,29 @@
     box-sizing: border-box;
 }
 
-#checklist .objective {
+#checklist .objective .field {
     font-size: 20px;
     display: flex;
 }
 
-#checklist .objective input {
+#checklist .objective .field input {
     flex-grow: 1;
 }
 
-#checklist .objective button {
+#checklist .objective .field button {
     flex-grow: 0;
 }
 
 #checklist .objective.checked {
     text-decoration: line-through;
+}
+
+#checklist .objective .goals {
+
+}
+
+#checklist .objective .goals.hidden {
+    display: none;
 }
 
 #checklist .finished {

@@ -24,6 +24,7 @@ export function Checklist(mission, game, editor) {
             const checklistObjective = new ChecklistObjective(objective, editor);
 
             _objectives.push(checklistObjective);
+
             _container.appendChild(checklistObjective.getElement());
         }
     };
