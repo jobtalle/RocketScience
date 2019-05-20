@@ -3,16 +3,21 @@ import {GoalPinState} from "./goal/goalPinState";
 /**
  * An objective made up of a number of goals.
  * @param {Array} goals An array of valid goals to complete.
- * @param {String} name A name describing this objective.
+ * @param {String} title A title describing this objective.
  * @constructor
  */
-
-export function Objective(goals, name) {
+export function Objective(goals, title) {
     /**
      * Get the text describing this objective.
      * @returns {String} A string describing this objective.
      */
-    this.getName = () => name;
+    this.getTitle = () => title;
+
+    /**
+     * Set the title.
+     * @param {String} newTitle The new title.
+     */
+    this.setTitle = newTitle => title = newTitle;
 
     /**
      * Prime this objective for operation.
@@ -36,21 +41,22 @@ export function Objective(goals, name) {
 
     this.serialize = buffer => {
         buffer.writeByte(goals.length);
+
         for (const goal of goals)
             goal.serialize(buffer);
 
-        buffer.writeString(name);
+        buffer.writeString(title);
     };
 }
 
 Objective.deserialize = buffer => {
-    let goals = [];
+    const goals = [];
+    const goalCount = buffer.readByte();
 
-    let goalLength = buffer.readByte();
-    for (let idx = 0; idx < goalLength; ++idx)
+    for (let idx = 0; idx < goalCount; ++idx)
         goals.push(GoalPinState.deserialize(buffer));
 
-    let name = buffer.readString();
+    const title = buffer.readString();
 
-    return new Objective(goals, name);
+    return new Objective(goals, title);
 };

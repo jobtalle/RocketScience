@@ -1,14 +1,31 @@
 /**
  * An objective for the checklist GUI.
- * @param {String} description A description of this objective.
+ * @param {Objective} objective An objective.
+ * @param {Boolean} editor A boolean indicating whether this objective is an editor.
  * @constructor
  */
-export function ChecklistObjective(description) {
+export function ChecklistObjective(objective, editor) {
     const _element = document.createElement("div");
+
+    const makeField = () => {
+        const element = document.createElement("input");
+
+        element.value = objective.getTitle();
+        element.onkeydown = element.onkeyup = event => event.stopPropagation();
+        element.oninput = () => {
+            objective.setTitle(element.value);
+        };
+
+        return element;
+    };
 
     const build = () => {
         _element.className = ChecklistObjective.CLASS;
-        _element.innerText = description;
+
+        if (editor)
+            _element.appendChild(makeField());
+        else
+            _element.innerText = objective.getTitle();
     };
 
     /**
