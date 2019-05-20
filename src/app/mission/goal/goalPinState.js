@@ -1,5 +1,6 @@
 import {PcbGraph} from "../../pcb/pcbGraph";
 import {getPartFromId, getPartId} from "../../part/objects";
+import {Goal} from "./goal";
 
 /**
  * Check if a part exists of which a certain pin's value matches a given value.
@@ -32,6 +33,15 @@ export function GoalPinState(part, pinIndex, pinValue) {
         }
     };
 
+    /**
+     * Get the objective type.
+     */
+    this.getType = () => Goal.TYPE_PIN_STATE;
+
+    /**
+     * Evaluate whether this goal condition has been met.
+     * @returns {Boolean} True if the goal succeeded.
+     */
     this.validate = () => {
         for (const check of _checks) if (check.check(pinValue))
             return true;
@@ -39,6 +49,10 @@ export function GoalPinState(part, pinIndex, pinValue) {
         return false;
     };
 
+    /**
+     * Serialize this goal.
+     * @param {ByteBuffer} buffer A byte buffer.
+     */
     this.serialize = buffer => {
         buffer.writeByte(getPartId(part));
         buffer.writeByte(pinIndex);

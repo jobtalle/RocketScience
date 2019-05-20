@@ -40,10 +40,6 @@
     text-decoration: line-through;
 }
 
-#checklist .objective .goals {
-
-}
-
 #checklist .objective .goals.hidden {
     display: none;
 }
