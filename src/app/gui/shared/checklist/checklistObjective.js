@@ -19,11 +19,21 @@ export function ChecklistObjective(objective, editor) {
         return element;
     };
 
+    const makeToggle = () => {
+        const element = document.createElement("button");
+
+        element.innerText = ChecklistObjective.TEXT_EDIT;
+
+        return element;
+    };
+
     const build = () => {
         _element.className = ChecklistObjective.CLASS;
 
-        if (editor)
+        if (editor) {
             _element.appendChild(makeField());
+            _element.appendChild(makeToggle());
+        }
         else
             _element.innerText = objective.getTitle();
     };
@@ -46,3 +56,4 @@ export function ChecklistObjective(objective, editor) {
 
 ChecklistObjective.CLASS = "objective";
 ChecklistObjective.CLASS_CHECKED = "checked";
+ChecklistObjective.TEXT_EDIT = String.fromCharCode(9660);

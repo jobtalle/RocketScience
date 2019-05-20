@@ -25,6 +25,15 @@
 
 #checklist .objective {
     font-size: 20px;
+    display: flex;
+}
+
+#checklist .objective input {
+    flex-grow: 1;
+}
+
+#checklist .objective button {
+    flex-grow: 0;
 }
 
 #checklist .objective.checked {
