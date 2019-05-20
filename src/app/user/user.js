@@ -21,9 +21,8 @@ export function User() {
 
         if (cookie.hasValue(Cookie.KEY_USER_ID))
             _id = cookie.getValue(Cookie.KEY_USER_ID);
-        else {
+        else
             cookie.setValue(Cookie.KEY_USER_ID, _id);
-        }
     };
 
     const hasSavedMission = (mission) => {
@@ -34,9 +33,13 @@ export function User() {
         return _webStorage.getItem(mission);
     };
 
+    const setSavedMission = (key, mission) => {
+        return _webStorage.setItem(key, mission.toString());
+    };
+
     /**
      * Set the user ID of the user.
-     * @param userId {Number} The user ID
+     * @param userId {Number} The user ID.
      */
     this.setUserId = (userId) => {
         _id = userId;
@@ -46,7 +49,7 @@ export function User() {
 
     /**
      * Obtain the user ID.
-     * @returns {Number} The user ID
+     * @returns {Number} The user ID.
      */
     this.getUserId = () => _id;
 
@@ -58,7 +61,7 @@ export function User() {
 
     /**
      * Get the mission progresses, holding a mission and progress. This is returned through the onLoaded function.
-     * @param onLoaded {Function} The onComplete function that should be called when a mission is loaded
+     * @param onLoaded {Function} The onComplete function that should be called when a mission is loaded.
      */
     this.loadMissionProgresses = (onLoaded) => {
         for (const category of missions.categories) {
@@ -86,6 +89,17 @@ export function User() {
                 }
             }
         }
+    };
+
+    /**
+     * Store the mission progress in the storage.
+     * @param missionName {String} The name of the mission.
+     * @param missionProgress {Mission} The mission that should be stored.
+     * @param onComplete {Function} The function that should be called when the saving is finished.
+     */
+    this.saveMissionProgress = (missionName, missionProgress, onComplete) => {
+        setSavedMission(missionName, missionProgress);
+        onComplete(true);
     };
 
     loadUserFromCookie();

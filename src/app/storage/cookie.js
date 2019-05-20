@@ -67,7 +67,7 @@ export function Cookie() {
     /**
      * Get the value from the cookie dictionary, if it exists.
      * @param key {String} The key of the data in the dictionary.
-     * @returns {String|Null}
+     * @returns {String|Null} Either the value or null if there is no value stored.
      */
     this.getValue = (key) => {
         if (cookieValue[key])
@@ -79,7 +79,7 @@ export function Cookie() {
     /**
      * Check if the key has a value in the dictionary.
      * @param key {String} The key of the data in the dictionary.
-     * @returns {Boolean}
+     * @returns {Boolean} True if there is a value stored, False if there is no value stored.
      */
     this.hasValue = (key) => {
         return cookieValue[key]
