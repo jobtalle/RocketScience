@@ -143,7 +143,11 @@ export function Game(renderContext, input, user) {
                 break;
             case Game.MODE_GAME:
                 _hud.show();
-                _world.activate();
+
+                if (_editor.getEditable() === null)
+                    _world.activate(-1);
+                else
+                    _world.activate(_editor.getEditables().indexOf(_editor.getEditable()));
 
                 break;
         }
@@ -167,7 +171,7 @@ export function Game(renderContext, input, user) {
 
         _world = new World(renderContext, mission);
         _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this);
+        _editor = new Editor(renderContext, _world, this, true);
 
         _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();

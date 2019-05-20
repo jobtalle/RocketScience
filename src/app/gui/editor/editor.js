@@ -12,15 +12,18 @@ import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
+import {Data} from "../../file/data";
+import {DownloadBinary} from "../../utils/downloadBinary";
 
 /**
  * Provides am editor for editing PCB's.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.
+ * @param {Boolean} isMissionEditor Shows whether the editor should show functionality for editing missions.
  * @constructor
  */
-export function Editor(renderContext, world, game) {
+export function Editor(renderContext, world, game, isMissionEditor) {
     const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
     const _info = new Info(_overlay);
     const _view = new View(
@@ -40,7 +43,8 @@ export function Editor(renderContext, world, game) {
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
         renderContext.getHeight(),
         renderContext.getViewport().getSplitX(),
-        this);
+        this,
+        isMissionEditor);
     const _toolbar = new Toolbar(
         _pcbEditor,
         renderContext.getViewport().getElement(),
@@ -50,8 +54,12 @@ export function Editor(renderContext, world, game) {
         _pcbEditor,
         _toolbar,
         _info,
-        renderContext.getViewport().getElement());
-    const _checklist = new Checklist(world.getMission(), game);
+        renderContext.getViewport().getElement(),
+        isMissionEditor);
+    const _checklist = new Checklist(
+        world.getMission(),
+        game,
+        isMissionEditor);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
 
     const _editables = new Editables(renderContext, world);
@@ -114,6 +122,18 @@ export function Editor(renderContext, world, game) {
         _pcbEditor.edit(editable);
         _toolbar.default();
     };
+
+    /**
+     * Get the currently selected editable.
+     * @returns {Editable} An editable, or null if none is selected.
+     */
+    this.getEditable = () => _editable;
+
+    /**
+     * Get all editables.
+     * @returns {Array} An array of editables.
+     */
+    this.getEditables = () => world.getMission().getEditables();
 
     /**
      * Hide the editor.
@@ -203,8 +223,11 @@ export function Editor(renderContext, world, game) {
 
                 if (!pressedEditable || pressedEditable === _editable)
                     _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
-                else
+                else {
+                    _pcbEditor.setEditMode(PcbEditor.EDIT_MODE_SELECT);
+
                     this.edit(pressedEditable);
+                }
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
@@ -240,6 +263,17 @@ export function Editor(renderContext, world, game) {
     this.onKeyEvent = event => {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
+
+        if (event.down) switch(event.key) {
+            case Editor.KEY_MISSION_DOWNLOAD:
+                const missionData = new Data();
+
+                world.getMission().serialize(missionData.getBuffer());
+
+                DownloadBinary(missionData.getBlob(), world.getMission().getTitle() + ".bin");
+
+                return;
+        }
     };
 
     /**
@@ -256,3 +290,4 @@ Editor.ZOOM_DEFAULT = 4;
 Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
 Editor.ZOOM_MAX = 16;
+Editor.KEY_MISSION_DOWNLOAD = "m";

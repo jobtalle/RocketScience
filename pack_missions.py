@@ -7,7 +7,7 @@ MISSION_DIR = 'missions'
 DEST_DIR = 'dist' + '/' + MISSION_DIR
 OUT_FILE = 'src/assets/missions.json'
 
-MISSION_EXTENSION = 'mission'
+MISSION_EXTENSION = 'bin'
 
 
 def pack_missions():
