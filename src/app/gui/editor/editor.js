@@ -56,7 +56,10 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _info,
         renderContext.getViewport().getElement(),
         isMissionEditor);
-    const _checklist = new Checklist(world.getMission(), game);
+    const _checklist = new Checklist(
+        world.getMission(),
+        game,
+        isMissionEditor);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
 
     const _editables = new Editables(renderContext, world);

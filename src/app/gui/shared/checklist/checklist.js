@@ -7,10 +7,10 @@ import {ChecklistFinished} from "./checklistFinished";
  * A checklist displaying all mission objectives.
  * @param {Mission} mission A mission to create a checklist for.
  * @param {Game} game The game object.
- * @param {Mission} [listenTo] An optional mission to synchronize the list to.
+ * @param {Boolean} editor A boolean indicating whether this checklist is an editor.
  * @constructor
  */
-export function Checklist(mission, game, listenTo) {
+export function Checklist(mission, game, editor) {
     const _container = document.createElement("div");
     const _objectives = [];
 
@@ -18,8 +18,7 @@ export function Checklist(mission, game, listenTo) {
 
     const build = () => {
         _container.id = Checklist.ID;
-
-        _container.appendChild(new ChecklistTitle(mission.getTitle()).getElement());
+        _container.appendChild(new ChecklistTitle(mission, editor).getElement());
 
         for (const objective of mission.getObjectives()) {
             const checklistObjective = new ChecklistObjective(objective.getName());
@@ -59,8 +58,8 @@ export function Checklist(mission, game, listenTo) {
      */
     this.getElement = () => _container;
 
-    if (listenTo)
-        listenTo.setOnChange(update);
+    if (!editor)
+        mission.setOnChange(update);
 
     build();
 }
