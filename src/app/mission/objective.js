@@ -1,4 +1,5 @@
 import {GoalPinState} from "./goal/goalPinState";
+import {Goal} from "./goal/goal";
 
 /**
  * An objective made up of a number of goals.
@@ -42,8 +43,10 @@ export function Objective(goals, title) {
     this.serialize = buffer => {
         buffer.writeByte(goals.length);
 
-        for (const goal of goals)
+        for (const goal of goals) {
+            buffer.writeByte(goal.getType());
             goal.serialize(buffer);
+        }
 
         buffer.writeString(title);
     };
@@ -53,8 +56,14 @@ Objective.deserialize = buffer => {
     const goals = [];
     const goalCount = buffer.readByte();
 
-    for (let idx = 0; idx < goalCount; ++idx)
-        goals.push(GoalPinState.deserialize(buffer));
+    for (let idx = 0; idx < goalCount; ++idx) {
+        switch (buffer.readByte()) {
+            case Goal.TYPE_PIN_STATE:
+                goals.push(GoalPinState.deserialize(buffer));
+
+                break;
+        }
+    }
 
     const title = buffer.readString();
 
