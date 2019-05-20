@@ -52,6 +52,14 @@
     display: none;
 }
 
+#menu .content .missions .completed {
+    background-color: red;
+}
+
+#menu .content .missions .incomplete {
+    background-color: fuchsia;
+}
+
 #menu .content .missions .mission:hover {
     background-color: white;
 }

@@ -104,6 +104,10 @@ export function Game(renderContext, input, user) {
 
                 break;
             case Game.MODE_GAME:
+                user.saveMissionProgress(new MissionProgress(_world.getMission(),
+                    _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
+                    (result) => console.log("Saved mission " + result));
+
                 _hud.hide();
                 _world.deactivate();
 

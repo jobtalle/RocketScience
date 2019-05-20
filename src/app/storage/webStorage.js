@@ -141,7 +141,7 @@ export function WebStorage() {
     this.isMissionCompleted = (missionName) => {
         const complete = getItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName);
 
-        return !(complete === null || complete === undefined || complete === false);
+        return !(complete === null || complete === undefined || complete === "false");
     }
 }
 

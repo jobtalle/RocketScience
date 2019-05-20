@@ -12,13 +12,14 @@ export function MenuMissions(menu, user) {
     const _element = document.createElement("div");
 
     const onMissionLoaded = (missionProgress) => {
-        _element.appendChild(new MenuMission(menu, missionProgress.getMission()).getElement());
+        _element.appendChild(new MenuMission(menu, missionProgress).getElement());
     };
 
     const make = () => {
         _element.className = MenuMissions.CLASS;
 
-        user.loadMissionProgresses((missionProgress) => onMissionLoaded(missionProgress));
+        user.loadMissionProgresses((missionProgress) => onMissionLoaded(missionProgress),
+            (error) => console.log(error));
     };
 
     /**

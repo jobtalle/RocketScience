@@ -1,23 +1,30 @@
 /**
  * A mission that can be started.
  * @param {Menu} menu The menu.
- * @param {Mission} mission A mission.
+ * @param {MissionProgress} missionProgress A missionProgress object.
  * @constructor
  */
 import {MenuMissionTitle} from "./menuMissionTitle";
 import {MenuMissionDescription} from "./menuMissionDescription";
+import {MissionProgress} from "../../../../mission/missionProgress";
 
-export function MenuMission(menu, mission) {
+export function MenuMission(menu, missionProgress) {
     const _element = document.createElement("div");
 
     const start = () => {
-        menu.getGame().startMission(mission);
+        menu.getGame().startMission(missionProgress.getMission());
     };
 
     const make = () => {
         _element.className = MenuMission.CLASS;
-        _element.appendChild(new MenuMissionTitle(mission.getTitle()).getElement());
-        _element.appendChild(new MenuMissionDescription(mission.getDescription()).getElement());
+
+        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE)
+            _element.classList.add(MenuMission.CLASS_COMPLETED);
+        else if (missionProgress.getProgress() === MissionProgress.PROGRESS_INCOMPLETE)
+            _element.classList.add(MenuMission.CLASS_INCOMPLETE);
+
+        _element.appendChild(new MenuMissionTitle(missionProgress.getMission().getTitle()).getElement());
+        _element.appendChild(new MenuMissionDescription(missionProgress.getMission().getDescription()).getElement());
         _element.onclick = start;
     };
 
@@ -31,3 +38,5 @@ export function MenuMission(menu, mission) {
 }
 
 MenuMission.CLASS = "mission";
+MenuMission.CLASS_COMPLETED = "completed";
+MenuMission.CLASS_INCOMPLETE = "incomplete";
