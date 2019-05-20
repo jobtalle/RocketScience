@@ -116,8 +116,36 @@ export function WebStorage() {
                 onLoad(getItem(key));
         }
     };
+
+    /**
+     * Removes completion progress from the mission.
+     * @param missionName {String} The name of the mission.
+     */
+    this.setMissionIncomplete = (missionName) => {
+        removeItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName);
+    };
+
+    /**
+     * Marks the mission as completed.
+     * @param missionName {String} The name of the mission.
+     */
+    this.setMissionCompleted = (missionName) => {
+        setItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName, true);
+    };
+
+    /**
+     * Returns whether the mission is completed or not.
+     * @param missionName {String} The name of the mission.
+     * @return {Boolean} True if the mission is completed, false otherwise.
+     */
+    this.isMissionCompleted = (missionName) => {
+        const complete = getItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName);
+
+        return !(complete === null || complete === undefined || complete === false);
+    }
 }
 
-WebStorage.PREFIX_MISSION_PROGRESS = "progress-";
-WebStorage.PREFIX_CUSTOM_MISSION = "custom-";
+WebStorage.PREFIX_COMPLETED_MISSION = "completed-mission-";
+WebStorage.PREFIX_MISSION_PROGRESS = "mission-progress-";
+WebStorage.PREFIX_CUSTOM_MISSION = "custom-mission-";
 WebStorage.PREFIX_PCB = "PCB-";

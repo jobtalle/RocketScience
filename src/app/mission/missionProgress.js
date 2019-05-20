@@ -5,8 +5,16 @@
  * @constructor
  */
 export function MissionProgress(mission, progress) {
+    /**
+     * Obtain the mission object.
+     * @return {Mission} The mission.
+     */
     this.getMission = () => mission;
 
+    /**
+     * Obtain the mission progress.
+     * @return {Number} A number which indicates the progress, 0 for none, 1 for incomplete, 2 for completed.
+     */
     this.getProgress = () => progress;
 }
 

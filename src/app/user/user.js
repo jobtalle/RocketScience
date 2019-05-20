@@ -43,6 +43,13 @@ export function User() {
         _webStorage.saveMissionProgress(name, data.toString())
     };
 
+    const getMissionProgression = (missionName) => {
+        if (_webStorage.isMissionCompleted(missionName))
+            return MissionProgress.PROGRESS_COMPLETE;
+
+        return MissionProgress.PROGRESS_INCOMPLETE;
+    };
+
     /**
      * Set the user ID of the user.
      * @param userId {Number} The user ID.
@@ -67,41 +74,46 @@ export function User() {
 
     /**
      * Get the mission progresses, holding a mission and progress. This is returned through the onLoaded function.
-     * @param onLoaded {Function} The onComplete function that should be called when a mission is loaded.
+     * @param onLoaded {Function} The onLoaded function will be called per mission that is loaded.
+     * @param onError {Function} This will be called when an error occurs.
      */
-    this.loadMissionProgresses = (onLoaded) => {
+    this.loadMissionProgresses = (onLoaded, onError) => {
         for (const category of missions.categories) {
             for (const mission of category.missions) {
-                const loadData = new Data();
 
                 if (hasSavedMission(mission.title)) {
-                    const missionProgress = new MissionProgress(getSavedMission(mission.title),
-                        MissionProgress.PROGRESS_INCOMPLETE);
+                        onLoaded(new MissionProgress(getSavedMission(mission.title),
+                            getMissionProgression(mission.title)));
 
-                    onLoaded(missionProgress);
-                } else {
-                    requestBinary(mission.file, (result) => {
-                        loadData.setBlob(result, () => {
-                            const missionProgress = new MissionProgress(Mission.deserialize(loadData.getBuffer()),
-                                MissionProgress.PROGRESS_UNBEGUN);
+                } else { // Load mission from binary file
+                    requestBinary(mission.file,
+                        (result) => {
+                            const data = new Data();
 
-                            onLoaded(missionProgress);
-                        });
-                    }, () => {
-                        console.log("could not parse mission " + mission);
-                    });
+                            data.setBlob(result, () => onLoaded(new MissionProgress(
+                                Mission.deserialize(data.getBuffer()),
+                                MissionProgress.PROGRESS_UNBEGUN)));
+                    },
+                        () => onError("could not parse mission " + mission)
+                    );
                 }
             }
         }
     };
 
     /**
-     * Store the mission progress in the storage.
-     * @param mission {Mission} The mission that has to be saved.
+     * Store the missionProgress progress in the storage.
+     * @param missionProgress {MissionProgress} The missionProgress that has to be saved.
      * @param onComplete {Function} The function that should be called when the saving is finished.
      */
-    this.saveMissionProgress = (mission, onComplete) => {
-        setSavedMission(mission.getTitle(), mission);
+    this.saveMissionProgress = (missionProgress, onComplete) => {
+        setSavedMission(missionProgress.getMission().getTitle(), missionProgress.getMission());
+
+        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE)
+            _webStorage.setMissionCompleted(missionProgress.getMission().getTitle());
+        else
+            _webStorage.setMissionIncomplete(missionProgress.getMission().getTitle());
+
         onComplete(true);
     };
 

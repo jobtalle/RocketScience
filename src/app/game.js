@@ -3,6 +3,7 @@ import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
 import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
+import {MissionProgress} from "./mission/missionProgress";
 
 /**
  * This class contains the game views.
@@ -65,12 +66,10 @@ export function Game(renderContext, input, user) {
             case Game.MODE_GAME:
                 _world.onKeyEvent(event);
 
-                if (event.down) switch (event.key) {
-                    case Game.KEY_TOGGLE_EDIT:
-                        if (_mode === Game.MODE_GAME)
-                            this.setMode(Game.MODE_EDIT);
-
-                        return;
+                if (event.down) if (event.key === Game.KEY_TOGGLE_EDIT) {
+                    if (_mode === Game.MODE_GAME)
+                        this.setMode(Game.MODE_EDIT);
+                    return;
                 }
 
                 break;
@@ -97,8 +96,10 @@ export function Game(renderContext, input, user) {
 
                 break;
             case Game.MODE_EDIT:
-                user.saveMissionProgress(_world.getMission(),
+                user.saveMissionProgress(new MissionProgress(_world.getMission(),
+                    _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
                     (result) => console.log("Saved mission " + result));
+
                 _editor.hide();
 
                 break;
