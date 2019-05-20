@@ -1,14 +1,26 @@
+import {Goal} from "../../../mission/goal/goal";
+import {ChecklistObjectiveGoalPinState} from "./goals/checklistObjectiveGoalPinState";
+
 /**
  * A list of editable objective goals.
+ * @param {Objective} objective An objective.
  * @constructor
  */
-export function ChecklistObjectiveGoals() {
+export function ChecklistObjectiveGoals(objective) {
     const _element = document.createElement("div");
 
     const make = () => {
         _element.classList.add(ChecklistObjectiveGoals.CLASS);
         _element.classList.add(ChecklistObjectiveGoals.CLASS_HIDDEN);
-        _element.innerText = "hello";
+
+        for (const goal of objective.getGoals()) {
+            switch (goal.getType()) {
+                case Goal.TYPE_PIN_STATE:
+                    _element.appendChild(new ChecklistObjectiveGoalPinState(goal).getElement());
+
+                    break;
+            }
+        }
     };
 
     /**

@@ -76,12 +76,23 @@ export function getPartId(name) {
 export function getPartFromId(id) {
     const object = Object.keys(states)[id];
 
-    for (const category of parts.categories) {
-        for (const part of category.parts) {
+    for (const category of parts.categories)
+        for (const part of category.parts)
             if (part.object === object)
                 return part;
-        }
-    }
 
     return null;
+}
+
+/**
+ * Return all part ID's in an array.
+ * @returns {Array} An array of numbers.
+ */
+export function getParts() {
+    const ids = [];
+
+    for (const state of Object.keys(states))
+        ids.push(getPartId(state));
+
+    return ids;
 }

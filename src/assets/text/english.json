@@ -9,8 +9,16 @@
   "MACRO_HIGH": "high",
   "MACRO_LOW": "low",
 
+  "VALUE_PICKER_LOW": "Low",
+  "VALUE_PICKER_HIGH": "High",
+
   "BUDGET_TYPE_NONE": "Unlimited budget",
   "BUDGET_TYPE_INVENTORY": "Inventory budget",
+
+  "GOAL_PIN_STATE_DESCRIPTION": "Check if a part exists with a certain value at a certain pin.",
+  "GOAL_PIN_STATE_PART": "Part",
+  "GOAL_PIN_STATE_PIN": "Pin",
+  "GOAL_PIN_STATE_VALUE": "Value",
 
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
@@ -64,7 +72,7 @@
   "PART_GATE_NOT_PIN_2_DESCRIPTION": "The input signal.",
 
   "PART_BATTERY_NAME": "Battery",
-  "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a positive signal. Many parts need to be powered to function.",
+  "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a high signal. Many parts need to be powered to function.",
   "PART_BATTERY_PIN_DESCRIPTION": "This pin will always output a <high> signal.",
 
   "PART_WHEEL_NAME": "Wheel",

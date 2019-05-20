@@ -6,7 +6,7 @@ import {Goal} from "./goal";
  * Check if a part exists of which a certain pin's value matches a given value.
  * @param {String} part A valid part name; the goal will check all parts of this type.
  * @param {Number} pinIndex A pin index to check state from.
- * @param {Number} pinValue The value this pin must have for the goal to succeed.
+ * @param {Number} pinValue The value this pin must have for the goal to succeed, must be 0 or 1.
  * @constructor
  */
 export function GoalPinState(part, pinIndex, pinValue) {
@@ -37,6 +37,42 @@ export function GoalPinState(part, pinIndex, pinValue) {
      * Get the objective type.
      */
     this.getType = () => Goal.TYPE_PIN_STATE;
+
+    /**
+     * Get the part.
+     * @returns {String} A valid part name.
+     */
+    this.getPart = () => part;
+
+    /**
+     * Set the part.
+     * @param {String} newPart A valid part name.
+     */
+    this.setPart = newPart => part = newPart;
+
+    /**
+     * Get the pin index that is evaluated.
+     * @returns {Number} The pin index.
+     */
+    this.getPinIndex = () => pinIndex;
+
+    /**
+     * Set the pin index that is evaluated.
+     * @param {Number} newPinIndex A valid pin index within the part.
+     */
+    this.setPinIndex = newPinIndex => pinIndex = newPinIndex;
+
+    /**
+     * Get the value the pin must have for the goal to succeed.
+     * @returns {Number} The pin value, zero or one.
+     */
+    this.getPinValue = () => pinValue;
+
+    /**
+     * Set the pin value.
+     * @param {Number} newPinValue A valid pin value that must be either zero or one.
+     */
+    this.setPinValue = newPinValue => pinValue = newPinValue;
 
     /**
      * Evaluate whether this goal condition has been met.

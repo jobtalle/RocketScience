@@ -17,4 +17,11 @@ export function Macro(find, replaceClass, replaceText) {
     this.getReplaceText = () => {
         return "<span class=\"" + replaceClass + "\">" + getString(replaceText) + "</span>";
     };
+
+    /**
+     * Get the replacement text without formatting.
+     */
+    this.getReplaceTextRaw = () => {
+        return getString(replaceText);
+    };
 }

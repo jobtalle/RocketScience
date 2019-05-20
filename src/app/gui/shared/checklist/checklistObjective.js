@@ -44,7 +44,7 @@ export function ChecklistObjective(objective, editor) {
         _element.className = ChecklistObjective.CLASS;
 
         if (editor) {
-            const goals = new ChecklistObjectiveGoals();
+            const goals = new ChecklistObjectiveGoals(objective);
 
             _element.appendChild(makeEditor(goals));
             _element.appendChild(goals.getElement());

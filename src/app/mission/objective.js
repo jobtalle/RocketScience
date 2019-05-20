@@ -21,6 +21,12 @@ export function Objective(goals, title) {
     this.setTitle = newTitle => title = newTitle;
 
     /**
+     * Get this objective's goals.
+     * @returns {Array} An array of goals, that may not be empty.
+     */
+    this.getGoals = () => goals;
+
+    /**
      * Prime this objective for operation.
      * @param {Array} objects An array containing all editable PCB's as game objects in order.
      */
@@ -40,6 +46,10 @@ export function Objective(goals, title) {
         return true;
     };
 
+    /**
+     * Serialize this objective.
+     * @param {ByteBuffer} buffer A byte buffer.
+     */
     this.serialize = buffer => {
         buffer.writeByte(goals.length);
 
