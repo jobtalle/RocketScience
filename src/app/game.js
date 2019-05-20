@@ -97,6 +97,8 @@ export function Game(renderContext, input, user) {
 
                 break;
             case Game.MODE_EDIT:
+                user.saveMissionProgress(_world.getMission(),
+                    (result) => console.log("Saved mission " + result));
                 _editor.hide();
 
                 break;

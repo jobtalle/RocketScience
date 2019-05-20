@@ -29,7 +29,11 @@ def pack_missions():
             if not fileName.endswith(MISSION_EXTENSION):
                 continue
 
-            fileList.append(os.path.join(MISSION_DIR, dirName, fileName))
+
+            mission = {"title": fileName.split('.')[0],
+                "file": os.path.join(MISSION_DIR, dirName, fileName)}
+
+            fileList.append(mission);
             print('- \'' + os.path.join(MISSION_DIR, dirName, fileName) + '\'')
 
         category['missions'] = fileList

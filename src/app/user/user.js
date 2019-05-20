@@ -26,15 +26,21 @@ export function User() {
     };
 
     const hasSavedMission = (mission) => {
-        return _webStorage.getItem(mission) != null;
+        return _webStorage.getMissionProgress(mission) != null;
     };
 
     const getSavedMission = (mission) => {
-        return _webStorage.getItem(mission);
+        const data = new Data();
+        data.fromString(_webStorage.getMissionProgress(mission));
+
+        return Mission.deserialize(data.getBuffer())
     };
 
-    const setSavedMission = (key, mission) => {
-        return _webStorage.setItem(key, mission.toString());
+    const setSavedMission = (name, mission) => {
+        const data = new Data();
+        mission.serialize(data.getBuffer());
+
+        _webStorage.saveMissionProgress(name, data.toString())
     };
 
     /**
@@ -68,15 +74,13 @@ export function User() {
             for (const mission of category.missions) {
                 const loadData = new Data();
 
-                if (hasSavedMission(mission)) {
-                    loadData.fromString(getSavedMission(mission));
-
-                    // TODO: load from a progress key
-
-                    const missionProgress = new MissionProgress(Mission.deserialize(loadData.getBuffer()),
+                if (hasSavedMission(mission.title)) {
+                    const missionProgress = new MissionProgress(getSavedMission(mission.title),
                         MissionProgress.PROGRESS_INCOMPLETE);
+
+                    onLoaded(missionProgress);
                 } else {
-                    requestBinary(mission, (result) => {
+                    requestBinary(mission.file, (result) => {
                         loadData.setBlob(result, () => {
                             const missionProgress = new MissionProgress(Mission.deserialize(loadData.getBuffer()),
                                 MissionProgress.PROGRESS_UNBEGUN);
@@ -93,12 +97,11 @@ export function User() {
 
     /**
      * Store the mission progress in the storage.
-     * @param missionName {String} The name of the mission.
-     * @param missionProgress {Mission} The mission that should be stored.
+     * @param mission {Mission} The mission that has to be saved.
      * @param onComplete {Function} The function that should be called when the saving is finished.
      */
-    this.saveMissionProgress = (missionName, missionProgress, onComplete) => {
-        setSavedMission(missionName, missionProgress);
+    this.saveMissionProgress = (mission, onComplete) => {
+        setSavedMission(mission.getTitle(), mission);
         onComplete(true);
     };
 
