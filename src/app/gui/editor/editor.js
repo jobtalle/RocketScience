@@ -156,7 +156,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _toolbar.show();
         _overlay.show();
 
-        if (world.getMission().isFinished())
+        if (!isMissionEditor && world.getMission().isFinished())
             _checklist.finish();
 
         renderContext.getOverlay().appendChild(_checklist.getElement());

@@ -11,7 +11,10 @@ import {PinPicker} from "./pinPicker";
  * @constructor
  */
 export function ChecklistObjectiveGoalPinState(goal) {
-    const _element = new ChecklistObjectiveGoalPanel().getElement();
+    const _element = new ChecklistObjectiveGoalPanel(
+        ChecklistObjectiveGoalPinState.TEXT_TITLE,
+        ChecklistObjectiveGoalPinState.TEXT_DESCRIPTION
+    ).getElement();
 
     const makeRow = (label, field) => {
         const element = document.createElement("tr");
@@ -67,6 +70,7 @@ export function ChecklistObjectiveGoalPinState(goal) {
     make();
 }
 
+ChecklistObjectiveGoalPinState.TEXT_TITLE = "GOAL_PIN_STATE_TITLE";
 ChecklistObjectiveGoalPinState.TEXT_DESCRIPTION = "GOAL_PIN_STATE_DESCRIPTION";
 ChecklistObjectiveGoalPinState.TEXT_PART = "GOAL_PIN_STATE_PART";
 ChecklistObjectiveGoalPinState.TEXT_PIN = "GOAL_PIN_STATE_PIN";
