@@ -6,6 +6,8 @@
     background-color: #ffcc66;
     padding: var(--checklist-padding);
     font-size: 20px;
+    overflow-y: auto;
+    max-height: calc(100% - 2 * (var(--hud-padding) + var(--checklist-padding)));
 }
 
 #checklist .title {
