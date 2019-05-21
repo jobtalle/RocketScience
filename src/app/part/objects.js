@@ -23,31 +23,47 @@ import {Subtractor} from "./parts/subtractor";
 import {SensorSonar} from "./parts/sensorSonar";
 import {GateXor} from "./parts/gateXor";
 
-const states = {
-    "Led": Led,
-    "Oscillator": Oscillator,
-    "Battery": Battery,
-    "GateOr": GateOr,
-    "GateXor": GateXor,
-    "GateAnd": GateAnd,
-    "GateNot": GateNot,
-    "Wheel": Wheel,
-    "SensorTouch": SensorTouch,
-    "Propeller": Propeller,
-    "Controller": Controller,
-    "Button": Button,
-    "Switch": Switch,
-    "Transistor": Transistor,
-    "Meter": Meter,
-    "Resistor": Resistor,
-    "Adder": Adder,
-    "Capacitor": Capacitor,
-    "Altimeter": Altimeter,
-    "Comparator": Comparator,
-    "Tilt": Tilt,
-    "Subtractor": Subtractor,
-    "SensorSonar": SensorSonar
-};
+const objects = [
+    Led,
+    Oscillator,
+    Battery,
+    GateOr,
+    GateXor,
+    GateAnd,
+    GateNot,
+    Wheel,
+    SensorTouch,
+    Propeller,
+    Controller,
+    Button,
+    Switch,
+    Transistor,
+    Meter,
+    Resistor,
+    Adder,
+    Capacitor,
+    Altimeter,
+    Comparator,
+    Tilt,
+    Subtractor,
+    SensorSonar];
+
+const nameToId = {};
+const idToName = {};
+const idToObject = {};
+const idToDefinition = {};
+const ids = [];
+
+for (let i = 0; i < objects.length; ++i) {
+    ids.push(i);
+    nameToId[objects[i].name] = i;
+    idToName[i] = objects[i].name;
+    idToObject[i] = objects[i];
+}
+
+for (const category of parts.categories)
+    for (const part of category.parts)
+        idToDefinition[nameToId[part.object]] = part;
 
 /**
  * Get part state from its name.
@@ -55,7 +71,7 @@ const states = {
  * @returns {Object} the state object.
  */
 export function getPartObject(name) {
-    return states[name];
+    return idToObject[nameToId[name]];
 }
 
 /**
@@ -64,7 +80,7 @@ export function getPartObject(name) {
  * @returns {Number} A unique id. -1 if the part name is invalid.
  */
 export function getPartId(name) {
-    return Object.keys(states).indexOf(name);
+    return nameToId[name];
 }
 
 /**
@@ -74,14 +90,7 @@ export function getPartId(name) {
  * @returns {Object} A valid part configuration. If the id is invalid, null is returned.
  */
 export function getPartFromId(id) {
-    const object = Object.keys(states)[id];
-
-    for (const category of parts.categories)
-        for (const part of category.parts)
-            if (part.object === object)
-                return part;
-
-    return null;
+    return idToDefinition[id];
 }
 
 /**
@@ -89,10 +98,5 @@ export function getPartFromId(id) {
  * @returns {Array} An array of numbers.
  */
 export function getParts() {
-    const ids = [];
-
-    for (const state of Object.keys(states))
-        ids.push(getPartId(state));
-
     return ids;
 }
