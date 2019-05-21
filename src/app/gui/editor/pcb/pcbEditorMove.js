@@ -24,6 +24,22 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
     let _resizeQuadrant = 0;
 
     /**
+     * Set the flags in _resizeQuadrant. Stores in which quadrant of the editable region the mouse is.
+     */
+    const setResizeQuadrant = () => {
+        _resizeQuadrant = 0;
+        if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
+            _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
+        else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x)
+            _resizeQuadrant |= PcbEditorMove.BIT_MASK_RIGHT;
+
+        if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
+            _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
+        else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y)
+            _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
+    };
+
+    /**
      * Change the PCB being edited.
      */
     this.updatePcb = () => {
@@ -42,7 +58,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      * Tell the editor the cursor has moved.
      */
     this.moveCursor = () => {
-        if (!_dragging)
+        if (!_dragging) {
             if (pcb.getPoint(cursor.x, cursor.y) !== null)
                 _mode = PcbEditorMove.PCB_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
@@ -56,19 +72,10 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
                 5)) {
                 _mode = PcbEditorMove.REGION_RESIZE;
 
-                _resizeQuadrant = 0;
-                if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
-                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
-                else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x)
-                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_RIGHT;
-
-                if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
-                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
-                else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y)
-                    _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
-            }
-            else
+                setResizeQuadrant();
+            } else
                 _mode = PcbEditorMove.NOT_MOVABLE;
+        }
     };
 
     /**
@@ -91,15 +98,20 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
                     break;
                 case PcbEditorMove.REGION_RESIZE:
+                    const delta = new Myr.Vector(0, 0);
+
                     if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT)
-                        editor.resizeRegionUpLeft(dx, 0);
+                        delta.add(editor.resizeRegionUpLeft(dx, 0));
                     else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_RIGHT)
-                        editor.resizeRegion(dx, 0);
+                        delta.add(editor.resizeRegion(dx, 0));
 
                     if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
-                        editor.resizeRegionUpLeft(0, dy);
+                        delta.add(editor.resizeRegionUpLeft(0, dy));
                     else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
-                        editor.resizeRegion(0, dy);
+                        delta.add(editor.resizeRegion(0, dy));
+
+                    delta.multiply(Scale.POINTS_PER_METER);
+                    _rawDragging.add(delta);
 
                     break;
             }
@@ -205,7 +217,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
         switch (_mode) {
             case PcbEditorMove.PCB_MOVE:
                 if (_dragging)
-                // if (false)
                     SPRITE_MOVE.draw(
                         (_dragging.x - 1) * Scale.PIXELS_PER_POINT,
                         (_dragging.y - 1) * Scale.PIXELS_PER_POINT);
@@ -227,16 +238,13 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
                 break;
             case PcbEditorMove.REGION_RESIZE:
-                let posX = 0;
-                let posY = 0;
+                let posX = rawCursor.x;
+                let posY = rawCursor.y;
                 const offset = 1.5;
 
                 if (_rawDragging) {
                     posX = _rawDragging.x;
                     posY = _rawDragging.y;
-                } else {
-                    posX = rawCursor.x;
-                    posY = rawCursor.y;
                 }
 
                 if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT)
@@ -281,9 +289,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
                         (posX + offset) * Scale.PIXELS_PER_POINT,
                         (posY - offset) * Scale.PIXELS_PER_POINT,
                         1.5 * Math.PI);
-
-
-
 
                 break;
         }
