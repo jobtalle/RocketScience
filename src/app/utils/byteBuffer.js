@@ -27,7 +27,7 @@ export function ByteBuffer(source) {
      */
     this.writeByteSigned = byte => {
         if (byte >= 0)
-            _bytes.push(byte);
+            _bytes.push(byte & 0x7F);
         else
             _bytes.push(((128 + byte) & 0x7F) | 0x80);
     };
@@ -39,6 +39,23 @@ export function ByteBuffer(source) {
     this.writeShort = short => {
         _bytes.push((short >> 8) & 0xFF);
         _bytes.push(short & 0xFF);
+    };
+
+    /**
+     * Write 16 signed bits to the buffer.
+     * @param {Number} short An unsigned integer in the range [-32768, 32767].
+     */
+    this.writeShortSigned = short => {
+        if (short >= 0) {
+            _bytes.push((short >> 8) & 0x7F);
+            _bytes.push(short & 0xFF);
+        }
+        else {
+            short += 32768;
+
+            _bytes.push(((short >> 8) & 0x7F) | 0x80);
+            _bytes.push(short & 0xFF);
+        }
     };
 
     /**
@@ -89,6 +106,7 @@ export function ByteBuffer(source) {
      */
     this.readByteSigned = () => {
         const x = _bytes[_at++];
+
         if (x < 128)
             return x;
 
@@ -101,6 +119,19 @@ export function ByteBuffer(source) {
      */
     this.readShort = () => {
         return (_bytes[_at++] << 8) | _bytes[_at++];
+    };
+
+    /**
+     * Read 16 signed bits from the buffer.
+     * @returns {Number} An unsigned integer in the range [-32768, 32767].
+     */
+    this.readShortSigned = () => {
+        const x = (_bytes[_at++] << 8) | _bytes[_at++];
+
+        if (x < 32768)
+            return x;
+
+        return -32768 + (x & 0x7FFF);
     };
 
     /**

@@ -390,9 +390,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Press the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
+     * @param {Boolean} cam A boolean indicating whether this is a camera press.
      */
-    this.onMousePress = (x, y) => {
-        if (!mouseDown(x, y)) {
+    this.onMousePress = (x, y, cam) => {
+        if (cam || !mouseDown(x, y)) {
             view.onMouseMove(x, y);
             view.onMousePress();
         }
@@ -402,11 +403,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Release the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
+     * @param {Boolean} cam A boolean indicating whether this is a camera press.
      */
-    this.onMouseRelease = (x, y) => {
-        mouseUp(x, y);
-
-        view.onMouseRelease();
+    this.onMouseRelease = (x, y, cam) => {
+        if (cam || !mouseUp(x, y))
+            view.onMouseRelease();
     };
 
     /**

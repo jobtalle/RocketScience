@@ -26,8 +26,15 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
     const makeToggle = goals => {
         const element = document.createElement("button");
 
-        element.innerText = ChecklistObjective.TEXT_EDIT;
-        element.onclick = goals.toggle;
+        element.innerText = ChecklistObjective.TEXT_EXPAND;
+        element.onclick = () => {
+            goals.toggle();
+
+            if (element.innerText === ChecklistObjective.TEXT_EXPAND)
+                element.innerText = ChecklistObjective.TEXT_COLLAPSE;
+            else
+                element.innerText = ChecklistObjective.TEXT_EXPAND;
+        };
 
         return element;
     };
@@ -45,11 +52,15 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
 
     const makeEditor = goals => {
         const element = document.createElement("div");
+        const toggle = makeToggle(goals);
 
         element.className = ChecklistObjective.CLASS_INPUT;
         element.appendChild(makeField());
-        element.appendChild(makeToggle(goals));
+        element.appendChild(toggle);
         element.appendChild(makeDelete());
+
+        if (open)
+            toggle.click();
 
         return element;
     };
@@ -62,9 +73,6 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
 
             _element.appendChild(makeEditor(goals));
             _element.appendChild(goals.getElement());
-
-            if (open)
-                goals.toggle();
         }
         else
             _element.innerText = objective.getTitle();
@@ -89,5 +97,6 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
 ChecklistObjective.CLASS = "objective";
 ChecklistObjective.CLASS_CHECKED = "checked";
 ChecklistObjective.CLASS_INPUT = "field";
-ChecklistObjective.TEXT_EDIT = String.fromCharCode(9660);
+ChecklistObjective.TEXT_EXPAND = String.fromCharCode(9660);
+ChecklistObjective.TEXT_COLLAPSE = String.fromCharCode(9650);
 ChecklistObjective.TEXT_DELETE = String.fromCharCode(10006);

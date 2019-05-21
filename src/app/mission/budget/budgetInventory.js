@@ -83,7 +83,7 @@ export function BudgetInventory(entries) {
 
         for (const entry of entries) {
             buffer.writeByte(getPartId(entry.name));
-            buffer.writeByteSigned(entry.count);
+            buffer.writeShortSigned(entry.count);
         }
     };
 
@@ -95,7 +95,7 @@ BudgetInventory.deserialize = buffer => {
     let entryLength = buffer.readByte();
 
     for (let idx = 0; idx < entryLength; ++idx) {
-        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readByteSigned()));
+        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readShortSigned()));
     }
 
     return new BudgetInventory(entries);

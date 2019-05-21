@@ -221,10 +221,15 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_PRESS_LMB:
+            case MouseEvent.EVENT_PRESS_RMB:
                 const pressedEditable = _editables.getEditableAt(event.x, event.y);
+                const isCam = event.type === Editor.MOUSE_BUTTON_PRESS_VIEW;
 
-                if (!pressedEditable || pressedEditable === _editable)
-                    _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
+                if (isCam || !pressedEditable || pressedEditable === _editable)
+                    _pcbEditor.onMousePress(
+                        event.x - renderContext.getViewport().getSplitX(),
+                        event.y,
+                        isCam);
                 else {
                     _pcbEditor.setEditMode(PcbEditor.EDIT_MODE_SELECT);
 
@@ -233,7 +238,11 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
-                _pcbEditor.onMouseRelease(event.x - renderContext.getViewport().getSplitX(), event.y);
+            case MouseEvent.EVENT_RELEASE_RMB:
+                _pcbEditor.onMouseRelease(
+                    event.x - renderContext.getViewport().getSplitX(),
+                    event.y,
+                    event.type === Editor.MOUSE_BUTTON_RELEASE_VIEW);
 
                 break;
             case MouseEvent.EVENT_SCROLL:
@@ -283,6 +292,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      */
     this.free = () => {
         _pcbEditor.free();
+        _editables.free();
     };
 
     _view.setOnChanged(onViewChanged);
@@ -293,3 +303,5 @@ Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
 Editor.ZOOM_MAX = 16;
 Editor.KEY_MISSION_DOWNLOAD = "m";
+Editor.MOUSE_BUTTON_PRESS_VIEW = MouseEvent.EVENT_PRESS_RMB;
+Editor.MOUSE_BUTTON_RELEASE_VIEW = MouseEvent.EVENT_RELEASE_RMB;

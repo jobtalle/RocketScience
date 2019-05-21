@@ -83,4 +83,4 @@ export function CategoryPartCountSetter(budget, name, counter) {
 
 CategoryPartCountSetter.CLASS = "count-setter";
 CategoryPartCountSetter.TEXT_INFINITE = String.fromCharCode(8734);
-CategoryPartCountSetter.COUNT_MAX = 127;
+CategoryPartCountSetter.COUNT_MAX = 32767;

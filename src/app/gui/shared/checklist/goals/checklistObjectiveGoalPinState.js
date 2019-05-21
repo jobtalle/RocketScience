@@ -8,13 +8,14 @@ import {PinPicker} from "./pinPicker";
 /**
  * A pin state goal editor.
  * @param {GoalPinState} goal The goal to edit.
+ * @param {Function} onDelete A function to call when the objective should be deleted.
  * @constructor
  */
-export function ChecklistObjectiveGoalPinState(goal) {
-    const _element = new ChecklistObjectiveGoalPanel(
+export function ChecklistObjectiveGoalPinState(goal, onDelete) {
+    const _panel = new ChecklistObjectiveGoalPanel(
         ChecklistObjectiveGoalPinState.TEXT_TITLE,
-        ChecklistObjectiveGoalPinState.TEXT_DESCRIPTION
-    ).getElement();
+        ChecklistObjectiveGoalPinState.TEXT_DESCRIPTION,
+        onDelete);
 
     const makeRow = (label, field) => {
         const element = document.createElement("tr");
@@ -57,14 +58,14 @@ export function ChecklistObjectiveGoalPinState(goal) {
     };
 
     const make = () => {
-        _element.appendChild(makeTable());
+        _panel.add(makeTable());
     };
 
     /**
      * Get the HTML element.
      * @returns {HTMLElement} An HTML element.
      */
-    this.getElement = () => _element;
+    this.getElement = () => _panel.getElement();
 
     make();
 }

@@ -16,6 +16,7 @@
   "OBJECTIVE_DEFAULT_TITLE": "New objective",
 
   "GOAL_CREATE": "Add a goal: ",
+  "GOAL_DELETE": "Delete",
 
   "BUDGET_TYPE_NONE": "Unlimited budget",
   "BUDGET_TYPE_INVENTORY": "Inventory budget",

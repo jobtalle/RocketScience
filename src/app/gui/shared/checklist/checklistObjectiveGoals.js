@@ -34,14 +34,25 @@ export function ChecklistObjectiveGoals(objective) {
         });
 
         const add = goal => {
+            let element = null;
+
+            const onDelete = () => {
+                objective.getGoals().splice(objective.getGoals().indexOf(goal), 1);
+
+                _element.removeChild(element.getElement());
+            };
+
             switch (goal.getType()) {
                 case Goal.TYPE_PIN_STATE:
-                    _element.insertBefore(
-                        new ChecklistObjectiveGoalPinState(goal).getElement(),
-                        goalNew.getElement());
+                    element = new ChecklistObjectiveGoalPinState(goal, onDelete);
 
                     break;
             }
+
+            if (element)
+                _element.insertBefore(
+                    element.getElement(),
+                    goalNew.getElement());
         };
 
         _element.appendChild(goalNew.getElement());
