@@ -23,4 +23,6 @@ export function Input(window, renderContext) {
      * @returns {InputMouse} The mouse input object.
      */
     this.getMouse = () => _mouse;
+
+    document.addEventListener("contextmenu", event => event.preventDefault());
 }
