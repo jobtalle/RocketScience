@@ -124,6 +124,12 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     };
 
     /**
+     * Check if anything is edited in the current editor.
+     * @return {Boolean} A boolean indicating if the editor is ever edited.
+     */
+    this.isEdited = () => _pcbEditor.isEdited();
+
+    /**
      * Get the currently selected editable.
      * @returns {Editable} An editable, or null if none is selected.
      */

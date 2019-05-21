@@ -89,6 +89,16 @@ export function Game(renderContext, input, user) {
         }
     };
 
+    const saveMissionProgress = () => {
+        if (!_editor.isEdited()) // Nothing is changed.
+            return;
+
+        user.saveMissionProgress(new MissionProgress(_world.getMission(),
+            _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
+            (result) => console.log("Saved mission " + result));
+
+    };
+
     const unsetMode = mode => {
         switch(mode) {
             case Game.MODE_MENU:
@@ -96,17 +106,13 @@ export function Game(renderContext, input, user) {
 
                 break;
             case Game.MODE_EDIT:
-                user.saveMissionProgress(new MissionProgress(_world.getMission(),
-                    _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
-                    (result) => console.log("Saved mission " + result));
+                saveMissionProgress();
 
                 _editor.hide();
 
                 break;
             case Game.MODE_GAME:
-                user.saveMissionProgress(new MissionProgress(_world.getMission(),
-                    _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
-                    (result) => console.log("Saved mission " + result));
+                saveMissionProgress();
 
                 _hud.hide();
                 _world.deactivate();
