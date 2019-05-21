@@ -10,11 +10,16 @@ OUT_FILE = 'src/assets/missions.json'
 MISSION_EXTENSION = 'bin'
 
 
+def copytree(src, dest):
+    for item in os.listdir(src):
+        shutil.copytree(os.path.join(src, item), os.path.join(dest, item))
+
+
 def pack_missions():
     print("Packing missions:")
 
     shutil.rmtree(DEST_DIR, True)
-    shutil.copytree(SOURCE_DIR, DEST_DIR)
+    copytree(SOURCE_DIR, DEST_DIR)
 
     categoryList = []
 
@@ -40,3 +45,6 @@ def pack_missions():
 
     with open(OUT_FILE, 'w') as file:
         file.write(json.dumps(missions, indent=None, separators=(",", ":")))
+
+if __name__ == '__main__':
+    pack_missions()
