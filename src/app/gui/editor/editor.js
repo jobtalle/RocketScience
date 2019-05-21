@@ -270,6 +270,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
 
+        // TODO: REMOVE THIS
         if (event.down) switch(event.key) {
             case Editor.KEY_MISSION_DOWNLOAD:
                 const missionData = new Data();

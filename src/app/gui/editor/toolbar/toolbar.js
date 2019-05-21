@@ -54,6 +54,16 @@ export function Toolbar(editor, overlay, x, game) {
         getString(Toolbar.TEXT_EXIT),
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
+    const _buttonUndo = new ToolbarButton(
+        () => editor.undo(),
+        getString(Toolbar.TEXT_UNDO),
+        "toolbar-undo",
+        ToolbarButton.TYPE_CLICK);
+    const _buttonRedo = new ToolbarButton(
+        () => editor.redo(),
+        getString(Toolbar.TEXT_REDO),
+        "toolbar-redo",
+        ToolbarButton.TYPE_CLICK);
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -76,6 +86,9 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
         _container.appendChild(_buttonXRay.getElement());
+        _container.appendChild(makeSpacer());
+        _container.appendChild(_buttonUndo.getElement());
+        _container.appendChild(_buttonRedo.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonExit.getElement());
     };
@@ -137,6 +150,14 @@ export function Toolbar(editor, overlay, x, game) {
                     _buttonExit.getElement().click();
 
                     break;
+                case Toolbar.KEY_PRESS_UNDO:
+                    _buttonUndo.getElement().click();
+
+                    break;
+                case Toolbar.KEY_PRESS_REDO:
+                    _buttonRedo.getElement().click();
+
+                    break;
             }
         }
         else {
@@ -160,6 +181,8 @@ Toolbar.KEY_PRESS_MOVE = "4";
 Toolbar.KEY_PRESS_LAUNCH = " ";
 Toolbar.KEY_PRESS_XRAY = "x";
 Toolbar.KEY_PRESS_EXIT = "Escape";
+Toolbar.KEY_PRESS_UNDO = "z";
+Toolbar.KEY_PRESS_REDO = "y";
 Toolbar.TEXT_EXTEND = "TOOLBAR_EXTEND";
 Toolbar.TEXT_SELECT = "TOOLBAR_SELECT";
 Toolbar.TEXT_ETCH = "TOOLBAR_ETCH";
@@ -167,5 +190,7 @@ Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
 Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
 Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
 Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";
+Toolbar.TEXT_UNDO = "TOOLBAR_UNDO";
+Toolbar.TEXT_REDO = "TOOLBAR_REDO";
 Toolbar.TEXT_MOVE_REGION = "TOOLBAR_MOVE_REGION";
 Toolbar.TEXT_RESIZE_REGION = "TOOLBAR_RESIZE_REGION";

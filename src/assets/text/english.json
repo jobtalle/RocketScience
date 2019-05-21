@@ -19,6 +19,8 @@
   "TOOLBAR_LAUNCH": "Launch the game",
   "TOOLBAR_X_RAY": "See through parts on the PCB",
   "TOOLBAR_EXIT": "Exit",
+  "TOOLBAR_UNDO": "Undo",
+  "TOOLBAR_REDO": "Redo",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
