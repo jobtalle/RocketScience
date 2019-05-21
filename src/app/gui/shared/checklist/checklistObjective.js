@@ -52,11 +52,15 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
 
     const makeEditor = goals => {
         const element = document.createElement("div");
+        const toggle = makeToggle(goals);
 
         element.className = ChecklistObjective.CLASS_INPUT;
         element.appendChild(makeField());
-        element.appendChild(makeToggle(goals));
+        element.appendChild(toggle);
         element.appendChild(makeDelete());
+
+        if (open)
+            toggle.click();
 
         return element;
     };
@@ -69,9 +73,6 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
 
             _element.appendChild(makeEditor(goals));
             _element.appendChild(goals.getElement());
-
-            if (open)
-                goals.toggle();
         }
         else
             _element.innerText = objective.getTitle();
