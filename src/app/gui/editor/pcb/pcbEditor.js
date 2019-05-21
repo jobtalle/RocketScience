@@ -29,19 +29,12 @@ import Myr from "myr.js"
 export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
     const _rawCursor = _cursor.copy();
-    const _undoStacks = [];
 
-    let _undoStack = null;
     let _editable = null;
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
     let _hover = true;
-
-    const initializeUndoStacks = () => {
-        for (const editable of world.getMission().getEditables())
-            _undoStacks.push(new UndoStack(editable));
-    };
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -113,6 +106,12 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         updateRenderer();
         moveCursor();
     };
+
+    /**
+     * Get the view.
+     * @returns {View}
+     */
+    this.getView = () => view;
 
     /**
      * Set X-ray render mode on or off. If turned on, the user will be able to see behind parts.
@@ -365,7 +364,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;
-        _undoStack = _undoStacks[world.getMission().getEditables().indexOf(editable)];
 
         updatePcb();
     };
@@ -380,7 +378,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Get the undo stack.
      * @returns {UndoStack} An undo stack.
      */
-    this.getUndoStack = () => _undoStack;
+    this.getUndoStack = () => _editable.getUndoStack();
 
     /**
      * Get the PCB editor width
@@ -550,8 +548,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         if (_renderer)
             _renderer.free();
     };
-
-    initializeUndoStacks();
 }
 
 PcbEditor.EDIT_MODE_SELECT = 0;

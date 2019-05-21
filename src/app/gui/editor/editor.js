@@ -45,11 +45,14 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getViewport().getSplitX(),
         this,
         isMissionEditor);
+    const _editables = new Editables(this, renderContext, world);
     const _toolbar = new Toolbar(
         _pcbEditor,
+        _editables,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
-        game);
+        game,
+        isMissionEditor);
     const _library = new Library(
         _pcbEditor,
         _toolbar,
@@ -60,9 +63,8 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         world.getMission(),
         game,
         isMissionEditor);
-    const _pcbScreenPosition = new Myr.Vector(0, 0);
 
-    const _editables = new Editables(renderContext, world);
+    const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
 
     const onViewChanged = () => {

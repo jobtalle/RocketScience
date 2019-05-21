@@ -3,16 +3,20 @@ import {ToolbarButton} from "./toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
 import {Game} from "../../../game";
+import {Editable} from "../../../mission/editable/editable";
+import * as Myr from "myr.js";
 
 /**
  * A toolbar containing buttons for the PCB editor.
  * @param {PcbEditor} editor A PcbEditor which places selected objects.
+ * @param {Editables} editables An Editables object which holds all editables.
  * @param {HTMLElement} overlay The element to place the toolbar on.
  * @param {Number} x The X position of the toolbar in pixels.
  * @param {Game} game A game.
+ * @param {Boolean} isMissionEditor Enables mission editor functionality.
  * @constructor
  */
-export function Toolbar(editor, overlay, x, game) {
+export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
@@ -54,6 +58,25 @@ export function Toolbar(editor, overlay, x, game) {
         getString(Toolbar.TEXT_EXIT),
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
+    const _buttonAddRegion = new ToolbarButton(
+        () => {
+            const at = new Myr.Vector(100, 100);
+            editor.getView().getInverse().apply(at);
+            editables.addEditable(Editable.defaultEditable(at.x, at.y));
+        },
+        getString(Toolbar.TEXT_ADD_REGION),
+        "toolbar-select",
+        ToolbarButton.TYPE_CLICK);
+    const _buttonCopyRegion = new ToolbarButton(
+        () => editables.addEditable(editor.getEditable().copy()),
+        getString(Toolbar.TEXT_COPY_REGION),
+        "toolbar-select",
+        ToolbarButton.TYPE_CLICK);
+    const _buttonRemoveRegion = new ToolbarButton(
+        () => editables.removeEditable(editor.getEditable()),
+        getString(Toolbar.TEXT_REMOVE_REGION),
+        "toolbar-select",
+        ToolbarButton.TYPE_CLICK);
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -78,6 +101,13 @@ export function Toolbar(editor, overlay, x, game) {
         _container.appendChild(_buttonXRay.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonExit.getElement());
+
+        if (isMissionEditor) {
+            _container.appendChild(makeSpacer());
+            _container.appendChild(_buttonAddRegion.getElement());
+            _container.appendChild(_buttonCopyRegion.getElement());
+            _container.appendChild(_buttonRemoveRegion.getElement());
+        }
     };
 
     /**
@@ -169,3 +199,6 @@ Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
 Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";
 Toolbar.TEXT_MOVE_REGION = "TOOLBAR_MOVE_REGION";
 Toolbar.TEXT_RESIZE_REGION = "TOOLBAR_RESIZE_REGION";
+Toolbar.TEXT_COPY_REGION = "TOOLBAR_COPY_REGION";
+Toolbar.TEXT_ADD_REGION = "TOOLBAR_ADD_REGION";
+Toolbar.TEXT_REMOVE_REGION = "TOOLBAR_REMOVE_REGION";

@@ -2,6 +2,8 @@ import {Pcb} from "../../pcb/pcb";
 import Myr from "myr.js"
 import {EditableRegion} from "./editableRegion";
 import {BudgetInventory} from "../budget/budgetInventory";
+import {UndoStack} from "../../gui/editor/pcb/undoStack";
+import {Scale} from "../../world/scale";
 
 /**
  * A definition of an editable PCB (and its part budget).
@@ -13,11 +15,18 @@ import {BudgetInventory} from "../budget/budgetInventory";
  */
 export function Editable(region, pcb, pcbOffset, budget) {
     const _position = new Myr.Vector(0, 0);
+    const _undoStack = new UndoStack(this);
 
     const calculatePosition = () => {
         _position.x = region.getOrigin().x + pcbOffset.x;
         _position.y = region.getOrigin().y + pcbOffset.y;
     };
+
+    /**
+     * Get the undo stack of this editable.
+     * @returns {UndoStack}
+     */
+    this.getUndoStack = () => _undoStack;
 
     /**
      * Get the region this editable is in.
@@ -98,6 +107,17 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getPosition = () => _position;
 
     /**
+     * Make a copy of this editable.
+     * @return {Object} A deep copy.
+     */
+    this.copy = () => {
+        if (budget)
+            return new Editable(region.copy(), pcb.copy(), pcbOffset.copy(), budget.copy());
+
+        return new Editable(region.copy(), pcb.copy(), pcbOffset.copy(), null);
+    };
+
+    /**
      * Serialize this editable.
      * @param {ByteBuffer} buffer A byte buffer to serialize to.
      */
@@ -130,6 +150,22 @@ Editable.deserialize = buffer => {
         budget = BudgetInventory.deserialize(buffer);
 
     return new Editable(region, pcb, offset, budget);
+};
+
+/**
+ * Return a default editable at given position.
+ * @param x
+ * @param y
+ * @returns {Editable}
+ */
+Editable.defaultEditable = (x, y) => {
+    x *= Scale.METERS_PER_PIXEL;
+    y *= Scale.METERS_PER_PIXEL;
+    console.log(x, y);
+    const pcb = new Pcb();
+    pcb.initialize();
+
+    return new Editable(new EditableRegion(new Myr.Vector(x, y), new Myr.Vector(5, 5)), pcb, new Myr.Vector(1, 1), null);
 };
 
 Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;
