@@ -117,5 +117,13 @@ export function Editables(editor, renderContext, world) {
         editor.edit(world.getMission().getEditables()[0]);
     };
 
+    /**
+     * Free all resources maintained by this editables.
+     */
+    this.free = () => {
+        for (const renderer of _renderers)
+            renderer.free();
+    };
+
     makeRenderers();
 }
