@@ -12,6 +12,9 @@
   "VALUE_PICKER_LOW": "Low",
   "VALUE_PICKER_HIGH": "High",
 
+  "OBJECTIVE_NEW": "New objective",
+  "OBJECTIVE_DEFAULT_TITLE": "New objective",
+
   "BUDGET_TYPE_NONE": "Unlimited budget",
   "BUDGET_TYPE_INVENTORY": "Inventory budget",
 

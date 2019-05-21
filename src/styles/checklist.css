@@ -23,6 +23,24 @@
     box-sizing: border-box;
 }
 
+#checklist .new {
+    border: 2px dashed var(--text-color-dark);
+    text-align: center;
+    font-size: 20px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+
+#checklist .new:hover {
+    background-color: white;
+}
+
+#checklist .objective h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+
 #checklist .objective .field {
     font-size: 20px;
     display: flex;
