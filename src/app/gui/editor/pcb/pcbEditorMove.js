@@ -227,8 +227,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
                 break;
             case PcbEditorMove.REGION_RESIZE:
-                // const posX = (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT;
-                // const posY = (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT;
                 let posX = 0;
                 let posY = 0;
                 const offset = 1.5;
