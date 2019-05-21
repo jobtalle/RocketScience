@@ -21,7 +21,12 @@ export function Checklist(mission, game, editor) {
         _container.appendChild(new ChecklistTitle(mission, editor).getElement());
 
         for (const objective of mission.getObjectives()) {
-            const checklistObjective = new ChecklistObjective(objective, editor);
+            const checklistObjective = new ChecklistObjective(objective, editor, () => {
+                _objectives.splice(_objectives.indexOf(checklistObjective), 1);
+                _container.removeChild(checklistObjective.getElement());
+
+                mission.getObjectives().splice(mission.getObjectives().indexOf(objective), 1);
+            });
 
             _objectives.push(checklistObjective);
 

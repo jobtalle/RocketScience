@@ -15,6 +15,7 @@
   "BUDGET_TYPE_NONE": "Unlimited budget",
   "BUDGET_TYPE_INVENTORY": "Inventory budget",
 
+  "GOAL_PIN_STATE_TITLE": "Pin state",
   "GOAL_PIN_STATE_DESCRIPTION": "Check if a part exists with a certain value at a certain pin.",
   "GOAL_PIN_STATE_PART": "Part",
   "GOAL_PIN_STATE_PIN": "Pin",
