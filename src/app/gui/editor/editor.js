@@ -290,6 +290,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      */
     this.free = () => {
         _pcbEditor.free();
+        _editables.free();
     };
 
     _view.setOnChanged(onViewChanged);

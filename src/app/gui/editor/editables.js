@@ -71,5 +71,13 @@ export function Editables(renderContext, world) {
         return null;
     };
 
+    /**
+     * Free all resources maintained by this editables.
+     */
+    this.free = () => {
+        for (const renderer of _renderers)
+            renderer.free();
+    };
+
     makeRenderers();
 }
