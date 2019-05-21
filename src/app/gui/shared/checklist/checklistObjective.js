@@ -1,12 +1,13 @@
+import {ChecklistObjectiveGoals} from "./checklistObjectiveGoals";
+
 /**
  * An objective for the checklist GUI.
  * @param {Objective} objective An objective.
  * @param {Boolean} editor A boolean indicating whether this objective is an editor.
+ * @param {Function} [onDelete] A function to call when this objective wants to delete itself.
  * @constructor
  */
-import {ChecklistObjectiveGoals} from "./checklistObjectiveGoals";
-
-export function ChecklistObjective(objective, editor) {
+export function ChecklistObjective(objective, editor, onDelete) {
     const _element = document.createElement("div");
 
     const makeField = () => {
@@ -30,12 +31,24 @@ export function ChecklistObjective(objective, editor) {
         return element;
     };
 
+    const makeDelete = () => {
+        const element = document.createElement("button");
+
+        element.innerText = ChecklistObjective.TEXT_DELETE;
+
+        if (onDelete)
+            element.onclick = onDelete;
+
+        return element;
+    };
+
     const makeEditor = goals => {
         const element = document.createElement("div");
 
         element.className = ChecklistObjective.CLASS_INPUT;
         element.appendChild(makeField());
         element.appendChild(makeToggle(goals));
+        element.appendChild(makeDelete());
 
         return element;
     };
@@ -73,3 +86,4 @@ ChecklistObjective.CLASS = "objective";
 ChecklistObjective.CLASS_CHECKED = "checked";
 ChecklistObjective.CLASS_INPUT = "field";
 ChecklistObjective.TEXT_EDIT = String.fromCharCode(9660);
+ChecklistObjective.TEXT_DELETE = String.fromCharCode(10006);
