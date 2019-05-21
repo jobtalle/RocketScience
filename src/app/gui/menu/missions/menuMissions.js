@@ -9,7 +9,7 @@ import missions from "../../../../assets/missions.json"
  * @constructor
  */
 export function MenuMissions(menu, user) {
-    const _element = document.createElement("div");
+    let _element = document.createElement("div");
 
     const onMissionLoaded = (missionProgress) => {
         _element.appendChild(new MenuMission(menu, missionProgress).getElement());
@@ -20,6 +20,14 @@ export function MenuMissions(menu, user) {
 
         user.loadMissionProgresses((missionProgress) => onMissionLoaded(missionProgress),
             (error) => console.log(error));
+    };
+
+    /**
+     * Reload the element in this menu.
+     */
+    this.reload = () => {
+        _element = document.createElement("div");
+        make();
     };
 
     /**

@@ -8,12 +8,20 @@ import {Avatar} from "./avatar";
  * @constructor
  */
 export function UserIcon(user, onClick) {
-    const _element = document.createElement("div");
+    let _element = document.createElement("div");
 
     const make = () => {
         _element.id = UserIcon.ID;
         _element.appendChild(new Avatar(user.getAvatarSprites()).getElement());
         _element.onclick = onClick;
+    };
+
+    /**
+     * Reload the element in this menu.
+     */
+    this.reload = () => {
+        _element = document.createElement("div");
+        make();
     };
 
     /**

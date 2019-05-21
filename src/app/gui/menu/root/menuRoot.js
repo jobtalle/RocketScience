@@ -9,7 +9,7 @@ import {MenuMissions} from "../missions/menuMissions";
  * @constructor
  */
 export function MenuRoot(menu, user) {
-    const _element = document.createElement("div");
+    let _element = document.createElement("div");
 
     const make = () => {
         _element.className = MenuRoot.CLASS;
@@ -24,9 +24,17 @@ export function MenuRoot(menu, user) {
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-                menu.setContent(new MenuMissions(menu, user).getElement());
+                menu.setContent(new MenuMissions(menu, user));
             }
         ).getElement());
+    };
+
+    /**
+     * Reload the element in this menu.
+     */
+    this.reload = () => {
+        _element = document.createElement("div");
+        make();
     };
 
     /**

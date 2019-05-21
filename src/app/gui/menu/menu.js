@@ -15,13 +15,14 @@ export function Menu(game, parent, user) {
     const _divWrapper = document.createElement("div");
     const _divTitle = document.createElement("div");
     const _divContent = document.createElement("div");
+    let _contentObject = null;
     const _contentStack = [];
 
     const clearContent = () => {
         const removed = [];
 
-        while (_divContent.firstChild) {
-            removed.push(_divContent.firstChild);
+        if (_divContent.firstChild) {
+            removed.push(_contentObject);
 
             _divContent.removeChild(_divContent.firstChild);
         }
@@ -38,8 +39,17 @@ export function Menu(game, parent, user) {
         _divTitle.appendChild(new MenuTitle().getElement());
 
         _divWrapper.appendChild(_divTitle);
-        _divWrapper.appendChild(_divContent);
         _divWrapper.appendChild(new UserIcon(user, null).getElement());
+        _divWrapper.appendChild(_divContent);
+    };
+
+    const reloadCurrentContent = () => {
+        if (!_contentObject)
+            return;
+
+        _contentObject.reload();
+        _divContent.removeChild(_divContent.firstChild);
+        _divContent.appendChild(_contentObject.getElement());
     };
 
     /**
@@ -52,12 +62,13 @@ export function Menu(game, parent, user) {
 
     /**
      * Set the content of this menu.
-     * @param {HTMLElement} element An HTML element to place in the menu content.
+     * @param {Object} content An object that can at least create an element and reload.
      */
-    this.setContent = element => {
+    this.setContent = content => {
         _contentStack.push(clearContent());
 
-        _divContent.appendChild(element);
+        _contentObject = content;
+        _divContent.appendChild(_contentObject.getElement());
     };
 
     /**
@@ -69,8 +80,11 @@ export function Menu(game, parent, user) {
         if (newContent) {
             clearContent();
 
-            for (const element of newContent)
-                _divContent.appendChild(element);
+            for (const content of newContent) {
+                _contentObject = content;
+                _contentObject.reload();
+                _divContent.appendChild(_contentObject.getElement());
+            }
         }
     };
 
@@ -78,6 +92,7 @@ export function Menu(game, parent, user) {
      * Show the menu.
      */
     this.show = () => {
+        reloadCurrentContent();
         parent.appendChild(_divWrapper);
     };
 
@@ -90,7 +105,8 @@ export function Menu(game, parent, user) {
 
     build();
 
-    _divContent.appendChild(new MenuRoot(this, user).getElement());
+    _contentObject = new MenuRoot(this, user);
+    _divContent.appendChild(_contentObject.getElement());
 }
 
 Menu.ID_WRAPPER = "menu";
