@@ -4,10 +4,11 @@ import {ChecklistObjectiveGoals} from "./checklistObjectiveGoals";
  * An objective for the checklist GUI.
  * @param {Objective} objective An objective.
  * @param {Boolean} editor A boolean indicating whether this objective is an editor.
+ * @param {Boolean} open A boolean indicating whether this objective should be expanded initially.
  * @param {Function} [onDelete] A function to call when this objective wants to delete itself.
  * @constructor
  */
-export function ChecklistObjective(objective, editor, onDelete) {
+export function ChecklistObjective(objective, editor, open, onDelete) {
     const _element = document.createElement("div");
 
     const makeField = () => {
@@ -61,6 +62,9 @@ export function ChecklistObjective(objective, editor, onDelete) {
 
             _element.appendChild(makeEditor(goals));
             _element.appendChild(goals.getElement());
+
+            if (open)
+                goals.toggle();
         }
         else
             _element.innerText = objective.getTitle();

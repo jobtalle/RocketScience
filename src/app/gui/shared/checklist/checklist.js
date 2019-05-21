@@ -31,7 +31,7 @@ export function Checklist(mission, game, editor) {
 
             mission.getObjectives().push(objective);
 
-            addObjective(objective);
+            addObjective(objective, true);
         });
 
         if (editor)
@@ -44,10 +44,11 @@ export function Checklist(mission, game, editor) {
             mission.getObjectives().splice(mission.getObjectives().indexOf(objective), 1);
         };
 
-        const addObjective = objective => {
+        const addObjective = (objective, open) => {
             const checklistObjective = new ChecklistObjective(
                 objective,
                 editor,
+                open,
                 () => removeObjective(objective, checklistObjective));
 
             _objectives.push(checklistObjective);
@@ -59,7 +60,7 @@ export function Checklist(mission, game, editor) {
         };
 
         for (const objective of mission.getObjectives())
-            addObjective(objective);
+            addObjective(objective, false);
     };
 
     const update = checkMarks => {
