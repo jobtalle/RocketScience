@@ -174,6 +174,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
             dy = -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y);
 
         _editable.resizeRegion(dx, dy);
+
+        return new Myr.Vector(dx, dy);
     };
 
     this.resizeRegionUpLeft = (dx, dy) => {
@@ -184,8 +186,16 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
             dy = _editable.getOffset().y;
 
         this.moveRegion(dx, dy);
-        this.moveOffset(-dx, -dy);
-        this.resizeRegion(-dx, -dy);
+
+        if (dx < 0 || dy < 0) {
+            _editable.resizeRegion(-dx, -dy);
+            this.moveOffset(-dx, -dy);
+        } else {
+            this.moveOffset(-dx, -dy);
+            _editable.resizeRegion(-dx, -dy);
+        }
+
+        return new Myr.Vector(dx, dy);
     };
 
     /**
