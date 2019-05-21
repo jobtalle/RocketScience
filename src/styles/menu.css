@@ -74,6 +74,8 @@
 #menu .content .missions .mission .description {
     padding: 8px;
     display: none;
+    height: 100%;
+    width: auto;
 }
 
 #menu .content .missions .mission:hover {

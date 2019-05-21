@@ -101,7 +101,8 @@ export function User() {
 
                             data.setBlob(result, () => onLoaded(new MissionProgress(
                                 Mission.deserialize(data.getBuffer()),
-                                MissionProgress.PROGRESS_UNBEGUN)));
+                                _webStorage.isMissionCompleted(mission.title) ? MissionProgress.PROGRESS_COMPLETE :
+                                    MissionProgress.PROGRESS_UNBEGUN)));
                     },
                         () => onError("could not parse mission " + mission)
                     );
