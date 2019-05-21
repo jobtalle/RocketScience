@@ -1,4 +1,5 @@
 import {getString, getStringRaw} from "../../../../text/language";
+import {Pin} from "../../../../part/pin";
 
 /**
  * A drop down pin picker to pick some pin index from an object.
@@ -39,10 +40,11 @@ export function PinPicker(index, object, onSelect) {
             _element.removeChild(_element.firstChild);
 
         for (let i = 0; i < object.configurations[0].io.length; ++i)
-            _element.appendChild(makeOption(
-                i,
-                getString(object.configurations[0].io[i].name),
-                getStringRaw(object.configurations[0].io[i].description)));
+            if (object.configurations[0].io[i].type !== Pin.TYPE_STRUCTURAL)
+                _element.appendChild(makeOption(
+                    i,
+                    getString(object.configurations[0].io[i].name),
+                    getStringRaw(object.configurations[0].io[i].description)));
     };
 
     /**

@@ -5,6 +5,7 @@
     width: var(--checklist-width);
     background-color: #ffcc66;
     padding: var(--checklist-padding);
+    font-size: 20px;
 }
 
 #checklist .title {
@@ -26,7 +27,6 @@
 #checklist .new {
     border: 2px dashed var(--text-color-dark);
     text-align: center;
-    font-size: 20px;
     margin-top: 4px;
     cursor: pointer;
 }
@@ -36,13 +36,16 @@
 }
 
 #checklist .objective h1 {
-    font-size: 20px;
+    font-size: inherit;
     font-weight: bold;
     margin: 0;
 }
 
+#checklist .objective {
+    font-size: 16px;
+}
+
 #checklist .objective .field {
-    font-size: 20px;
     display: flex;
 }
 
@@ -63,6 +66,13 @@
 }
 
 #checklist .objective .goals .goal {
+    margin-bottom: 8px;
+    margin-top: 8px;
+    padding-left: 8px;
+    border-left: 2px solid var(--text-color-dark);
+}
+
+#checklist .objective .goals .picker {
     margin-bottom: 8px;
     margin-top: 8px;
     padding-left: 8px;

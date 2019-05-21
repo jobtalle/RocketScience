@@ -57,7 +57,6 @@ export function ChecklistObjectiveGoalPinState(goal) {
     };
 
     const make = () => {
-        _element.appendChild(document.createTextNode(getString(ChecklistObjectiveGoalPinState.TEXT_DESCRIPTION)));
         _element.appendChild(makeTable());
     };
 
