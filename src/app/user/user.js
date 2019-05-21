@@ -109,7 +109,8 @@ export function User() {
     this.saveMissionProgress = (missionProgress, onComplete) => {
         setSavedMission(missionProgress.getMission().getTitle(), missionProgress.getMission());
 
-        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE)
+        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE ||
+            _webStorage.isMissionCompleted(missionProgress.getMission().getTitle()))
             _webStorage.setMissionCompleted(missionProgress.getMission().getTitle());
         else
             _webStorage.setMissionIncomplete(missionProgress.getMission().getTitle());
