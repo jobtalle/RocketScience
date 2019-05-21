@@ -17,12 +17,20 @@ export function ChecklistObjectiveGoals(objective) {
         _element.classList.add(ChecklistObjectiveGoals.CLASS_HIDDEN);
 
         const goalNew = new ChecklistObjectiveGoalNew(type => {
+            let goal = null;
+
             switch (type) {
                 case Goal.TYPE_PIN_STATE:
-                    add(new GoalPinState(getPartFromId(0).object, 0, 0));
+                    goal = new GoalPinState(getPartFromId(0).object, 0, 0);
 
                     break;
             }
+
+            objective.getGoals().push(goal);
+
+            if (goal)
+                add(goal);
+
         });
 
         const add = goal => {
