@@ -193,6 +193,19 @@ export function Game(renderContext, input, user) {
     };
 
     /**
+     * Clear the internal progress of the mission.
+     * Will still be marked as completed if it is completed.
+     * @param mission
+     */
+    this.clearMission = mission => {
+        stopMission();
+
+        user.clearMission(mission.getTitle());
+
+        _menu.show();
+    };
+
+    /**
      * Call after the render context has resized.
      * @param {Number} width The width in pixels.
      * @param {Number} height The height in pixels.

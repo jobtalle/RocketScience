@@ -72,6 +72,15 @@ export function User() {
      */
     this.getAvatarSprites = () => _avatarSprites;
 
+
+    /**
+     * Clear a mission with the given name. This will not revert completion status.
+     * @param missionName {String} Name of the mission.
+     */
+    this.clearMission = (missionName) => {
+        _webStorage.clearMissionProgress(missionName);
+    };
+
     /**
      * Get the mission progresses, holding a mission and progress. This is returned through the onLoaded function.
      * @param onLoaded {Function} The onLoaded function will be called per mission that is loaded.

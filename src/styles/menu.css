@@ -39,25 +39,41 @@
     cursor: pointer;
 }
 
-#menu .content .missions .mission .title {
+#menu .content .missions .completed {
+    background-color: green;
+}
+
+#menu .content .missions .incomplete {
+    background-color: fuchsia;
+}
+
+#menu .content .missions .mission .header {
+    position: relative;
+    background-color: lightgray;
+}
+
+#menu .content .missions .mission .header .title {
     color: black;
     font-size: 24pt;
     text-align: center;
-    background-color: lightgray;
     font-weight: bold;
+}
+
+#menu .content .missions .mission .header .button-bar {
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+
+#menu .content .missions .mission .header .button-bar .button {
+    position: absolute;
+    right: 0;
+    top: 0;
 }
 
 #menu .content .missions .mission .description {
     padding: 8px;
     display: none;
-}
-
-#menu .content .missions .completed {
-    background-color: red;
-}
-
-#menu .content .missions .incomplete {
-    background-color: fuchsia;
 }
 
 #menu .content .missions .mission:hover {
