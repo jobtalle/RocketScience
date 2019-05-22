@@ -1,16 +1,15 @@
 /**
  * The buttonBar for every MissionMenu object.
- * @param menu {Menu} The menu
- * @param missionProgress {MissionProgress} A MissionProgress object.
+ * @param menuMission {MenuMission} The menuMission
  * @constructor
  */
 import {MenuMissionButton} from "./menuMissionButton";
 
-export function MenuMissionButtonBar(menu, missionProgress) {
+export function MenuMissionButtonBar(menuMission) {
     const _element = document.createElement("div");
     const _clearButton = new MenuMissionButton(
         "mission-clear",
-        () => menu.getGame().clearMission(missionProgress.getMission()));
+        () => menuMission.clearMission());
 
     const make = () => {
         _element.className = MenuMissionButtonBar.CLASS;

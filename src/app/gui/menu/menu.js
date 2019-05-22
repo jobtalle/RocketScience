@@ -47,7 +47,6 @@ export function Menu(game, parent, user) {
         if (!_contentObject)
             return;
 
-        _contentObject.reload();
         _divContent.removeChild(_divContent.firstChild);
         _divContent.appendChild(_contentObject.getElement());
     };

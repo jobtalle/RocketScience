@@ -3,18 +3,18 @@ import {MenuMissionButtonBar} from "./menuMissionButtonBar";
 
 /**
  * Holds the header for a MenuMission
- * @param menu {Menu} The menu
+ * @param menuMission {MenuMission} The menuMission
  * @param missionProgress {MissionProgress} A MissionProgress object.
  * @constructor
  */
-export function MenuMissionHeader(menu, missionProgress) {
+export function MenuMissionHeader(menuMission, missionProgress) {
     const _element = document.createElement("div");
 
     const make = () => {
         _element.className = MenuMissionHeader.CLASS;
 
         _element.appendChild(new MenuMissionTitle(missionProgress.getMission().getTitle()).getElement());
-        _element.appendChild(new MenuMissionButtonBar(menu, missionProgress).getElement());
+        _element.appendChild(new MenuMissionButtonBar(menuMission).getElement());
     };
 
     /**

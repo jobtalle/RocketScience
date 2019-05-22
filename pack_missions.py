@@ -16,31 +16,30 @@ def pack_missions():
     shutil.rmtree(DEST_DIR, True)
     shutil.copytree(SOURCE_DIR, DEST_DIR)
 
-    categoryList = []
+    story_list = []
 
     for dirName in os.listdir(DEST_DIR):
         if not os.path.isdir(os.path.join(DEST_DIR, dirName)):
             continue
 
-        fileList = []
-        category = {'label': dirName}
+        file_list = []
+        story = {'label': dirName}
 
         for fileName in os.listdir(os.path.join(DEST_DIR, dirName)):
             if not fileName.endswith(MISSION_EXTENSION):
                 continue
 
-
             mission = {"title": fileName.split('.')[0],
-                "file": os.path.join(MISSION_DIR, dirName, fileName)}
+                       "file": os.path.join(MISSION_DIR, dirName, fileName)}
 
-            fileList.append(mission);
+            file_list.append(mission)
+
             print('- \'' + os.path.join(MISSION_DIR, dirName, fileName) + '\'')
 
-        category['missions'] = fileList
+        story['missions'] = file_list
+        story_list.append(story)
 
-        categoryList.append(category)
-
-    missions = {'categories': categoryList}
+    missions = {'stories': story_list}
 
     with open(OUT_FILE, 'w') as file:
         file.write(json.dumps(missions, indent=None, separators=(",", ":")))

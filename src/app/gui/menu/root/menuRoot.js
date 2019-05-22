@@ -1,6 +1,6 @@
 import {getString} from "../../../text/language";
 import {MenuButtonCentered} from "../shared/menuButtonCentered";
-import {MenuMissions} from "../missions/menuMissions";
+import {MenuStories} from "../missions/menuStories";
 
 /**
  * Content for the Menu root, containing buttons that allow access to other menu's.
@@ -24,17 +24,9 @@ export function MenuRoot(menu, user) {
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-                menu.setContent(new MenuMissions(menu, user));
+                menu.setContent(new MenuStories(menu, user));
             }
         ).getElement());
-    };
-
-    /**
-     * Reload the element in this menu.
-     */
-    this.reload = () => {
-        _element = document.createElement("div");
-        make();
     };
 
     /**

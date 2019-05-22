@@ -1,10 +1,11 @@
 /**
  * A wrapper for Mission, which also stores the progress and a unique hash for the mission.
- * @param mission {Mission} A mission
+ * @param mission {Mission} A mission.
  * @param progress {Number} An int variable which states the progression of the mission.
+ * @param fileName {String} The fileName of the mission.
  * @constructor
  */
-export function MissionProgress(mission, progress) {
+export function MissionProgress(mission, progress, fileName) {
     /**
      * Obtain the mission object.
      * @return {Mission} The mission.
@@ -16,6 +17,12 @@ export function MissionProgress(mission, progress) {
      * @return {Number} A number which indicates the progress, 0 for none, 1 for incomplete, 2 for completed.
      */
     this.getProgress = () => progress;
+
+    /**
+     * Get the filename
+     * @return {String}
+     */
+    this.getFileName = () => fileName;
 }
 
 MissionProgress.PROGRESS_UNBEGUN = 0;

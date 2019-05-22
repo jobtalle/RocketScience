@@ -8,7 +8,7 @@ import {MenuMissionHeader} from "./menuMissionHeader";
  * @param {MissionProgress} missionProgress A missionProgress object.
  * @constructor
  */
-export function MenuMission(menu, missionProgress) {
+export function MenuMission(menu, missionProgress, onUpdate) {
     const _element = document.createElement("div");
 
     const start = () => {
@@ -24,10 +24,16 @@ export function MenuMission(menu, missionProgress) {
         else if (missionProgress.getProgress() === MissionProgress.PROGRESS_INCOMPLETE)
             _element.classList.add(MenuMission.CLASS_INCOMPLETE);
 
-        _element.appendChild(new MenuMissionHeader(menu, missionProgress).getElement());
+        _element.appendChild(new MenuMissionHeader(this, missionProgress).getElement());
         _element.appendChild(new MenuMissionDescription(missionProgress.getMission().getDescription(),
             start).getElement());
     };
+
+    /**
+     *
+     * @return {*}
+     */
+    this.clearMission = () => onUpdate();
 
     /**
      * Get the HTML element.

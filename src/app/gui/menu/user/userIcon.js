@@ -17,14 +17,6 @@ export function UserIcon(user, onClick) {
     };
 
     /**
-     * Reload the element in this menu.
-     */
-    this.reload = () => {
-        _element = document.createElement("div");
-        make();
-    };
-
-    /**
      * Get the HTML element.
      * @returns {HTMLElement} The HTML element.
      */

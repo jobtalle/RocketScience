@@ -6,6 +6,7 @@ import {requestBinary} from "../utils/requestBinary";
 import {Mission} from "../mission/mission";
 import {WebStorage} from "../storage/webStorage";
 import {MissionProgress} from "../mission/missionProgress";
+import {Story} from "../mission/story";
 
 /**
  * The user information stored locally and online.
@@ -50,14 +51,63 @@ export function User() {
         return MissionProgress.PROGRESS_INCOMPLETE;
     };
 
-    /**
-     * Set the user ID of the user.
-     * @param userId {Number} The user ID.
-     */
-    this.setUserId = (userId) => {
-        _id = userId;
+    const loadMissionProgress = (filePath, onLoad, onError) => {
+        if (hasSavedMission(filePath)) {
+            onLoad(new MissionProgress(getSavedMission(filePath),
+                getMissionProgression(filePath),
+                filePath));
 
-        new Cookie().setValue(Cookie.KEY_USER_ID, _id);
+        } else { // Load mission from binary file
+            requestBinary(filePath,
+                (result) => {
+                    const data = new Data();
+
+                    data.setBlob(result, () => onLoad(new MissionProgress(
+                        Mission.deserialize(data.getBuffer()),
+                        _webStorage.isMissionCompleted(filePath) ? MissionProgress.PROGRESS_COMPLETE :
+                            MissionProgress.PROGRESS_UNBEGUN,
+                        filePath)));
+                },
+                () => onError("could not parse mission " + filePath)
+            );
+        }
+    };
+
+    const loadStory = (story, onComplete, onError) => {
+        const missionNames = [];
+        const missions = {};
+        const errors = [];
+
+        const getOrderedMissions = () => {
+            const orderedMissions = [];
+            missionNames.sort();
+
+            for (const name of missionNames)
+                orderedMissions.push(missions[name]);
+
+            return orderedMissions;
+        };
+
+        const checkIfComplete = () => {
+            if (story.missions.length === missionNames.length + errors.length)
+                onComplete(new Story(getOrderedMissions()));
+        };
+
+        for (const mission of story.missions) {
+            loadMissionProgress(mission.file,
+                (missionProgress) => {
+                    missionNames.push(missionProgress.getFileName());
+                    missions[missionProgress.getFileName()] = missionProgress;
+
+                    checkIfComplete();
+                },
+                (error) => {
+                    errors.push(mission.file);
+                    onError(error);
+
+                    checkIfComplete();
+                });
+        }
     };
 
     /**
@@ -82,32 +132,44 @@ export function User() {
     };
 
     /**
-     * Get the mission progresses, holding a mission and progress. This is returned through the onLoaded function.
-     * @param onLoaded {Function} The onLoaded function will be called per mission that is loaded.
-     * @param onError {Function} This will be called when an error occurs.
+     * Get the number of stories.
+     * @return {Number} Number of stories.
      */
-    this.loadMissionProgresses = (onLoaded, onError) => {
-        for (const category of missions.categories) {
-            for (const mission of category.missions) {
+    this.getStoryCount = () => {
+        return missions.stories.length;
+    };
 
-                if (hasSavedMission(mission.title)) {
-                        onLoaded(new MissionProgress(getSavedMission(mission.title),
-                            getMissionProgression(mission.title)));
+    /**
+     * Load all the stories, containing the missions.
+     * @param onLoad {Function} Callback function, called for every loaded story, with the story and the index.
+     * @param onComplete {Function} Callback function, called when everything is finished.
+     * @param onError {Function} Callback function, called when a story returns an error.
+     */
+    this.loadStories = (onLoad, onComplete, onError) => {
+        let loaded = 0;
 
-                } else { // Load mission from binary file
-                    requestBinary(mission.file,
-                        (result) => {
-                            const data = new Data();
+        const checkIfComplete = () => {
+            if (loaded === missions.stories.length)
+                onComplete();
+        };
 
-                            data.setBlob(result, () => onLoaded(new MissionProgress(
-                                Mission.deserialize(data.getBuffer()),
-                                _webStorage.isMissionCompleted(mission.title) ? MissionProgress.PROGRESS_COMPLETE :
-                                    MissionProgress.PROGRESS_UNBEGUN)));
-                    },
-                        () => onError("could not parse mission " + mission)
-                    );
-                }
-            }
+        let index = 0;
+        for (const story of missions.stories) {
+            ++index;
+
+            loadStory(story,
+                (result) => {
+                    ++loaded;
+
+                    onLoad(result, index);
+                    checkIfComplete();
+                },
+                (error) => {
+                    ++loaded;
+
+                    onError(error, index);
+                    checkIfComplete();
+                });
         }
     };
 
