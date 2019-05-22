@@ -4,6 +4,7 @@ import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
 import {Game} from "../../../game";
 import {Editable} from "../../../mission/editable/editable";
+import * as Myr from "myr.js";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -58,19 +59,19 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
     const _buttonAddRegion = new ToolbarButton(
-        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getPosition().copy())),
+        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getRegion().getOrigin().copy()), new Myr.Vector(0.4, 0.4)),
         getString(Toolbar.TEXT_ADD_REGION),
-        "toolbar-select",
+        "toolbar-add-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonCopyRegion = new ToolbarButton(
-        () => editables.addEditable(editor.getEditable().copy()),
+        () => editables.addEditable(editor.getEditable().copy(), new Myr.Vector(0.4, 0.4)),
         getString(Toolbar.TEXT_COPY_REGION),
-        "toolbar-select",
+        "toolbar-copy-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonRemoveRegion = new ToolbarButton(
         () => editables.removeEditable(editor.getEditable()),
         getString(Toolbar.TEXT_REMOVE_REGION),
-        "toolbar-select",
+        "toolbar-remove-region",
         ToolbarButton.TYPE_CLICK);
 
     const makeSpacer = () => {

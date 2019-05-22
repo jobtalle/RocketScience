@@ -1,6 +1,7 @@
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {Scale} from "../../world/scale";
 import Myr from "myr.js"
+import {getValidOrigin} from "../../utils/editableNode";
 
 /**
  * The editables in the world that may be edited.
@@ -92,7 +93,11 @@ export function Editables(editor, renderContext, world) {
      * Adds an editable to the world, and focuses on it.
      * @param editable Editable to add.
      */
-    this.addEditable = editable => {
+    this.addEditable = (editable) => {
+        const newOrigin = getValidOrigin(editable, world.getMission().getEditables());
+
+        editable.moveRegion(newOrigin.x - editable.getRegion().getOrigin().x, newOrigin.y - editable.getRegion().getOrigin().y);
+
         world.getMission().getEditables().push(editable);
         _renderers.push(new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL));
 

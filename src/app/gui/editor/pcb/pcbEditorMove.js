@@ -1,6 +1,7 @@
 import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js"
+import {getValidOrigin} from "../../../utils/editableNode";
 
 /**
  * A move editor moves a PCB within its editable region.
@@ -62,13 +63,13 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             if (pcb.getPoint(cursor.x, cursor.y) !== null)
                 _mode = PcbEditorMove.PCB_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
-                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x,
-                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y,
+                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
+                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
                 1))
                 _mode = PcbEditorMove.REGION_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
-                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x,
-                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y,
+                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
+                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
                 5)) {
                 _mode = PcbEditorMove.REGION_RESIZE;
 
@@ -146,6 +147,10 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      * Finish the current dragging action.
      */
     this.mouseUp = () => {
+        if (_mode === PcbEditorMove.REGION_MOVE) {
+            const newOrigin = getValidOrigin(editor.getEditable(), editor.getEditor().getEditables());
+            editor.moveRegion(newOrigin.x - editor.getEditable().getRegion().getOrigin().x, newOrigin.y - editor.getEditable().getRegion().getOrigin().y);
+        }
         _dragging = null;
         _rawDragging = null;
     };

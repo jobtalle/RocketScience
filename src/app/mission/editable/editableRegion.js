@@ -43,17 +43,27 @@ export function EditableRegion(origin, size) {
 
     /**
      * Check whether a point is in the region, with a margin of x POINTs on all sides.
-     * @param {Number} x The X coordinate.
-     * @param {Number} y The Y coordinate.
+     * @param {Number} x The X coordinate relative to the origin.
+     * @param {Number} y The Y coordinate relative to the origin.
      * @param {Number} margin The amount of POINTs outside the region to count as part of the region.
      * @returns {Boolean} A boolean indicating whether the point is inside this region.
      */
-    this.containsPoint = (x, y, margin=0) => {
-        return !(x + Scale.METERS_PER_POINT * margin < 0
-            || x > size.x + Scale.METERS_PER_POINT * margin
-            || y + Scale.METERS_PER_POINT * margin < 0
-            || y > size.y + Scale.METERS_PER_POINT * margin);
-    };
+    this.containsPoint = (x, y, margin=0) =>
+        !(x + Scale.METERS_PER_POINT * margin < origin.x
+            || x > origin.x + size.x + Scale.METERS_PER_POINT * margin
+            || y + Scale.METERS_PER_POINT * margin < origin.y
+            || y > origin.y + size.y + Scale.METERS_PER_POINT * margin);
+
+    /**
+     * Check whether a different region intersects this region.
+     * @param {EditableRegion} region
+     * @returns {Boolean} Returns true if the region intersects this region.
+     */
+    this.intersectsRegion = region =>
+        origin.x < region.getOrigin().x + region.getSize().x
+        && origin.x + size.x > region.getOrigin().x
+        && origin.y < region.getOrigin().y + region.getSize().y
+        && origin.y + size.y > region.getOrigin().y;
 
     /**
      * Make a copy of this region.
