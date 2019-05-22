@@ -59,11 +59,7 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
     const _buttonAddRegion = new ToolbarButton(
-        () => {
-            const at = new Myr.Vector(100, 100);
-            editor.getView().getInverse().apply(at);
-            editables.addEditable(Editable.defaultEditable(at.x, at.y));
-        },
+        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getPosition().copy())),
         getString(Toolbar.TEXT_ADD_REGION),
         "toolbar-select",
         ToolbarButton.TYPE_CLICK);

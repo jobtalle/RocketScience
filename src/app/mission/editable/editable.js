@@ -154,18 +154,14 @@ Editable.deserialize = buffer => {
 
 /**
  * Return a default editable at given position.
- * @param x
- * @param y
+ * @param {Myr.Vector} position Position of new Editable.
  * @returns {Editable}
  */
-Editable.defaultEditable = (x, y) => {
-    x *= Scale.METERS_PER_PIXEL;
-    y *= Scale.METERS_PER_PIXEL;
-    console.log(x, y);
+Editable.defaultEditable = (position) => {
     const pcb = new Pcb();
     pcb.initialize();
 
-    return new Editable(new EditableRegion(new Myr.Vector(x, y), new Myr.Vector(5, 5)), pcb, new Myr.Vector(1, 1), null);
+    return new Editable(new EditableRegion(position, new Myr.Vector(5, 5)), pcb, new Myr.Vector(1, 1), null);
 };
 
 Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;

@@ -114,7 +114,7 @@ export function Editables(editor, renderContext, world) {
                 renderer.free();
         }
 
-        editor.edit(world.getMission().getEditables()[0]);
+        editor.edit(world.getMission().getEditables()[world.getMission().getEditables().length - 1]);
     };
 
     /**
