@@ -34,6 +34,9 @@
   "TOOLBAR_LAUNCH": "Launch the game",
   "TOOLBAR_X_RAY": "See through parts on the PCB",
   "TOOLBAR_EXIT": "Exit",
+  "TOOLBAR_ADD_REGION": "Add a new PCB region",
+  "TOOLBAR_COPY_REGION": "Add a copy of current PCB region",
+  "TOOLBAR_REMOVE_REGION": "Remove current PCB region",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",

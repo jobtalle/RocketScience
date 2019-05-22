@@ -4,7 +4,6 @@ import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
 import {Game} from "../../../game";
 import {Editable} from "../../../mission/editable/editable";
-import * as Myr from "myr.js";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -193,8 +192,6 @@ Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
 Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
 Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
 Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";
-Toolbar.TEXT_MOVE_REGION = "TOOLBAR_MOVE_REGION";
-Toolbar.TEXT_RESIZE_REGION = "TOOLBAR_RESIZE_REGION";
 Toolbar.TEXT_COPY_REGION = "TOOLBAR_COPY_REGION";
 Toolbar.TEXT_ADD_REGION = "TOOLBAR_ADD_REGION";
 Toolbar.TEXT_REMOVE_REGION = "TOOLBAR_REMOVE_REGION";

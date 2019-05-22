@@ -4,6 +4,7 @@ import Myr from "myr.js"
 
 /**
  * The editables in the world that may be edited.
+ * @param {Editor} editor The editing context.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @constructor
@@ -103,8 +104,10 @@ export function Editables(editor, renderContext, world) {
      * @param editable Editable to remove.
      */
     this.removeEditable = editable => {
-        if (world.getMission().getEditables().length === 1)
+        if (world.getMission().getEditables().length === 1) {
+            // TODO: Notify user that remove fails.
             return;
+        }
 
         let index = world.getMission().getEditables().indexOf(editable);
         if (index > -1) {
