@@ -1,60 +1,20 @@
-import * as Myr from "myr.js";
-import {EditableRegion} from "../mission/editable/editableRegion";
-
-/**
- *
- * @param {Myr.Vector} sourceOrigin
- * @param {EditableRegion} region
- * @constructor
- */
-export function EditableNode(sourceOrigin, region) {
-    const _diff = sourceOrigin.copy();
-    _diff.subtract(region.getOrigin());
-    const _dist = _diff.length();
-
-    this.getPrio = () => _dist;
-
-    this.getRegion = () => region;
-}
-
-/**
- * Basic priority queue. Implements push and pop functionality. Nodes must have a "getPrio" function for sorting.
- * Lowest priority values are popped first.
- * @constructor
- */
-export function PriorityQueue() {
-    const _queue = [];
-
-    this.push = node => {
-        _queue.push(node);
-        _queue.sort(((a, b) => {
-            if (a.getPrio() > b.getPrio())
-                return -1;
-
-            if (a.getPrio() < b.getPrio())
-                return 1;
-
-            return 0;
-        }));
-    };
-
-    this.pop = () => _queue.pop();
-
-    this.isEmpty = () => _queue.length === 0;
-}
-
 /**
  * Returns a vector for the valid origin of an editable.
- * @param editable
- * @param editables
- * @returns {Myr.Vector}
+ * @param {Editable} editable Current editable, of which the origin might be invalid.
+ * @param {Array} editables List of all editables in the world.
+ * @returns {Myr.Vector} Valid coordinates for the origin of the editable.
  */
+import {EditableRegionNode} from "./editableRegionNode";
+import {PriorityQueue} from "../../utils/priorityQueue";
+import {EditableRegion} from "./editableRegion";
+import * as Myr from "myr.js";
+
 export function getValidOrigin(editable, editables) {
     const _visited = [];
     const _queue = new PriorityQueue();
     const _sourceOrigin = editable.getRegion().getOrigin().copy();
 
-    _queue.push(new EditableNode(_sourceOrigin, editable.getRegion().copy()));
+    _queue.push(new EditableRegionNode(_sourceOrigin, editable.getRegion().copy()));
 
     while (!_queue.isEmpty()) {
         const node = _queue.pop();
@@ -83,18 +43,18 @@ export function getValidOrigin(editable, editables) {
         newRegions.push(new EditableRegion(new Myr.Vector(intersected.getRegion().getOrigin().x - region.getSize().x, region.getOrigin().y), region.getSize()));
 
         for (const newRegion of newRegions) {
-            let illegal = false;
+            let unvisited = true;
 
             for (const visitedOrigin of _visited) {
                 if (newRegion.getOrigin().x === visitedOrigin.x && newRegion.getOrigin().y === visitedOrigin.y) {
-                    illegal = true;
+                    unvisited = false;
 
                     break;
                 }
             }
 
-            if (!illegal) {
-                _queue.push(new EditableNode(_sourceOrigin, newRegion));
+            if (unvisited) {
+                _queue.push(new EditableRegionNode(_sourceOrigin, newRegion));
                 _visited.push(newRegion.getOrigin());
             }
         }

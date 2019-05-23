@@ -1,7 +1,7 @@
 import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {Scale} from "../../world/scale";
 import Myr from "myr.js"
-import {getValidOrigin} from "../../utils/editableNode";
+import {getValidOrigin} from "../../mission/editable/editableEscaper";
 
 /**
  * The editables in the world that may be edited.
