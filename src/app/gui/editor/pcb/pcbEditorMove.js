@@ -1,7 +1,7 @@
 import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js"
-import {getValidOrigin} from "../../../utils/editableNode";
+import {getValidOrigin} from "../../../mission/editable/editableEscaper";
 
 /**
  * A move editor moves a PCB within its editable region.
