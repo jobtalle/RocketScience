@@ -13,35 +13,79 @@ import {getValidOrigin} from "../../mission/editable/editableEscaper";
 export function Editables(editor, renderContext, world) {
     const Entry = function(editable) {
         const _renderer = new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL);
-        const _grid = new (renderContext.getMyr().Surface)(
-            editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
-            editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
+        let _grid = null;
+        let _border = null;
+        let _lastSize = editable.getRegion().getSize().copy();
+
+        const makeGrid = () => {
+            if (_grid)
+                _grid.free();
+
+            _grid = new (renderContext.getMyr().Surface)(
+                Math.ceil(editable.getRegion().getSize().x * Scale.PIXELS_PER_METER),
+                Math.ceil(editable.getRegion().getSize().y * Scale.PIXELS_PER_METER));
+
+            _grid.setClearColor(new Myr.Color(1, 1, 1, 0));
+            _grid.bind();
+
+            for (let x = 0; x < _grid.getWidth(); x += _spriteGrid.getWidth())
+                for (let y = 0; y < _grid.getHeight(); y += _spriteGrid.getHeight())
+                    _spriteGrid.draw(x, y);
+        };
+
+        const makeBorder = () => {
+            if (_border)
+                _border.free();
+
+            _border = new (renderContext.getMyr().Surface)(
+                Math.ceil(editable.getRegion().getSize().x * Scale.PIXELS_PER_METER),
+                Math.ceil(editable.getRegion().getSize().y * Scale.PIXELS_PER_METER));
+
+            _border.bind();
+
+            renderContext.getMyr().primitives.drawRectangle(
+                Editables.BORDER_COLOR,
+                1,
+                1,
+                _border.getWidth() -1,
+                _border.getHeight() - 1);
+        };
+
+        const resize = () => {
+            makeGrid();
+            makeBorder();
+        };
 
         this.getEditable = () => editable;
 
         this.draw = editing => {
+            if (!_lastSize.equals(editable.getRegion().getSize())) {
+                _lastSize = editable.getRegion().getSize().copy();
+
+                resize();
+            }
+
             if (editing)
                 _grid.draw(
                     editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
                     editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
-            else
+            else {
                 _renderer.drawBody(
                     (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
                     (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
+                _border.draw(
+                    editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
+                    editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
+            }
         };
 
         this.free = () => {
             _renderer.free();
             _grid.free();
+            _border.free();
         };
 
-        _grid.setClearColor(new Myr.Color(1, 1, 1, 0));
-        _grid.bind();
-        _grid.clear();
-
-        for (let x = 0; x < _grid.getWidth(); x += _spriteGrid.getWidth())
-            for(let y = 0; y < _grid.getHeight(); y += _spriteGrid.getHeight())
-                _spriteGrid.draw(x, y);
+        resize();
     };
 
     const _spriteGrid = renderContext.getSprites().getSprite(Editables.SPRITE_GRID);
@@ -157,3 +201,4 @@ export function Editables(editor, renderContext, world) {
 }
 
 Editables.SPRITE_GRID = "pcbGrid";
+Editables.BORDER_COLOR = Myr.Color.RED;

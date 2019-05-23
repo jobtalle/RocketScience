@@ -189,13 +189,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
         _editables.draw();
 
-        renderContext.getMyr().primitives.drawRectangle(
-            Myr.Color.RED,
-            _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
-
         renderContext.getMyr().pop();
 
         _pcbEditor.draw();
