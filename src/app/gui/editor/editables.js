@@ -11,20 +11,48 @@ import {getValidOrigin} from "../../mission/editable/editableEscaper";
  * @constructor
  */
 export function Editables(editor, renderContext, world) {
-    const _renderers = [];
+    const Entry = function(editable) {
+        const _renderer = new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL);
+        const _grid = new (renderContext.getMyr().Surface)(
+            editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
+            editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
 
-    let _current = null;
+        this.getEditable = () => editable;
 
-    const makeRenderers = () => {
-        for (const editable of world.getMission().getEditables())
-            _renderers.push(new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL));
+        this.draw = editing => {
+            if (editing)
+                _grid.draw(
+                    editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
+                    editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
+            else
+                _renderer.drawBody(
+                    (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
+                    (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
+        };
+
+        this.free = () => {
+            _renderer.free();
+            _grid.free();
+        };
+
+        _grid.setClearColor(new Myr.Color(1, 1, 1, 0));
+        _grid.bind();
+        _grid.clear();
+
+        for (let x = 0; x < _grid.getWidth(); x += _spriteGrid.getWidth())
+            for(let y = 0; y < _grid.getHeight(); y += _spriteGrid.getHeight())
+                _spriteGrid.draw(x, y);
     };
+
+    const _spriteGrid = renderContext.getSprites().getSprite(Editables.SPRITE_GRID);
+    const _entries = [];
+    let _current = null;
 
     /**
      * Returns true if coordinates are within editable region.
      * @param at coordinates to check.
      * @param editable Editable region to check against.
-     * @returns {boolean} True if coordinates are within editable region.
+     * @returns {Boolean} True if coordinates are within editable region.
      */
     const containsCoordinates = (at, editable) => {
         return at.x * Scale.METERS_PER_PIXEL >= editable.getRegion().getOrigin().x &&
@@ -37,31 +65,15 @@ export function Editables(editor, renderContext, world) {
      * Draw all editables except for the one currently being edited.
      */
     this.draw = () => {
-        for (let i = 0; i < world.getMission().getEditables().length; ++i) {
-            const editable = world.getMission().getEditables()[i];
-
-            if (editable === _current)
-                continue;
-
-            _renderers[i].drawBody(
-                (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
-                (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
-        }
+        for (const entry of _entries)
+            entry.draw(entry.getEditable() === _current);
     };
 
     /**
      * Set the currently being edited editable.
      * @param {Editable} current The currently being edited editable, or null if none is being edited.
      */
-    this.setCurrent = current => {
-        if (_current)
-            _renderers[world.getMission().getEditables().indexOf(_current)] = new PcbRenderer(
-                renderContext,
-                _current.getPcb(),
-                PcbRenderer.LEVEL_HULL);
-
-        _current = current;
-    };
+    this.setCurrent = current => _current = current;
 
     /**
      * Get the editable at a certain world position.
@@ -93,13 +105,15 @@ export function Editables(editor, renderContext, world) {
      * Adds an editable to the world, and focuses on it.
      * @param editable Editable to add.
      */
-    this.addEditable = (editable) => {
+    this.addEditable = editable => {
         const newOrigin = getValidOrigin(editable, world.getMission().getEditables());
 
+        // TODO: Should this really happen here?
         editable.moveRegion(newOrigin.x - editable.getRegion().getOrigin().x, newOrigin.y - editable.getRegion().getOrigin().y);
 
         world.getMission().getEditables().push(editable);
-        _renderers.push(new PcbRenderer(renderContext, editable.getPcb(), PcbRenderer.LEVEL_HULL));
+
+        _entries.push(new Entry(editable));
 
         editor.edit(editable);
     };
@@ -119,8 +133,12 @@ export function Editables(editor, renderContext, world) {
         if (index > -1) {
             world.getMission().getEditables().splice(index, 1);
 
-            for (const renderer of _renderers.splice(index, 1))
-                renderer.free();
+            for (const entry of _entries) if (entry.getEditable() === editable) {
+                entry.free();
+                _entries.splice(_entries.indexOf(entry), 1);
+
+                break;
+            }
         }
 
         editor.edit(world.getMission().getEditables()[world.getMission().getEditables().length - 1]);
@@ -130,9 +148,12 @@ export function Editables(editor, renderContext, world) {
      * Free all resources maintained by this editables.
      */
     this.free = () => {
-        for (const renderer of _renderers)
-            renderer.free();
+        for (const entry of _entries)
+            entry.free();
     };
 
-    makeRenderers();
+    for (const editable of world.getMission().getEditables())
+        _entries.push(new Entry(editable));
 }
+
+Editables.SPRITE_GRID = "pcbGrid";

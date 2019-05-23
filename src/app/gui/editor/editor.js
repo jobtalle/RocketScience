@@ -64,27 +64,8 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         game,
         isMissionEditor);
 
-    const _spriteGrid = renderContext.getSprites().getSprite(Editor.SPRITE_GRID);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
-    let _surfaceGrid = null;
-
-    const makeGrid = () => {
-        if (_surfaceGrid)
-            _surfaceGrid.free();
-
-        _surfaceGrid = new (renderContext.getMyr().Surface)(
-            _editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
-        _surfaceGrid.setClearColor(new Myr.Color(1, 1, 1, 0));
-
-        _surfaceGrid.bind();
-        _surfaceGrid.clear();
-
-        for (let x = 0; x < _surfaceGrid.getWidth(); x += _spriteGrid.getWidth())
-            for(let y = 0; y < _surfaceGrid.getHeight(); y += _spriteGrid.getHeight())
-                _spriteGrid.draw(x, y);
-    };
 
     const onViewChanged = () => {
         _pcbScreenPosition.x = 0;
@@ -141,8 +122,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _editables.setCurrent(editable);
         _pcbEditor.edit(editable);
         _toolbar.default();
-
-        makeGrid();
     };
 
     /**
@@ -207,11 +186,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.draw = () => {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
-
-        if (_surfaceGrid)
-            _surfaceGrid.draw(
-                _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
-                _editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
 
         _editables.draw();
 
@@ -306,9 +280,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.free = () => {
         _pcbEditor.free();
         _editables.free();
-
-        if (_surfaceGrid)
-            _surfaceGrid.free();
     };
 
     _view.setOnChanged(onViewChanged);
@@ -321,4 +292,3 @@ Editor.ZOOM_MAX = 16;
 Editor.KEY_MISSION_DOWNLOAD = "m";
 Editor.MOUSE_BUTTON_PRESS_VIEW = MouseEvent.EVENT_PRESS_RMB;
 Editor.MOUSE_BUTTON_RELEASE_VIEW = MouseEvent.EVENT_RELEASE_RMB;
-Editor.SPRITE_GRID = "pcbGrid";
