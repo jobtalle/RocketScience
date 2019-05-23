@@ -54,6 +54,8 @@ export function Editables(editor, renderContext, world) {
         const resize = () => {
             makeGrid();
             makeBorder();
+
+            renderContext.getMyr().bind();
         };
 
         this.getEditable = () => editable;
