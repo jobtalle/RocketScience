@@ -64,6 +64,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         game,
         isMissionEditor);
 
+    const _spriteGrid = renderContext.getSprites().getSprite(Editor.SPRITE_GRID);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
 
@@ -188,6 +189,10 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
 
+        for (let x = Math.floor(world.getView().getOrigin().x / Scale.PIXELS_PER_POINT) * Scale.PIXELS_PER_POINT; x < world.getView().getOrigin().x + world.getView().getSize().x; x += Scale.PIXELS_PER_POINT)
+            for (let y = Math.floor(world.getView().getOrigin().y / Scale.PIXELS_PER_POINT) * Scale.PIXELS_PER_POINT; y < world.getView().getOrigin().y + world.getView().getSize().y; y += Scale.PIXELS_PER_POINT)
+                _spriteGrid.draw(x, y);
+
         _editables.draw();
 
         renderContext.getMyr().primitives.drawLine(
@@ -305,3 +310,4 @@ Editor.ZOOM_MAX = 16;
 Editor.KEY_MISSION_DOWNLOAD = "m";
 Editor.MOUSE_BUTTON_PRESS_VIEW = MouseEvent.EVENT_PRESS_RMB;
 Editor.MOUSE_BUTTON_RELEASE_VIEW = MouseEvent.EVENT_RELEASE_RMB;
+Editor.SPRITE_GRID = "pcbGrid";
