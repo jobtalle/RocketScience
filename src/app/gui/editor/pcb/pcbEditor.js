@@ -108,12 +108,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
-     * Get the view.
-     * @returns {View}
-     */
-    this.getView = () => view;
-
-    /**
      * Set X-ray render mode on or off. If turned on, the user will be able to see behind parts.
      * @param {Boolean} xRay A boolean indicating whether to turn X-ray render mode on or off.
      */

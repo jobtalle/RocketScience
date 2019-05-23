@@ -114,7 +114,8 @@ export function Editables(editor, renderContext, world) {
             return;
         }
 
-        let index = world.getMission().getEditables().indexOf(editable);
+        const index = world.getMission().getEditables().indexOf(editable);
+
         if (index > -1) {
             world.getMission().getEditables().splice(index, 1);
 

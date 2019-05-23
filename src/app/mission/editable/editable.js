@@ -3,7 +3,6 @@ import Myr from "myr.js"
 import {EditableRegion} from "./editableRegion";
 import {BudgetInventory} from "../budget/budgetInventory";
 import {UndoStack} from "../../gui/editor/pcb/undoStack";
-import {Scale} from "../../world/scale";
 
 /**
  * A definition of an editable PCB (and its part budget).

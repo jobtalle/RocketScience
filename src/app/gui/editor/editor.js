@@ -67,6 +67,24 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     const _spriteGrid = renderContext.getSprites().getSprite(Editor.SPRITE_GRID);
     const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
+    let _surfaceGrid = null;
+
+    const makeGrid = () => {
+        if (_surfaceGrid)
+            _surfaceGrid.free();
+
+        _surfaceGrid = new (renderContext.getMyr().Surface)(
+            _editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
+            _editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
+        _surfaceGrid.setClearColor(new Myr.Color(1, 1, 1, 0));
+
+        _surfaceGrid.bind();
+        _surfaceGrid.clear();
+
+        for (let x = 0; x < _surfaceGrid.getWidth(); x += _spriteGrid.getWidth())
+            for(let y = 0; y < _surfaceGrid.getHeight(); y += _spriteGrid.getHeight())
+                _spriteGrid.draw(x, y);
+    };
 
     const onViewChanged = () => {
         _pcbScreenPosition.x = 0;
@@ -120,10 +138,11 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         }
 
         _editable = editable;
-
         _editables.setCurrent(editable);
         _pcbEditor.edit(editable);
         _toolbar.default();
+
+        makeGrid();
     };
 
     /**
@@ -189,24 +208,13 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
 
-        for (let x = Math.floor(world.getView().getOrigin().x / Scale.PIXELS_PER_POINT) * Scale.PIXELS_PER_POINT; x < world.getView().getOrigin().x + world.getView().getSize().x; x += Scale.PIXELS_PER_POINT)
-            for (let y = Math.floor(world.getView().getOrigin().y / Scale.PIXELS_PER_POINT) * Scale.PIXELS_PER_POINT; y < world.getView().getOrigin().y + world.getView().getSize().y; y += Scale.PIXELS_PER_POINT)
-                _spriteGrid.draw(x, y);
+        if (_surfaceGrid)
+            _surfaceGrid.draw(
+                _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
+                _editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
 
         _editables.draw();
 
-        renderContext.getMyr().primitives.drawLine(
-            Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x + 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER);
-        renderContext.getMyr().primitives.drawLine(
-            Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y - 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y + 1) * Scale.PIXELS_PER_METER);
         renderContext.getMyr().primitives.drawRectangle(
             Myr.Color.RED,
             _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
@@ -298,6 +306,9 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.free = () => {
         _pcbEditor.free();
         _editables.free();
+
+        if (_surfaceGrid)
+            _surfaceGrid.free();
     };
 
     _view.setOnChanged(onViewChanged);
