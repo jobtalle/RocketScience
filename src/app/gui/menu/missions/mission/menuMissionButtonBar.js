@@ -2,7 +2,7 @@ import {MenuMissionButton} from "./menuMissionButton";
 
 /**
  * The buttonBar for every MissionMenu object.
- * @param menuMission {MenuMission} The menuMission
+ * @param {MenuMission} menuMission The menuMission
  * @constructor
  */
 export function MenuMissionButtonBar(menuMission) {
