@@ -14,10 +14,11 @@ import Myr from "myr.js"
 /**
  * Simulates physics and led for all objects in the same space.
  * @param {RenderContext} renderContext A render context.
- * @param {Mission} mission An mission to complete in this world.
+ * @param {MissionProgress} missionProgress A mission to complete in this world.
  * @constructor
  */
-export function World(renderContext, mission) {
+export function World(renderContext, missionProgress) {
+    const mission = missionProgress.getMission();
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(mission.getPhysicsConfiguration());
@@ -60,6 +61,8 @@ export function World(renderContext, mission) {
 
         return false;
     };
+
+    this.getMissionProgress = () => missionProgress;
 
     /**
      * Get this world's mission.

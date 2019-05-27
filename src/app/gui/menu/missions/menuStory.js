@@ -6,38 +6,17 @@ import {Menu} from "../menu";
  * @param {Story} story A story.
  * @param {Menu} menu A menu.
  * @param {User} user The user of the system.
+ * @param {Function} onUpdate Function that is called when the object is updated.
  * @constructor
  */
-export function MenuStory(story, menu, user) {
-    let _element = document.createElement("div");
-
-    // const onMissionLoaded = (missionProgress) => {
-    //     const count = _element.childElementCount + 1;
-    //
-    //     const onLoad = (result) => {
-    //         const removeElement = _element.getChildren()[count];
-    //
-    //         _element.insertItemBefore(new MenuMission(menu, result, onUpdate).getElement(), count);
-    //
-    //         _element.removeChild(removeElement);
-    //     };
-    //
-    //     const onUpdate = () => {
-    //         user.clearMission(missionProgress.getMission().getTitle());
-    //
-    //         user.loadMissionProgress(missionProgress.getMission().getTitle(),
-    //             (result) => onLoad(result),
-    //             () => (console.log("error!")));
-    //     };
-    //
-    //     _element.appendChild(new MenuMission(menu, missionProgress, onUpdate).getElement());
-    // };
+export function MenuStory(story, menu, user, onUpdate) {
+    const _element = document.createElement("div");
 
     const make = () => {
         _element.className = MenuStory.CLASS;
 
         for (const mission of story.getMissions()) {
-            _element.appendChild(new MenuMission(menu, mission, () => {}).getElement());
+            _element.appendChild(new MenuMission(menu, mission, () => onUpdate(mission, story, _element)).getElement());
         }
     };
 

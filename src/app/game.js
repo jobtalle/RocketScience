@@ -1,7 +1,6 @@
 import {Menu} from "./gui/menu/menu";
 import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
-import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
 import {MissionProgress} from "./mission/missionProgress";
 
@@ -94,7 +93,8 @@ export function Game(renderContext, input, user) {
             return;
 
         user.saveMissionProgress(new MissionProgress(_world.getMission(),
-            _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE),
+            _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE,
+            _world.getMissionProgress().getFileName()),
             (result) => console.log("Saved mission " + result));
 
     };
@@ -177,12 +177,12 @@ export function Game(renderContext, input, user) {
 
     /**
      * Start a mission.
-     * @param {Mission} mission A mission to play.
+     * @param {MissionProgress} missionProgress A mission progress with a to play.
      */
-    this.startMission = mission => {
+    this.startMission = missionProgress => {
         stopMission();
 
-        _world = new World(renderContext, mission);
+        _world = new World(renderContext, missionProgress);
         _hud = new Hud(renderContext, _world, this);
         _editor = new Editor(renderContext, _world, this, true);
 

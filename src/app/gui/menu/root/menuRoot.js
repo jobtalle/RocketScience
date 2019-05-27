@@ -24,7 +24,7 @@ export function MenuRoot(menu, user) {
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-                menu.setContent(new MenuStories(menu, user));
+                menu.setContent(MenuStories);
             }
         ).getElement());
     };

@@ -73,7 +73,41 @@ export function User() {
         }
     };
 
-    const loadStory = (story, onComplete, onError) => {
+    /**
+     * Obtain the user ID.
+     * @returns {Number} The user ID.
+     */
+    this.getUserId = () => _id;
+
+    /**
+     * Obtain the sprites for the avatar
+     * @returns {AvatarSprites} The AvatarSprites object.
+     */
+    this.getAvatarSprites = () => _avatarSprites;
+
+    /**
+     * Clear a mission with the given name. This will not revert completion status.
+     * @param mission {MissionProgress} MissionProgress object.
+     */
+    this.clearMission = (mission) => {
+        _webStorage.clearMissionProgress(mission.getFileName());
+    };
+
+    /**
+     * Get the number of stories.
+     * @return {Number} Number of stories.
+     */
+    this.getStoryCount = () => {
+        return missions.stories.length;
+    };
+
+    /**
+     * Load one singular story.
+     * @param story {JSON} A JSON object of the story.
+     * @param onLoad {Function} A function that is called when the story is loaded, with the story.
+     * @param onError {Function} A function that is called then there is an error.
+     */
+    this.loadStory = (story, onLoad, onError) => {
         const missionNames = [];
         const missions = {};
         const errors = [];
@@ -90,7 +124,7 @@ export function User() {
 
         const checkIfComplete = () => {
             if (story.missions.length === missionNames.length + errors.length)
-                onComplete(new Story(getOrderedMissions()));
+                onLoad(new Story(story, getOrderedMissions()));
         };
 
         for (const mission of story.missions) {
@@ -111,63 +145,27 @@ export function User() {
     };
 
     /**
-     * Obtain the user ID.
-     * @returns {Number} The user ID.
-     */
-    this.getUserId = () => _id;
-
-    /**
-     * Obtain the sprites for the avatar
-     * @returns {AvatarSprites} The AvatarSprites object.
-     */
-    this.getAvatarSprites = () => _avatarSprites;
-
-
-    /**
-     * Clear a mission with the given name. This will not revert completion status.
-     * @param missionName {String} Name of the mission.
-     */
-    this.clearMission = (missionName) => {
-        _webStorage.clearMissionProgress(missionName);
-    };
-
-    /**
-     * Get the number of stories.
-     * @return {Number} Number of stories.
-     */
-    this.getStoryCount = () => {
-        return missions.stories.length;
-    };
-
-    /**
      * Load all the stories, containing the missions.
      * @param onLoad {Function} Callback function, called for every loaded story, with the story and the index.
      * @param onComplete {Function} Callback function, called when everything is finished.
      * @param onError {Function} Callback function, called when a story returns an error.
      */
     this.loadStories = (onLoad, onComplete, onError) => {
-        let loaded = 0;
+        let index = 0;
 
         const checkIfComplete = () => {
-            if (loaded === missions.stories.length)
+            if (index === missions.stories.length)
                 onComplete();
         };
 
-        let index = 0;
         for (const story of missions.stories) {
-            ++index;
-
-            loadStory(story,
+            this.loadStory(story,
                 (result) => {
-                    ++loaded;
-
-                    onLoad(result, index);
+                    onLoad(result, index++);
                     checkIfComplete();
                 },
                 (error) => {
-                    ++loaded;
-
-                    onError(error, index);
+                    onError(error, index++);
                     checkIfComplete();
                 });
         }
@@ -179,13 +177,13 @@ export function User() {
      * @param onComplete {Function} The function that should be called when the saving is finished.
      */
     this.saveMissionProgress = (missionProgress, onComplete) => {
-        setSavedMission(missionProgress.getMission().getTitle(), missionProgress.getMission());
+        setSavedMission(missionProgress.getFileName(), missionProgress.getMission());
 
         if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE ||
-            _webStorage.isMissionCompleted(missionProgress.getMission().getTitle()))
-            _webStorage.setMissionCompleted(missionProgress.getMission().getTitle());
+            _webStorage.isMissionCompleted(missionProgress.getFileName()))
+            _webStorage.setMissionCompleted(missionProgress.getFileName());
         else
-            _webStorage.setMissionIncomplete(missionProgress.getMission().getTitle());
+            _webStorage.setMissionIncomplete(missionProgress.getFileName());
 
         onComplete(true);
     };

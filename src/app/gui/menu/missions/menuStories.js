@@ -7,7 +7,20 @@ import {MenuStory} from "./menuStory";
  * @constructor
  */
 export function MenuStories(menu, user) {
-    let _element = document.createElement("div");
+    const _element = document.createElement("div");
+
+    const clearMission = (mission, story, element) => {
+        user.clearMission(mission);
+
+        user.loadStory(story.getStory(),
+            (result) => {
+                _element.insertBefore(new MenuStory(result, menu, user, clearMission).getElement(), element);
+                _element.removeChild(element);
+            },
+            (error) => {
+                console.log(error);
+            });
+    };
 
     const make = () => {
         const _stories = [];
@@ -24,7 +37,8 @@ export function MenuStories(menu, user) {
 
         user.loadStories(
             (result, index) => {
-                _element.insertBefore(new MenuStory(result, menu, user).getElement(), _stories[index]);
+                _element.insertBefore(new MenuStory(result, menu, user, clearMission).getElement(), _stories[index]);
+
                 _element.removeChild(_stories[index]);
             },
             () => {
