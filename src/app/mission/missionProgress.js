@@ -1,8 +1,8 @@
 /**
  * A wrapper for Mission, which also stores the progress and a unique hash for the mission.
- * @param mission {Mission} A mission.
- * @param progress {Number} An int variable which states the progression of the mission.
- * @param fileName {String} The fileName of the mission.
+ * @param {Mission} mission A mission.
+ * @param {Number} progress An int variable which states the progression of the mission.
+ * @param {String} fileName The fileName of the mission.
  * @constructor
  */
 export function MissionProgress(mission, progress, fileName) {

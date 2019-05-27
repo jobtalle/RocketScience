@@ -62,6 +62,10 @@ export function World(renderContext, missionProgress) {
         return false;
     };
 
+    /**
+     * Get the missionProgress object of world.
+     * @return {MissionProgress} A missionProgress.
+     */
     this.getMissionProgress = () => missionProgress;
 
     /**

@@ -1,7 +1,7 @@
 /**
  * Button for in the MenuMission
- * @param sprite {String} The name of the sprite.
- * @param onClick {Function} The function that has to be called when the button is clicked.
+ * @param {String} sprite The name of the sprite.
+ * @param {Function} onClick The function that has to be called when the button is clicked.
  * @constructor
  */
 export function MenuMissionButton(sprite, onClick) {
