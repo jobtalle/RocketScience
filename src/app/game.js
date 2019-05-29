@@ -1,18 +1,19 @@
 import {Menu} from "./gui/menu/menu";
 import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
-import {Mission} from "./mission/mission";
 import {Hud} from "./gui/hud/hud";
+import {MissionProgress} from "./mission/missionProgress";
 
 /**
  * This class contains the game views.
  * @param {RenderContext} renderContext A render context.
  * @param {Input} input An input controller.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function Game(renderContext, input) {
+export function Game(renderContext, input, user) {
     let _mode = Game.MODE_NONE;
-    let _menu = new Menu(this, renderContext.getOverlay());
+    let _menu = new Menu(this, renderContext.getOverlay(), user);
     let _world = null;
     let _editor = null;
     let _hud = null;
@@ -64,12 +65,10 @@ export function Game(renderContext, input) {
             case Game.MODE_GAME:
                 _world.onKeyEvent(event);
 
-                if (event.down) switch (event.key) {
-                    case Game.KEY_TOGGLE_EDIT:
-                        if (_mode === Game.MODE_GAME)
-                            this.setMode(Game.MODE_EDIT);
-
-                        return;
+                if (event.down) if (event.key === Game.KEY_TOGGLE_EDIT) {
+                    if (_mode === Game.MODE_GAME)
+                        this.setMode(Game.MODE_EDIT);
+                    return;
                 }
 
                 break;
@@ -89,6 +88,17 @@ export function Game(renderContext, input) {
         }
     };
 
+    const saveMissionProgress = () => {
+        if (!_editor.isEdited()) // Nothing is changed.
+            return;
+
+        user.saveMissionProgress(new MissionProgress(_world.getMission(),
+            _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE,
+            _world.getMissionProgress().getFileName()),
+            (result) => console.log("Saved mission " + result));
+
+    };
+
     const unsetMode = mode => {
         switch(mode) {
             case Game.MODE_MENU:
@@ -96,10 +106,14 @@ export function Game(renderContext, input) {
 
                 break;
             case Game.MODE_EDIT:
+                saveMissionProgress();
+
                 _editor.hide();
 
                 break;
             case Game.MODE_GAME:
+                saveMissionProgress();
+
                 _hud.hide();
                 _world.deactivate();
 
@@ -142,7 +156,11 @@ export function Game(renderContext, input) {
                 break;
             case Game.MODE_GAME:
                 _hud.show();
-                _world.activate();
+
+                if (_editor.getEditable() === null)
+                    _world.activate(-1);
+                else
+                    _world.activate(_editor.getEditables().indexOf(_editor.getEditable()));
 
                 break;
         }
@@ -159,14 +177,14 @@ export function Game(renderContext, input) {
 
     /**
      * Start a mission.
-     * @param {Mission} mission A mission to play.
+     * @param {MissionProgress} missionProgress A mission progress with a to play.
      */
-    this.startMission = mission => {
+    this.startMission = missionProgress => {
         stopMission();
 
-        _world = new World(renderContext, mission);
+        _world = new World(renderContext, missionProgress);
         _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this);
+        _editor = new Editor(renderContext, _world, this, true);
 
         _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();

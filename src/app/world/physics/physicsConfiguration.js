@@ -12,12 +12,12 @@ export function PhysicsConfiguration(gravity) {
     this.getGravity = () => gravity * PhysicsConfiguration.GRAVITY_CONSTANT;
 
     this.serialize = buffer => {
-        buffer.writeByte(gravity);
+        buffer.writeFloat(gravity);
     };
 }
 
 PhysicsConfiguration.deserialize = buffer => {
-    let gravity = buffer.readByte();
+    let gravity = buffer.readFloat();
 
     return new PhysicsConfiguration(gravity);
 };

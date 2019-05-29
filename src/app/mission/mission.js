@@ -15,7 +15,8 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
-    let _onChange=  null;
+    let _onChange = null;
+    let _isCompleted = false; // Should never be (de)serialized!
 
     const rewind = () => {
         _checking = objectives.slice();
@@ -78,7 +79,17 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
         if (_changed && _onChange)
             _onChange(_checkMarks);
 
-        return _checking.length === 0;
+        _isCompleted = _checking.length === 0;
+
+        return _isCompleted;
+    };
+
+    /**
+     * Check if the most recent call of validate was true or false. This function does not validate in any way.
+     * @return {Boolean} True if the mission has been completed, false otherwise
+     */
+    this.isCompleted = () => {
+        return _isCompleted;
     };
 
     /**

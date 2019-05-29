@@ -14,10 +14,11 @@ import Myr from "myr.js"
 /**
  * Simulates physics and led for all objects in the same space.
  * @param {RenderContext} renderContext A render context.
- * @param {Mission} mission An mission to complete in this world.
+ * @param {MissionProgress} missionProgress A mission to complete in this world.
  * @constructor
  */
-export function World(renderContext, mission) {
+export function World(renderContext, missionProgress) {
+    const mission = missionProgress.getMission();
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(mission.getPhysicsConfiguration());
@@ -60,6 +61,12 @@ export function World(renderContext, mission) {
 
         return false;
     };
+
+    /**
+     * Get the missionProgress object of world.
+     * @return {MissionProgress} A missionProgress.
+     */
+    this.getMissionProgress = () => missionProgress;
 
     /**
      * Get this world's mission.
@@ -141,7 +148,7 @@ export function World(renderContext, mission) {
     /**
      * Set the camera.
      * @param {Function} camera A valid camera constructor, or null.
-     * @param {Object} object An object to follow.
+     * @param {Object} [object] An object to follow, if camera was not null.
      */
     this.setCamera = (camera, object) => {
         if (!camera)
@@ -166,11 +173,15 @@ export function World(renderContext, mission) {
 
     /**
      * Activate the world.
+     * @param {Number} focus The index of the currently focused editable, or -1 if nothing is focused.
      */
-    this.activate = () => {
+    this.activate = focus => {
         this.unpause();
 
         mission.prime(_objects);
+
+        if (focus !== -1)
+            this.setCamera(CameraSmooth, _objects[focus]);
     };
 
     /**

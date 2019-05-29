@@ -15,7 +15,7 @@ import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
 
 /**
- * The interactive PCB editor which takes care of sizing & modifying a Pcb.
+ * The interactive PCB editor which takes care of editing a Pcb.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
@@ -23,10 +23,12 @@ import Myr from "myr.js"
  * @param {Number} height The editor height.
  * @param {Number} x The X position of the editor view in pixels.
  * @param {Editor} editor An Editor object.
+ * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, editor) {
+export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
+    const _rawCursor = _cursor.copy();
     const _undoStacks = [];
 
     let _undoStack = null;
@@ -56,6 +58,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         _cursor.y = view.getMouse().y;
 
         view.getInverse().apply(_cursor);
+
+        _rawCursor.x = _cursor.x / Scale.PIXELS_PER_POINT;
+        _rawCursor.y = _cursor.y / Scale.PIXELS_PER_POINT;
 
         _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
@@ -144,6 +149,51 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Shift the editable region position.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
+     */
+    this.moveRegion = (dx, dy) => {
+        _editable.moveRegion(dx, dy);
+        view.focus(
+            view.getFocusX() - dx * Scale.PIXELS_PER_METER,
+            view.getFocusY() - dy * Scale.PIXELS_PER_METER,
+            view.getZoom());
+    };
+
+    /**
+     * Resize the editable region.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resizeRegion = (dx, dy) => {
+        if (dx < -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x))
+            dx = -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x);
+
+        if (dy < -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y))
+            dy = -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y);
+
+        _editable.resizeRegion(dx, dy);
+    };
+
+    /**
+     * Resize the editable region to up and/or left.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resizeRegionUpLeft = (dx, dy) => {
+        if (dx > _editable.getOffset().x)
+            dx = _editable.getOffset().x;
+
+        if (dy > _editable.getOffset().y)
+            dy = _editable.getOffset().y;
+
+        this.moveRegion(dx, dy);
+        this.moveOffset(-dx, -dy);
+        this.resizeRegion(-dx, -dy);
+    };
+
+    /**
      * Set an editor to be active in this PcbEditor.
      * @param {Object} editor One of the valid PCB editor objects.
      */
@@ -220,7 +270,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view, isMissionEditor));
 
                 break;
         }
@@ -285,6 +335,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Set the part budget for the current editable.
+     * @param {Object} budget A valid part budget or null for an infinite budget.
+     */
+    this.setBudget = budget => {
+        if (_editable) {
+            _editable.setBudget(budget);
+
+            editor.onPcbChange();
+        }
+    };
+
+    /**
      * Start editing a pcb.
      * @param {Editable} editable An editable.
      */
@@ -301,6 +363,18 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
         _undoStack = _undoStacks[world.getMission().getEditables().indexOf(editable)];
 
         updatePcb();
+    };
+
+    /**
+     * Check if anything is edited in the current editor.
+     * @return {Boolean} A boolean indicating if the editor is ever edited.
+     */
+    this.isEdited = () => {
+        for (const stack of _undoStacks)
+            if (stack.isEdited())
+                return true;
+
+        return false;
     };
 
     /**
@@ -427,27 +501,34 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor) 
     };
 
     /**
+     * Undo the last action.
+     */
+    this.undo = () => {
+        if (this.getUndoStack().undo(this)) {
+            updatePcb();
+
+            matchWorldPosition();
+        }
+    };
+
+    /**
+     * Redo the previously undone action.
+     */
+    this.redo = () => {
+        if (this.getUndoStack().redo(this)) {
+            updatePcb();
+
+            matchWorldPosition();
+        }
+    };
+
+    /**
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
+        // TODO: Move this to Toolbar
         if (event.down) switch(event.key) {
-            case PcbEditor.KEY_UNDO:
-                if (event.control) if (this.getUndoStack().undo(this)) {
-                    updatePcb();
-
-                    matchWorldPosition();
-                }
-
-                return;
-            case PcbEditor.KEY_REDO:
-                if (event.control) if (this.getUndoStack().redo(this)) {
-                    updatePcb();
-
-                    matchWorldPosition();
-                }
-
-                return;
             case PcbEditor.KEY_SAVE:
                 const data = new Data();
 
@@ -491,7 +572,7 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
-PcbEditor.KEY_UNDO = "z";
-PcbEditor.KEY_REDO = "y";
+PcbEditor.EDIT_MODE_MOVE_REGION = 4;
+PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

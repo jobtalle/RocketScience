@@ -6,13 +6,15 @@ import {Game} from "./game"
 import {getString, Languages, setLanguage} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
+import {User} from "./user/user";
 
 const start = () => {
+    const user = new User();
     const renderContext = new RenderContext(
         document.getElementById("renderer"),
         document.getElementById("overlay"));
     const input = new Input(window, renderContext);
-    const game = new Game(renderContext, input);
+    const game = new Game(renderContext, input, user);
 
     const resize = () => {
         const wrapper = document.getElementById("wrapper");

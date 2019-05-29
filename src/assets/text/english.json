@@ -9,6 +9,9 @@
   "MACRO_HIGH": "high",
   "MACRO_LOW": "low",
 
+  "BUDGET_TYPE_NONE": "Unlimited budget",
+  "BUDGET_TYPE_INVENTORY": "Inventory budget",
+
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
   "TOOLBAR_ETCH": "Make connections on the PCB",
@@ -16,6 +19,8 @@
   "TOOLBAR_LAUNCH": "Launch the game",
   "TOOLBAR_X_RAY": "See through parts on the PCB",
   "TOOLBAR_EXIT": "Exit",
+  "TOOLBAR_UNDO": "Undo",
+  "TOOLBAR_REDO": "Redo",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
