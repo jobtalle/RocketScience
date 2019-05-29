@@ -20,4 +20,6 @@ export function PriorityQueue() {
     this.pop = () => _queue.pop();
 
     this.isEmpty = () => _queue.length === 0;
+
+    this.size = () => _queue.length;
 }

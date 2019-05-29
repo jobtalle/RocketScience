@@ -2,6 +2,7 @@ import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js"
 import {getValidOrigin} from "../../../mission/editable/editableEscaper";
+import {getValidRegion} from "../../../mission/editable/editableRegionShrinker";
 
 /**
  * A move editor moves a PCB within its editable region.
@@ -38,6 +39,55 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
         else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
+    };
+
+    /**
+     * Returns an iterator over editables that intersect the current editable.
+     * @returns {IterableIterator<*>}
+     */
+    const intersectingEditables = function* () {
+        for (const editable of editor.getEditor().getEditables()) {
+            if (editable === editor.getEditable())
+                continue;
+
+            if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion()))
+                yield editable;
+        }
+    };
+
+    /**
+     * Shrinks the editable region after a resize, if necessary. If an edge is selected, only resizes that edge.
+     * If a corner is selected, any edge may be resized.
+     */
+    const shrinkEditableRegion = () => {
+        if (_resizeQuadrant === PcbEditorMove.BIT_MASK_LEFT) {
+            for (const editable of intersectingEditables()) {
+                const dx = editable.getRegion().getOrigin().x + editable.getRegion().getSize().x - editor.getEditable().getRegion().getOrigin().x;
+                editor.resizeRegionUpLeft(dx, 0);
+            }
+        } else if (_resizeQuadrant === PcbEditorMove.BIT_MASK_RIGHT) {
+            for (const editable of intersectingEditables()) {
+                const dx = editable.getRegion().getOrigin().x - (editor.getEditable().getRegion().getOrigin().x + editor.getEditable().getRegion().getSize().x);
+                editor.resizeRegion(dx, 0);
+            }
+        } else if (_resizeQuadrant === PcbEditorMove.BIT_MASK_UP) {
+            for (const editable of intersectingEditables()) {
+                const dy = editable.getRegion().getOrigin().y + editable.getRegion().getSize().y - editor.getEditable().getRegion().getOrigin().y;
+                editor.resizeRegionUpLeft(0, dy);
+            }
+        } else if (_resizeQuadrant === PcbEditorMove.BIT_MASK_DOWN) {
+            for (const editable of intersectingEditables()) {
+                const dy = editable.getRegion().getOrigin().y - (editor.getEditable().getRegion().getOrigin().y + editor.getEditable().getRegion().getSize().y);
+                editor.resizeRegion(0, dy);
+            }
+        } else {
+            const newRegion = getValidRegion(editor.getEditable(), editor.getEditor().getEditables());
+
+            editor.resizeRegionUpLeft(newRegion.getOrigin().x - editor.getEditable().getRegion().getOrigin().x, 0);
+            editor.resizeRegionUpLeft(0, newRegion.getOrigin().y - editor.getEditable().getRegion().getOrigin().y);
+            editor.resizeRegion(newRegion.getSize().x - editor.getEditable().getRegion().getSize().x, 0);
+            editor.resizeRegion(0, newRegion.getSize().y - editor.getEditable().getRegion().getSize().y);
+        }
     };
 
     /**
@@ -151,48 +201,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             const newOrigin = getValidOrigin(editor.getEditable(), editor.getEditor().getEditables());
             editor.moveRegion(newOrigin.x - editor.getEditable().getRegion().getOrigin().x, newOrigin.y - editor.getEditable().getRegion().getOrigin().y);
         } else if (_mode === PcbEditorMove.REGION_RESIZE) {
-            if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT) {
-                for (const editable of editor.getEditor().getEditables()) {
-                    if (editable === editor.getEditable())
-                        continue;
-
-                    if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion())) {
-                        const dx = editable.getRegion().getOrigin().x + editable.getRegion().getSize().x - editor.getEditable().getRegion().getOrigin().x;
-                        editor.resizeRegionUpLeft(dx, 0);
-                    }
-                }
-            } else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_RIGHT) {
-                for (const editable of editor.getEditor().getEditables()) {
-                    if (editable === editor.getEditable())
-                        continue;
-
-                    if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion())) {
-                        const dx = editor.getEditable().getRegion().getOrigin().x + editor.getEditable().getRegion().getSize().x - editable.getRegion().getOrigin().x;
-                        editor.resizeRegion(-dx, 0);
-                    }
-                }
-            }
-            if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP) {
-                for (const editable of editor.getEditor().getEditables()) {
-                    if (editable === editor.getEditable())
-                        continue;
-
-                    if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion())) {
-                        const dy = editable.getRegion().getOrigin().y + editable.getRegion().getSize().y - editor.getEditable().getRegion().getOrigin().y;
-                        editor.resizeRegionUpLeft(0, dy);
-                    }
-                }
-            } else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN) {
-                for (const editable of editor.getEditor().getEditables()) {
-                    if (editable === editor.getEditable())
-                        continue;
-
-                    if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion())) {
-                        const dy = editor.getEditable().getRegion().getOrigin().y + editor.getEditable().getRegion().getSize().y - editable.getRegion().getOrigin().y;
-                        editor.resizeRegion(0, -dy);
-                    }
-                }
-            }
+            shrinkEditableRegion();
         }
         _dragging = null;
         _rawDragging = null;

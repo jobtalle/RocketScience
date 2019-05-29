@@ -4,7 +4,7 @@
  * @param {Array} editables List of all editables in the world.
  * @returns {Myr.Vector} Valid coordinates for the origin of the editable.
  */
-import {EditableRegionNode} from "./editableRegionNode";
+import {EditableRegionMoveNode} from "./editableRegionNode";
 import {PriorityQueue} from "../../utils/priorityQueue";
 import {EditableRegion} from "./editableRegion";
 import * as Myr from "myr.js";
@@ -14,7 +14,7 @@ export function getValidOrigin(editable, editables) {
     const _queue = new PriorityQueue();
     const _sourceOrigin = editable.getRegion().getOrigin().copy();
 
-    _queue.push(new EditableRegionNode(_sourceOrigin, editable.getRegion().copy()));
+    _queue.push(new EditableRegionMoveNode(_sourceOrigin, editable.getRegion().copy()));
 
     while (!_queue.isEmpty()) {
         const node = _queue.pop();
@@ -54,7 +54,7 @@ export function getValidOrigin(editable, editables) {
             }
 
             if (unvisited) {
-                _queue.push(new EditableRegionNode(_sourceOrigin, newRegion));
+                _queue.push(new EditableRegionMoveNode(_sourceOrigin, newRegion));
                 _visited.push(newRegion.getOrigin());
             }
         }
