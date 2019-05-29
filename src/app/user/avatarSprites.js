@@ -9,7 +9,7 @@ export function AvatarSprites() {
 
     /**
      * Set the background spite of the avatar.
-     * @param sprite {string} The sprite class for the background
+     * @param {string} sprite The sprite class for the background
      */
     this.setBackgroundSprite = (sprite) => {
         _background = sprite;
@@ -23,7 +23,7 @@ export function AvatarSprites() {
 
     /**
      * Set the character sprite of the avatar
-     * @param sprite {string} The sprite class for the character
+     * @param {string} sprite The sprite class for the character
      */
     this.setCharacterSprite = (sprite) => {
         _character = sprite;
@@ -37,7 +37,7 @@ export function AvatarSprites() {
 
     /**
      * Set the border sprite of the avatar
-     * @param sprite {string} The sprite class for the border
+     * @param {string} sprite The sprite class for the border
      */
     this.setBorderSprite = (sprite) => {
         _border = sprite;

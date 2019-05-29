@@ -55,8 +55,8 @@ export function Cookie() {
 
     /**
      * Sets the value to the dictionary and saves it to the cookie.
-     * @param key {String} The key of the data in the dictionary.
-     * @param value {String} The value that should be assigned to the key.
+     * @param {String} key The key of the data in the dictionary.
+     * @param {String} value The value that should be assigned to the key.
      */
     this.setValue = (key, value) => {
         cookieValue[key] = value;
@@ -66,7 +66,7 @@ export function Cookie() {
 
     /**
      * Get the value from the cookie dictionary, if it exists.
-     * @param key {String} The key of the data in the dictionary.
+     * @param {String} key The key of the data in the dictionary.
      * @returns {String|Null} Either the value or null if there is no value stored.
      */
     this.getValue = (key) => {
@@ -78,7 +78,7 @@ export function Cookie() {
 
     /**
      * Check if the key has a value in the dictionary.
-     * @param key {String} The key of the data in the dictionary.
+     * @param {String} key The key of the data in the dictionary.
      * @returns {Boolean} True if there is a value stored, False if there is no value stored.
      */
     this.hasValue = (key) => {

@@ -21,7 +21,7 @@ export function WebStorage() {
 
     /**
      * Remove the mission progress from the storage.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      */
     this.clearMissionProgress = (missionName) => {
         removeItem(WebStorage.PREFIX_MISSION_PROGRESS + missionName);
@@ -29,8 +29,8 @@ export function WebStorage() {
 
     /**
      * Store the mission progress in the storage.
-     * @param missionName {String} The name of the mission.
-     * @param data {String} The data that has to be stored.
+     * @param {String} missionName The name of the mission.
+     * @param {String} data The data that has to be stored.
      */
     this.saveMissionProgress = (missionName, data) => {
         setItem(WebStorage.PREFIX_MISSION_PROGRESS + missionName, data);
@@ -38,7 +38,7 @@ export function WebStorage() {
 
     /**
      * Obtain the mission progress from the storage.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      * @return {String} The mission data.
      */
     this.getMissionProgress = (missionName) => {
@@ -47,7 +47,7 @@ export function WebStorage() {
 
     /**
      * Remove the custom mission.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      */
     this.removeCustomMission = (missionName) => {
         removeItem(WebStorage.PREFIX_CUSTOM_MISSION + missionName);
@@ -55,8 +55,8 @@ export function WebStorage() {
 
     /**
      * Save the custom mission to the storage.
-     * @param missionName {String} The name of the mission.
-     * @param data {String} The mission data.
+     * @param {String} missionName The name of the mission.
+     * @param {String} data The mission data.
      */
     this.saveCustomMission = (missionName, data) => {
         setItem(WebStorage.PREFIX_CUSTOM_MISSION + missionName, data);
@@ -64,7 +64,7 @@ export function WebStorage() {
 
     /**
      * Obtain the custom mission.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      */
     this.getCustomMission = (missionName) => {
         getItem(WebStorage.PREFIX_CUSTOM_MISSION + missionName);
@@ -72,7 +72,7 @@ export function WebStorage() {
 
     /**
      * Obtain all the custom missions.
-     * @param onLoad {Function} Function that is called for each loaded custom mission.
+     * @param {Function} onLoad Function that is called for each loaded custom mission.
      */
     this.getAllCustomMissions = (onLoad) => {
         for (const key in getAllKeys()) {
@@ -83,7 +83,7 @@ export function WebStorage() {
 
     /**
      * Remove the PCB from storage.
-     * @param pcbName {String} The name of the PCB.
+     * @param {String} pcbName The name of the PCB.
      */
     this.removePcb = (pcbName) => {
         removeItem(WebStorage.PREFIX_PCB + pcbName);
@@ -91,8 +91,8 @@ export function WebStorage() {
 
     /**
      * Store the PCB to storage.
-     * @param pcbName {String} The name of the PCB
-     * @param data {String} The data of the PCB.
+     * @param {String} pcbName The name of the PCB
+     * @param {String} data The data of the PCB.
      */
     this.savePcb = (pcbName, data) => {
         setItem(WebStorage.PREFIX_PCB + pcbName, data);
@@ -100,7 +100,7 @@ export function WebStorage() {
 
     /**
      * Obtain the PCB data.
-     * @param pcbName {String} The PCB data.
+     * @param {String} pcbName The PCB data.
      */
     this.getPcb = (pcbName) => {
         getItem(WebStorage.PREFIX_PCB + pcbName);
@@ -108,7 +108,7 @@ export function WebStorage() {
 
     /**
      * Obtain all PCBs from storage.
-     * @param onLoad {Function} Function that is called for each loaded PCB.
+     * @param {Function} onLoad Function that is called for each loaded PCB.
      */
     this.getAllPcbs = (onLoad) => {
         for (const key in getAllKeys()) {
@@ -119,7 +119,7 @@ export function WebStorage() {
 
     /**
      * Removes completion progress from the mission.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      */
     this.setMissionIncomplete = (missionName) => {
         removeItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName);
@@ -127,7 +127,7 @@ export function WebStorage() {
 
     /**
      * Marks the mission as completed.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      */
     this.setMissionCompleted = (missionName) => {
         setItem(WebStorage.PREFIX_COMPLETED_MISSION + missionName, true);
@@ -135,7 +135,7 @@ export function WebStorage() {
 
     /**
      * Returns whether the mission is completed or not.
-     * @param missionName {String} The name of the mission.
+     * @param {String} missionName The name of the mission.
      * @return {Boolean} True if the mission is completed, false otherwise.
      */
     this.isMissionCompleted = (missionName) => {

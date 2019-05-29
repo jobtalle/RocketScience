@@ -87,10 +87,10 @@ export function User() {
 
     /**
      * Clear a mission with the given name. This will not revert completion status.
-     * @param mission {MissionProgress} MissionProgress object.
+     * @param {MissionProgress} missionProgress MissionProgress object.
      */
-    this.clearMission = (mission) => {
-        _webStorage.clearMissionProgress(mission.getFileName());
+    this.clearMission = (missionProgress) => {
+        _webStorage.clearMissionProgress(missionProgress.getFileName());
     };
 
     /**
@@ -103,9 +103,9 @@ export function User() {
 
     /**
      * Load one singular story.
-     * @param story {JSON} A JSON object of the story.
-     * @param onLoad {Function} A function that is called when the story is loaded, with the story.
-     * @param onError {Function} A function that is called then there is an error.
+     * @param {JSON} story A JSON object of the story.
+     * @param {Function} onLoad A function that is called when the story is loaded, with the story.
+     * @param {Function} onError A function that is called then there is an error.
      */
     this.loadStory = (story, onLoad, onError) => {
         const missionNames = [];
@@ -146,9 +146,9 @@ export function User() {
 
     /**
      * Load all the stories, containing the missions.
-     * @param onLoad {Function} Callback function, called for every loaded story, with the story and the index.
-     * @param onComplete {Function} Callback function, called when everything is finished.
-     * @param onError {Function} Callback function, called when a story returns an error.
+     * @param {Function} onLoad Callback function, called for every loaded story, with the story and the index.
+     * @param {Function} onComplete Callback function, called when everything is finished.
+     * @param {Function} onError Callback function, called when a story returns an error.
      */
     this.loadStories = (onLoad, onComplete, onError) => {
         let index = 0;
@@ -173,8 +173,8 @@ export function User() {
 
     /**
      * Store the missionProgress progress in the storage.
-     * @param missionProgress {MissionProgress} The missionProgress that has to be saved.
-     * @param onComplete {Function} The function that should be called when the saving is finished.
+     * @param {MissionProgress} missionProgress The missionProgress that has to be saved.
+     * @param {Function} onComplete The function that should be called when the saving is finished.
      */
     this.saveMissionProgress = (missionProgress, onComplete) => {
         setSavedMission(missionProgress.getFileName(), missionProgress.getMission());
