@@ -176,6 +176,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         _editable.resizeRegion(dx, dy);
     };
 
+    /**
+     * Resize the editable region to up and/or left.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
     this.resizeRegionUpLeft = (dx, dy) => {
         if (dx > _editable.getOffset().x)
             dx = _editable.getOffset().x;
