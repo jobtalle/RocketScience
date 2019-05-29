@@ -11,6 +11,14 @@
     z-index: var(--z-index-top);
 }
 
+#library #budget-chooser {
+    width: 100%;
+}
+
+#library #budget-chooser select {
+    width: 100%;
+}
+
 #library .category-title {
     padding: var(--text-padding);
     background-color: #6f747c;
@@ -19,50 +27,51 @@
     font-size: var(--font-size-headers);
 }
 
-#library #parts {
-    overflow-y: auto;
+#library #contents {
+    overflow: hidden;
     flex-grow: 1;
 }
 
-#library #parts .category.empty {
+#library #contents .category.empty {
     display: none;
 }
 
-#library #parts .category .part-list {
+#library #contents .category .part-list {
     display: grid;
     grid-template-columns: repeat(var(--part-grid-cells-per-row), var(--part-grid-cell-size));
 }
 
-#library #parts .category .part-list.closed {
+#library #contents .category .part-list.closed {
     display:none;
 }
 
-#library #parts .category .part-list .part {
+#library #contents .category .part-list .part {
     display: block;
 
     cursor: pointer;
     background-color: white;
+    position: relative;
 }
 
-#library #parts .category .part-list .part:hover {
+#library #contents .category .part-list .part .sprite:hover {
     background-color: lightblue;
 }
 
-#library #parts .category .part-list .part.not-available {
+#library #contents .category .part-list .part.not-available .sprite {
     background-color: gray;
     pointer-events: none;
 }
 
-#library #parts .category .part-list .part.not-specified {
-    display: none;
-}
-
-#library #parts .category .part-list .part.not-available:hover {
+#library #contents .category .part-list .part.not-available .sprite:hover {
     background-color: inherit;
 }
 
-#library #parts .category .part-list .part .count {
-    width: var(--part-grid-count-size);
+#library #contents .category .part-list .part.not-specified {
+    display: none;
+}
+
+#library #contents .category .part-list .part .count {
+    min-width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
     border-radius: calc(var(--part-grid-count-size) / 2);
@@ -70,8 +79,28 @@
     padding: 1px;
     text-align: center;
     background-color: white;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
-#library #parts .category .part-list .part.not-available .count {
+#library #contents .category .part-list .part .count.negative {
+    background-color: red;
+}
+
+#library #contents .category .part-list .part.not-available .count {
     background-color: #9f9f9f;
+}
+
+#library #contents .category .part-list .part .count-setter {
+    width: 100%;
+}
+
+#library #contents .category .part-list .part .count-setter input {
+    width: 50%;
+    box-sizing: border-box;
+}
+
+#library #contents .category .part-list .part .count-setter button {
+    width: 50%;
 }

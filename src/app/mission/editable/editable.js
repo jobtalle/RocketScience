@@ -8,7 +8,7 @@ import {BudgetInventory} from "../budget/budgetInventory";
  * @param {EditableRegion} region The editable region of this editable.
  * @param {Pcb} pcb The default pcb for this editable.
  * @param {Myr.Vector} pcbOffset The PCB's offset within its region.
- * @param {BudgetInventory} budget A part budget, or null if there is no budget.
+ * @param {Budget|Null} budget A part budget, or null if there is no budget.
  * @constructor
  */
 export function Editable(region, pcb, pcbOffset, budget) {
@@ -26,6 +26,12 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getRegion = () => region;
 
     /**
+     * Set the region this editable is in.
+     * @param {EditableRegion} newRegion An EditableRegion instance.
+     */
+    this.setRegion = newRegion => region = newRegion;
+
+    /**
      * Get the PCB of this editable.
      * @returns {Pcb} A pcb.
      */
@@ -39,9 +45,15 @@ export function Editable(region, pcb, pcbOffset, budget) {
 
     /**
      * Get the part budget of this editable.
-     * @returns {BudgetInventory} A part budget.
+     * @returns {Object} A part budget.
      */
     this.getBudget = () => budget;
+
+    /**
+     * Set a new budget for this editable.
+     * @param {Object} newBudget A valid budget object or null for an infinite budget.
+     */
+    this.setBudget = newBudget => budget = newBudget;
 
     /**
      * Get the offset of the pcb in the editable region.
@@ -62,13 +74,33 @@ export function Editable(region, pcb, pcbOffset, budget) {
     };
 
     /**
+     * Shift the region position.
+     * @param {Number} dx The horizontal movement in meters.
+     * @param {Number} dy The vertical movement in meters.
+     */
+    this.moveRegion = (dx, dy) => {
+        region.moveOrigin(dx, dy);
+
+        calculatePosition();
+    };
+
+    /**
+     * Resize the region.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
+    this.resizeRegion = (dx, dy) => region.resize(dx, dy);
+
+    /**
      * Get the PCB position in the world.
      * @returns {Myr.Vector} The PCB position in the world in meters.
      */
     this.getPosition = () => _position;
 
-    calculatePosition();
-
+    /**
+     * Serialize this editable.
+     * @param {ByteBuffer} buffer A byte buffer to serialize to.
+     */
     this.serialize = buffer => {
         let header = (this.getBudget() === null)?Editable.SERIALIZE_BIT_BUDGET_NULL:0;
         buffer.writeByte(header);
@@ -82,6 +114,8 @@ export function Editable(region, pcb, pcbOffset, budget) {
         if (!(header & Editable.SERIALIZE_BIT_BUDGET_NULL))
             this.getBudget().serialize(buffer);
     };
+
+    calculatePosition();
 }
 
 Editable.deserialize = buffer => {
@@ -98,5 +132,4 @@ Editable.deserialize = buffer => {
     return new Editable(region, pcb, offset, budget);
 };
 
-Editable.UNDO_COUNT = 64;
 Editable.SERIALIZE_BIT_BUDGET_NULL = 0x10;

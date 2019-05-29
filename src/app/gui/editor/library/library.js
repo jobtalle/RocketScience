@@ -1,42 +1,42 @@
 import "../../../../styles/library.css"
 import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
-import {Category} from "./category";
 import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../info/info";
+import {LibraryContents} from "./libraryContents";
+import {BudgetChooser} from "./budgetChooser";
 
 /**
  * An HTML based part library.
- * @param {PcbEditor} editor A PcbEditor which places selected objects.
+ * @param {PcbEditor} editor A PcbEditor.
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
  * @param {Object} overlay An element to place the library on.
+ * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function Library(editor, toolbar, info, overlay) {
-    const _container = document.createElement("div");
-    const _categories = [];
-
+export function Library(editor, toolbar, info, overlay, editable) {
     const setPart = part => {
         toolbar.default();
 
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     };
 
+    const setBudget = budget => {
+        editor.setBudget(budget);
+    };
+
+    const _container = document.createElement("div");
+    const _contents = new LibraryContents(parts.categories, setPart, info, editable);
+    const _budgetChooser = editable ? new BudgetChooser(setBudget) : null;
+
     const build = () => {
-        const categories = document.createElement("div");
-
         _container.id = Library.ID;
-        categories.id = Library.PARTS_ID;
 
-        for (const category of parts.categories) {
-            const newCategory = new Category(category, setPart, info);
+        if (editable)
+            _container.appendChild(_budgetChooser.getElement());
 
-            _categories.push(newCategory);
-            categories.appendChild(newCategory.getElement());
-        }
-
-        _container.appendChild(categories);
+        _container.appendChild(_contents.getElement());
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
     };
@@ -47,8 +47,10 @@ export function Library(editor, toolbar, info, overlay) {
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
-        for (const category of _categories)
-            category.setBudget(budget, summary);
+        _contents.setBudget(budget, summary);
+
+        if (_budgetChooser)
+            _budgetChooser.setBudget(budget);
     };
 
     /**
@@ -74,4 +76,3 @@ export function Library(editor, toolbar, info, overlay) {
 }
 
 Library.ID = "library";
-Library.PARTS_ID = "parts";

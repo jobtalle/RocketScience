@@ -1,15 +1,18 @@
 import {getString} from "../../../text/language";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Budget} from "../../../mission/budget/budget";
+import {CategoryPartCountSetter} from "./categoryPartCountSetter";
+import {CategoryPartCount} from "./categoryPartCount";
 
 /**
  * A part button used to instantiate a part.
  * @param {Object} part A part from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
+ * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function CategoryPart(part, setPart, info) {
+export function CategoryPart(part, setPart, info, editable) {
     const _element = document.createElement("div");
 
     const onClick = () => {
@@ -22,26 +25,21 @@ export function CategoryPart(part, setPart, info) {
 
     const onLeave = () => info.clearText();
 
-    const make = () => {
-        _element.classList.add(CategoryPart.CLASS);
-        _element.classList.add("sprite");
-        _element.classList.add(part.icon);
+    const makeSprite = () => {
+        const element = document.createElement("div");
 
-        _element.onclick = onClick;
-        _element.onmouseover = onEnter;
-        _element.onmouseout = onLeave;
+        element.classList.add("sprite");
+        element.classList.add(part.icon);
+        element.onclick = onClick;
+        element.onmouseover = onEnter;
+        element.onmouseout = onLeave;
+
+        return element;
     };
 
-    const makeCount = count => {
-        const countElement = document.createElement("div");
-
-        if (count <= BudgetInventory.COUNT_INFINITE)
-            count = CategoryPart.TEXT_INFINITE;
-
-        countElement.className = CategoryPart.CLASS_COUNT;
-        countElement.innerHTML = count;
-
-        return countElement;
+    const make = () => {
+        _element.classList.add(CategoryPart.CLASS);
+        _element.appendChild(makeSprite());
     };
 
     /**
@@ -60,6 +58,7 @@ export function CategoryPart(part, setPart, info) {
         while (_element.firstChild)
             _element.removeChild(_element.firstChild);
 
+        _element.appendChild(makeSprite());
         _element.classList.remove(CategoryPart.CLASS_NOT_AVAILABLE);
         _element.classList.remove(CategoryPart.CLASS_NOT_SPECIFIED);
 
@@ -68,21 +67,27 @@ export function CategoryPart(part, setPart, info) {
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
-                const count = budget.getCount(part.object);
-                let available = 0;
+                if (editable) {
+                    const counter = new CategoryPartCount(budget.getCount(part.object), part.object, summary);
 
-                if (count !== null) {
-                    available = count - summary.getPartCount(part.object);
-
-                    _element.appendChild(makeCount(available));
-
-                    if (available === 0)
-                        _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                    _element.appendChild(new CategoryPartCountSetter(budget, part.object, counter).getElement());
+                    _element.appendChild(counter.getElement());
                 }
                 else {
-                    _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
+                    const count = budget.getCount(part.object);
 
-                    return false;
+                    if (count !== null) {
+                        const available = count - summary.getPartCount(part.object);
+
+                        _element.appendChild(new CategoryPartCount(count, part.object, summary).getElement());
+
+                        if (available === 0)
+                            _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
+                    } else {
+                        _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
+
+                        return false;
+                    }
                 }
 
                 break;
@@ -97,5 +102,3 @@ export function CategoryPart(part, setPart, info) {
 CategoryPart.CLASS = "part";
 CategoryPart.CLASS_NOT_AVAILABLE = "not-available";
 CategoryPart.CLASS_NOT_SPECIFIED = "not-specified";
-CategoryPart.CLASS_COUNT = "count";
-CategoryPart.TEXT_INFINITE = "&#8734";

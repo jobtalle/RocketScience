@@ -26,37 +26,64 @@
 
 }
 
-#menu .content .missions {
+#menu .content .stories .story {
     margin-left: auto;
     margin-right: auto;
 }
 
-#menu .content .missions .mission {
+#menu .content .stories .story .mission {
     width: 240px;
     height: 160px;
     margin: 16px;
     background-color: goldenrod;
-    cursor: pointer;
 }
 
-#menu .content .missions .mission .title {
+#menu .content .stories .story .completed {
+    background-color: green;
+}
+
+#menu .content .stories .story .incomplete {
+    background-color: fuchsia;
+}
+
+#menu .content .stories .story .mission .header {
+    position: relative;
+    background-color: lightgray;
+}
+
+#menu .content .stories .story .mission .header .title {
     color: black;
     font-size: 24pt;
     text-align: center;
-    background-color: lightgray;
     font-weight: bold;
 }
 
-#menu .content .missions .mission .description {
-    padding: 8px;
-    display: none;
+#menu .content .stories .story .mission .header .button-bar {
+    position: absolute;
+    right: 0;
+    top: 2px;
 }
 
-#menu .content .missions .mission:hover {
+#menu .content .stories .story .mission .header .button-bar .button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+#menu .content .stories .story .mission .description {
+    padding: 8px;
+    display: none;
+    height: 100%;
+    width: auto;
+    cursor: pointer;
+}
+
+#menu .content .stories .story .mission:hover {
     background-color: white;
 }
 
-#menu .content .missions .mission:hover .description {
+#menu .content .stories .story .mission:hover .description {
     display: block;
 }
 
