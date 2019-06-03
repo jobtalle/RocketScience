@@ -250,7 +250,8 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      * The mouse leaves.
      */
     this.onMouseLeave = () => {
-
+        this.mouseUp();
+        _mode = PcbEditorMove.NOT_MOVABLE;
     };
 
     /**
