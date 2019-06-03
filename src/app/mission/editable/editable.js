@@ -104,9 +104,9 @@ export function Editable(region, pcb, pcbOffset, budget) {
      * Rounds all coordinates to the grid. This method should not change the current coordinates, but should be a safeguard against rounding errors.
      */
     this.roundCoordinatesToGrid = () => {
+        region.roundCoordinatesToGrid();
         pcbOffset.x = Math.round(pcbOffset.x * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
         pcbOffset.y = Math.round(pcbOffset.y * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
-        region.roundCoordinatesToGrid();
     };
 
     /**
