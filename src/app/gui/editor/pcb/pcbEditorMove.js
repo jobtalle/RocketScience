@@ -32,12 +32,12 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
         _resizeQuadrant = 0;
         if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
-        else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x > editor.getEditable().getRegion().getSize().x)
+        else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x >= editor.getEditable().getRegion().getSize().x)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_RIGHT;
 
         if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
-        else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y > editor.getEditable().getRegion().getSize().y)
+        else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y >= editor.getEditable().getRegion().getSize().y)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
     };
 
@@ -102,7 +102,17 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
+        if (event.down) switch (event.key) {
+            case PcbEditorMove.RESIZE_KEY:
+                let rand = Math.random();
+                editor.resizeRegion(1, 0);
+                rand = Math.random();
+                editor.resizeRegion(0, 1);
 
+                shrinkEditableRegion();
+
+                break;
+        }
     };
 
     /**
@@ -136,8 +146,10 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      */
     this.mouseMove = (x, y) => {
         if (_dragging) {
-            const dx = (x - _moveStart.x) * Scale.METERS_PER_PIXEL / view.getZoom();
-            const dy = (y - _moveStart.y) * Scale.METERS_PER_PIXEL / view.getZoom();
+            const dx = Math.round((x - _moveStart.x) * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.METERS_PER_POINT;
+            const dy = Math.round((y - _moveStart.y) * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.METERS_PER_POINT;
+
+            console.log(dx, dy);
 
             switch (_mode) {
                 case PcbEditorMove.PCB_MOVE:
@@ -162,13 +174,15 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
                         delta.add(editor.resizeRegion(0, dy));
 
                     delta.multiply(Scale.POINTS_PER_METER);
-                    _rawDragging.add(delta);
+                    _dragging.add(delta);
 
                     break;
             }
 
-            _moveStart.x = x;
-            _moveStart.y = y;
+            if (dx !== 0)
+                _moveStart.x = Math.round(x * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
+            if (dy !== 0)
+                _moveStart.y = Math.round(y * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
         }
     };
 
@@ -182,8 +196,8 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
         if (_mode !== PcbEditorMove.NOT_MOVABLE) {
             editor.getUndoStack().push();
 
-            _moveStart.x = x;
-            _moveStart.y = y;
+            _moveStart.x = Math.round(x * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
+            _moveStart.y = Math.round(y * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
             _dragging = cursor.copy();
             _rawDragging = rawCursor.copy();
 
@@ -205,6 +219,8 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
         }
         _dragging = null;
         _rawDragging = null;
+
+        editor.getEditable().roundCoordinatesToGrid();
     };
 
     /**
@@ -273,6 +289,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
 
         switch (_mode) {
             case PcbEditorMove.PCB_MOVE:
+            case PcbEditorMove.REGION_MOVE:
                 if (_dragging)
                     SPRITE_MOVE.draw(
                         (_dragging.x - 1) * Scale.PIXELS_PER_POINT,
@@ -283,69 +300,35 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
                         (cursor.y - 1) * Scale.PIXELS_PER_POINT);
 
                 break;
-            case PcbEditorMove.REGION_MOVE:
-                if (_rawDragging)
-                    SPRITE_MOVE.draw(
-                        (_rawDragging.x - 1.5) * Scale.PIXELS_PER_POINT,
-                        (_rawDragging.y - 1.5) * Scale.PIXELS_PER_POINT);
-                else
-                    SPRITE_MOVE.draw(
-                        (rawCursor.x - 1.5) * Scale.PIXELS_PER_POINT,
-                        (rawCursor.y - 1.5) * Scale.PIXELS_PER_POINT);
-
-                break;
             case PcbEditorMove.REGION_RESIZE:
-                let posX = rawCursor.x;
-                let posY = rawCursor.y;
-                const offset = 1.5;
+                let posX = cursor.x;
+                let posY = cursor.y;
 
-                if (_rawDragging) {
-                    posX = _rawDragging.x;
-                    posY = _rawDragging.y;
+                if (_dragging) {
+                    posX = _dragging.x;
+                    posY = _dragging.y;
                 }
 
                 if (_resizeQuadrant & PcbEditorMove.BIT_MASK_LEFT) {
                     if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
-                        SPRITE_RESIZE.drawRotated(
-                            posX * Scale.PIXELS_PER_POINT,
-                            (posY + Math.sqrt(offset * offset + offset * offset)) * Scale.PIXELS_PER_POINT,
-                            0.75 * Math.PI);
+                        SPRITE_RESIZE.setFrame(3);
                     else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
-                        SPRITE_RESIZE.drawRotated(
-                            (posX + Math.sqrt(offset * offset + offset * offset)) * Scale.PIXELS_PER_POINT,
-                            posY * Scale.PIXELS_PER_POINT,
-                            1.25 * Math.PI);
+                        SPRITE_RESIZE.setFrame(5);
                     else
-                        SPRITE_RESIZE.drawRotated(
-                            (posX + offset) * Scale.PIXELS_PER_POINT,
-                            (posY + offset) * Scale.PIXELS_PER_POINT,
-                            Math.PI);
+                        SPRITE_RESIZE.setFrame(4);
                 } else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_RIGHT) {
                     if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
-                        SPRITE_RESIZE.drawRotated(
-                            (posX - Math.sqrt(offset * offset + offset * offset)) * Scale.PIXELS_PER_POINT,
-                            posY * Scale.PIXELS_PER_POINT,
-                            0.25 * Math.PI);
+                        SPRITE_RESIZE.setFrame(1);
                     else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_DOWN)
-                        SPRITE_RESIZE.drawRotated(
-                            posX * Scale.PIXELS_PER_POINT,
-                            (posY - Math.sqrt(offset * offset + offset * offset)) * Scale.PIXELS_PER_POINT,
-                            1.75 * Math.PI);
+                        SPRITE_RESIZE.setFrame(7);
                     else
-                        SPRITE_RESIZE.drawRotated(
-                            (posX - offset) * Scale.PIXELS_PER_POINT,
-                            (posY - offset) * Scale.PIXELS_PER_POINT,
-                            0);
+                        SPRITE_RESIZE.setFrame(0);
                 } else if (_resizeQuadrant & PcbEditorMove.BIT_MASK_UP)
-                    SPRITE_RESIZE.drawRotated(
-                        (posX - offset) * Scale.PIXELS_PER_POINT,
-                        (posY + offset) * Scale.PIXELS_PER_POINT,
-                        0.5 * Math.PI);
+                        SPRITE_RESIZE.setFrame(2);
                 else
-                    SPRITE_RESIZE.drawRotated(
-                        (posX + offset) * Scale.PIXELS_PER_POINT,
-                        (posY - offset) * Scale.PIXELS_PER_POINT,
-                        1.5 * Math.PI);
+                    SPRITE_RESIZE.setFrame(6);
+
+                SPRITE_RESIZE.draw((posX - 1) * Scale.PIXELS_PER_POINT, (posY - 1) * Scale.PIXELS_PER_POINT);
 
                 break;
         }
@@ -361,3 +344,5 @@ PcbEditorMove.BIT_MASK_LEFT = 0x01;
 PcbEditorMove.BIT_MASK_RIGHT = 0x02;
 PcbEditorMove.BIT_MASK_UP = 0x04;
 PcbEditorMove.BIT_MASK_DOWN = 0x08;
+
+PcbEditorMove.RESIZE_KEY = "b";

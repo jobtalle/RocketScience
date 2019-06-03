@@ -42,6 +42,16 @@ export function EditableRegion(origin, size) {
     };
 
     /**
+     * Rounds all coordinates to the grid. This method should not change the current coordinates, but should be a safeguard against rounding errors.
+     */
+    this.roundCoordinatesToGrid = () => {
+        origin.x = Math.round(origin.x * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+        origin.y = Math.round(origin.y * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+        size.x = Math.round(size.x * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+        size.y = Math.round(size.y * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+    };
+
+    /**
      * Check whether a point is in the region, with a margin of x POINTs on all sides.
      * @param {Number} x The X coordinate relative to the origin.
      * @param {Number} y The Y coordinate relative to the origin.
@@ -50,9 +60,9 @@ export function EditableRegion(origin, size) {
      */
     this.containsPoint = (x, y, margin=0) =>
         !(x + Scale.METERS_PER_POINT * margin < origin.x
-            || x > origin.x + size.x + Scale.METERS_PER_POINT * margin
+            || x >= origin.x + size.x + Scale.METERS_PER_POINT * margin
             || y + Scale.METERS_PER_POINT * margin < origin.y
-            || y > origin.y + size.y + Scale.METERS_PER_POINT * margin);
+            || y >= origin.y + size.y + Scale.METERS_PER_POINT * margin);
 
     /**
      * Check whether a different region intersects this region.

@@ -3,6 +3,7 @@ import Myr from "myr.js"
 import {EditableRegion} from "./editableRegion";
 import {BudgetInventory} from "../budget/budgetInventory";
 import {UndoStack} from "../../gui/editor/pcb/undoStack";
+import {Scale} from "../../world/scale";
 
 /**
  * A definition of an editable PCB (and its part budget).
@@ -98,6 +99,15 @@ export function Editable(region, pcb, pcbOffset, budget) {
      * @param {Number} dy The vertical change in meters.
      */
     this.resizeRegion = (dx, dy) => region.resize(dx, dy);
+
+    /**
+     * Rounds all coordinates to the grid. This method should not change the current coordinates, but should be a safeguard against rounding errors.
+     */
+    this.roundCoordinatesToGrid = () => {
+        pcbOffset.x = Math.round(pcbOffset.x * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+        pcbOffset.y = Math.round(pcbOffset.y * Scale.POINTS_PER_METER) * Scale.METERS_PER_POINT;
+        region.roundCoordinatesToGrid();
+    };
 
     /**
      * Get the PCB position in the world.

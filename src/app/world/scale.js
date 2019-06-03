@@ -9,6 +9,7 @@ export const Scale = {
     PIXELS_PER_METER: pixelsPerPoint * pointsPerMeter,
 
     POINTS_PER_METER: pointsPerMeter,
+    POINTS_PER_PIXEL: 1 / pixelsPerPoint,
 
     METERS_PER_PIXEL: 1 / (pixelsPerPoint * pointsPerMeter),
     METERS_PER_POINT: 1 / pointsPerMeter

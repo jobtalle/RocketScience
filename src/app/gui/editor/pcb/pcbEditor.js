@@ -58,6 +58,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
 
+        _rawCursor.x = _cursor.x;
+        _rawCursor.y = _cursor.y;
+
         return _cursor.x !== oldX || _cursor.y !== oldY;
     };
 
