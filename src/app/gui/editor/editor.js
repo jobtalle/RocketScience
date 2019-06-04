@@ -45,11 +45,14 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getViewport().getSplitX(),
         this,
         isMissionEditor);
+    const _editables = new Editables(this, renderContext, world);
     const _toolbar = new Toolbar(
         _pcbEditor,
+        _editables,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
-        game);
+        game,
+        isMissionEditor);
     const _library = new Library(
         _pcbEditor,
         _toolbar,
@@ -60,9 +63,8 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         world.getMission(),
         game,
         isMissionEditor);
-    const _pcbScreenPosition = new Myr.Vector(0, 0);
 
-    const _editables = new Editables(renderContext, world);
+    const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
 
     const onViewChanged = () => {
@@ -117,7 +119,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         }
 
         _editable = editable;
-
         _editables.setCurrent(editable);
         _pcbEditor.edit(editable);
         _toolbar.default();
@@ -162,7 +163,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _toolbar.show();
         _overlay.show();
 
-        if (world.getMission().isFinished())
+        if (!isMissionEditor && world.getMission().isFinished())
             _checklist.finish();
 
         renderContext.getOverlay().appendChild(_checklist.getElement());
@@ -194,25 +195,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
         _editables.draw();
 
-        renderContext.getMyr().primitives.drawLine(
-            Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x - 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x + 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y) * Scale.PIXELS_PER_METER);
-        renderContext.getMyr().primitives.drawLine(
-            Myr.Color.BLUE,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y - 1) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().x + _editable.getOffset().x) * Scale.PIXELS_PER_METER,
-            (_editable.getRegion().getOrigin().y + _editable.getOffset().y + 1) * Scale.PIXELS_PER_METER);
-        renderContext.getMyr().primitives.drawRectangle(
-            Myr.Color.RED,
-            _editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getSize().x * Scale.PIXELS_PER_METER,
-            _editable.getRegion().getSize().y * Scale.PIXELS_PER_METER);
-
         renderContext.getMyr().pop();
 
         _pcbEditor.draw();
@@ -225,10 +207,15 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_PRESS_LMB:
+            case MouseEvent.EVENT_PRESS_RMB:
                 const pressedEditable = _editables.getEditableAt(event.x, event.y);
+                const isCam = event.type === Editor.MOUSE_BUTTON_PRESS_VIEW;
 
-                if (!pressedEditable || pressedEditable === _editable)
-                    _pcbEditor.onMousePress(event.x - renderContext.getViewport().getSplitX(), event.y);
+                if (isCam || !pressedEditable || pressedEditable === _editable)
+                    _pcbEditor.onMousePress(
+                        event.x - renderContext.getViewport().getSplitX(),
+                        event.y,
+                        isCam);
                 else {
                     _pcbEditor.setEditMode(PcbEditor.EDIT_MODE_SELECT);
 
@@ -237,7 +224,11 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
-                _pcbEditor.onMouseRelease(event.x - renderContext.getViewport().getSplitX(), event.y);
+            case MouseEvent.EVENT_RELEASE_RMB:
+                _pcbEditor.onMouseRelease(
+                    event.x - renderContext.getViewport().getSplitX(),
+                    event.y,
+                    event.type === Editor.MOUSE_BUTTON_RELEASE_VIEW);
 
                 break;
             case MouseEvent.EVENT_SCROLL:
@@ -288,6 +279,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      */
     this.free = () => {
         _pcbEditor.free();
+        _editables.free();
     };
 
     _view.setOnChanged(onViewChanged);
@@ -298,3 +290,5 @@ Editor.ZOOM_FACTOR = 0.15;
 Editor.ZOOM_MIN = 1;
 Editor.ZOOM_MAX = 16;
 Editor.KEY_MISSION_DOWNLOAD = "m";
+Editor.MOUSE_BUTTON_PRESS_VIEW = MouseEvent.EVENT_PRESS_RMB;
+Editor.MOUSE_BUTTON_RELEASE_VIEW = MouseEvent.EVENT_RELEASE_RMB;

@@ -29,19 +29,12 @@ import Myr from "myr.js"
 export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
     const _rawCursor = _cursor.copy();
-    const _undoStacks = [];
 
-    let _undoStack = null;
     let _editable = null;
     let _renderer = null;
     let _editor = null;
     let _stashedEditor = null;
     let _hover = true;
-
-    const initializeUndoStacks = () => {
-        for (const editable of world.getMission().getEditables())
-            _undoStacks.push(new UndoStack(editable));
-    };
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -64,6 +57,9 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
 
         _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
+
+        _rawCursor.x = _cursor.x;
+        _rawCursor.y = _cursor.y;
 
         return _cursor.x !== oldX || _cursor.y !== oldY;
     };
@@ -174,6 +170,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
             dy = -(_editable.getRegion().getSize().y - _editable.getPcb().getHeight() * Scale.METERS_PER_POINT - _editable.getOffset().y);
 
         _editable.resizeRegion(dx, dy);
+
+        return new Myr.Vector(dx, dy);
     };
 
     /**
@@ -189,8 +187,16 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
             dy = _editable.getOffset().y;
 
         this.moveRegion(dx, dy);
-        this.moveOffset(-dx, -dy);
-        this.resizeRegion(-dx, -dy);
+
+        if (dx < 0 || dy < 0) {
+            _editable.resizeRegion(-dx, -dy);
+            this.moveOffset(-dx, -dy);
+        } else {
+            this.moveOffset(-dx, -dy);
+            _editable.resizeRegion(-dx, -dy);
+        }
+
+        return new Myr.Vector(dx, dy);
     };
 
     /**
@@ -360,7 +366,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
                 Editor.ZOOM_DEFAULT);
 
         _editable = editable;
-        _undoStack = _undoStacks[world.getMission().getEditables().indexOf(editable)];
 
         updatePcb();
     };
@@ -387,7 +392,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Get the undo stack.
      * @returns {UndoStack} An undo stack.
      */
-    this.getUndoStack = () => _undoStack;
+    this.getUndoStack = () => _editable.getUndoStack();
 
     /**
      * Get the PCB editor width
@@ -399,9 +404,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Press the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
+     * @param {Boolean} cam A boolean indicating whether this is a camera press.
      */
-    this.onMousePress = (x, y) => {
-        if (!mouseDown(x, y)) {
+    this.onMousePress = (x, y, cam) => {
+        if (cam || !mouseDown(x, y)) {
             view.onMouseMove(x, y);
             view.onMousePress();
         }
@@ -411,11 +417,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Release the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
+     * @param {Boolean} cam A boolean indicating whether this is a camera press.
      */
-    this.onMouseRelease = (x, y) => {
-        mouseUp(x, y);
-
-        view.onMouseRelease();
+    this.onMouseRelease = (x, y, cam) => {
+        if (cam || !mouseUp(x, y))
+            view.onMouseRelease();
     };
 
     /**
@@ -564,8 +570,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         if (_renderer)
             _renderer.free();
     };
-
-    initializeUndoStacks();
 }
 
 PcbEditor.EDIT_MODE_SELECT = 0;

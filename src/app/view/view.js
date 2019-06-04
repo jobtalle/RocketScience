@@ -14,6 +14,8 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
     const _transform = new Myr.Transform();
     const _inverse = new Myr.Transform();
     const _mouse = new Myr.Vector(0, 0);
+    const _origin = new Myr.Vector(0, 0);
+    const _size = new Myr.Vector(0, 0);
 
     let _onChanged = null;
     let _dragging = false;
@@ -26,6 +28,11 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
 
         _inverse.set(_transform);
         _inverse.invert();
+
+        _size.x = viewWidth / this.getZoom();
+        _size.y = viewHeight / this.getZoom();
+        _origin.x = this.getFocusX() - _size.x * 0.5;
+        _origin.y = this.getFocusY() - _size.y * 0.5;
 
         if (_onChanged)
             _onChanged();
@@ -46,14 +53,26 @@ export function View(viewWidth, viewHeight, zoomProfile, shiftProfile) {
     };
 
     /**
+     * Get the view origin in meters, which is the top left origin in meters.
+     * @returns {Myr.Vector} The origin in meters.
+     */
+    this.getOrigin = () => _origin;
+
+    /**
+     * Get the size the view spans in meters.
+     * @returns {Myr.Vector} The dimensions in meters.
+     */
+    this.getSize = () => _size;
+
+    /**
      * Get the view width.
-     * @returns {Number} The view width.
+     * @returns {Number} The view width in pixels.
      */
     this.getWidth = () => viewWidth;
 
     /**
      * Get the view height.
-     * @returns {Number} The view height.
+     * @returns {Number} The view height in pixels.
      */
     this.getHeight = () => viewHeight;
 
