@@ -269,6 +269,7 @@ export function World(renderContext, missionProgress) {
      * Free all resources occupied by the world
      */
     this.free = () => {
+        _terrain.free();
         _surface.free();
         _physics.free();
     };
