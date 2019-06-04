@@ -191,6 +191,18 @@ export function Editables(editor, renderContext, world) {
     };
 
     /**
+     * Check if anything is edited.
+     * @return {Boolean} A boolean indicating if the editables are edited.
+     */
+    this.isEdited = () => {
+        for (const entry of _entries)
+            if (entry.getEditable().getUndoStack().isEdited())
+                return true;
+
+        return false;
+    };
+
+    /**
      * Free all resources maintained by this editables.
      */
     this.free = () => {

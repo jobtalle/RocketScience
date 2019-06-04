@@ -375,11 +375,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * @return {Boolean} A boolean indicating if the editor is ever edited.
      */
     this.isEdited = () => {
-        for (const stack of _undoStacks)
-            if (stack.isEdited())
-                return true;
-
-        return false;
+        return editor.isEdited();
     };
 
     /**

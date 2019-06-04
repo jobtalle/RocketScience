@@ -91,6 +91,14 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.getOverlay = () => _overlay;
 
     /**
+     * Check if anything is edited.
+     * @return {Boolean} A boolean indicating if the editables are edited.
+     */
+    this.isEdited = () => {
+        return _editables.isEdited();
+    };
+
+    /**
      * The PCB has changed.
      */
     this.onPcbChange = () => {
@@ -123,12 +131,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _pcbEditor.edit(editable);
         _toolbar.default();
     };
-
-    /**
-     * Check if anything is edited in the current editor.
-     * @return {Boolean} A boolean indicating if the editor is ever edited.
-     */
-    this.isEdited = () => _pcbEditor.isEdited();
 
     /**
      * Get the currently selected editable.
