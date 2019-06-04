@@ -89,6 +89,13 @@ export function Physics(configuration) {
     };
 
     /**
+     * Set the gravitational value.
+     */
+    this.setGravity = () => {
+        _world.SetGravity(getb2Vec2(0, configuration.getGravity()));
+    };
+
+    /**
      * Create a new physics body.
      * @param {Array} polygons An array of polygon arrays, where each polygon point has an x and y coordinate.
      * @param {Number} x Horizontal position.

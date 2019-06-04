@@ -59,12 +59,12 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
     const _buttonAddRegion = new ToolbarButton(
-        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getRegion().getOrigin().copy()), new Myr.Vector(0.4, 0.4)),
+        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getRegion().getOrigin().copy())),
         getString(Toolbar.TEXT_ADD_REGION),
         "toolbar-add-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonCopyRegion = new ToolbarButton(
-        () => editables.addEditable(editor.getEditable().copy(), new Myr.Vector(0.4, 0.4)),
+        () => editables.addEditable(editor.getEditable().copy()),
         getString(Toolbar.TEXT_COPY_REGION),
         "toolbar-copy-region",
         ToolbarButton.TYPE_CLICK);

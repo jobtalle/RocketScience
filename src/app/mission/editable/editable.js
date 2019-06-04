@@ -147,6 +147,10 @@ export function Editable(region, pcb, pcbOffset, budget) {
     calculatePosition();
 }
 
+/**
+ * Deserialize this editable.
+ * @param {ByteBuffer} buffer A byte buffer to serialize from.
+ */
 Editable.deserialize = buffer => {
     let header = buffer.readByte();
 

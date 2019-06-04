@@ -1,0 +1,18 @@
+#tabbar {
+    position: absolute;
+    z-index: var(--z-index-top);
+    bottom: 0;
+}
+
+#tabbar .button {
+    cursor: pointer;
+    float: left;
+}
+
+#tabbar .spacer {
+    float: left;
+}
+
+#tabbar .page {
+    width: 100%;
+}

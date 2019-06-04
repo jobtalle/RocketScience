@@ -14,6 +14,7 @@ import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
 import {Data} from "../../file/data";
 import {DownloadBinary} from "../../utils/downloadBinary";
+import {Tabbar} from "./tabbar/tabbar";
 
 /**
  * Provides am editor for editing PCB's.
@@ -62,6 +63,12 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     const _checklist = new Checklist(
         world.getMission(),
         game,
+        isMissionEditor);
+    const _tabbar = new Tabbar(
+        _pcbEditor,
+        renderContext.getViewport().getElement(),
+        renderContext.getViewport().getSplitX(),
+        world,
         isMissionEditor);
 
     const _pcbScreenPosition = new Myr.Vector(0, 0);
@@ -144,6 +151,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _library.hide();
         _pcbEditor.hide();
         _overlay.hide();
+        _tabbar.hide();
 
         renderContext.getOverlay().removeChild(_checklist.getElement());
     };
@@ -156,6 +164,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _library.show();
         _toolbar.show();
         _overlay.show();
+        _tabbar.show();
 
         if (!isMissionEditor && world.getMission().isFinished())
             _checklist.finish();
