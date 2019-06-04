@@ -26,12 +26,20 @@ export function Terrain(myr, recipe) {
                 if (section + i === _heights.length)
                     break;
 
-                myr.primitives.drawLine(
-                    Myr.Color.BLACK,
-                    i * Terrain.PIXELS_PER_SEGMENT,
-                    Terrain.SURFACE_HEIGHT + heights[section + i] * Scale.PIXELS_PER_METER,
-                    (i + 1) * Terrain.PIXELS_PER_SEGMENT,
-                    Terrain.SURFACE_HEIGHT + heights[section + i + 1] * Scale.PIXELS_PER_METER);
+                const xStart = i * Terrain.PIXELS_PER_SEGMENT;
+                const xEnd = xStart + Terrain.PIXELS_PER_SEGMENT;
+                const yStart = Terrain.SURFACE_HEIGHT + heights[section + i] * Scale.PIXELS_PER_METER;
+                const yEnd = Terrain.SURFACE_HEIGHT + heights[section + i + 1] * Scale.PIXELS_PER_METER;
+
+                myr.primitives.drawTriangle(Terrain.COLOR_FILL,
+                    xStart, yStart,
+                    xStart, Terrain.SURFACE_HEIGHT,
+                    xEnd, Terrain.SURFACE_HEIGHT);
+                myr.primitives.drawTriangle(Terrain.COLOR_FILL,
+                    xEnd, Terrain.SURFACE_HEIGHT,
+                    xEnd, yEnd,
+                    xStart, yStart);
+                myr.primitives.drawLine(Terrain.COLOR_EDGE, xStart, yStart, xEnd, yEnd);
             }
 
             surfaces.push(surface);
@@ -88,3 +96,5 @@ Terrain.SECTIONS_PER_SURFACE = 8;
 Terrain.MAX_HEIGHT = 8;
 Terrain.SURFACE_WIDTH = Terrain.PIXELS_PER_SEGMENT * Terrain.SECTIONS_PER_SURFACE;
 Terrain.SURFACE_HEIGHT = Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT;
+Terrain.COLOR_EDGE = new Myr.Color(0.15, 0.15, 0.15);
+Terrain.COLOR_FILL = new Myr.Color(0.4, 0.6, 0.3);
