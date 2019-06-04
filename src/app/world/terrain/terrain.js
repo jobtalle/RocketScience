@@ -17,7 +17,7 @@ export function Terrain(myr, recipe) {
     const makeSurfaces = heights => {
         const surfaces = [];
 
-        for (let section = 0; section < _heights.length; section += Terrain.SECTIONS_PER_SURFACE) {
+        for (let section = 0; section < _heights.length - 1; section += Terrain.SECTIONS_PER_SURFACE) {
             const surface = new myr.Surface(Terrain.SURFACE_WIDTH, Terrain.SURFACE_HEIGHT);
 
             surface.bind();
@@ -66,9 +66,14 @@ export function Terrain(myr, recipe) {
 
     /**
      * Draws the terrain.
+     * @returns {Number} left The left bound.
+     * @return {Number} right The right bound.
      */
-    this.draw = () => {
-        for (let surface = 0; surface < _surfaces.length; ++surface)
+    this.draw = (left, right) => {
+        const first = Math.max(Math.floor(left / Terrain.SURFACE_WIDTH), 0);
+        const last = Math.min(Math.ceil(right / Terrain.SURFACE_WIDTH), _surfaces.length);
+
+        for (let surface = first; surface < last; ++surface)
             _surfaces[surface].draw(surface * Terrain.SURFACE_WIDTH, -Terrain.SURFACE_HEIGHT);
 
         myr.primitives.fillRectangleGradient(

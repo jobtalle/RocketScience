@@ -237,7 +237,7 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        _terrain.draw();
+        _terrain.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth());
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
