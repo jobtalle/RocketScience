@@ -7,6 +7,8 @@ import {getString} from "../../../text/language";
 export function Tabbar(editor, overlay, x, world, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroup = new TabbarButton.ToggleGroup();
+    const _buttons = document.createElement("div");
+    const _pageElement = document.createElement("div");
     let _page;
 
     const _buttonCollapse = new TabbarButton(
@@ -24,9 +26,9 @@ export function Tabbar(editor, overlay, x, world, isMissionEditor) {
 
     const _setPage = page => {
         if (_page !== undefined)
-            _container.removeChild(_page.getElement());
+            _pageElement.removeChild(_page.getElement());
 
-        _container.appendChild(page.getElement());
+        _pageElement.appendChild(page.getElement());
 
         _page = page;
     };
@@ -35,8 +37,14 @@ export function Tabbar(editor, overlay, x, world, isMissionEditor) {
         _container.id = Tabbar.ID;
         _container.style.left = x + "px";
 
-        _container.appendChild(_buttonCollapse.getElement());
-        _container.appendChild(_buttonPhysics.getElement());
+        _buttons.appendChild(_buttonCollapse.getElement());
+        _buttons.appendChild(_buttonPhysics.getElement());
+
+        _buttons.classList.add("row");
+        _pageElement.classList.add("row");
+
+        _container.appendChild(_buttons);
+        _container.appendChild(_pageElement);
 
         _buttonCollapse.getElement().click();
     };

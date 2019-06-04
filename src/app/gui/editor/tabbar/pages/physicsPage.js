@@ -6,7 +6,7 @@ export function PhysicsPage(world) {
 
         element.value = world.getMission().getPhysicsConfiguration().getGravityFactor().toString();
         element.onkeydown = element.onkeyup = event => event.stopPropagation();
-        element.oninput = () => {
+        element.onchange = () => {
             if (isNaN(Number(element.value)))
                 element.value = "0";
 
