@@ -1,14 +1,15 @@
 import {getString} from "../../../text/language";
 import {MenuButtonCentered} from "../shared/menuButtonCentered";
-import {MenuMissions} from "../missions/menuMissions";
+import {MenuStories} from "../missions/menuStories";
 
 /**
  * Content for the Menu root, containing buttons that allow access to other menu's.
  * @param {Menu} menu A menu.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function MenuRoot(menu) {
-    const _element = document.createElement("div");
+export function MenuRoot(menu, user) {
+    let _element = document.createElement("div");
 
     const make = () => {
         _element.className = MenuRoot.CLASS;
@@ -23,7 +24,7 @@ export function MenuRoot(menu) {
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_MISSIONS),
             () => {
-                menu.setContent(new MenuMissions(menu).getElement());
+                menu.setContent(MenuStories);
             }
         ).getElement());
     };

@@ -1,5 +1,6 @@
 import {ByteBuffer} from "../utils/byteBuffer";
 import Pako from "pako"
+import * as md5 from "md5";
 
 /**
  * A generic file containing binary data.
@@ -61,6 +62,16 @@ export function Data() {
         });
 
         fileReader.readAsArrayBuffer(blob);
+    };
+
+    /**
+     * Creates a hash from the mission.
+     * @returns {string} The hash of the mission
+     */
+    this.toHash = () => {
+        const string =  btoa(String.fromCharCode.apply(null, _buffer.getBytes()));
+
+        return md5(string);
     };
 }
 

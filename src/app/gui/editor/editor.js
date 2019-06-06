@@ -98,6 +98,14 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.getOverlay = () => _overlay;
 
     /**
+     * Check if anything is edited.
+     * @return {Boolean} A boolean indicating if the editables are edited.
+     */
+    this.isEdited = () => {
+        return _editables.isEdited();
+    };
+
+    /**
      * The PCB has changed.
      */
     this.onPcbChange = () => {
@@ -264,6 +272,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
 
+        // TODO: REMOVE THIS
         if (event.down) switch(event.key) {
             case Editor.KEY_MISSION_DOWNLOAD:
                 const missionData = new Data();

@@ -1,4 +1,6 @@
 import noisejs from "noisejs"
+import {Terrain} from "./terrain";
+import {makeOctaves} from "./octaves";
 
 /**
  * A recipe for rough unvaried terrain.
@@ -8,9 +10,6 @@ import noisejs from "noisejs"
  * @param {Number} height The height of this terrain in the range [0, 1].
  * @constructor
  */
-import {Terrain} from "./terrain";
-import {makeOctaves} from "./octaves";
-
 export function TerrainRugged(seed, width, roughness, height) {
     this.getHeights = () => {
         const segments = Math.ceil(width * Terrain.SEGMENTS_PER_METER) + 1;

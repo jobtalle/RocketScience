@@ -174,6 +174,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         return new Myr.Vector(dx, dy);
     };
 
+    /**
+     * Resize the editable region to up and/or left.
+     * @param {Number} dx The horizontal change in meters.
+     * @param {Number} dy The vertical change in meters.
+     */
     this.resizeRegionUpLeft = (dx, dy) => {
         if (dx > _editable.getOffset().x)
             dx = _editable.getOffset().x;
@@ -366,6 +371,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
+     * Check if anything is edited in the current editor.
+     * @return {Boolean} A boolean indicating if the editor is ever edited.
+     */
+    this.isEdited = () => {
+        return editor.isEdited();
+    };
+
+    /**
      * Get the current editable object.
      * @returns {Editable} The editable.
      */
@@ -490,27 +503,34 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
+     * Undo the last action.
+     */
+    this.undo = () => {
+        if (this.getUndoStack().undo(this)) {
+            updatePcb();
+
+            matchWorldPosition();
+        }
+    };
+
+    /**
+     * Redo the previously undone action.
+     */
+    this.redo = () => {
+        if (this.getUndoStack().redo(this)) {
+            updatePcb();
+
+            matchWorldPosition();
+        }
+    };
+
+    /**
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
+        // TODO: Move this to Toolbar
         if (event.down) switch(event.key) {
-            case PcbEditor.KEY_UNDO:
-                if (event.control) if (this.getUndoStack().undo(this)) {
-                    updatePcb();
-
-                    matchWorldPosition();
-                }
-
-                return;
-            case PcbEditor.KEY_REDO:
-                if (event.control) if (this.getUndoStack().redo(this)) {
-                    updatePcb();
-
-                    matchWorldPosition();
-                }
-
-                return;
             case PcbEditor.KEY_SAVE:
                 const data = new Data();
 
@@ -554,7 +574,5 @@ PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
 PcbEditor.EDIT_MODE_MOVE_REGION = 4;
 PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
-PcbEditor.KEY_UNDO = "z";
-PcbEditor.KEY_REDO = "y";
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

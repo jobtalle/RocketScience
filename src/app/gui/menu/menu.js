@@ -1,29 +1,28 @@
 import "../../../styles/menu.css"
 import {MenuTitle} from "./title";
 import {MenuRoot} from "./root/menuRoot";
+import {UserIcon} from "./user/userIcon";
+import {User} from "../../user/user";
 
 /**
  * The menu object creates an HTML menu which changes Game state.
  * @param {Game} game A constructed Game object to be controlled.
  * @param {HTMLElement} parent An HTML element to create the menu on.
+ * @param {User} user The user of the system.
  * @constructor
  */
-export function Menu(game, parent) {
+export function Menu(game, parent, user) {
     const _divWrapper = document.createElement("div");
     const _divTitle = document.createElement("div");
     const _divContent = document.createElement("div");
+    let _contentObject = null;
     const _contentStack = [];
 
     const clearContent = () => {
-        const removed = [];
-
-        while (_divContent.firstChild) {
-            removed.push(_divContent.firstChild);
-
+        while (_divContent.firstChild)
             _divContent.removeChild(_divContent.firstChild);
-        }
 
-        return removed;
+        return _contentObject;
     };
 
     const build = () => {
@@ -35,6 +34,7 @@ export function Menu(game, parent) {
         _divTitle.appendChild(new MenuTitle().getElement());
 
         _divWrapper.appendChild(_divTitle);
+        _divWrapper.appendChild(new UserIcon(user, null).getElement());
         _divWrapper.appendChild(_divContent);
     };
 
@@ -48,25 +48,25 @@ export function Menu(game, parent) {
 
     /**
      * Set the content of this menu.
-     * @param {HTMLElement} element An HTML element to place in the menu content.
+     * @param {Function} content An object that can at least create an element and reload.
      */
-    this.setContent = element => {
+    this.setContent = content => {
         _contentStack.push(clearContent());
 
-        _divContent.appendChild(element);
+        _contentObject = content;
+        _divContent.appendChild(new _contentObject(this, user).getElement());
     };
 
     /**
      * Set the content to the previous configuration if there is one.
      */
     this.goBack = () => {
-        const newContent = _contentStack.pop();
+        _contentObject = _contentStack.pop();
 
-        if (newContent) {
+        if (_contentObject) {
             clearContent();
 
-            for (const element of newContent)
-                _divContent.appendChild(element);
+            _divContent.appendChild(new _contentObject(this, user).getElement());
         }
     };
 
@@ -74,6 +74,11 @@ export function Menu(game, parent) {
      * Show the menu.
      */
     this.show = () => {
+        if (_contentObject) {
+            clearContent();
+            _divContent.appendChild(new _contentObject(this, user).getElement());
+        }
+
         parent.appendChild(_divWrapper);
     };
 
@@ -86,7 +91,8 @@ export function Menu(game, parent) {
 
     build();
 
-    _divContent.appendChild(new MenuRoot(this).getElement());
+    _contentObject = MenuRoot;
+    _divContent.appendChild(new _contentObject(this, user).getElement());
 }
 
 Menu.ID_WRAPPER = "menu";

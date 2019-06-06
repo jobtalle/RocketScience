@@ -6,6 +6,7 @@
 export function UndoStack(editable) {
     const _undoStack = [];
     const _redoStack = [];
+    let _edited = false;
 
     const applyState = (state, editor) => {
         editable.setPcb(state.pcb);
@@ -22,6 +23,7 @@ export function UndoStack(editable) {
      * Push the state onto the undo stack.
      */
     this.push = () => {
+        _edited = true;
         _undoStack.push(new UndoStack.State(editable));
 
         if (_undoStack.length > UndoStack.CAPACITY)
@@ -75,6 +77,12 @@ export function UndoStack(editable) {
 
         return false;
     };
+
+    /**
+     * Check if the UndoStack has been edited in some way.
+     * @return {Boolean} A boolean indicating whether the stack has been edited.
+     */
+    this.isEdited = () => _edited;
 }
 
 UndoStack.CAPACITY = 100;
