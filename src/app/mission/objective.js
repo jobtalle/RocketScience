@@ -62,6 +62,11 @@ export function Objective(goals, title) {
     };
 }
 
+/**
+ * Deserialize this objective.
+ * @param {ByteBuffer} buffer A byte buffer.
+ * @returns {Objective} The deserialized Objective.
+ */
 Objective.deserialize = buffer => {
     const goals = [];
     const goalCount = buffer.readByte();

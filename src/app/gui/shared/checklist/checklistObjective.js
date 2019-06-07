@@ -5,7 +5,7 @@ import {ChecklistObjectiveGoals} from "./checklistObjectiveGoals";
  * @param {Objective} objective An objective.
  * @param {Boolean} editor A boolean indicating whether this objective is an editor.
  * @param {Boolean} open A boolean indicating whether this objective should be expanded initially.
- * @param {Function} [onDelete] A function to call when this objective wants to delete itself.
+ * @param {Function} onDelete A function to call when this objective wants to delete itself.
  * @constructor
  */
 export function ChecklistObjective(objective, editor, open, onDelete) {

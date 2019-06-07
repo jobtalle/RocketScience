@@ -30,6 +30,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      */
     const setResizeQuadrant = () => {
         _resizeQuadrant = 0;
+
         if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
         else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x >= editor.getEditable().getRegion().getSize().x)
@@ -47,10 +48,7 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      */
     const intersectingEditables = function* () {
         for (const editable of editor.getEditor().getEditables()) {
-            if (editable === editor.getEditable())
-                continue;
-
-            if (editable.getRegion().intersectsRegion(editor.getEditable().getRegion()))
+            if (editable !== editor.getEditable() && editable.getRegion().intersectsRegion(editor.getEditable().getRegion()))
                 yield editable;
         }
     };

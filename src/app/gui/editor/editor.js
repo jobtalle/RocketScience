@@ -65,7 +65,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         game,
         isMissionEditor);
     const _tabbar = new Tabbar(
-        _pcbEditor,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
         world,

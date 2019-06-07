@@ -1,14 +1,14 @@
+import {EditableRegionMoveNode} from "./editableRegionMoveNode";
+import {PriorityQueue} from "../../utils/priorityQueue";
+import {EditableRegion} from "./editableRegion";
+import * as Myr from "myr.js";
+
 /**
  * Returns a vector for the valid origin of an editable.
  * @param {Editable} editable Current editable, of which the origin might be invalid.
  * @param {Array} editables List of all editables in the world.
  * @returns {Myr.Vector} Valid coordinates for the origin of the editable.
  */
-import {EditableRegionMoveNode} from "./editableRegionNode";
-import {PriorityQueue} from "../../utils/priorityQueue";
-import {EditableRegion} from "./editableRegion";
-import * as Myr from "myr.js";
-
 export function getValidOrigin(editable, editables) {
     const _visited = [];
     const _queue = new PriorityQueue();
@@ -59,5 +59,4 @@ export function getValidOrigin(editable, editables) {
             }
         }
     }
-    console.log("ERROR: NO VALID PATH FOUND");
 }

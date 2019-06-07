@@ -4,7 +4,15 @@ import {EmptyPage} from "./pages/emptyPage";
 import {PhysicsPage} from "./pages/physicsPage";
 import {getString} from "../../../text/language";
 
-export function Tabbar(editor, overlay, x, world, isMissionEditor) {
+/**
+ * The tabbar, which is located at the bottom of the level window.
+ * @param {HTMLElement} overlay The element to place the toolbar on.
+ * @param {Number} x The X position of the toolbar in pixels.
+ * @param {World} world The current world.
+ * @param {Boolean} isMissionEditor Enables mission editor functionality.
+ * @constructor
+ */
+export function Tabbar(overlay, x, world, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroup = new TabbarButton.ToggleGroup();
     const _buttons = document.createElement("div");
@@ -49,9 +57,19 @@ export function Tabbar(editor, overlay, x, world, isMissionEditor) {
         _buttonCollapse.getElement().click();
     };
 
-    this.show = () => overlay.appendChild(_container);
+    /**
+     * Show the tabbar.
+     */
+    this.show = () => {
+        overlay.appendChild(_container);
+    };
 
-    this.hide = () => overlay.removeChild(_container);
+    /**
+     * Hide the tabbar.
+     */
+    this.hide = () => {
+        overlay.removeChild(_container);
+    };
 
     if (isMissionEditor)
         build();

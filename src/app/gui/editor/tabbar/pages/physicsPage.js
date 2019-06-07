@@ -1,3 +1,8 @@
+/**
+ * A page where the settings for the physics can be adjusted.
+ * @param {World} world The current world.
+ * @constructor
+ */
 export function PhysicsPage(world) {
     const _element = document.createElement("div");
 
@@ -24,12 +29,18 @@ export function PhysicsPage(world) {
     };
 
     _element.classList.add(PhysicsPage.CLASS);
+    _element.style.backgroundColor = PhysicsPage.BACKGROUND_COLOR;
 
     _element.appendChild(makeField());
 
+    /**
+     * Get the element of this page.
+     * @returns {HTMLDivElement}
+     */
     this.getElement = () => _element;
 }
 
 PhysicsPage.CLASS = "page";
 PhysicsPage.MIN_GRAVITY_FACTOR = -1;
 PhysicsPage.MAX_GRAVITY_FACTOR = 5;
+PhysicsPage.BACKGROUND_COLOR = "#37946e";

@@ -58,8 +58,16 @@ export function Editables(editor, renderContext, world) {
             renderContext.getMyr().bind();
         };
 
+        /**
+         * Get the editable object of the entry
+         * @returns {Editable}
+         */
         this.getEditable = () => editable;
 
+        /**
+         * Draw the editable of the entry
+         * @param {Boolean} editing
+         */
         this.draw = editing => {
             if (!_lastSize.equals(editable.getRegion().getSize())) {
                 _lastSize = editable.getRegion().getSize().copy();
@@ -81,6 +89,9 @@ export function Editables(editor, renderContext, world) {
             }
         };
 
+        /**
+         * Frees the memory of the OpenGL backend
+         */
         this.free = () => {
             _renderer.free();
             _grid.free();
@@ -96,8 +107,8 @@ export function Editables(editor, renderContext, world) {
 
     /**
      * Returns true if coordinates are within editable region.
-     * @param at coordinates to check.
-     * @param editable Editable region to check against.
+     * @param {Myr.Vector} at coordinates to check.
+     * @param {Editable} editable Editable to check against.
      * @returns {Boolean} True if coordinates are within editable region.
      */
     const containsCoordinates = (at, editable) => {
@@ -149,12 +160,11 @@ export function Editables(editor, renderContext, world) {
 
     /**
      * Adds an editable to the world, and focuses on it.
-     * @param editable Editable to add.
+     * @param {Editable} editable Editable to add.
      */
     this.addEditable = editable => {
         const newOrigin = getValidOrigin(editable, world.getMission().getEditables());
 
-        // TODO: Should this really happen here?
         editable.moveRegion(newOrigin.x - editable.getRegion().getOrigin().x, newOrigin.y - editable.getRegion().getOrigin().y);
 
         world.getMission().getEditables().push(editable);
@@ -166,7 +176,7 @@ export function Editables(editor, renderContext, world) {
 
     /**
      * Removes selected editable from the world, and focuses on the first editable of the editable array in Missions.
-     * @param editable Editable to remove.
+     * @param {Editable} editable Editable to remove.
      */
     this.removeEditable = editable => {
         if (world.getMission().getEditables().length === 1) {

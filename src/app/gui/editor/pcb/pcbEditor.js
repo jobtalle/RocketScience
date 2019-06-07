@@ -161,6 +161,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Resize the editable region.
      * @param {Number} dx The horizontal change in meters.
      * @param {Number} dy The vertical change in meters.
+     * @returns {Myr.Vector} The values for dx and dy that are actually used.
      */
     this.resizeRegion = (dx, dy) => {
         if (dx < -(_editable.getRegion().getSize().x - _editable.getPcb().getWidth() * Scale.METERS_PER_POINT - _editable.getOffset().x))
@@ -178,6 +179,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Resize the editable region to up and/or left.
      * @param {Number} dx The horizontal change in meters.
      * @param {Number} dy The vertical change in meters.
+     * @returns {Myr.Vector} The values for dx and dy that are actually used.
      */
     this.resizeRegionUpLeft = (dx, dy) => {
         if (dx > _editable.getOffset().x)
@@ -400,10 +402,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Press the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
-     * @param {Boolean} cam A boolean indicating whether this is a camera press.
+     * @param {Boolean} isCam A boolean indicating whether this is a camera press.
      */
-    this.onMousePress = (x, y, cam) => {
-        if (cam || !mouseDown(x, y)) {
+    this.onMousePress = (x, y, isCam) => {
+        if (isCam || !mouseDown(x, y)) {
             view.onMouseMove(x, y);
             view.onMousePress();
         }
@@ -413,10 +415,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * Release the mouse.
      * @param {Number} x The mouse x position in pixels.
      * @param {Number} y The mouse y position in pixels.
-     * @param {Boolean} cam A boolean indicating whether this is a camera press.
+     * @param {Boolean} isCam A boolean indicating whether this is a camera press.
      */
-    this.onMouseRelease = (x, y, cam) => {
-        if (cam || !mouseUp(x, y))
+    this.onMouseRelease = (x, y, isCam) => {
+        if (isCam || !mouseUp(x, y))
             view.onMouseRelease();
     };
 

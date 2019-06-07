@@ -66,8 +66,8 @@ export function Terrain(myr, recipe) {
 
     /**
      * Draws the terrain.
-     * @returns {Number} left The left bound.
-     * @return {Number} right The right bound.
+     * @param {Number} left The left bound.
+     * @param {Number} right The right bound.
      */
     this.draw = (left, right) => {
         const first = Math.max(Math.floor(left / Terrain.SURFACE_WIDTH), 0);

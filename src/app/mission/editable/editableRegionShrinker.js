@@ -1,14 +1,14 @@
+import {EditableRegionResizeNode} from "./editableRegionResizeNode";
+import {PriorityQueue} from "../../utils/priorityQueue";
+import {EditableRegion} from "./editableRegion";
+import {Scale} from "../../world/scale";
+
 /**
  * Returns a valid region for an editable.
  * @param {Editable} editable Current editable, of which the origin might be invalid.
  * @param {Array} editables List of all editables in the world.
  * @returns {EditableRegion} Valid editable region.
  */
-import {EditableRegionResizeNode} from "./editableRegionNode";
-import {PriorityQueue} from "../../utils/priorityQueue";
-import {EditableRegion} from "./editableRegion";
-import {Scale} from "../../world/scale";
-
 export function getValidRegion(editable, editables) {
     const _queue = new PriorityQueue();
     const _sourceRegion = editable.getRegion().copy();
@@ -64,5 +64,4 @@ export function getValidRegion(editable, editables) {
             return region;
 
     }
-    console.log("ERROR: NO VALID PATH FOUND");
 }

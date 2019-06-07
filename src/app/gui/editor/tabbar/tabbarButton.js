@@ -1,4 +1,11 @@
-
+/**
+ * A button for the tabbar.
+ * @param {Function} onClick A function to execute when the button is active.
+ * @param {String} toolTip A tool tip message.
+ * @param {String} sprite The sprite class.
+ * @param {TabbarButton.ToggleGroup} toggleGroup The toggle group to assign this button to.
+ * @constructor
+ */
 export function TabbarButton(onClick, toolTip, sprite, toggleGroup) {
     const _element = document.createElement("div");
 
