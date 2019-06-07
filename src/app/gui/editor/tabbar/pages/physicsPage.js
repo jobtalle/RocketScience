@@ -28,10 +28,14 @@ export function PhysicsPage(world) {
         return element;
     };
 
-    _element.classList.add(PhysicsPage.CLASS);
-    _element.style.backgroundColor = PhysicsPage.BACKGROUND_COLOR;
+    const build = () => {
+        _element.classList.add(PhysicsPage.CLASS);
+        _element.style.backgroundColor = PhysicsPage.BACKGROUND_COLOR;
 
-    _element.appendChild(makeField());
+        _element.appendChild(makeField());
+    };
+
+    build();
 
     /**
      * Get the element of this page.
