@@ -12,7 +12,7 @@ export function Macro(find, replaceClass, replaceText) {
 
     /**
      * Get the text that the finding should be replaced with based on the current language.
-     * @returns {string} The replace text.
+     * @returns {String} The replace text.
      */
     this.getReplaceText = () => {
         return "<span class=\"" + replaceClass + "\">" + getString(replaceText) + "</span>";
@@ -20,6 +20,7 @@ export function Macro(find, replaceClass, replaceText) {
 
     /**
      * Get the replacement text without formatting.
+     * @returns {String} Get the raw replace text.
      */
     this.getReplaceTextRaw = () => {
         return getString(replaceText);
