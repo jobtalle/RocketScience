@@ -17,6 +17,7 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     let _checkMarks = null;
     let _onChange = null;
     let _isCompleted = false; // Should never be (de)serialized!
+    let _isEdited = false;
 
     const rewind = () => {
         _checking = objectives.slice();
@@ -50,7 +51,10 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
      * Set the mission title.
      * @param {String} newTitle A title.
      */
-    this.setTitle = newTitle => title = newTitle;
+    this.setTitle = newTitle => {
+        title = newTitle;
+        _isEdited = true;
+    };
 
     /**
      * Get this missions description.
@@ -62,7 +66,10 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
      * Set the mission description.
      * @param {String} newDescription A description.
      */
-    this.setDescription = newDescription => description = newDescription;
+    this.setDescription = newDescription => {
+        description = newDescription;
+        _isEdited = true;
+    };
 
     /**
      * Prime this mission for operation.
@@ -111,6 +118,24 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     this.getObjectives = () => objectives;
 
     /**
+     * Add an objective to the mission.
+     * @param {Objective} objective A new objective.
+     */
+    this.addObjective = objective => {
+        objectives.push(objective);
+        _isEdited = true;
+    };
+
+    /**
+     * Remove an objective from the mission.
+     * @param {Objective} objective The objective that will be removed.
+     */
+    this.removeObjective = objective => {
+        objectives.splice(objectives.indexOf(objective), 1);
+        _isEdited = true;
+    };
+
+    /**
      * Get the editables of this mission.
      * @returns {Array} An array of editables.
      */
@@ -125,6 +150,24 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
             return false;
 
         return true;
+    };
+
+    /**
+     * Let the mission know it has been edited.
+     * @param {Boolean} edited Whether the mission has been edited.
+     */
+    this.setEdited = edited => _isEdited = edited;
+
+    /**
+     * Check whether the mission information has been edited (mission editor only).
+     * @returns {Boolean} A boolean indicating whether this mission has been edited.
+     */
+    this.isEdited = () => {
+        for (const objective of objectives)
+            if (objective.isEdited())
+                return true;
+
+        return _isEdited || physicsConfiguration.isEdited();
     };
 
     /**

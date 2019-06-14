@@ -373,14 +373,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
-     * Check if anything is edited in the current editor.
-     * @return {Boolean} A boolean indicating if the editor is ever edited.
-     */
-    this.isEdited = () => {
-        return editor.isEdited();
-    };
-
-    /**
      * Get the current editable object.
      * @returns {Editable} The editable.
      */

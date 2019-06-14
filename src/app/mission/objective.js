@@ -8,6 +8,8 @@ import {Goal} from "./goal/goal";
  * @constructor
  */
 export function Objective(goals, title) {
+    let _isEdited = false;
+
     /**
      * Get the text describing this objective.
      * @returns {String} A string describing this objective.
@@ -18,13 +20,34 @@ export function Objective(goals, title) {
      * Set the title.
      * @param {String} newTitle The new title.
      */
-    this.setTitle = newTitle => title = newTitle;
+    this.setTitle = newTitle => {
+        title = newTitle;
+        _isEdited = true;
+    };
 
     /**
      * Get this objective's goals.
      * @returns {Array} An array of goals, that may not be empty.
      */
     this.getGoals = () => goals;
+
+    /**
+     * Add a new goal to the objective.
+     * @param {Goal} goal A new goal.
+     */
+    this.addGoal = goal => {
+        goals.push(goal);
+        _isEdited = true;
+    };
+
+    /**
+     * Remove a goal from the objective.
+     * @param {Goal} goal The goal that will be removed.
+     */
+    this.removeGoal = goal => {
+        goals.splice(goals.indexOf(goal), 1);
+        _isEdited = true;
+    };
 
     /**
      * Prime this objective for operation.
@@ -44,6 +67,14 @@ export function Objective(goals, title) {
             return false;
 
         return true;
+    };
+
+    this.isEdited = () => {
+        for (const goal of goals)
+            if (goal.isEdited())
+                return true;
+
+        return _isEdited;
     };
 
     /**

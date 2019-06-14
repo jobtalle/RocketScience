@@ -10,6 +10,8 @@ import {Goal} from "./goal";
  * @constructor
  */
 export function GoalPinState(part, pinIndex, pinValue) {
+    let _isEdited = false;
+
     const PinCheck = function(state, index) {
         this.check = value => state[index] === value;
     };
@@ -49,7 +51,10 @@ export function GoalPinState(part, pinIndex, pinValue) {
      * Set the part.
      * @param {String} newPart A valid part name.
      */
-    this.setPart = newPart => part = newPart;
+    this.setPart = newPart => {
+        part = newPart;
+        _isEdited = true;
+    };
 
     /**
      * Get the pin index that is evaluated.
@@ -61,7 +66,10 @@ export function GoalPinState(part, pinIndex, pinValue) {
      * Set the pin index that is evaluated.
      * @param {Number} newPinIndex A valid pin index within the part.
      */
-    this.setPinIndex = newPinIndex => pinIndex = newPinIndex;
+    this.setPinIndex = newPinIndex => {
+        pinIndex = newPinIndex;
+        _isEdited = true;
+    };
 
     /**
      * Get the value the pin must have for the goal to succeed.
@@ -73,7 +81,10 @@ export function GoalPinState(part, pinIndex, pinValue) {
      * Set the pin value.
      * @param {Number} newPinValue A valid pin value that must be either zero or one.
      */
-    this.setPinValue = newPinValue => pinValue = newPinValue;
+    this.setPinValue = newPinValue => {
+        pinValue = newPinValue;
+        _isEdited = true;
+    };
 
     /**
      * Evaluate whether this goal condition has been met.
@@ -87,6 +98,12 @@ export function GoalPinState(part, pinIndex, pinValue) {
     };
 
     /**
+     * Check whether the goal information has been edited (mission editor only).
+     * @returns {Boolean} A boolean indicating whether this goal has been edited.
+     */
+    this.isEdited = () => _isEdited;
+
+    /**
      * Serialize this goal.
      * @param {ByteBuffer} buffer A byte buffer.
      */
@@ -97,6 +114,11 @@ export function GoalPinState(part, pinIndex, pinValue) {
     };
 }
 
+/**
+ * Deserialize a goal.
+ * @param {ByteBuffer} buffer A byte buffer.
+ * @returns {GoalPinState} The deserialized GoalPinState.
+ */
 GoalPinState.deserialize = buffer => {
     let part = getPartFromId(buffer.readByte()).object;
     let pinIndex = buffer.readByte();

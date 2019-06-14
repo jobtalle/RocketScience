@@ -89,7 +89,7 @@ export function Game(renderContext, input, user) {
     };
 
     const saveMissionProgress = () => {
-        if (!_editor.isEdited()) // Nothing is changed.
+        if (!_editor.isEdited() && !_world.getMission().isEdited()) // Nothing is changed.
             return;
 
         user.saveMissionProgress(new MissionProgress(_world.getMission(),
