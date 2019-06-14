@@ -147,8 +147,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             const dx = Math.round((x - _moveStart.x) * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.METERS_PER_POINT;
             const dy = Math.round((y - _moveStart.y) * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.METERS_PER_POINT;
 
-            console.log(dx, dy);
-
             switch (_mode) {
                 case PcbEditorMove.PCB_MOVE:
                     editor.moveOffset(dx, dy);
