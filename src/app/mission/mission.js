@@ -47,6 +47,12 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     this.getTitle = () => title;
 
     /**
+     * Set the mission title.
+     * @param {String} newTitle A title.
+     */
+    this.setTitle = newTitle => title = newTitle;
+
+    /**
      * Get this missions description.
      * @returns {String} The mission description.
      */

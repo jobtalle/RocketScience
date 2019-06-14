@@ -104,8 +104,8 @@ export function PcbRenderer(renderContext, pcb, level) {
                 _layerPcb.draw(x, y);
 
                 for (let i = 0; i < _partRenderers.length; ++i) {
-                    _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
-                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+                    _partRenderers[i].drawInternal(x + _partPositions[i].x, y + _partPositions[i].y);
+                    _partRenderers[i].drawExternal(x + _partPositions[i].x, y + _partPositions[i].y);
                 }
 
                 break;
@@ -113,8 +113,8 @@ export function PcbRenderer(renderContext, pcb, level) {
                 _layerPcb.draw(x, y);
 
                 for (let i = 0; i < _partRenderers.length; ++i) {
-                    _partRenderers[i].drawInternal(_partPositions[i].x, _partPositions[i].y);
-                    _partRenderers[i].drawExternal(_partPositions[i].x, _partPositions[i].y);
+                    _partRenderers[i].drawInternal(x + _partPositions[i].x, y + _partPositions[i].y);
+                    _partRenderers[i].drawExternal(x + _partPositions[i].x, y + _partPositions[i].y);
                 }
 
                 break;

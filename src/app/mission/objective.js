@@ -1,18 +1,30 @@
 import {GoalPinState} from "./goal/goalPinState";
+import {Goal} from "./goal/goal";
 
 /**
  * An objective made up of a number of goals.
  * @param {Array} goals An array of valid goals to complete.
- * @param {String} name A name describing this objective.
+ * @param {String} title A title describing this objective.
  * @constructor
  */
-
-export function Objective(goals, name) {
+export function Objective(goals, title) {
     /**
      * Get the text describing this objective.
      * @returns {String} A string describing this objective.
      */
-    this.getName = () => name;
+    this.getTitle = () => title;
+
+    /**
+     * Set the title.
+     * @param {String} newTitle The new title.
+     */
+    this.setTitle = newTitle => title = newTitle;
+
+    /**
+     * Get this objective's goals.
+     * @returns {Array} An array of goals, that may not be empty.
+     */
+    this.getGoals = () => goals;
 
     /**
      * Prime this objective for operation.
@@ -34,23 +46,41 @@ export function Objective(goals, name) {
         return true;
     };
 
+    /**
+     * Serialize this objective.
+     * @param {ByteBuffer} buffer A byte buffer.
+     */
     this.serialize = buffer => {
         buffer.writeByte(goals.length);
-        for (const goal of goals)
-            goal.serialize(buffer);
 
-        buffer.writeString(name);
+        for (const goal of goals) {
+            buffer.writeByte(goal.getType());
+            goal.serialize(buffer);
+        }
+
+        buffer.writeString(title);
     };
 }
 
+/**
+ * Deserialize this objective.
+ * @param {ByteBuffer} buffer A byte buffer.
+ * @returns {Objective} The deserialized Objective.
+ */
 Objective.deserialize = buffer => {
-    let goals = [];
+    const goals = [];
+    const goalCount = buffer.readByte();
 
-    let goalLength = buffer.readByte();
-    for (let idx = 0; idx < goalLength; ++idx)
-        goals.push(GoalPinState.deserialize(buffer));
+    for (let idx = 0; idx < goalCount; ++idx) {
+        switch (buffer.readByte()) {
+            case Goal.TYPE_PIN_STATE:
+                goals.push(GoalPinState.deserialize(buffer));
 
-    let name = buffer.readString();
+                break;
+        }
+    }
 
-    return new Objective(goals, name);
+    const title = buffer.readString();
+
+    return new Objective(goals, title);
 };

@@ -33,7 +33,7 @@ export function CategoryPartCountSetter(budget, name, counter) {
         const element = document.createElement("input");
 
         element.value = getCount();
-        element.onkeydown = event => event.stopPropagation();
+        element.onkeydown = element.onkeyup = event => event.stopPropagation();
         element.oninput = () => {
             let count;
 
@@ -83,4 +83,4 @@ export function CategoryPartCountSetter(budget, name, counter) {
 
 CategoryPartCountSetter.CLASS = "count-setter";
 CategoryPartCountSetter.TEXT_INFINITE = String.fromCharCode(8734);
-CategoryPartCountSetter.COUNT_MAX = 127;
+CategoryPartCountSetter.COUNT_MAX = 32767;

@@ -11,8 +11,18 @@ function Language() {
         for (const macro of Language.MACROS)
             expressions.push(new RegExp(macro.find, "g"));
 
-        for (const key of Object.keys(_language)) for (let i = 0; i < Language.MACROS.length; ++i)
-            _language[key] = _language[key].replace(expressions[i], Language.MACROS[i].getReplaceText());
+        for (const key of Object.keys(_language)) {
+            let applied = _language[key];
+            let raw = _language[key];
+
+            for (let i = 0; i < Language.MACROS.length; ++i) {
+                applied = applied.replace(expressions[i], Language.MACROS[i].getReplaceText());
+                raw = raw.replace(expressions[i], Language.MACROS[i].getReplaceTextRaw());
+            }
+
+            _language[key] = applied;
+            _language[Language.PREFIX_RAW + key] = raw;
+        }
     };
 
     this.set = (source, onReady, onError) => {
@@ -33,8 +43,18 @@ function Language() {
 
         return text;
     };
+
+    this.getRaw = key => {
+        const text = _language[Language.PREFIX_RAW + key];
+
+        if (text === undefined)
+            return Language.ERROR_TEXT;
+
+        return text;
+    };
 }
 
+Language.PREFIX_RAW = "_raw_";
 Language.ERROR_TEXT = "<string not found>";
 Language.MACROS = [
     new Macro("<high>", "signal high", "MACRO_HIGH"),
@@ -67,4 +87,12 @@ export function setLanguage(language, onReady, onError) {
  */
 export function getString(key) {
     return _language.get(key);
+}
+
+/**
+ * Get an unformatted string from the text library.
+ * @param {String} key The strings key.
+ */
+export function getStringRaw(key) {
+    return _language.getRaw(key);
 }

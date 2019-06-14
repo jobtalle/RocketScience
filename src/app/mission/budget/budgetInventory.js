@@ -62,6 +62,19 @@ export function BudgetInventory(entries) {
     };
 
     /**
+     * Returns a deep copy of this budget.
+     * @returns {BudgetInventory} a new BudgetInventory.
+     */
+    this.copy = () => {
+        const newEntries = [];
+
+        for (const entry of entries)
+            newEntries.push(entry.copy());
+
+        return new BudgetInventory(newEntries);
+    };
+
+    /**
      * Serialize this inventory.
      * @param {Object} buffer A byte buffer to serialize to.
      */
@@ -70,7 +83,7 @@ export function BudgetInventory(entries) {
 
         for (const entry of entries) {
             buffer.writeByte(getPartId(entry.name));
-            buffer.writeByteSigned(entry.count);
+            buffer.writeShortSigned(entry.count);
         }
     };
 
@@ -82,7 +95,7 @@ BudgetInventory.deserialize = buffer => {
     let entryLength = buffer.readByte();
 
     for (let idx = 0; idx < entryLength; ++idx) {
-        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readByteSigned()));
+        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readShortSigned()));
     }
 
     return new BudgetInventory(entries);
@@ -99,4 +112,12 @@ BudgetInventory.COUNT_INFINITE = -1;
 BudgetInventory.Entry = function(name, count) {
     this.name = name;
     this.count = count;
+
+    /**
+     * Returns a copy of this entry.
+     * @returns {BudgetInventory.Entry} a new Entry.
+     */
+    this.copy = () => {
+        return new BudgetInventory.Entry(name, count);
+    };
 };

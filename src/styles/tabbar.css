@@ -1,0 +1,22 @@
+#tabbar {
+    position: absolute;
+    z-index: var(--z-index-top);
+    bottom: 0;
+    width: 100%;
+}
+
+#tabbar .row {
+    position: relative;
+    overflow: auto;
+}
+
+#tabbar .button {
+    position: relative;
+    cursor: pointer;
+    float: left;
+}
+
+#tabbar .page {
+    position: relative;
+    bottom: 0;
+}

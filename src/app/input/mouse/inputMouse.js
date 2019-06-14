@@ -43,11 +43,17 @@ export function InputMouse(element) {
         if (event.target !== element)
             return;
 
-        fireEvent(MouseEvent.makePress(event.clientX - _x, event.clientY - _y));
+        if (event.button === 0)
+            fireEvent(MouseEvent.makePressLeft(event.clientX - _x, event.clientY - _y));
+        else
+            fireEvent(MouseEvent.makePressRight(event.clientX - _x, event.clientY - _y));
     });
 
     element.addEventListener("mouseup", event => {
-        fireEvent(MouseEvent.makeRelease(event.clientX - _x, event.clientY - _y));
+        if (event.button === 0)
+            fireEvent(MouseEvent.makeReleaseLeft(event.clientX - _x, event.clientY - _y));
+        else
+            fireEvent(MouseEvent.makeReleaseRight(event.clientX - _x, event.clientY - _y));
     });
 
     element.addEventListener("mousemove", event => {

@@ -14,23 +14,43 @@ export function MouseEvent(type, x, y, wheelDelta) {
 }
 
 /**
- * Make a mouse press event.
+ * Make a left mouse press event.
  * @param {Number} x The x coordinate in pixels.
  * @param {Number} y The y coordinate in pixels.
  * @returns {MouseEvent} A mouse event.
  */
-MouseEvent.makePress = (x, y) => {
+MouseEvent.makePressLeft = (x, y) => {
     return new MouseEvent(MouseEvent.EVENT_PRESS_LMB, x, y, 0)
 };
 
 /**
- * Make a mouse release event.
+ * Make a right mouse press event.
  * @param {Number} x The x coordinate in pixels.
  * @param {Number} y The y coordinate in pixels.
  * @returns {MouseEvent} A mouse event.
  */
-MouseEvent.makeRelease = (x, y) => {
+MouseEvent.makePressRight = (x, y) => {
+    return new MouseEvent(MouseEvent.EVENT_PRESS_RMB, x, y, 0)
+};
+
+/**
+ * Make a left mouse release event.
+ * @param {Number} x The x coordinate in pixels.
+ * @param {Number} y The y coordinate in pixels.
+ * @returns {MouseEvent} A mouse event.
+ */
+MouseEvent.makeReleaseLeft = (x, y) => {
     return new MouseEvent(MouseEvent.EVENT_RELEASE_LMB, x, y, 0)
+};
+
+/**
+ * Make a right mouse release event.
+ * @param {Number} x The x coordinate in pixels.
+ * @param {Number} y The y coordinate in pixels.
+ * @returns {MouseEvent} A mouse event.
+ */
+MouseEvent.makeReleaseRight = (x, y) => {
+    return new MouseEvent(MouseEvent.EVENT_RELEASE_RMB, x, y, 0)
 };
 
 /**
@@ -76,6 +96,8 @@ MouseEvent.makeLeave = (x, y) => {
 
 MouseEvent.EVENT_PRESS_LMB = 0;
 MouseEvent.EVENT_RELEASE_LMB = 1;
+MouseEvent.EVENT_PRESS_RMB = 6;
+MouseEvent.EVENT_RELEASE_RMB = 7;
 MouseEvent.EVENT_SCROLL = 2;
 MouseEvent.EVENT_MOVE = 3;
 MouseEvent.EVENT_ENTER = 4;

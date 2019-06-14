@@ -5,14 +5,36 @@
  * @constructor
  */
 export function ChecklistTitle(mission, editor) {
-    this.getElement = () => {
-        const element = document.createElement("div");
+    const _element = document.createElement("div");
 
-        element.className = ChecklistTitle.CLASS;
-        element.innerText = mission.getTitle();
+    const makeField = () => {
+        const element = document.createElement("input");
+
+        element.value = mission.getTitle();
+        element.onkeydown = element.onkeyup = event => event.stopPropagation();
+        element.oninput = () => {
+            mission.setTitle(element.value);
+        };
 
         return element;
     };
+
+    const make = () => {
+        _element.className = ChecklistTitle.CLASS;
+
+        if (editor)
+            _element.appendChild(makeField());
+        else
+            _element.innerText = mission.getTitle();
+    };
+
+    /**
+     * Get  the HTML element.
+     * @returns {HTMLElement} The element.
+     */
+    this.getElement = () => _element;
+
+    make();
 }
 
 ChecklistTitle.CLASS = "title";

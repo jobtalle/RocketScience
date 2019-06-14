@@ -75,6 +75,12 @@ export function World(renderContext, missionProgress) {
     this.getMission = () => mission;
 
     /**
+     * Get this world's physics.
+     * @returns {Physics} a Physics object.
+     */
+    this.getPhysics = () => _physics;
+
+    /**
      * Add a new pcb to simulate in the world.
      * @param {Pcb} pcb The pcb to add.
      * @param {Number} x The x-position in meters.
@@ -237,7 +243,7 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        _terrain.draw();
+        _terrain.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth());
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
@@ -269,6 +275,7 @@ export function World(renderContext, missionProgress) {
      * Free all resources occupied by the world
      */
     this.free = () => {
+        _terrain.free();
         _surface.free();
         _physics.free();
     };
