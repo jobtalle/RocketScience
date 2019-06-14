@@ -3,11 +3,13 @@
     top: var(--hud-padding);
     right: var(--hud-padding);
     width: var(--checklist-width);
-    background-color: #ffcc66;
+    background-color: #F6AB15;
     padding: var(--checklist-padding);
     font-size: 20px;
     overflow-y: auto;
     max-height: calc(100% - 2 * (var(--hud-padding) + var(--checklist-padding)));
+    border-radius: 10px;
+    border: 2px #212121 solid;
 }
 
 #checklist .title {
@@ -94,8 +96,11 @@
     text-align: center;
     font-size: var(--font-size-headers);
     font-weight: bold;
-    padding: 16px 10%;
-    background-color: gray;
+    margin-top: 10px;
+    padding: 10px 10%;
+    background-color: #37946E;
+    border-radius: 10px;
+    border: 1px #212121 solid;
 }
 
 #checklist .finished:hover {

@@ -285,7 +285,7 @@ export function World(renderContext, missionProgress) {
     _terrain.makeTerrain(_physics);
 }
 
-World.COLOR_CLEAR = new Myr.Color(0.5, 0.6, 0.7);
+World.COLOR_CLEAR = new Myr.Color(0.701, 0.886, 0.925);
 World.ZOOM_FACTOR = 0.25;
 World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;
