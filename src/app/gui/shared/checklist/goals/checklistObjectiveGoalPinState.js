@@ -45,9 +45,11 @@ export function ChecklistObjectiveGoalPinState(goal, onDelete) {
                 goal.setPart(part.object);
                 pinPicker.set(0, part);
             }).getElement()));
+
         element.appendChild(makeRow(
             getString(ChecklistObjectiveGoalPinState.TEXT_PIN),
             pinPicker.getElement()));
+
         element.appendChild(makeRow(
             getString(ChecklistObjectiveGoalPinState.TEXT_VALUE),
             new ValuePicker(goal.getPinValue(), selected => {

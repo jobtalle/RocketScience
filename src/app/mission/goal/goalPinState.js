@@ -35,6 +35,7 @@ export function GoalPinState(part, pinIndex, pinValue) {
 
     /**
      * Get the objective type.
+     * @returns {Number} The objective type.
      */
     this.getType = () => Goal.TYPE_PIN_STATE;
 
