@@ -3,6 +3,7 @@ import {TabbarButton} from "./tabbarButton";
 import {EmptyPage} from "./pages/emptyPage";
 import {PhysicsPage} from "./pages/physicsPage";
 import {getString} from "../../../text/language";
+import {DescriptionPage} from "./pages/descriptionPage";
 
 /**
  * The tabbar, which is located at the bottom of the level window.
@@ -31,6 +32,12 @@ export function Tabbar(overlay, x, world, isMissionEditor) {
         "tabbar-physics",
         _toggleGroup
     );
+    const _buttonDescription = new TabbarButton(
+        () => _setPage(new DescriptionPage(world.getMission())),
+        getString(Tabbar.TEXT_DESCRIPTION),
+        "tabbar-description",
+        _toggleGroup
+    );
 
     const _setPage = page => {
         if (_page !== undefined)
@@ -47,6 +54,7 @@ export function Tabbar(overlay, x, world, isMissionEditor) {
 
         _buttons.appendChild(_buttonCollapse.getElement());
         _buttons.appendChild(_buttonPhysics.getElement());
+        _buttons.appendChild(_buttonDescription.getElement());
 
         _buttons.classList.add("row");
         _pageElement.classList.add("row");
@@ -79,3 +87,4 @@ Tabbar.ID = "tabbar";
 
 Tabbar.TEXT_COLLAPSE = "TABBAR_COLLAPSE";
 Tabbar.TEXT_PHYSICS = "TABBAR_PHYSICS";
+Tabbar.TEXT_DESCRIPTION = "TABBAR_DESCRIPTION";

@@ -59,6 +59,12 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     this.getDescription = () => description;
 
     /**
+     * Set the mission description.
+     * @param {String} newDescription A description.
+     */
+    this.setDescription = newDescription => description = newDescription;
+
+    /**
      * Prime this mission for operation.
      * @param {Array} objects An array containing all editable PCB's as game objects in order.
      */
@@ -145,6 +151,11 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     rewind();
 }
 
+/**
+ * Deserialize a mission.
+ * @param {Object} buffer A byte buffer.
+ * @returns {Mission} The deserialized mission.
+ */
 Mission.deserialize = buffer => {
     let objectives = [];
     let objectiveLength = buffer.readByte();

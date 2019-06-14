@@ -42,6 +42,7 @@
 
   "TABBAR_COLLAPSE": "Collapse current tab",
   "TABBAR_PHYSICS": "Set this mission's physics configuration",
+  "TABBAR_DESCRIPTION": "Set this mission's description",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
