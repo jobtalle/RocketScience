@@ -4,10 +4,10 @@
  * @param {Function} onChange This function needs to take a string argument, and return a string.
  * @param {String} description
  * @param {Number} size The size of the input field.
- * @returns {HTMLDivElement}
+ * @returns {HTMLElement}
  */
 export function makeInputField(initialValue, onChange, description, size) {
-    const element = document.createElement("div");
+    const element = document.createElement("LABEL");
 
     const field = document.createElement("input");
 
