@@ -29,7 +29,7 @@ export function Checklist(mission, game, editor) {
                 getString(Checklist.TEXT_NEW_OBJECTIVE_TITLE)
             );
 
-            mission.getObjectives().push(objective);
+            mission.addObjective(objective);
 
             addObjective(objective, true);
         });
@@ -41,7 +41,7 @@ export function Checklist(mission, game, editor) {
             _objectives.splice(_objectives.indexOf(checklistObjective), 1);
             _container.removeChild(checklistObjective.getElement());
 
-            mission.getObjectives().splice(mission.getObjectives().indexOf(objective), 1);
+            mission.removeObjective(objective);
         };
 
         const addObjective = (objective, open) => {
