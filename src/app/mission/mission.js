@@ -142,6 +142,24 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     this.getEditables = () => editables;
 
     /**
+     * Add an editable to the mission.
+     * @param {Editable} editable The editable to add.
+     */
+    this.addEditable = editable => {
+        editables.push(editable);
+        _isEdited = true;
+    };
+
+    /**
+     * Remove an editable from the mission.
+     * @param {Editable} editable The editable to remove.
+     */
+    this.removeEditable = editable => {
+        editables.splice(editables.indexOf(editable), 1);
+        _isEdited = true;
+    };
+
+    /**
      * Check whether this mission is finished.
      * @returns {Boolean} A boolean indicating whether this mission has finished.
      */
@@ -157,6 +175,10 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
      * @returns {Boolean} A boolean indicating whether this mission has been edited.
      */
     this.isEdited = () => {
+        for (const editable of editables)
+            if (editable.isEdited())
+                return true;
+
         for (const objective of objectives)
             if (objective.isEdited())
                 return true;
