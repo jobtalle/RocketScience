@@ -8,6 +8,7 @@ import {getPartFromId, getPartId} from "../../part/objects";
  */
 export function BudgetInventory(entries) {
     let _entries = {};
+    let _isEdited = false;
 
     const build = () => {
         _entries = {};
@@ -37,12 +38,12 @@ export function BudgetInventory(entries) {
     };
 
     /**
-     * Chance the budget of a part.
+     * Change the budget of a part.
      * @param {String} name The part name.
      * @param {Number} count The maximum number of instances for this part. If zero, getCount for this part returns null.
      */
     this.setCount = (name, count) => {
-        if (count == 0) {
+        if (count === 0) {
             for (let i = entries.length; i-- > 0;) if (entries[i].name === name) {
                 entries.splice(i, 1);
 
@@ -59,6 +60,16 @@ export function BudgetInventory(entries) {
         }
 
         build();
+
+        _isEdited = true;
+    };
+
+    /**
+     * Checks if the budget has been edited.
+     * @returns {Boolean} A boolean indicating whether the budget has been edited.
+     */
+    this.isEdited = () => {
+        return _isEdited;
     };
 
     /**

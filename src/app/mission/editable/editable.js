@@ -10,12 +10,13 @@ import {Scale} from "../../world/scale";
  * @param {EditableRegion} region The editable region of this editable.
  * @param {Pcb} pcb The default pcb for this editable.
  * @param {Myr.Vector} pcbOffset The PCB's offset within its region.
- * @param {Budget|Null} budget A part budget, or null if there is no budget.
+ * @param {BudgetInventory|Null} budget A part budget, or null if there is no budget.
  * @constructor
  */
 export function Editable(region, pcb, pcbOffset, budget) {
     const _position = new Myr.Vector(0, 0);
     const _undoStack = new UndoStack(this);
+    let _isEdited = false;
 
     const calculatePosition = () => {
         _position.x = region.getOrigin().x + pcbOffset.x;
@@ -62,7 +63,10 @@ export function Editable(region, pcb, pcbOffset, budget) {
      * Set a new budget for this editable.
      * @param {Object} newBudget A valid budget object or null for an infinite budget.
      */
-    this.setBudget = newBudget => budget = newBudget;
+    this.setBudget = newBudget => {
+        budget = newBudget;
+        _isEdited = true;
+    };
 
     /**
      * Get the offset of the pcb in the editable region.
@@ -116,8 +120,19 @@ export function Editable(region, pcb, pcbOffset, budget) {
     this.getPosition = () => _position;
 
     /**
+     * Check if the editable has been edited.
+     * @returns {Boolean} A boolean indicating if anything has been edited.
+     */
+    this.isEdited = () => {
+        if (budget && budget.isEdited())
+            return true;
+
+        return _undoStack.isEdited() || _isEdited;
+    };
+
+    /**
      * Make a copy of this editable.
-     * @return {Object} A deep copy.
+     * @return {Editable} A deep copy.
      */
     this.copy = () => {
         if (budget)

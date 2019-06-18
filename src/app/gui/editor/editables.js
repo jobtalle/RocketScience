@@ -206,7 +206,7 @@ export function Editables(editor, renderContext, world) {
      */
     this.isEdited = () => {
         for (const entry of _entries)
-            if (entry.getEditable().getUndoStack().isEdited())
+            if (entry.getEditable().isEdited())
                 return true;
 
         return false;

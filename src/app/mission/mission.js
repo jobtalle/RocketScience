@@ -153,12 +153,6 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
     };
 
     /**
-     * Let the mission know it has been edited.
-     * @param {Boolean} edited Whether the mission has been edited.
-     */
-    this.setEdited = edited => _isEdited = edited;
-
-    /**
      * Check whether the mission information has been edited (mission editor only).
      * @returns {Boolean} A boolean indicating whether this mission has been edited.
      */
