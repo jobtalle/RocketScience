@@ -40,7 +40,6 @@
   "TOOLBAR_COPY_REGION": "Add a copy of current PCB region",
   "TOOLBAR_REMOVE_REGION": "Remove current PCB region",
 
-  "TABBAR_COLLAPSE": "Collapse current tab",
   "TABBAR_PHYSICS": "Set this mission's physics configuration",
   "TABBAR_DESCRIPTION": "Set this mission's description",
 

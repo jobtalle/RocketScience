@@ -1,6 +1,5 @@
 import "../../../../styles/tabbar.css";
 import {TabbarButton} from "./tabbarButton";
-import {EmptyPage} from "./pages/emptyPage";
 import {PhysicsPage} from "./pages/physicsPage";
 import {getString} from "../../../text/language";
 import {DescriptionPage} from "./pages/descriptionPage";
@@ -20,28 +19,28 @@ export function Tabbar(overlay, x, world, isMissionEditor) {
     const _pageElement = document.createElement("div");
     let _page;
 
-    const _buttonCollapse = new TabbarButton(
-        () => _setPage(new EmptyPage()),
-        getString(Tabbar.TEXT_COLLAPSE),
-        "tabbar-collapse",
-        _toggleGroup
-    );
     const _buttonPhysics = new TabbarButton(
-        () => _setPage(new PhysicsPage(world)),
+        (show) => _setPage(show, new PhysicsPage(world)),
         getString(Tabbar.TEXT_PHYSICS),
         "tabbar-physics",
         _toggleGroup
     );
     const _buttonDescription = new TabbarButton(
-        () => _setPage(new DescriptionPage(world.getMission())),
+        (show) => _setPage(show, new DescriptionPage(world.getMission())),
         getString(Tabbar.TEXT_DESCRIPTION),
         "tabbar-description",
         _toggleGroup
     );
 
-    const _setPage = page => {
+    const _setPage = (show, page) => {
         if (_page !== undefined)
             _pageElement.removeChild(_page.getElement());
+
+        if (!show) {
+            _page = undefined;
+
+            return;
+        }
 
         _pageElement.appendChild(page.getElement());
 
@@ -52,7 +51,6 @@ export function Tabbar(overlay, x, world, isMissionEditor) {
         _container.id = Tabbar.ID;
         _container.style.left = x + "px";
 
-        _buttons.appendChild(_buttonCollapse.getElement());
         _buttons.appendChild(_buttonPhysics.getElement());
         _buttons.appendChild(_buttonDescription.getElement());
 
@@ -61,8 +59,6 @@ export function Tabbar(overlay, x, world, isMissionEditor) {
 
         _container.appendChild(_buttons);
         _container.appendChild(_pageElement);
-
-        _buttonCollapse.getElement().click();
     };
 
     /**

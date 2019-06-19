@@ -17,13 +17,13 @@ export function TabbarButton(onClick, toolTip, sprite, toggleGroup) {
 
         _element.onclick = () => {
             if (_element.classList.contains(TabbarButton.CLASS_ACTIVE))
-                return;
+                onClick(false);
+            else
+                onClick(true);
 
             toggleGroup.press(_element);
 
-            _element.classList.add(TabbarButton.CLASS_ACTIVE);
-
-            onClick();
+            _element.classList.toggle(TabbarButton.CLASS_ACTIVE);
         };
 
         toggleGroup.add(_element);
