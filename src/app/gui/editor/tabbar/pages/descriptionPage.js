@@ -16,7 +16,7 @@ export function DescriptionPage(mission) {
         _element.appendChild(makeInputField(mission.getDescription(), value => {
             mission.setDescription(value);
             return value;
-        }, getString(DescriptionPage.MISSION_DESCRIPTION_DESCRIPTION), DescriptionPage.MISSION_DESCRIPTION_INPUT_SIZE));
+        }, getString(DescriptionPage.DESCRIPTION_LABEL), DescriptionPage.DESCRIPTION_INPUT_SIZE));
     };
 
     build();
@@ -30,5 +30,5 @@ export function DescriptionPage(mission) {
 
 DescriptionPage.CLASS = "page";
 DescriptionPage.BACKGROUND_COLOR = "#37946e";
-DescriptionPage.MISSION_DESCRIPTION_DESCRIPTION = "TABPAGE_DESCRIPTION_DESCRIPTION";
-DescriptionPage.MISSION_DESCRIPTION_INPUT_SIZE = 40;
+DescriptionPage.DESCRIPTION_LABEL = "TABPAGE_DESCRIPTION_LABEL";
+DescriptionPage.DESCRIPTION_INPUT_SIZE = 40;

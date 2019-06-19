@@ -27,7 +27,7 @@ export function PhysicsPage(world) {
             world.getPhysics().setGravity();
 
             return value;
-        }, getString(PhysicsPage.GRAVITY_DESCRIPTION), PhysicsPage.GRAVITY_INPUT_SIZE));
+        }, getString(PhysicsPage.GRAVITY_LABEL), PhysicsPage.GRAVITY_INPUT_SIZE));
     };
 
     build();
@@ -43,5 +43,5 @@ PhysicsPage.CLASS = "page";
 PhysicsPage.MIN_GRAVITY_FACTOR = -1;
 PhysicsPage.MAX_GRAVITY_FACTOR = 5;
 PhysicsPage.BACKGROUND_COLOR = "#37946e";
-PhysicsPage.GRAVITY_DESCRIPTION = "TABPAGE_PHYSICS_DESCRIPTION";
+PhysicsPage.GRAVITY_LABEL = "TABPAGE_PHYSICS_LABEL";
 PhysicsPage.GRAVITY_INPUT_SIZE = 1;

@@ -44,8 +44,8 @@
   "TABBAR_PHYSICS": "Set this mission's physics configuration",
   "TABBAR_DESCRIPTION": "Set this mission's description",
 
-  "TABPAGE_PHYSICS_DESCRIPTION": "The factor of Earth's gravity.",
-  "TABPAGE_DESCRIPTION_DESCRIPTION": "The description of the mission.",
+  "TABPAGE_PHYSICS_LABEL": "The factor of Earth's gravity.",
+  "TABPAGE_DESCRIPTION_LABEL": "The description of the mission.",
 
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
