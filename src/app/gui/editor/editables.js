@@ -182,7 +182,7 @@ export function Editables(editor, renderContext, world) {
 
         editable.moveRegion(newOrigin.x - editable.getRegion().getOrigin().x, newOrigin.y - editable.getRegion().getOrigin().y);
 
-        world.getMission().getEditables().push(editable);
+        world.getMission().addEditable(editable);
 
         _entries.push(new Entry(editable));
 
@@ -202,7 +202,7 @@ export function Editables(editor, renderContext, world) {
         const index = world.getMission().getEditables().indexOf(editable);
 
         if (index > -1) {
-            world.getMission().getEditables().splice(index, 1);
+            world.getMission().removeEditable(editable);
 
             for (const entry of _entries) if (entry.getEditable() === editable) {
                 entry.free();
@@ -213,18 +213,6 @@ export function Editables(editor, renderContext, world) {
         }
 
         editor.edit(world.getMission().getEditables()[world.getMission().getEditables().length - 1]);
-    };
-
-    /**
-     * Check if anything is edited.
-     * @return {Boolean} A boolean indicating if the editables are edited.
-     */
-    this.isEdited = () => {
-        for (const entry of _entries)
-            if (entry.getEditable().getUndoStack().isEdited())
-                return true;
-
-        return false;
     };
 
     /**
