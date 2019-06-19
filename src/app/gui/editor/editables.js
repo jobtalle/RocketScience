@@ -138,8 +138,11 @@ export function Editables(editor, renderContext, world) {
      */
     this.setCurrent = current => {
         for (const entry of _entries)
-            if (entry.getEditable() === _current)
+            if (entry.getEditable() === _current) {
                 entry.getRenderer().revalidate();
+
+                break;
+            }
 
         _current = current;
     };
