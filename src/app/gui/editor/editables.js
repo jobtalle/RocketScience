@@ -59,13 +59,19 @@ export function Editables(editor, renderContext, world) {
         };
 
         /**
-         * Get the editable object of the entry
+         * Get the pcbRenderer of the entry.
+         * @returns {PcbRenderer}
+         */
+        this.getRenderer = () => _renderer;
+
+        /**
+         * Get the editable object of the entry.
          * @returns {Editable}
          */
         this.getEditable = () => editable;
 
         /**
-         * Draw the editable of the entry
+         * Draw the editable of the entry.
          * @param {Boolean} editing
          */
         this.draw = editing => {
@@ -130,7 +136,16 @@ export function Editables(editor, renderContext, world) {
      * Set the currently being edited editable.
      * @param {Editable} current The currently being edited editable, or null if none is being edited.
      */
-    this.setCurrent = current => _current = current;
+    this.setCurrent = current => {
+        for (const entry of _entries)
+            if (entry.getEditable() === _current) {
+                entry.getRenderer().revalidate();
+
+                break;
+            }
+
+        _current = current;
+    };
 
     /**
      * Get the editable at a certain world position.
