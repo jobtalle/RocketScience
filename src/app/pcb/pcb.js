@@ -366,14 +366,19 @@ export function Pcb() {
      * @param {Number} y The Y shift in points.
      */
     this.shift = (x, y) => {
-        for(let row = 0; row < this.getHeight(); ++row)
+        for (let row = 0; row < this.getHeight(); ++row)
             for(let i = 0; i < x; ++i)
                 _points[row].splice(0, 0, null);
 
-        for(let i = 0; i < y; ++i)
+        for (let i = 0; i < y; ++i)
             _points.splice(0, 0, []);
 
         _width += x;
+
+        for (const air of _air) {
+            air.x += x;
+            air.y += y;
+        }
 
         moveFixtures(x, y);
     };
