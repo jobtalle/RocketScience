@@ -80,7 +80,7 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
      * @param {Number} xOffset The wheel X offset in meters.
      * @param {Number} yOffset The wheel Y offset in meters.
      * @param {Myr.Transform} transform A transformation to capture this object's position.
-     * @returns {WheelJoint} A new body representing the wheel.
+     * @returns {WheelJoint} A joint connected to the new wheel.
      */
     this.createWheel = (radius, xOffset, yOffset, transform) => {
         const offset = getOffset(xOffset, yOffset);
@@ -88,6 +88,7 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
             physics,
             world,
             [createCircleShape(radius)],
+            [],
             x + offset.x,
             y + offset.y,
             radius,
