@@ -51,5 +51,5 @@ export function AvatarSprites() {
 }
 
 AvatarSprites.BACKGROUND_DEFAULT = "avatar-background-blue";
-AvatarSprites.CHARACTER_DEFAULT = "avatar-mr-tencent";
+AvatarSprites.CHARACTER_DEFAULT = "avatar-clean";
 AvatarSprites.BORDER_DEFAULT = "avatar-border-gold";

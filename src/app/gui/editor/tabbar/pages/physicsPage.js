@@ -11,7 +11,6 @@ export function PhysicsPage(world) {
 
     const build = () => {
         _element.classList.add(PhysicsPage.CLASS);
-        _element.style.backgroundColor = PhysicsPage.BACKGROUND_COLOR;
 
         _element.appendChild(makeInputField(world.getMission().getPhysicsConfiguration().getGravityFactor().toString(), value => {
             if (isNaN(Number(value)))
@@ -42,6 +41,5 @@ export function PhysicsPage(world) {
 PhysicsPage.CLASS = "page";
 PhysicsPage.MIN_GRAVITY_FACTOR = -1;
 PhysicsPage.MAX_GRAVITY_FACTOR = 5;
-PhysicsPage.BACKGROUND_COLOR = "#37946e";
 PhysicsPage.GRAVITY_LABEL = "TABPAGE_PHYSICS_LABEL";
 PhysicsPage.GRAVITY_INPUT_SIZE = 1;

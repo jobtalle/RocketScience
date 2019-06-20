@@ -1,5 +1,5 @@
 #menu {
-    background-color: royalblue;
+    background-color: var(--menu-color-background);
     position: relative;
     width: 100%;
     height: 100%;
@@ -13,7 +13,7 @@
     font-size: 80pt;
     padding: 32px;
     text-align: center;
-    color: white;
+    color: var(--text-color-light);
 }
 
 #menu .content {
@@ -27,41 +27,46 @@
 }
 
 #menu .content .stories .story {
-    margin-left: auto;
-    margin-right: auto;
+    padding: 30px;
 }
 
 #menu .content .stories .story .mission {
+    display: inline-block;
     width: 240px;
     height: 160px;
-    margin: 16px;
-    background-color: goldenrod;
+    margin: 20px;
+    background-color: var(--mission-color-unplayed);
+    border-radius: 10px;
+    border: 2px var(--border-color) solid;
+    overflow: hidden;
 }
 
 #menu .content .stories .story .completed {
-    background-color: green;
+    background-color: var(--mission-color-completed);
 }
 
 #menu .content .stories .story .incomplete {
-    background-color: fuchsia;
+    background-color: var(--mission-color-incomplete);
 }
 
 #menu .content .stories .story .mission .header {
     position: relative;
-    background-color: lightgray;
+    height: 35px;
+    background-color: var(--mission-color-description);
+    border-radius: 8px 8px 8px 8px;
 }
 
 #menu .content .stories .story .mission .header .title {
-    color: black;
-    font-size: 24pt;
+    color: var(--text-color-dark);
+    font-size: 14pt;
     text-align: center;
     font-weight: bold;
 }
 
 #menu .content .stories .story .mission .header .button-bar {
     position: absolute;
-    right: 0;
-    top: 2px;
+    right: 2px;
+    top: 8px;
 }
 
 #menu .content .stories .story .mission .header .button-bar .button {
@@ -72,15 +77,15 @@
 }
 
 #menu .content .stories .story .mission .description {
-    padding: 8px;
     display: none;
     height: 100%;
-    width: auto;
+    width: 100%;
     cursor: pointer;
+    text-align: center;
 }
 
 #menu .content .stories .story .mission:hover {
-    background-color: white;
+    background-color: var(--mission-color-description);
 }
 
 #menu .content .stories .story .mission:hover .description {

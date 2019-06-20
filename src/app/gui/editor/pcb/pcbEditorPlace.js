@@ -6,6 +6,7 @@ import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js"
+import {StyleUtils} from "../../../utils/styleUtils";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -303,4 +304,4 @@ PcbEditorPlace.Fixture.prototype.isInstance = function() {
     return this.part.configurations === undefined;
 };
 
-PcbEditorPlace.COLOR_UNSUITABLE = new Myr.Color(1, 0, 0, 0.5);
+PcbEditorPlace.COLOR_UNSUITABLE = StyleUtils.getColorHex("--game-color-pcb-edit-place-unsuitable");

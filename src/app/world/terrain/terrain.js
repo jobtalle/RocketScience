@@ -1,5 +1,6 @@
 import {Scale} from "../scale";
 import Myr from "myr.js"
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * An environment to place bots in.
@@ -9,8 +10,8 @@ import Myr from "myr.js"
  */
 export function Terrain(myr, recipe) {
     const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = new Myr.Color(0.3, 0.3, 1, 0.2);
-    const COLOR_WATER_BOTTOM = new Myr.Color(1, 1, 1, 0);
+    const COLOR_WATER_TOP = StyleUtils.getColorHex("--game-color-water-top");
+    const COLOR_WATER_BOTTOM = StyleUtils.getColorHex("--game-color-water-bottom");
 
     const _heights = recipe.getHeights();
 
@@ -101,5 +102,5 @@ Terrain.SECTIONS_PER_SURFACE = 8;
 Terrain.MAX_HEIGHT = 8;
 Terrain.SURFACE_WIDTH = Terrain.PIXELS_PER_SEGMENT * Terrain.SECTIONS_PER_SURFACE;
 Terrain.SURFACE_HEIGHT = Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT;
-Terrain.COLOR_EDGE = new Myr.Color(0.15, 0.15, 0.15);
-Terrain.COLOR_FILL = new Myr.Color(0.4, 0.6, 0.3);
+Terrain.COLOR_EDGE = StyleUtils.getColorHex("--game-color-terrain-border");
+Terrain.COLOR_FILL = StyleUtils.getColorHex("--game-color-terrain-fill");

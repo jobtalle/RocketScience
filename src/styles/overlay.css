@@ -13,8 +13,7 @@
     font-size: 4px;
     width: 6px;
     height: 6px;
-    color: white;
-
+    color: var(--overlay-color-pin);
     text-align: center;
     line-height: 6px;
 }
@@ -35,7 +34,7 @@
     justify-content: space-between;
     align-items: stretch;
     height: 6px;
-    color: white;
+    color: var(--overlay-color-ruler);
     line-height: 6px;
     font-family: monospace;
 }
@@ -53,7 +52,7 @@
 #editor-overlay .rulers .ruler .hbar {
     position: relative;
     display: inline-block;
-    background-color: white;
+    background-color: var(--overlay-color-ruler);
     width: calc(100% - 1px);
     top: -2px;
     height: 1px;
@@ -61,7 +60,7 @@
 
 #editor-overlay .rulers .ruler .vbar {
     display: inline-block;
-    background-color: white;
+    background-color: var(--overlay-color-ruler);
     height: calc(100% - 1px);
     margin-top: 1px;
     width: 1px;
