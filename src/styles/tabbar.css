@@ -14,9 +14,11 @@
     position: relative;
     cursor: pointer;
     float: left;
+    background-color: var(--tabbar-color);
 }
 
 #tabbar .page {
     position: relative;
     bottom: 0;
+    background-color: var(--tabbar-color);
 }

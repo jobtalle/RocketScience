@@ -1,5 +1,6 @@
 import Myr from "myr.js";
 import {Scale} from "../scale";
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * A renderable terrain segment.
@@ -57,5 +58,5 @@ export function TerrainSegment(myr, width, height, depth, heights) {
     update();
 }
 
-TerrainSegment.COLOR_EDGE = new Myr.Color(0.15, 0.15, 0.15);
-TerrainSegment.COLOR_FILL = new Myr.Color(0.4, 0.6, 0.3);
+TerrainSegment.COLOR_EDGE = StyleUtils.getColorHex("--game-color-terrain-border");
+TerrainSegment.COLOR_FILL = StyleUtils.getColorHex("--game-color-terrain-fill");

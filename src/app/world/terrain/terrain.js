@@ -1,6 +1,7 @@
 import {Scale} from "../scale";
 import {TerrainSegment} from "./terrainSegment";
 import Myr from "myr.js"
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * An environment to place bots in.
@@ -10,8 +11,8 @@ import Myr from "myr.js"
  */
 export function Terrain(myr, generator) {
     const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = new Myr.Color(0.3, 0.3, 1, 0.2);
-    const COLOR_WATER_BOTTOM = new Myr.Color(1, 1, 1, 0);
+    const COLOR_WATER_TOP = StyleUtils.getColorHex("--game-color-water-top");
+    const COLOR_WATER_BOTTOM = StyleUtils.getColorHex("--game-color-water-bottom");
 
     const _heights = generator.getHeights();
 

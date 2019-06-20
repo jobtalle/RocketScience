@@ -1,16 +1,15 @@
 #user-button {
-    background-color: white;
     position: absolute;
     top: var(--avatar-padding);
     right: var(--avatar-padding);
 }
 
-#avatar #character, #background {
-    position: absolute;
-    top: calc(var(--avatar-padding) * var(--image-scale));
-    left: calc(var(--avatar-padding) * var(--image-scale));
-}
+/*#avatar #character, #background {*/
+/*    position: absolute;*/
+/*    top: calc(var(--avatar-padding) * var(--image-scale));*/
+/*    left: calc(var(--avatar-padding) * var(--image-scale));*/
+/*}*/
 
-#avatar #border {
-    position: relative;
-}
+/*#avatar #border {*/
+/*    position: relative;*/
+/*}*/

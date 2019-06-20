@@ -3,11 +3,13 @@
     top: var(--hud-padding);
     right: var(--hud-padding);
     width: var(--checklist-width);
-    background-color: #ffcc66;
+    background-color: var(--checklist-color-background);
     padding: var(--checklist-padding);
     font-size: 20px;
     overflow-y: auto;
     max-height: calc(100% - 2 * (var(--hud-padding) + var(--checklist-padding)));
+    border-radius: 10px;
+    border: 2px var(--border-color) solid;
 }
 
 #checklist .title {
@@ -34,7 +36,7 @@
 }
 
 #checklist .new:hover {
-    background-color: white;
+    background-color: var(--button-color-hover);
 }
 
 #checklist .objective h1 {
@@ -94,11 +96,14 @@
     text-align: center;
     font-size: var(--font-size-headers);
     font-weight: bold;
-    padding: 16px 10%;
-    background-color: gray;
+    margin-top: 10px;
+    padding: 10px 10%;
+    background-color: var(--checklist-color-finish);
+    border-radius: 10px;
+    border: 1px var(--border-color) solid;
 }
 
 #checklist .finished:hover {
-    background-color: white;
+    background-color: var(--button-color-hover);
     cursor: pointer;
 }

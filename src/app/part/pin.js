@@ -1,13 +1,13 @@
-import Myr from "myr.js"
+import {StyleUtils} from "../utils/styleUtils";
 
 export const Pin = {
     TYPE_STRUCTURAL: "structural",
     TYPE_IN: "in",
     TYPE_OUT: "out",
 
-    COLOR_IN: Myr.Color.fromHex("6699ff"),
-    COLOR_OUT: Myr.Color.fromHex("33cc33"),
-    COLOR_POWER: Myr.Color.fromHex("ff0000"),
+    COLOR_IN: StyleUtils.getColorHex("--game-color-pcb-pin-in"),
+    COLOR_OUT: StyleUtils.getColorHex("--game-color-pcb-pin-out"),
+    COLOR_POWER: StyleUtils.getColorHex("--game-color-pcb-pin-power"),
 
     NAME_POWER: "PIN_POWER_NAME",
 

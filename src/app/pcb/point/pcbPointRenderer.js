@@ -1,4 +1,5 @@
 import Myr from "myr.js"
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * A pcb path renderer, used for rendering etched states of PCB points.
@@ -70,6 +71,6 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
     };
 }
 
-PcbPointRenderer.COLOR_SELECT = null;
-PcbPointRenderer.COLOR_DELETE = Myr.Color.RED;
-PcbPointRenderer.COLOR_INVALID = Myr.Color.BLUE;
+PcbPointRenderer.COLOR_SELECT = StyleUtils.getColorHex("--game-color-pcb-point-renderer-selected");
+PcbPointRenderer.COLOR_DELETE = StyleUtils.getColorHex("--game-color-pcb-point-renderer-delete");
+PcbPointRenderer.COLOR_INVALID = StyleUtils.getColorHex("--game-color-pcb-point-renderer-invalid");

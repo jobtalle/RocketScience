@@ -7,8 +7,8 @@
     min-height: var(--info-height);
     max-height: var(--info-height);
 
-    border-top: 1px solid black;
-    background-color: lightgray;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--info-color-background);
 }
 
 #info .title {
@@ -40,12 +40,12 @@
 #info .pinouts .pinout {
     font-family: monospace;
     font-size: var(--font-size-descriptions);
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--border-color);
 }
 
 #info .pinouts .pinout .pinout-index {
     padding: var(--text-padding);
-    border-right: 1px solid black;
+    border-right: 1px solid var(--border-color);
     color: var(--text-color-light);
 }
 
@@ -55,13 +55,13 @@
 }
 
 #info .pinouts .pinout .pinout-name.selected {
-    background-color: gray;
+    background-color: var(--info-color-pinout-description-background-selected);
     color: var(--text-color-light);
 }
 
 #info .pinouts .inline-description {
-    background-color: white;
-    border-bottom: 1px solid black;
+    background-color: var(--info-color-pinout-description-background);
+    border-bottom: 1px solid var(--border-color);
 }
 
 #info .pinouts .pinout-description {
@@ -79,8 +79,8 @@
 
 #info-extension .pinout-description {
     padding: var(--text-padding);
-    background-color: white;
-    border: 1px solid black;
+    background-color: var(--info-color-extention-background);
+    border: 1px solid var(--border-color);
     width: 100%;
     display: none;
 }
