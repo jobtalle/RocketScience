@@ -97,14 +97,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.getOverlay = () => _overlay;
 
     /**
-     * Check if anything is edited.
-     * @return {Boolean} A boolean indicating if the editables are edited.
-     */
-    this.isEdited = () => {
-        return _editables.isEdited();
-    };
-
-    /**
      * The PCB has changed.
      */
     this.onPcbChange = () => {

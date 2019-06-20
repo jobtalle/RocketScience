@@ -59,13 +59,19 @@ export function Editables(editor, renderContext, world) {
         };
 
         /**
-         * Get the editable object of the entry
+         * Get the pcbRenderer of the entry.
+         * @returns {PcbRenderer}
+         */
+        this.getRenderer = () => _renderer;
+
+        /**
+         * Get the editable object of the entry.
          * @returns {Editable}
          */
         this.getEditable = () => editable;
 
         /**
-         * Draw the editable of the entry
+         * Draw the editable of the entry.
          * @param {Boolean} editing
          */
         this.draw = editing => {
@@ -130,7 +136,16 @@ export function Editables(editor, renderContext, world) {
      * Set the currently being edited editable.
      * @param {Editable} current The currently being edited editable, or null if none is being edited.
      */
-    this.setCurrent = current => _current = current;
+    this.setCurrent = current => {
+        for (const entry of _entries)
+            if (entry.getEditable() === _current) {
+                entry.getRenderer().revalidate();
+
+                break;
+            }
+
+        _current = current;
+    };
 
     /**
      * Get the editable at a certain world position.
@@ -167,7 +182,7 @@ export function Editables(editor, renderContext, world) {
 
         editable.moveRegion(newOrigin.x - editable.getRegion().getOrigin().x, newOrigin.y - editable.getRegion().getOrigin().y);
 
-        world.getMission().getEditables().push(editable);
+        world.getMission().addEditable(editable);
 
         _entries.push(new Entry(editable));
 
@@ -187,7 +202,7 @@ export function Editables(editor, renderContext, world) {
         const index = world.getMission().getEditables().indexOf(editable);
 
         if (index > -1) {
-            world.getMission().getEditables().splice(index, 1);
+            world.getMission().removeEditable(editable);
 
             for (const entry of _entries) if (entry.getEditable() === editable) {
                 entry.free();
@@ -198,18 +213,6 @@ export function Editables(editor, renderContext, world) {
         }
 
         editor.edit(world.getMission().getEditables()[world.getMission().getEditables().length - 1]);
-    };
-
-    /**
-     * Check if anything is edited.
-     * @return {Boolean} A boolean indicating if the editables are edited.
-     */
-    this.isEdited = () => {
-        for (const entry of _entries)
-            if (entry.getEditable().getUndoStack().isEdited())
-                return true;
-
-        return false;
     };
 
     /**

@@ -26,7 +26,7 @@ export function ChecklistObjectiveGoals(objective) {
                     break;
             }
 
-            objective.getGoals().push(goal);
+            objective.addGoal(goal);
 
             if (goal)
                 add(goal);
@@ -37,7 +37,7 @@ export function ChecklistObjectiveGoals(objective) {
             let element = null;
 
             const onDelete = () => {
-                objective.getGoals().splice(objective.getGoals().indexOf(goal), 1);
+                objective.removeGoal(goal);
 
                 _element.removeChild(element.getElement());
             };

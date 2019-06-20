@@ -88,9 +88,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     const updateRenderer = () => {
         let lastLevel;
 
-        if (_renderer)
+        if (_renderer) {
             lastLevel = _renderer.getLevel();
-        else
+            _renderer.free();
+        } else
             lastLevel = PcbRenderer.LEVEL_PARTS;
 
         _renderer = new PcbRenderer(renderContext, _editable.getPcb(), lastLevel);
@@ -370,14 +371,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         _editable = editable;
 
         updatePcb();
-    };
-
-    /**
-     * Check if anything is edited in the current editor.
-     * @return {Boolean} A boolean indicating if the editor is ever edited.
-     */
-    this.isEdited = () => {
-        return editor.isEdited();
     };
 
     /**
