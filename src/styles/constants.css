@@ -70,6 +70,9 @@
     --game-color-terrain-fill: #5B8023;
     --game-color-terrain-border: #262626;
 
+    --game-color-water-top: #4d4dff33;
+    --game-color-water-bottom: #01010100;
+
     --game-color-pcb: #607D45;
     --game-color-pcb-point: #425630;
 
@@ -80,6 +83,8 @@
     --game-color-pcb-point-renderer-selected: #ffffff;
     --game-color-pcb-point-renderer-invalid: #5F0D0D;
     --game-color-pcb-point-renderer-delete: #ff0000;
+
+    --game-color-pcb-edit-place-unsuitable: #ff000080;
 
     --game-color-pcb-editables-border: #FF0000;
 }
