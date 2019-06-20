@@ -31,6 +31,7 @@
     --text-color-signal-high: #ff0000;
     --text-color-signal-varying: #cc66ff;
 
+    --default-button-color: #37946e;
     --button-color-hover: #ffffff;
 
     --border-color: #212121;
@@ -42,8 +43,8 @@
     --mission-color-incomplete: #E13B3F;
     --mission-color-completed: #61B948;
 
-    --checklist-color-background: #F6AB15;
-    --checklist-color-finish: #37946E;
+    --checklist-color-background: #f8ba3f;
+    --checklist-color-finish: var(--default-button-color);
 
     --info-color-background: #fbcc6f;
     --info-color-pinout-description-background: #ffffff;
@@ -52,7 +53,7 @@
     --info-color-extention-background: #ffffff;
 
     --library-color-background: #dee5ef;
-    --library-color-category: #37946E;
+    --library-color-category: var(--default-button-color);
 
     --library-color-part-background: #ffffff;
     --library-color-part-background-hover: #add8e6;
@@ -64,6 +65,8 @@
 
     --overlay-color-pin: #ffffff;
     --overlay-color-ruler: #ffffff;
+
+    --tabbar-color: var(--default-button-color);
 
     /* Colors in-game */
     --game-color-sky: #b3e2ec;
