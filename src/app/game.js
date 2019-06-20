@@ -95,7 +95,7 @@ export function Game(renderContext, input, user) {
         user.saveMissionProgress(new MissionProgress(_world.getMission(),
             _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE,
             _world.getMissionProgress().getFileName()),
-            (result) => console.log("Saved mission " + result));
+            (result) => null);
 
     };
 

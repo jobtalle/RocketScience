@@ -4,8 +4,8 @@
     width: var(--library-width);
     height: 100%;
     user-select: none;
-    background-color: #dee5ef;
-    border-right: 1px solid black;
+    background-color: var(--library-color-background);
+    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     z-index: var(--z-index-top);
@@ -21,7 +21,7 @@
 
 #library .category-title {
     padding: var(--text-padding);
-    background-color: #37946E;
+    background-color: var(--library-color-category);
     color: var(--text-color-light);
     font-weight: bold;
     font-size: var(--font-size-headers);
@@ -47,18 +47,17 @@
 
 #library #contents .category .part-list .part {
     display: block;
-
     cursor: pointer;
-    background-color: white;
+    background-color: var(--library-color-part-background);
     position: relative;
 }
 
 #library #contents .category .part-list .part .sprite:hover {
-    background-color: lightblue;
+    background-color: var(--library-color-part-background-hover);
 }
 
 #library #contents .category .part-list .part.not-available .sprite {
-    background-color: gray;
+    background-color: var(--library-color-part-background-unavailable);
     pointer-events: none;
 }
 
@@ -75,21 +74,21 @@
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
     border-radius: calc(var(--part-grid-count-size) / 2);
-    border: 1px solid black;
+    border: 1px solid var(--border-color);
     padding: 1px;
     text-align: center;
-    background-color: white;
+    background-color: var(--library-color-count-background);
     position: absolute;
     left: 0;
     top: 0;
 }
 
 #library #contents .category .part-list .part .count.negative {
-    background-color: red;
+    background-color: var(--library-color-count-background-negative);
 }
 
 #library #contents .category .part-list .part.not-available .count {
-    background-color: #9f9f9f;
+    background-color: var(--library-color-count-background-unavailable);
 }
 
 #library #contents .category .part-list .part .count-setter {

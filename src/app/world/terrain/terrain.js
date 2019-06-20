@@ -1,5 +1,6 @@
 import {Scale} from "../scale";
 import Myr from "myr.js"
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * An environment to place bots in.
@@ -101,5 +102,5 @@ Terrain.SECTIONS_PER_SURFACE = 8;
 Terrain.MAX_HEIGHT = 8;
 Terrain.SURFACE_WIDTH = Terrain.PIXELS_PER_SEGMENT * Terrain.SECTIONS_PER_SURFACE;
 Terrain.SURFACE_HEIGHT = Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT;
-Terrain.COLOR_EDGE = new Myr.Color(0.15, 0.15, 0.15);
-Terrain.COLOR_FILL = new Myr.Color(0.356, 0.501, 0.137);
+Terrain.COLOR_EDGE = StyleUtils.getColorHex("--game-color-terrain-border");
+Terrain.COLOR_FILL = StyleUtils.getColorHex("--game-color-terrain-fill");

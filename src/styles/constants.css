@@ -7,8 +7,6 @@
     --font-size-headers: 20px;
 
     --text-padding: 5px;
-    --text-color-dark: #212121;
-    --text-color-light: white;
 
     --info-height: 250px;
 
@@ -24,4 +22,64 @@
     --checklist-padding: 16px;
 
     --avatar-padding: 10px;
+
+    /* Colors */
+    --text-color-dark: #212121;
+    --text-color-light: #ffffff;
+
+    --text-color-signal-low: #0000ff;
+    --text-color-signal-high: #ff0000;
+    --text-color-signal-varying: #cc66ff;
+
+    --button-color-hover: #ffffff;
+
+    --border-color: #212121;
+
+    --menu-color-background: #16A086;
+
+    --mission-color-description: #e6e6fa;
+    --mission-color-unplayed: #0371AC;
+    --mission-color-incomplete: #E13B3F;
+    --mission-color-completed: #61B948;
+
+    --checklist-color-background: #F6AB15;
+    --checklist-color-finish: #37946E;
+
+    --info-color-background: #fbcc6f;
+    --info-color-pinout-description-background: #ffffff;
+    --info-color-pinout-description-background-selected: #add8e6;
+
+    --info-color-extention-background: #ffffff;
+
+    --library-color-background: #dee5ef;
+    --library-color-category: #37946E;
+
+    --library-color-part-background: #ffffff;
+    --library-color-part-background-hover: #add8e6;
+    --library-color-part-background-unavailable: #808080;
+
+    --library-color-count-background: #ffffff;
+    --library-color-count-background-unavailable: #9f9f9f;
+    --library-color-count-background-negative: #ff0000;
+
+    --overlay-color-pin: #ffffff;
+    --overlay-color-ruler: #ffffff;
+
+    /* Colors in-game */
+    --game-color-sky: #b3e2ec;
+    --game-color-terrain-fill: #5B8023;
+    --game-color-terrain-border: #262626;
+
+    --game-color-pcb: #607D45;
+    --game-color-pcb-point: #425630;
+
+    --game-color-pcb-pin-in: #6699ff;
+    --game-color-pcb-pin-out: #33cc33;
+    --game-color-pcb-pin-power: #ff0000;
+
+    --game-color-pcb-point-renderer-selected: #ffffff;
+    --game-color-pcb-point-renderer-invalid: #5F0D0D;
+    --game-color-pcb-point-renderer-delete: #ff0000;
+
+    --game-color-pcb-editables-border: #FF0000;
 }

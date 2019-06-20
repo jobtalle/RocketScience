@@ -10,6 +10,7 @@ import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
 import {CameraSmooth} from "../view/camera/cameraSmooth";
 import Myr from "myr.js"
+import {StyleUtils} from "../utils/styleUtils";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -268,7 +269,7 @@ export function World(renderContext, missionProgress) {
 
         _surface.free();
         _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
-        _surface.setClearColor(World.COLOR_CLEAR);
+        _surface.setClearColor(World.COLOR_SKY);
     };
 
     /**
@@ -281,11 +282,11 @@ export function World(renderContext, missionProgress) {
     };
 
     _view.focus(-_terrain.getWidth() * 0.5, 0, 0.5);
-    _surface.setClearColor(World.COLOR_CLEAR);
+    _surface.setClearColor(World.COLOR_SKY);
     _terrain.makeTerrain(_physics);
 }
 
-World.COLOR_CLEAR = new Myr.Color(0.701, 0.886, 0.925);
+World.COLOR_SKY = StyleUtils.getColorHex("--game-color-sky");
 World.ZOOM_FACTOR = 0.25;
 World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;
