@@ -4,7 +4,7 @@ import {Physics} from "./physics/physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
-import {TerrainRugged} from "./terrain/terrainRugged";
+import {TerrainRugged} from "./terrain/generators/terrainRugged";
 import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";

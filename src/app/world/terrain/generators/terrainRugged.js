@@ -1,5 +1,5 @@
 import noisejs from "noisejs"
-import {Terrain} from "./terrain";
+import {Terrain} from "../terrain";
 import {makeOctaves} from "./octaves";
 
 /**
