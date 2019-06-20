@@ -304,4 +304,4 @@ PcbEditorPlace.Fixture.prototype.isInstance = function() {
     return this.part.configurations === undefined;
 };
 
-PcbEditorPlace.COLOR_UNSUITABLE = StyleUtils.getColorHex("--game-color-pcb-edit-place-unsuitable");
+PcbEditorPlace.COLOR_UNSUITABLE = StyleUtils.getColor("--game-color-pcb-edit-place-unsuitable");

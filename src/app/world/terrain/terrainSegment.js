@@ -58,5 +58,5 @@ export function TerrainSegment(myr, width, height, depth, heights) {
     update();
 }
 
-TerrainSegment.COLOR_EDGE = StyleUtils.getColorHex("--game-color-terrain-border");
-TerrainSegment.COLOR_FILL = StyleUtils.getColorHex("--game-color-terrain-fill");
+TerrainSegment.COLOR_EDGE = StyleUtils.getColor("--game-color-terrain-border");
+TerrainSegment.COLOR_FILL = StyleUtils.getColor("--game-color-terrain-fill");

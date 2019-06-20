@@ -286,7 +286,7 @@ export function World(renderContext, missionProgress) {
     _terrain.makeTerrain(_physics);
 }
 
-World.COLOR_SKY = StyleUtils.getColorHex("--game-color-sky");
+World.COLOR_SKY = StyleUtils.getColor("--game-color-sky");
 World.ZOOM_FACTOR = 0.25;
 World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;

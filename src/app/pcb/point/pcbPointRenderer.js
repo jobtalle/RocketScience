@@ -71,6 +71,6 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
     };
 }
 
-PcbPointRenderer.COLOR_SELECT = StyleUtils.getColorHex("--game-color-pcb-point-renderer-selected");
-PcbPointRenderer.COLOR_DELETE = StyleUtils.getColorHex("--game-color-pcb-point-renderer-delete");
-PcbPointRenderer.COLOR_INVALID = StyleUtils.getColorHex("--game-color-pcb-point-renderer-invalid");
+PcbPointRenderer.COLOR_SELECT = StyleUtils.getColor("--game-color-pcb-point-renderer-selected");
+PcbPointRenderer.COLOR_DELETE = StyleUtils.getColor("--game-color-pcb-point-renderer-delete");
+PcbPointRenderer.COLOR_INVALID = StyleUtils.getColor("--game-color-pcb-point-renderer-invalid");

@@ -5,9 +5,9 @@ export const Pin = {
     TYPE_IN: "in",
     TYPE_OUT: "out",
 
-    COLOR_IN: StyleUtils.getColorHex("--game-color-pcb-pin-in"),
-    COLOR_OUT: StyleUtils.getColorHex("--game-color-pcb-pin-out"),
-    COLOR_POWER: StyleUtils.getColorHex("--game-color-pcb-pin-power"),
+    COLOR_IN: StyleUtils.getColor("--game-color-pcb-pin-in"),
+    COLOR_OUT: StyleUtils.getColor("--game-color-pcb-pin-out"),
+    COLOR_POWER: StyleUtils.getColor("--game-color-pcb-pin-power"),
 
     NAME_POWER: "PIN_POWER_NAME",
 

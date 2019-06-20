@@ -11,8 +11,8 @@ import {StyleUtils} from "../../utils/styleUtils";
  */
 export function Terrain(myr, generator) {
     const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = StyleUtils.getColorHex("--game-color-water-top");
-    const COLOR_WATER_BOTTOM = StyleUtils.getColorHex("--game-color-water-bottom");
+    const COLOR_WATER_TOP = StyleUtils.getColor("--game-color-water-top");
+    const COLOR_WATER_BOTTOM = StyleUtils.getColor("--game-color-water-bottom");
 
     const _heights = generator.getHeights();
 

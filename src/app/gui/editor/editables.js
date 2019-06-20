@@ -229,4 +229,4 @@ export function Editables(editor, renderContext, world) {
 }
 
 Editables.SPRITE_GRID = "pcbGrid";
-Editables.BORDER_COLOR = StyleUtils.getColorHex("--game-color-pcb-editables-border");
+Editables.BORDER_COLOR = StyleUtils.getColor("--game-color-pcb-editables-border");
