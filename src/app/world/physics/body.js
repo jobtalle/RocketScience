@@ -11,7 +11,7 @@ import {Ray} from "./ray";
 import Myr from "myr.js"
 
 // Only instantiate bodies through Physics!
-export function Body(physics, world, shapes, x, y, xOrigin, yOrigin, transform) {
+export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, transform) {
     const _bodyDefinition = new BodyDefinition();
     const _body = world.CreateBody(_bodyDefinition.getDefinition());
     const _connected = [];

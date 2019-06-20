@@ -98,6 +98,7 @@ export function Physics(configuration) {
     /**
      * Create a new physics body.
      * @param {Array} polygons An array of polygon arrays, where each polygon point has an x and y coordinate.
+     * @param {Array} points An array of points to sample for buoyancy.
      * @param {Number} x Horizontal position.
      * @param {Number} y Vertical position.
      * @param {Number} xOrigin The X origin.
@@ -105,7 +106,7 @@ export function Physics(configuration) {
      * @param {Myr.Transform} transform A transformation to write the physics location to.
      * @return {Object} The created physics body.
      */
-    this.createBody = (polygons, x, y, xOrigin, yOrigin, transform) => {
+    this.createBody = (polygons, points, x, y, xOrigin, yOrigin, transform) => {
         const shapes = [];
 
         for (const polygon of polygons)
@@ -115,6 +116,7 @@ export function Physics(configuration) {
             this,
             _world,
             shapes,
+            points,
             x + xOrigin,
             y + yOrigin,
             xOrigin,

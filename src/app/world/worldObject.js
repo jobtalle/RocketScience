@@ -22,14 +22,21 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
     let _state = null;
     let _body = null;
 
-    const generatePhysicsBody = () => {
+    const createPhysicsBody = () => {
         const shape = new PcbShape(pcb);
         const polygons = [];
 
         for (const part of shape.getParts())
             polygons.push(part.getPoints());
 
-        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y, _transform);
+        return physics.createBody(
+            polygons,
+            [],
+            x,
+            y,
+            shape.getCenter().x,
+            shape.getCenter().y,
+            _transform);
     };
 
     /**
@@ -116,7 +123,7 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
      */
     this.getState = () => _state;
 
-    _body = generatePhysicsBody();
+    _body = createPhysicsBody();
     _state = new PcbState(pcb, _renderer, _body, controllerState);
     _renderer.setLevel(PcbRenderer.LEVEL_HULL);
 }
