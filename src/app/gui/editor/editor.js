@@ -270,7 +270,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
                 world.getMission().serialize(missionData.getBuffer());
 
-                DownloadBinary(missionData.getBlob(), world.getMission().getTitle() + ".bin");
+                DownloadBinary(missionData.getBlob(), world.getMission().getTitle().replace(/[\\/:\*\?"<>\|\s+]/g, '').toLowerCase() + ".bin");
 
                 return;
         }
