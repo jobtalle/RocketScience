@@ -145,21 +145,23 @@ export function User() {
      * @param {Function} onError Callback function, called when a story returns an error.
      */
     this.loadStories = (onLoad, onComplete, onError) => {
-        let index = 0;
+        let loaded = 0;
 
         const checkIfComplete = () => {
-            if (index === missions.stories.length)
+            if (loaded === missions.stories.length)
                 onComplete();
         };
 
         for (const story of missions.stories) {
             this.loadStory(story,
                 (result) => {
-                    onLoad(result, index++);
+                    onLoad(result, missions.stories.indexOf(story));
+                    ++loaded;
                     checkIfComplete();
                 },
                 (error) => {
-                    onError(error, index++);
+                    onError(error, missions.stories.indexOf(story));
+                    ++loaded;
                     checkIfComplete();
                 });
         }
@@ -173,12 +175,18 @@ export function User() {
     this.saveMissionProgress = (missionProgress, onComplete) => {
         setSavedMission(missionProgress.getFileName(), missionProgress.getMission());
 
-        if (missionProgress.isCompleted() || _webStorage.isMissionCompleted(missionProgress.getFileName()))
+        if (missionProgress.isCompleted())
             _webStorage.setMissionCompleted(missionProgress.getFileName());
-        else
-            _webStorage.setMissionIncomplete(missionProgress.getFileName());
 
         onComplete(true);
+    };
+
+    /**
+     * Just set a mission to completed.
+     * @param {MissionProgress} missionProgress The mission progress.
+     */
+    this.saveMissionCompleted = (missionProgress) => {
+        _webStorage.setMissionCompleted(missionProgress.getFileName());
     };
 
     loadUserFromCookie();

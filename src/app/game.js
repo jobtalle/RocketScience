@@ -89,14 +89,15 @@ export function Game(renderContext, input, user) {
     };
 
     const saveMissionProgress = () => {
-        if (!_world.getMission().isEdited()) // Nothing has changed.
-            return;
-
-        user.saveMissionProgress(new MissionProgress(_world.getMission(),
-            _world.getMission().isCompleted(),
-            true,
-            _world.getMissionProgress().getFileName()),
-            (result) => null);
+        if (!_world.getMission().isEdited() && _world.getMission().isCompleted())
+            user.saveMissionCompleted(_world.getMissionProgress());
+        else if (_world.getMission().isEdited()){
+            user.saveMissionProgress(new MissionProgress(_world.getMission(),
+                _world.getMission().isCompleted(),
+                true,
+                _world.getMissionProgress().getFileName()),
+                (result) => null);
+        }
 
     };
 
