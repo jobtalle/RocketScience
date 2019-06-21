@@ -25,13 +25,20 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
     const createPhysicsBody = () => {
         const shape = new PcbShape(pcb);
         const polygons = [];
+        const points = [];
 
         for (const part of shape.getParts())
             polygons.push(part.getPoints());
 
+        for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x)
+            if (pcb.getPoint(x, y))
+                points.push(new Myr.Vector(
+                    (x + 0.5) * Scale.METERS_PER_POINT,
+                    (y + 0.5) * Scale.METERS_PER_POINT));
+
         return physics.createBody(
             polygons,
-            [],
+            points,
             x,
             y,
             shape.getCenter().x,

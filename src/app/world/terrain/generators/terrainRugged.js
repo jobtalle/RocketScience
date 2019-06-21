@@ -22,7 +22,7 @@ export function TerrainRugged(seed, width, roughness, height) {
         const heightMultiplier = amp * (TerrainRugged.HEIGHT_MAX - TerrainRugged.HEIGHT_MIN);
 
         for (let i = 0; i < segments; ++i)
-            heights.push(0);
+            heights.push(1.6);
 
         let scale = TerrainRugged.SCALE_MIN + (TerrainRugged.SCALE_MAX - TerrainRugged.SCALE_MIN) * (1 - roughness);
 
@@ -47,7 +47,7 @@ export function TerrainRugged(seed, width, roughness, height) {
 TerrainRugged.OCTAVES = 3;
 TerrainRugged.FALLOFF = 2;
 TerrainRugged.HEIGHT_MIN = 0;
-TerrainRugged.HEIGHT_MAX = 3;
+TerrainRugged.HEIGHT_MAX = 4;
 TerrainRugged.AMP_MIN = 0.2;
 TerrainRugged.AMP_MAX = 1;
 TerrainRugged.SCALE_MIN = 4;

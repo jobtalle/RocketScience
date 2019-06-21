@@ -1,4 +1,4 @@
-import {getb2Vec2, box2d} from "./internal/box2d";
+import {getb2Vec2, box2d, getb2Vec2A, getb2Vec2B} from "./internal/box2d";
 import {createCircleShape} from "./internal/shapes/circle";
 import {BodyDefinition} from "./internal/bodyDefinition";
 import {WheelJoint} from "./joints/wheelJoint";
@@ -16,6 +16,8 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
     const _body = world.CreateBody(_bodyDefinition.getDefinition());
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
+    const _buoyancyPosition = new Myr.Vector(0, 0);
+    let _radius = 0;
 
     let _angle = 0;
 
@@ -41,6 +43,39 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
         return new Myr.Vector(dx - xOrigin, dy - yOrigin);
     };
 
+    const applyBuoyancy = timeStep => {
+        const cos = Math.cos(-_angle);
+        const sin = Math.sin(-_angle);
+        let matches = 0;
+
+        _buoyancyPosition.x = _buoyancyPosition.y = 0;
+
+        for (const point of points) {
+            const y = _body.GetPosition().get_y() + point.x * sin + point.y * cos;
+
+            if (y > 0) {
+                const x = _body.GetPosition().get_x() + point.x * cos - point.y * sin;
+
+                _buoyancyPosition.x += x;
+                _buoyancyPosition.y += y;
+                ++matches;
+            }
+        }
+
+        if (matches !== 0) {
+            const submerged = matches / points.length;
+
+            _buoyancyPosition.divide(matches);
+
+            _body.ApplyForce(
+                getb2Vec2A(0, -90 * submerged),
+                getb2Vec2B(_buoyancyPosition.x, _buoyancyPosition.y),
+                true);
+
+            console.log(matches / points.length);
+        }
+    };
+
     /**
      * Update the body state.
      * @param {Number} timeStep The time step.
@@ -50,6 +85,9 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
             connected.update(timeStep);
 
         updateTransform();
+
+        if (_body.GetPosition().get_y() + _radius > 0)
+            applyBuoyancy(timeStep);
     };
 
     /**
@@ -155,6 +193,17 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
         fixture.free();
 
         box2d.destroy(shape);
+    }
+
+    for (const point of points) {
+        const offset = getOffset(point.x, point.y);
+        const radius = offset.length();
+
+        point.x = offset.x;
+        point.y = offset.y;
+
+        if (_radius < radius)
+            _radius = radius;
     }
 
     _bodyDefinition.free();
