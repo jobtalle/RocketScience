@@ -52,4 +52,4 @@ export function Propeller(pins, renderer, x, y) {
 Propeller.PIN_INDEX_POWER = 0;
 Propeller.PIN_INDEX_INPUT = 1;
 Propeller.SPRITE_INDEX_PROPELLER = 1;
-Propeller.MAX_FORCE = -4500;
+Propeller.MAX_FORCE = -900;

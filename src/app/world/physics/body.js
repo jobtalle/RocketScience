@@ -11,14 +11,13 @@ import {Ray} from "./ray";
 import Myr from "myr.js"
 
 // Only instantiate bodies through Physics!
-export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, transform) {
+export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOrigin, transform) {
     const _bodyDefinition = new BodyDefinition();
     const _body = world.CreateBody(_bodyDefinition.getDefinition());
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
     const _buoyancyPosition = new Myr.Vector(0, 0);
     let _radius = 0;
-
     let _angle = 0;
 
     const updateTransform = () => {
@@ -68,8 +67,12 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
             _buoyancyPosition.divide(matches);
 
             _body.ApplyForce(
-                getb2Vec2A(0, -90 * submerged),
-                getb2Vec2B(_buoyancyPosition.x, _buoyancyPosition.y),
+                getb2Vec2A(
+                    0,
+                    -_body.GetMass() * physics.getConfiguration().getGravity() * Body.BUOYANCY_FACTOR * submerged / density),
+                getb2Vec2B(
+                    _buoyancyPosition.x,
+                    _buoyancyPosition.y),
                 true);
             _body.SetLinearDamping(2 * submerged);
             _body.SetAngularDamping(2 * submerged);
@@ -131,6 +134,7 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
             world,
             [createCircleShape(radius)],
             [],
+            1,
             x + offset.x,
             y + offset.y,
             radius,
@@ -188,12 +192,18 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
         return mover;
     };
 
+    /**
+     * Get the Box2D body.
+     * @returns {Object} The Box2D body.
+     * @private
+     */
     this._getBody = () => _body;
 
     for (const shape of shapes) {
-        const fixture = new Fixture(shape, Channels.OBJECT, Channels.OBJECT);
+        const fixture = new Fixture(shape, 1, Channels.OBJECT, Channels.OBJECT);
 
         _body.CreateFixture(fixture.getDefinition());
+
         fixture.free();
 
         box2d.destroy(shape);
@@ -213,3 +223,5 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
     _bodyDefinition.free();
     _body.SetTransform(getb2Vec2(x, y), 0);
 }
+
+Body.BUOYANCY_FACTOR = 2;

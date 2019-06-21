@@ -39,6 +39,7 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
         return physics.createBody(
             polygons,
             points,
+            1,
             x,
             y,
             shape.getCenter().x,
