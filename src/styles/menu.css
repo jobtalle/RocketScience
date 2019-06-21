@@ -41,11 +41,7 @@
     overflow: hidden;
 }
 
-#menu .content .stories .story .completed {
-    background-color: var(--mission-color-completed);
-}
-
-#menu .content .stories .story .incomplete {
+#menu .content .stories .story .mission.incomplete {
     background-color: var(--mission-color-incomplete);
 }
 
@@ -54,6 +50,10 @@
     height: 35px;
     background-color: var(--mission-color-description);
     border-radius: 8px 8px 8px 8px;
+}
+
+#menu .content .stories .story .mission.completed .header {
+    background-color: var(--mission-color-completed);
 }
 
 #menu .content .stories .story .mission .header .title {
@@ -86,6 +86,10 @@
 
 #menu .content .stories .story .mission:hover {
     background-color: var(--mission-color-description);
+}
+
+#menu .content .stories .story .mission.completed:hover {
+    background-color: var(--mission-color-completed);
 }
 
 #menu .content .stories .story .mission:hover .description {

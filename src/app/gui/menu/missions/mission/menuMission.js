@@ -20,9 +20,9 @@ export function MenuMission(menu, missionProgress, onUpdate) {
         _element.className = MenuMission.CLASS;
 
         // Add class based on progress
-        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE)
+        if (missionProgress.isCompleted())
             _element.classList.add(MenuMission.CLASS_COMPLETED);
-        else if (missionProgress.getProgress() === MissionProgress.PROGRESS_INCOMPLETE)
+        else if (missionProgress.hasSavedState())
             _element.classList.add(MenuMission.CLASS_INCOMPLETE);
 
         _element.appendChild(new MenuMissionHeader(this, missionProgress).getElement());

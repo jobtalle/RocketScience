@@ -41,7 +41,7 @@
     --mission-color-description: #e6e6fa;
     --mission-color-unplayed: #0371AC;
     --mission-color-incomplete: #E13B3F;
-    --mission-color-completed: #61B948;
+    --mission-color-completed: #8fdf78;
 
     --checklist-color-background: #f8ba3f;
     --checklist-color-finish: var(--default-button-color);
