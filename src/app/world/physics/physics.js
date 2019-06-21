@@ -10,6 +10,7 @@ import Myr from "myr.js"
  * @constructor
  */
 export function Physics(configuration) {
+    console.log(configuration.getGravity());
     const _world = new box2d.b2World(getb2Vec2(0, configuration.getGravity()), true);
     const _bodies = [];
 

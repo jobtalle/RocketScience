@@ -71,8 +71,8 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
                 getb2Vec2A(0, -90 * submerged),
                 getb2Vec2B(_buoyancyPosition.x, _buoyancyPosition.y),
                 true);
-
-            console.log(matches / points.length);
+            _body.SetLinearDamping(2 * submerged);
+            _body.SetAngularDamping(2 * submerged);
         }
     };
 
@@ -88,6 +88,10 @@ export function Body(physics, world, shapes, points, x, y, xOrigin, yOrigin, tra
 
         if (_body.GetPosition().get_y() + _radius > 0)
             applyBuoyancy(timeStep);
+        else {
+            _body.SetLinearDamping(0);
+            _body.SetAngularDamping(0);
+        }
     };
 
     /**
