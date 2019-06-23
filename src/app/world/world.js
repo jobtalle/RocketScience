@@ -134,6 +134,7 @@ export function World(renderContext, missionProgress) {
 
                 break;
             case MouseEvent.EVENT_RELEASE_LMB:
+            case MouseEvent.EVENT_RELEASE_RMB:
                 if (_camera)
                     _camera.onMouseRelease();
                 else
@@ -147,6 +148,13 @@ export function World(renderContext, missionProgress) {
                     else
                         _view.onMousePress();
                 }
+
+                break;
+            case MouseEvent.EVENT_PRESS_RMB:
+                if (_camera)
+                    _camera.onMousePress();
+                else
+                    _view.onMousePress();
 
                 break;
         }
