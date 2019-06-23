@@ -1,17 +1,20 @@
 import {Objective} from "./objective";
 import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
+import {Terrain} from "../world/terrain/terrain";
+import {TerrainRugged} from "../world/terrain/generators/terrainRugged";
 
 /**
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
  * @param {Array} editables An array of editables. The first editable will be the default pcb.
+ * @param {Terrain} terrain A terrain, or null if no terrain exists.
  * @param {PhysicsConfiguration} physicsConfiguration The physics configuration.
  * @param {String} title A title for this mission.
  * @param {String} description A description of this mission.
  * @constructor
  */
-export function Mission(objectives, editables, physicsConfiguration, title, description) {
+export function Mission(objectives, editables, terrain, physicsConfiguration, title, description) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
@@ -34,6 +37,12 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
      * @param {Function} onChange A function to call when a change in passed objectives occurs.
      */
     this.setOnChange = onChange => _onChange = onChange;
+
+    /**
+     * Get this missions terrain.
+     * @returns {Terrain} A terrain, or null if no terrain exists for this mission.
+     */
+    this.getTerrain = () => terrain;
 
     /**
      * Get the physics configuration.
@@ -228,6 +237,7 @@ Mission.deserialize = buffer => {
     for (let idx = 0; idx < editablesLength; ++idx)
         editables.push(Editable.deserialize(buffer));
 
+    const terrain = new Terrain(new TerrainRugged(Math.random(), 100, 0.2, 0.5));
     const physicsConfiguration = PhysicsConfiguration.deserialize(buffer);
     const title = buffer.readString();
     const description = buffer.readString();
@@ -235,6 +245,7 @@ Mission.deserialize = buffer => {
     return new Mission(
         objectives,
         editables,
+        terrain,
         physicsConfiguration,
         title,
         description);

@@ -1,36 +1,12 @@
 import {Scale} from "../scale";
-import {TerrainSegment} from "./terrainSegment";
-import Myr from "myr.js"
-import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * An environment to place bots in.
- * @param {Myr} myr A Myriad instance.
  * @param {Object} generator A valid generator to generate terrain from.
  * @constructor
  */
-export function Terrain(myr, generator) {
-    const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = StyleUtils.getColor("--game-color-water-top");
-    const COLOR_WATER_BOTTOM = StyleUtils.getColor("--game-color-water-bottom");
-
+export function Terrain(generator) {
     const _heights = generator.getHeights();
-
-    const makeSegments = heights => {
-        const segments = [];
-
-        for (let section = 0; section < _heights.length - 1; section += Terrain.SECTIONS_PER_SEGMENT)
-            segments.push(new TerrainSegment(
-                myr,
-                Terrain.SEGMENT_WIDTH,
-                Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT,
-                Scale.PIXELS_PER_METER * Terrain.MAX_DEPTH,
-                heights.slice(section, section + Terrain.SECTIONS_PER_SEGMENT + 1)));
-
-        return segments;
-    };
-
-    const _segments = makeSegments(_heights);
 
     /**
      * Make a physics body for this terrain.
@@ -47,33 +23,10 @@ export function Terrain(myr, generator) {
     this.getWidth = () => (_heights.length - 1) * Terrain.PIXELS_PER_SEGMENT;
 
     /**
-     * Draws the terrain.
-     * @param {Number} left The left bound.
-     * @param {Number} right The right bound.
+     * Get all height points of this terrain.
+     * @returns {Array} An array of heights. Negative numbers elevate, positive numbers are below sea level.
      */
-    this.draw = (left, right) => {
-        const first = Math.max(Math.floor(left / Terrain.SEGMENT_WIDTH), 0);
-        const last = Math.min(Math.ceil(right / Terrain.SEGMENT_WIDTH), _segments.length);
-
-        for (let segment = first; segment < last; ++segment)
-            _segments[segment].draw(segment * Terrain.SEGMENT_WIDTH, -Terrain.SEGMENT_ELEVATION);
-
-        myr.primitives.fillRectangleGradient(
-            COLOR_WATER_TOP,
-            COLOR_WATER_TOP,
-            COLOR_WATER_BOTTOM,
-            COLOR_WATER_BOTTOM,
-            0, 0,
-            this.getWidth(), WATER_DEPTH);
-    };
-
-    /**
-     * Free this terrain.
-     */
-    this.free = () => {
-        for (const segment of _segments)
-            segment.free();
-    };
+    this.getHeights = () => _heights;
 }
 
 Terrain.SEGMENTS_PER_METER = 2;

@@ -1,16 +1,15 @@
-import {Terrain} from "./terrain/terrain";
 import {View} from "../view/view";
 import {Physics} from "./physics/physics";
 import {WorldObject} from "./worldObject";
 import {ZoomProfile} from "../view/zoomProfile";
 import {ShiftProfile} from "../view/shiftProfile";
-import {TerrainRugged} from "./terrain/generators/terrainRugged";
 import {KeyEvent} from "../input/keyboard/keyEvent";
 import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
 import {CameraSmooth} from "../view/camera/cameraSmooth";
-import Myr from "myr.js"
 import {StyleUtils} from "../utils/styleUtils";
+import {TerrainRenderer} from "./terrain/terrainRenderer";
+import Myr from "myr.js"
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -23,7 +22,7 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(mission.getPhysicsConfiguration());
-    const _terrain = new Terrain(renderContext.getMyr(), new TerrainRugged(Math.random(), 100, 0.2, 0.5));
+    const _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -252,7 +251,7 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        _terrain.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth() / _view.getZoom());
+        _terrainRenderer.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth() / _view.getZoom());
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
@@ -284,14 +283,14 @@ export function World(renderContext, missionProgress) {
      * Free all resources occupied by the world
      */
     this.free = () => {
-        _terrain.free();
+        _terrainRenderer.free();
         _surface.free();
         _physics.free();
     };
 
-    _view.focus(-_terrain.getWidth() * 0.5, 0, 0.5);
+    _view.focus(-mission.getTerrain().getWidth() * 0.5, 0, 0.5);
     _surface.setClearColor(World.COLOR_SKY);
-    _terrain.makeTerrain(_physics);
+    mission.getTerrain().makeTerrain(_physics);
 }
 
 World.COLOR_SKY = StyleUtils.getColor("--game-color-sky");
