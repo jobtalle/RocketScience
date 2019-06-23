@@ -188,7 +188,7 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
 
     /**
      * Serialize this mission.
-     * @param {Object} buffer A byte buffer.
+     * @param {ByteBuffer} buffer A byte buffer.
      */
     this.serialize = buffer => {
         buffer.writeByte(objectives.length);
@@ -212,24 +212,30 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
 
 /**
  * Deserialize a mission.
- * @param {Object} buffer A byte buffer.
+ * @param {ByteBuffer} buffer A byte buffer.
  * @returns {Mission} The deserialized mission.
  */
 Mission.deserialize = buffer => {
-    let objectives = [];
-    let objectiveLength = buffer.readByte();
-    for (let idx = 0; idx < objectiveLength; ++idx)
+    const objectives = [];
+    const objectivesLength = buffer.readByte();
+
+    for (let idx = 0; idx < objectivesLength; ++idx)
         objectives.push(Objective.deserialize(buffer));
 
-    let editables = [];
-    let editableLength = buffer.readByte();
-    for (let idx = 0; idx < editableLength; ++idx)
+    const editables = [];
+    const editablesLength = buffer.readByte();
+
+    for (let idx = 0; idx < editablesLength; ++idx)
         editables.push(Editable.deserialize(buffer));
 
-    let physics = PhysicsConfiguration.deserialize(buffer);
+    const physicsConfiguration = PhysicsConfiguration.deserialize(buffer);
+    const title = buffer.readString();
+    const description = buffer.readString();
 
-    let title = buffer.readString();
-    let descr = buffer.readString();
-
-    return new Mission(objectives, editables, physics, title, descr);
+    return new Mission(
+        objectives,
+        editables,
+        physicsConfiguration,
+        title,
+        description);
 };
