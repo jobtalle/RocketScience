@@ -210,6 +210,7 @@ export function Mission(objectives, editables, terrain, physicsConfiguration, ti
         for (const editable of editables)
             editable.serialize(buffer);
 
+        terrain.serialize(buffer);
         physicsConfiguration.serialize(buffer);
 
         buffer.writeString(title);
@@ -237,7 +238,7 @@ Mission.deserialize = buffer => {
     for (let idx = 0; idx < editablesLength; ++idx)
         editables.push(Editable.deserialize(buffer));
 
-    const terrain = new Terrain(new TerrainRugged(Math.random(), 100, 0.2, 0.5));
+    const terrain = Terrain.deserialize(buffer);
     const physicsConfiguration = PhysicsConfiguration.deserialize(buffer);
     const title = buffer.readString();
     const description = buffer.readString();
