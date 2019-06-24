@@ -5,7 +5,5 @@
 }
 
 #edit-options .container {
-    width: 128px;
-    height: 128px;
-    background-color: blue;
+    background-color: var(--menu-color-background);
 }
