@@ -1,3 +1,5 @@
+import {FormLayout} from "../../../utils/formLayout";
+
 /**
  * Terrain editor options.
  * @constructor
@@ -16,10 +18,23 @@ export function EditOptionsTerrain() {
         return slider;
     };
 
-    const build = () => {
-        _element.className = EditOptionsTerrain.CLASS;
+    const makeIcon = sprite => {
+        const icon = document.createElement("div");
 
-        _element.appendChild(makeRadiusSlider());
+        icon.className = "icon sprite " + sprite;
+
+        return icon;
+    };
+
+    const build = () => {
+        const form = new FormLayout();
+
+        form.add(
+            makeIcon(EditOptionsTerrain.ICON_BRUSH_WIDTH),
+            makeRadiusSlider());
+
+        _element.className = EditOptionsTerrain.CLASS;
+        _element.appendChild(form.getElement());
     };
 
     /**
@@ -32,3 +47,4 @@ export function EditOptionsTerrain() {
 }
 
 EditOptionsTerrain.CLASS = "container";
+EditOptionsTerrain.ICON_BRUSH_WIDTH = "terrain-brush-width";
