@@ -107,10 +107,12 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         _mouse.y = y;
 
         if (_deltas) {
+            const dy = (y - _dragY) / world.getView().getZoom();
+
             for (let i = 0; i < _deltas.length; ++i) {
                 const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
-                console.log(factor);
-                _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * (y - _dragY) * Scale.METERS_PER_PIXEL;
+
+                _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * dy * Scale.METERS_PER_PIXEL;
             }
         }
         else {
