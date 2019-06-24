@@ -109,8 +109,8 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         if (_deltas) {
             for (let i = 0; i < _deltas.length; ++i) {
                 const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
-
-                _deltas[i] = Math.sin(Math.PI * factor) * (y - _dragY) * Scale.METERS_PER_PIXEL;
+                console.log(factor);
+                _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * (y - _dragY) * Scale.METERS_PER_PIXEL;
             }
         }
         else {
