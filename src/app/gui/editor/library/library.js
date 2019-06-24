@@ -1,10 +1,10 @@
 import "../../../../styles/library.css"
-import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../info/info";
 import {LibraryContents} from "./libraryContents";
 import {BudgetChooser} from "./budgetChooser";
+import {getParts} from "../../../utils/partLoader";
 
 /**
  * An HTML based part library.
@@ -27,7 +27,7 @@ export function Library(editor, toolbar, info, overlay, isEditable) {
     };
 
     const _container = document.createElement("div");
-    const _contents = new LibraryContents(parts.categories, setPart, info, isEditable);
+    const _contents = new LibraryContents(getParts().categories, setPart, info, isEditable);
     const _budgetChooser = isEditable ? new BudgetChooser(setBudget) : null;
 
     const build = () => {

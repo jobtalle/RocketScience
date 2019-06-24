@@ -1,4 +1,4 @@
-import {getPartFromId, getParts} from "../../../../part/objects";
+import {getPartFromId, getPartIds} from "../../../../part/objects";
 import {getString} from "../../../../text/language";
 
 /**
@@ -23,7 +23,7 @@ export function PartPicker(id, onSelect) {
     };
 
     const make = () => {
-        for (const part of getParts())
+        for (const part of getPartIds())
             _element.appendChild(makeOption(
                 part,
                 getString(getPartFromId(part).label)));
