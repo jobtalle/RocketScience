@@ -70,6 +70,7 @@
 }
 
 #library #contents .category .part-list .part .count {
+    font-family: sans-serif;
     min-width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);

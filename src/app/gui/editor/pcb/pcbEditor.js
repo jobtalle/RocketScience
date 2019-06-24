@@ -13,6 +13,7 @@ import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
+import {PcbEditorTerrain} from "./pcbEditorTerrain";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
@@ -280,6 +281,10 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
                 this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view, isMissionEditor));
+
+                break;
+            case PcbEditor.EDIT_MODE_TERRAIN:
+                this.setEditor(new PcbEditorTerrain(renderContext, _editable.getPcb(), _cursor, this));
 
                 break;
         }
@@ -567,7 +572,6 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
-PcbEditor.EDIT_MODE_MOVE_REGION = 4;
-PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
+PcbEditor.EDIT_MODE_TERRAIN = 4;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

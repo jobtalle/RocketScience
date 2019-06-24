@@ -4,7 +4,6 @@ import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
 import {Game} from "../../../game";
 import {Editable} from "../../../mission/editable/editable";
-import * as Myr from "myr.js";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -41,6 +40,12 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE),
         getString(Toolbar.TEXT_MOVE),
         "toolbar-move",
+        ToolbarButton.TYPE_TOGGLE_GROUP,
+        _toggleGroupSelectMode);
+    const _buttonTerrain = new ToolbarButton(
+        () => editor.setEditMode(PcbEditor.EDIT_MODE_TERRAIN),
+        getString(Toolbar.TEXT_TERRAIN),
+        "toolbar-terrain",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonLaunch = new ToolbarButton(
@@ -102,6 +107,10 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         _container.appendChild(_buttonSelect.getElement());
         _container.appendChild(_buttonEtch.getElement());
         _container.appendChild(_buttonMove.getElement());
+
+        if (isMissionEditor)
+            _container.appendChild(_buttonTerrain.getElement());
+
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
         _container.appendChild(_buttonXRay.getElement());
@@ -164,6 +173,10 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
                     _buttonMove.getElement().click();
 
                     break;
+                case Toolbar.KEY_PRESS_TERRAIN:
+                    _buttonTerrain.getElement().click();
+
+                    break;
                 case Toolbar.KEY_PRESS_LAUNCH:
                     _buttonLaunch.getElement().click();
 
@@ -204,6 +217,7 @@ Toolbar.KEY_PRESS_EXTEND = "1";
 Toolbar.KEY_PRESS_SELECT = "2";
 Toolbar.KEY_PRESS_ETCH = "3";
 Toolbar.KEY_PRESS_MOVE = "4";
+Toolbar.KEY_PRESS_TERRAIN = "5";
 Toolbar.KEY_PRESS_LAUNCH = " ";
 Toolbar.KEY_PRESS_XRAY = "x";
 Toolbar.KEY_PRESS_EXIT = "Escape";
@@ -213,6 +227,7 @@ Toolbar.TEXT_EXTEND = "TOOLBAR_EXTEND";
 Toolbar.TEXT_SELECT = "TOOLBAR_SELECT";
 Toolbar.TEXT_ETCH = "TOOLBAR_ETCH";
 Toolbar.TEXT_MOVE = "TOOLBAR_MOVE";
+Toolbar.TEXT_TERRAIN = "TOOLBAR_TERRAIN";
 Toolbar.TEXT_LAUNCH = "TOOLBAR_LAUNCH";
 Toolbar.TEXT_X_RAY = "TOOLBAR_X_RAY";
 Toolbar.TEXT_EXIT = "TOOLBAR_EXIT";
