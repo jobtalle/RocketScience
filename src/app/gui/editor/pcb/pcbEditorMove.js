@@ -9,19 +9,17 @@ import {getValidRegion} from "../../../mission/editable/editableRegionShrinker";
  * @param {RenderContext} renderContext A render context.
  * @param {Pcb} pcb The PCB currently being edited.
  * @param {Myr.Vector} cursor The cursor position in cells.
- * @param {Myr.Vector} rawCursor The precise cursor position, not rounded down to cells.
  * @param {PcbEditor} editor A PCB editor.
  * @param {View} view The editor view.
  * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, view, isMissionEditor) {
+export function PcbEditorMove(renderContext, pcb, cursor, editor, view, isMissionEditor) {
     const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
     const SPRITE_RESIZE = renderContext.getSprites().getSprite("pcbAreaExtend");
 
     let _mode = PcbEditorMove.NOT_MOVABLE;
     let _dragging = null;
-    let _rawDragging = null;
     let _moveStart = new Myr.Vector(0, 0);
     let _resizeQuadrant = 0;
 
@@ -31,14 +29,14 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
     const setResizeQuadrant = () => {
         _resizeQuadrant = 0;
 
-        if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
+        if (cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x < 0)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_LEFT;
-        else if (rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x >= editor.getEditable().getRegion().getSize().x)
+        else if (cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x >= editor.getEditable().getRegion().getSize().x)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_RIGHT;
 
-        if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
+        if (cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y < 0)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_UP;
-        else if (rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y >= editor.getEditable().getRegion().getSize().y)
+        else if (cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y >= editor.getEditable().getRegion().getSize().y)
             _resizeQuadrant |= PcbEditorMove.BIT_MASK_DOWN;
     };
 
@@ -118,16 +116,16 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
      */
     this.moveCursor = () => {
         if (!_dragging) {
-            if (pcb.getPoint(cursor.x, cursor.y) !== null)
+            if (pcb.getPoint(cursor.x, cursor.y))
                 _mode = PcbEditorMove.PCB_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
-                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
-                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
+                cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
+                cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
                 1))
                 _mode = PcbEditorMove.REGION_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
-                rawCursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
-                rawCursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
+                cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
+                cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
                 5)) {
                 _mode = PcbEditorMove.REGION_RESIZE;
 
@@ -195,7 +193,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             _moveStart.x = Math.round(x * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
             _moveStart.y = Math.round(y * Scale.POINTS_PER_PIXEL / view.getZoom()) * Scale.PIXELS_PER_POINT * view.getZoom();
             _dragging = cursor.copy();
-            _rawDragging = rawCursor.copy();
 
             return true;
         }
@@ -214,7 +211,6 @@ export function PcbEditorMove(renderContext, pcb, cursor, rawCursor, editor, vie
             shrinkEditableRegion();
         }
         _dragging = null;
-        _rawDragging = null;
 
         editor.getEditable().roundCoordinatesToGrid();
     };
