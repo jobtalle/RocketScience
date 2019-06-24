@@ -1,9 +1,8 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * @param {Object} context A context for pins and the renderer.
  * @constructor
  */
-function Battery(pins, renderer) {
+function Battery(context) {
     const PIN_COUNT = 4;
 
     /**
@@ -20,6 +19,6 @@ function Battery(pins, renderer) {
      */
     this.tick = state => {
         for (let pin = 0; pin < PIN_COUNT; ++pin)
-            state[pins[pin]] = 1;
+            state[context.pins[pin]] = 1;
     };
 }

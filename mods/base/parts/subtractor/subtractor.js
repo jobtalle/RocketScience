@@ -1,9 +1,9 @@
 /**
- * An adder circuit.
- * @param {Object} context A context with an array containing the pin indices.
+ * A subtractor circuit.
+ * @param {Array} pins An array containing the pin indices.
  * @constructor
  */
-function Adder(context) {
+function Subtractor(context) {
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_OUTPUT = 1;
     const PIN_INDEX_INPUT_1 = 2;
@@ -17,9 +17,9 @@ function Adder(context) {
         if (state[context.pins[PIN_INDEX_POWER]] !== 1)
             state[context.pins[PIN_INDEX_OUTPUT]] = 0;
         else
-            state[context.pins[PIN_INDEX_OUTPUT]] = Math.min(
-                1,
-                state[context.pins[PIN_INDEX_INPUT_1]] +
+            state[context.pins[PIN_INDEX_OUTPUT]] = Math.max(
+                0,
+                state[context.pins[PIN_INDEX_INPUT_1]] -
                 state[context.pins[PIN_INDEX_INPUT_2]]);
     };
 }

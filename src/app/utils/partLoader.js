@@ -1,69 +1,19 @@
 import JSZip from "jszip";
-import {Led} from "../part/parts/led";
-import {Oscillator} from "../part/parts/oscillator";
-import {Battery} from "../part/parts/battery";
-import {GateOr} from "../part/parts/gateOr";
-import {GateXor} from "../part/parts/gateXor";
-import {GateAnd} from "../part/parts/gateAnd";
-import {GateNot} from "../part/parts/gateNot";
-import {Wheel} from "../part/parts/wheel";
-import {SensorTouch} from "../part/parts/sensorTouch";
-import {Propeller} from "../part/parts/propeller";
-import {Controller} from "../part/parts/controller";
-import {Button} from "../part/parts/button";
-import {Switch} from "../part/parts/switch";
-import {Transistor} from "../part/parts/transistor";
-import {Meter} from "../part/parts/meter";
-import {Resistor} from "../part/parts/resistor";
-import {Adder} from "../part/parts/adder";
-import {Capacitor} from "../part/parts/capacitor";
-import {Altimeter} from "../part/parts/altimeter";
-import {Comparator} from "../part/parts/comparator";
-import {Tilt} from "../part/parts/tilt";
-import {Subtractor} from "../part/parts/subtractor";
-import {SensorSonar} from "../part/parts/sensorSonar";
 import {loadObjects} from "../part/objects";
-import parts from "../../assets/parts.json"
 
 function PartLoader() {
     const _zip = new JSZip();
     let _counter = 0;
     let _onLoad;
 
-    const _objects = [
-        Led,
-        Oscillator,
-        Battery,
-        GateOr,
-        GateXor,
-        GateAnd,
-        GateNot,
-        Wheel,
-        SensorTouch,
-        Propeller,
-        Controller,
-        Button,
-        Switch,
-        Transistor,
-        Meter,
-        Resistor,
-        Adder,
-        Capacitor,
-        Altimeter,
-        Comparator,
-        Tilt,
-        Subtractor,
-        SensorSonar];
-
-    const _parts = parts;
-
     const _language = {};
-    // const _objects = [];
-    // const _parts = {categories: []};
+    const _objects = [];
+    const _parts = {categories: []};
 
     const onFinish = () => {
         _counter--;
         if (_counter === 0) {
+            console.log(_objects);
             for (const category of _parts.categories)
                 category.parts.sort((a, b) => a.label - b.label);
             loadObjects(_objects, _parts);
@@ -129,62 +79,63 @@ function PartLoader() {
         });
     };
 
-    const loadParts = (mods, language) => {
-        for (const modPath of mods) {
-            fetch(modPath)
-                .then(response => response.arrayBuffer())
-                .then(buffer => _zip.loadAsync(buffer))
-                .then(zip => zip.forEach((path, file) => {
-                    if (path.endsWith(".js"))
-                        loadScript(file);
-                    else if (path.endsWith(language))
-                        loadLanguage(file);
-                    else if (path.endsWith("definition.json"))
-                        loadDefinition(file);
-                }));
-        }
+    const loadParts = (zip, language) => {
+        zip.forEach((path, file) => {
+            console.log(_counter);
+            if (path.endsWith(".js"))
+                loadScript(file);
+            else if (path.endsWith(language))
+                loadLanguage(file);
+            else if (path.endsWith("definition.json"))
+                loadDefinition(file);
+        });
     };
 
     const loadCategories = (mods, language) => {
-        for (const modPath of mods)
+        for (const modPath of mods) {
+            console.log(modPath);
             fetch(modPath)
                 .then(response => response.arrayBuffer())
                 .then(buffer => _zip.loadAsync(buffer))
-                .then(zip => zip.forEach((path, file) => {
-                    if (path.endsWith("categories.json")) {
-                        _counter++;
-                        file.async("string").then(text => {
-                            const json = JSON.parse(text);
+                .then(zip => {
+                    console.log("Zip for each called now!");
+                    zip.forEach((path, file) => {
+                        console.log(path);
+                        if (path.endsWith("categories.json")) {
+                            file.async("string").then(text => {
+                                const json = JSON.parse(text);
 
-                            for (const label of json.labels) {
-                                let duplicate = false;
+                                for (const label of json.labels) {
+                                    let duplicate = false;
 
-                                for (const category of _parts.categories)
-                                    if (label === category.label) {
-                                        duplicate = true;
+                                    for (const category of _parts.categories)
+                                        if (label === category.label) {
+                                            duplicate = true;
 
-                                        break;
+                                            break;
+                                        }
+                                    if (!duplicate) {
+                                        let insertIndex = 0;
+
+                                        if (json.labels.indexOf(label) > 0)
+                                            for (const category of _parts.categories)
+                                                if (category.label === json.labels[json.labels.indexOf(label) - 1]) {
+                                                    insertIndex = _parts.categories.indexOf(category) + 1;
+
+                                                    break;
+                                                }
+                                        _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
                                     }
-                                if (!duplicate) {
-                                    let insertIndex = 0;
-
-                                    if (json.labels.indexOf(label) > 0)
-                                        for (const category of _parts.categories)
-                                            if (category.label === json.labels[json.labels.indexOf(label) - 1]) {
-                                                insertIndex = _parts.categories.indexOf(category) + 1;
-
-                                                break;
-                                            }
-                                    _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
                                 }
-                            }
 
-                            _counter--;
-                            if (_counter === 0)
-                                loadParts(mods, language);
-                        });
-                    }
-                }));
+                                console.log("!!!!!!! Calling loadParts now!!");
+                                console.log(zip);
+                                loadParts(zip, language);
+                            });
+                        }
+                    })
+                });
+        }
     };
 
     this.load = (mods, language, onLoad) => {

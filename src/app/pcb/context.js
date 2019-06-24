@@ -1,11 +1,13 @@
 import {SpringApproach} from "../utils/springApproach";
 import {Scale} from "../world/scale";
 import Myr from "myr.js";
+import {ContactListener} from "../world/physics/contactListener";
 
 const refs = {
     Myr: Myr,
     Scale: Scale,
-    SpringApproach: SpringApproach
+    SpringApproach: SpringApproach,
+    ContactListener: ContactListener
 };
 
 /**
