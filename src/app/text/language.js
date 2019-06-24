@@ -1,6 +1,7 @@
 import "../../styles/text.css";
 import {Macro} from "./macro";
 import {requestText} from "../utils/requestText";
+import {getLanguage} from "../utils/partLoader";
 
 function Language() {
     let _language;
@@ -28,6 +29,12 @@ function Language() {
     this.set = (source, onReady, onError) => {
         requestText(source, file => {
             _language = JSON.parse(file);
+
+            for (const key in getLanguage())
+                if (!_language.hasOwnProperty(key))
+                    _language[key] = getLanguage()[key];
+                else
+                    console.log("Duplicate language entry from a mod: " + key + ", " + getLanguage()[key]);
 
             applyMacros();
 
