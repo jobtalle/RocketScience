@@ -287,7 +287,7 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
 
                 break;
             case PcbEditor.EDIT_MODE_TERRAIN:
-                const terrainEditor = new PcbEditorTerrain(renderContext, _editable.getPcb(), _cursor, this);
+                const terrainEditor = new PcbEditorTerrain(renderContext, this);
 
                 this.setEditor(terrainEditor);
 

@@ -3,12 +3,10 @@ import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
 /**
  * The terrain editor, used for editing terrain.
  * @param {RenderContext} renderContext A render context.
- * @param {Pcb} pcb The PCB currently being edited.
- * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {PcbEditor} editor A PCB editor.
  * @constructor
  */
-export function PcbEditorTerrain(renderContext, pcb, cursor, editor) {
+export function PcbEditorTerrain(renderContext, editor) {
     let _radius = PcbEditorTerrain.RADIUS_DEFAULT;
 
     /**
@@ -28,7 +26,7 @@ export function PcbEditorTerrain(renderContext, pcb, cursor, editor) {
      * @param {Pcb} newPcb The new PCB to edit.
      */
     this.updatePcb = newPcb => {
-        pcb = newPcb;
+
     };
 
     /**
