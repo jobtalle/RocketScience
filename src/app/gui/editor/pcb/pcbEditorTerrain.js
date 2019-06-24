@@ -2,6 +2,7 @@ import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
 import {Terrain} from "../../../world/terrain/terrain";
 import {Scale} from "../../../world/scale";
 import * as Myr from "myr.js";
+import {StyleUtils} from "../../../utils/styleUtils";
 
 /**
  * The terrain editor, used for editing terrain.
@@ -13,6 +14,7 @@ import * as Myr from "myr.js";
 export function PcbEditorTerrain(renderContext, editor, world) {
     const _worldPosition = new Myr.Vector(0, 0);
     const _spriteElevate = renderContext.getSprites().getSprite(PcbEditorTerrain.SPRITE_ELEVATE);
+    const _spriteAnchor = renderContext.getSprites().getSprite(PcbEditorTerrain.SPRITE_ANCHOR);
     const _mouse = new Myr.Vector(0, 0);
     let _mode = PcbEditorTerrain.MODE_DEFAULT;
     let _cursor = 0;
@@ -42,6 +44,34 @@ export function PcbEditorTerrain(renderContext, editor, world) {
             sprite.draw(
                 segment * Terrain.PIXELS_PER_SEGMENT - sprite.getWidth() * 0.5,
                 (world.getMission().getTerrain().getHeights()[segment] + deltas[segment - cursor + radius]) * Scale.PIXELS_PER_METER - sprite.getHeight() * 0.5);
+    };
+
+    const fillDelta = (cursor, radius, deltas) => {
+        if (radius === 0)
+            return;
+
+        const min = getMin(cursor, radius);
+        const max = getMax(cursor, radius);
+
+        for (let segment = min; segment < max; ++segment) {
+            const xStart = segment * Terrain.PIXELS_PER_SEGMENT;
+            const xEnd = xStart + Terrain.PIXELS_PER_SEGMENT;
+            const yStart = world.getMission().getTerrain().getHeights()[segment] * Scale.PIXELS_PER_METER;
+            const yStartElevated = yStart + deltas[segment - cursor + radius] * Scale.PIXELS_PER_METER;
+            const yEnd = world.getMission().getTerrain().getHeights()[segment + 1] * Scale.PIXELS_PER_METER;
+            const yEndElevated = yEnd + deltas[segment - cursor + radius + 1] * Scale.PIXELS_PER_METER;
+
+            renderContext.getMyr().primitives.drawTriangle(
+                PcbEditorTerrain.COLOR_DELTA,
+                xStart, yStart,
+                xEnd, yEnd,
+                xEnd, yEndElevated);
+            renderContext.getMyr().primitives.drawTriangle(
+                PcbEditorTerrain.COLOR_DELTA,
+                xEnd, yEndElevated,
+                xStart, yStartElevated,
+                xStart, yStart);
+        }
     };
 
     const apply = (cursor, radius, deltas) => {
@@ -218,10 +248,13 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
         switch (_mode) {
             case PcbEditorTerrain.MODE_ELEVATE:
-                if (_deltas)
+                if (_deltas) {
+                    fillDelta(_cursor, _radius, _deltas);
                     drawAnchorsElevated(_cursor, _radius, _spriteElevate, _deltas);
-
-                drawAnchors(_cursor, _radius, _spriteElevate);
+                    drawAnchors(_cursor, _radius, _spriteAnchor);
+                }
+                else
+                    drawAnchors(_cursor, _radius, _spriteElevate);
 
                 break;
         }
@@ -240,3 +273,5 @@ PcbEditorTerrain.RADIUS_DEFAULT = 2;
 PcbEditorTerrain.MODE_ELEVATE = 0;
 PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
 PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
+PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";
+PcbEditorTerrain.COLOR_DELTA = StyleUtils.getColor("--game-color-terrain-elevate");
