@@ -2,7 +2,6 @@ import JSZip from "jszip";
 import {loadObjects} from "../part/objects";
 
 function PartLoader() {
-    const _zip = new JSZip();
     let _counter = 0;
     let _onLoad;
 
@@ -13,7 +12,6 @@ function PartLoader() {
     const onFinish = () => {
         _counter--;
         if (_counter === 0) {
-            console.log(_objects);
             for (const category of _parts.categories)
                 category.parts.sort((a, b) => a.label - b.label);
             loadObjects(_objects, _parts);
@@ -81,7 +79,6 @@ function PartLoader() {
 
     const loadParts = (zip, language) => {
         zip.forEach((path, file) => {
-            console.log(_counter);
             if (path.endsWith(".js"))
                 loadScript(file);
             else if (path.endsWith(language))
@@ -93,14 +90,11 @@ function PartLoader() {
 
     const loadCategories = (mods, language) => {
         for (const modPath of mods) {
-            console.log(modPath);
             fetch(modPath)
                 .then(response => response.arrayBuffer())
-                .then(buffer => _zip.loadAsync(buffer))
+                .then(buffer => JSZip.loadAsync(buffer))
                 .then(zip => {
-                    console.log("Zip for each called now!");
                     zip.forEach((path, file) => {
-                        console.log(path);
                         if (path.endsWith("categories.json")) {
                             file.async("string").then(text => {
                                 const json = JSON.parse(text);
@@ -127,9 +121,6 @@ function PartLoader() {
                                         _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
                                     }
                                 }
-
-                                console.log("!!!!!!! Calling loadParts now!!");
-                                console.log(zip);
                                 loadParts(zip, language);
                             });
                         }

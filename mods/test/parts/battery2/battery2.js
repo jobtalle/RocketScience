@@ -3,7 +3,7 @@
  * @param {PartRenderer} renderer A part renderer to render state to.
  * @constructor
  */
-function Battery2(pins, renderer) {
+function Battery2(context) {
     /**
      * Initialize the state.
      * @param {Physics} body A physics body to apply state to.
@@ -18,6 +18,6 @@ function Battery2(pins, renderer) {
      */
     this.tick = state => {
         for (let pin = 0; pin < 4; ++pin)
-            state[pins[pin]] = 1;
+            state[context.pins[pin]] = 1;
     };
 }
