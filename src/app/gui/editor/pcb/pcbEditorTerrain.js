@@ -48,8 +48,16 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         const min = getMin(cursor, radius);
         const max = getMax(cursor, radius);
 
-        for (let segment = min; segment <= max; ++segment)
-            world.getMission().getTerrain().getHeights()[segment] += deltas[segment - cursor + radius];
+        for (let segment = min; segment <= max; ++segment) {
+            let newHeight = world.getMission().getTerrain().getHeights()[segment] + deltas[segment - cursor + radius];
+
+            if (newHeight > Terrain.MAX_DEPTH)
+                newHeight = Terrain.MAX_DEPTH;
+            else if (newHeight < -Terrain.MAX_HEIGHT)
+                newHeight = -Terrain.MAX_HEIGHT;
+
+            world.getMission().getTerrain().getHeights()[segment] = newHeight;
+        }
 
         world.updateTerrain();
     };
@@ -99,8 +107,11 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         _mouse.y = y;
 
         if (_deltas) {
-            for (let i = 0; i < _deltas.length; ++i)
-                _deltas[i] = (y - _dragY) * Scale.METERS_PER_PIXEL;
+            for (let i = 0; i < _deltas.length; ++i) {
+                const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
+
+                _deltas[i] = Math.sin(Math.PI * factor) * (y - _dragY) * Scale.METERS_PER_PIXEL;
+            }
         }
         else {
             _worldPosition.x = x + renderContext.getViewport().getSplitX();
