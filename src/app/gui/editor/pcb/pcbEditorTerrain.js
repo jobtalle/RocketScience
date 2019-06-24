@@ -1,12 +1,19 @@
 import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
+import {Terrain} from "../../../world/terrain/terrain";
+import * as Myr from "myr.js";
 
 /**
  * The terrain editor, used for editing terrain.
  * @param {RenderContext} renderContext A render context.
  * @param {PcbEditor} editor A PCB editor.
+ * @param {World} world The World object.
  * @constructor
  */
-export function PcbEditorTerrain(renderContext, editor) {
+export function PcbEditorTerrain(renderContext, editor, world) {
+    const _worldPosition = new Myr.Vector(0, 0);
+    const _spriteElevate = renderContext.getSprites().getSprite(PcbEditorTerrain.SPRITE_ELEVATE);
+    let _mode = PcbEditorTerrain.MODE_DEFAULT;
+    let _cursor = -1;
     let _radius = PcbEditorTerrain.RADIUS_DEFAULT;
 
     /**
@@ -50,7 +57,12 @@ export function PcbEditorTerrain(renderContext, editor) {
      * @param {Number} y The mouse position on the screen in pixels.
      */
     this.mouseMove = (x, y) => {
+        _worldPosition.x = x + renderContext.getViewport().getSplitX();
+        _worldPosition.y = y;
 
+        world.getView().getInverse().apply(_worldPosition);
+
+        _cursor = Math.floor(_worldPosition.x / Terrain.PIXELS_PER_SEGMENT);
     };
 
     /**
@@ -127,7 +139,21 @@ export function PcbEditorTerrain(renderContext, editor) {
      * Draw this editor.
      */
     this.draw = () => {
+        renderContext.getMyr().push();
+        renderContext.getMyr().transformSet(world.getView().getTransform());
 
+        switch (_mode) {
+            case PcbEditorTerrain.MODE_ELEVATE:
+                _spriteElevate.draw(
+                    _cursor * Terrain.PIXELS_PER_SEGMENT - _spriteElevate.getWidth() * 0.5,
+                    -_spriteElevate.getHeight() * 0.5);
+
+                break;
+        }
+
+        _spriteElevate.draw(0, 0);
+
+        renderContext.getMyr().pop();
     };
 
     const _options = new EditOptionsTerrain(this);
@@ -140,3 +166,6 @@ export function PcbEditorTerrain(renderContext, editor) {
 }
 
 PcbEditorTerrain.RADIUS_DEFAULT = 12;
+PcbEditorTerrain.MODE_ELEVATE = 0;
+PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
+PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";

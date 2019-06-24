@@ -17,13 +17,13 @@ export function TerrainRenderer(myr, terrain) {
     const makeSegments = heights => {
         const segments = [];
 
-        for (let section = 0; section < heights.length - 1; section += Terrain.SECTIONS_PER_SEGMENT)
+        for (let section = 0; section < heights.length - 1; section += Terrain.SEGMENTS_PER_SECTION)
             segments.push(new TerrainSegment(
                 myr,
                 Terrain.SEGMENT_WIDTH,
                 Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT,
                 Scale.PIXELS_PER_METER * Terrain.MAX_DEPTH,
-                heights.slice(section, section + Terrain.SECTIONS_PER_SEGMENT + 1)));
+                heights.slice(section, section + Terrain.SEGMENTS_PER_SECTION + 1)));
 
         return segments;
     };

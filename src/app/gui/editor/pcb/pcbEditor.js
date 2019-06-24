@@ -12,9 +12,8 @@ import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
-import Myr from "myr.js"
 import {PcbEditorTerrain} from "./pcbEditorTerrain";
-import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
+import Myr from "myr.js";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
@@ -287,7 +286,7 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
 
                 break;
             case PcbEditor.EDIT_MODE_TERRAIN:
-                const terrainEditor = new PcbEditorTerrain(renderContext, this);
+                const terrainEditor = new PcbEditorTerrain(renderContext, this, world);
 
                 this.setEditor(terrainEditor);
 
