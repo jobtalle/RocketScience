@@ -13,18 +13,45 @@ import * as Myr from "myr.js";
 export function PcbEditorTerrain(renderContext, editor, world) {
     const _worldPosition = new Myr.Vector(0, 0);
     const _spriteElevate = renderContext.getSprites().getSprite(PcbEditorTerrain.SPRITE_ELEVATE);
+    const _mouse = new Myr.Vector(0, 0);
     let _mode = PcbEditorTerrain.MODE_DEFAULT;
     let _cursor = 0;
     let _radius = PcbEditorTerrain.RADIUS_DEFAULT;
+    let _deltas = null;
+    let _dragY = 0;
+
+    const getMin = (cursor, radius) => Math.max(0, cursor - radius);
+
+    const getMax = (cursor, radius) => Math.min(world.getMission().getTerrain().getHeights().length - 1, cursor + radius);
 
     const drawAnchors = (cursor, radius, sprite) => {
-        const min = Math.max(0, cursor - radius);
-        const max = Math.min(world.getMission().getTerrain().getHeights().length - 1, cursor + radius);
+        const min = getMin(cursor, radius);
+        const max = getMax(cursor, radius);
 
         for (let segment = min; segment <= max; ++segment)
             sprite.draw(
                 segment * Terrain.PIXELS_PER_SEGMENT - sprite.getWidth() * 0.5,
                 world.getMission().getTerrain().getHeights()[segment] * Scale.PIXELS_PER_METER - sprite.getHeight() * 0.5);
+    };
+
+    const drawAnchorsElevated = (cursor, radius, sprite, deltas) => {
+        const min = getMin(cursor, radius);
+        const max = getMax(cursor, radius);
+
+        for (let segment = min; segment <= max; ++segment)
+            sprite.draw(
+                segment * Terrain.PIXELS_PER_SEGMENT - sprite.getWidth() * 0.5,
+                (world.getMission().getTerrain().getHeights()[segment] + deltas[segment - cursor + radius]) * Scale.PIXELS_PER_METER - sprite.getHeight() * 0.5);
+    };
+
+    const apply = (cursor, radius, deltas) => {
+        const min = getMin(cursor, radius);
+        const max = getMax(cursor, radius);
+
+        for (let segment = min; segment <= max; ++segment)
+            world.getMission().getTerrain().getHeights()[segment] += deltas[segment - cursor + radius];
+
+        world.updateTerrain();
     };
 
     /**
@@ -68,17 +95,26 @@ export function PcbEditorTerrain(renderContext, editor, world) {
      * @param {Number} y The mouse position on the screen in pixels.
      */
     this.mouseMove = (x, y) => {
-        _worldPosition.x = x + renderContext.getViewport().getSplitX();
-        _worldPosition.y = y;
+        _mouse.x = x;
+        _mouse.y = y;
 
-        world.getView().getInverse().apply(_worldPosition);
+        if (_deltas) {
+            for (let i = 0; i < _deltas.length; ++i)
+                _deltas[i] = (y - _dragY) * Scale.METERS_PER_PIXEL;
+        }
+        else {
+            _worldPosition.x = x + renderContext.getViewport().getSplitX();
+            _worldPosition.y = y;
 
-        _cursor = Math.round(_worldPosition.x / Terrain.PIXELS_PER_SEGMENT);
+            world.getView().getInverse().apply(_worldPosition);
 
-        if (_cursor < 0)
-            _cursor = 0;
-        else if (_cursor >= world.getMission().getTerrain().getHeights().length)
-            _cursor = world.getMission().getTerrain().getHeights().length - 1;
+            _cursor = Math.round(_worldPosition.x / Terrain.PIXELS_PER_SEGMENT);
+
+            if (_cursor < 0)
+                _cursor = 0;
+            else if (_cursor >= world.getMission().getTerrain().getHeights().length)
+                _cursor = world.getMission().getTerrain().getHeights().length - 1;
+        }
     };
 
     /**
@@ -86,14 +122,22 @@ export function PcbEditorTerrain(renderContext, editor, world) {
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
     this.mouseDown = () => {
+        _deltas = new Array(1 + 2 * _radius).fill(0);
+        _dragY = _mouse.y;
 
+        return true;
     };
 
     /**
      * Finish the current dragging action.
      */
     this.mouseUp = () => {
+        if (_deltas)
+            apply(_cursor, _radius, _deltas);
 
+        _deltas = null;
+
+        return true;
     };
 
     /**
@@ -161,6 +205,9 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
         switch (_mode) {
             case PcbEditorTerrain.MODE_ELEVATE:
+                if (_deltas)
+                    drawAnchorsElevated(_cursor, _radius, _spriteElevate, _deltas);
+
                 drawAnchors(_cursor, _radius, _spriteElevate);
 
                 break;

@@ -11,7 +11,7 @@ export function Terrain(heights) {
      * @param {Physics} physics A physics instance.
      */
     this.makeTerrain = physics => {
-        physics.setTerrain(heights, 1 / Terrain.SEGMENTS_PER_METER);
+        physics.setTerrain(heights, Terrain.METERS_PER_SEGMENT);
     };
 
     /**

@@ -22,7 +22,6 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(mission.getPhysicsConfiguration());
-    const _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -36,6 +35,7 @@ export function World(renderContext, missionProgress) {
             0));
 
     let _camera = null;
+    let _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
     let _paused = true;
@@ -60,6 +60,16 @@ export function World(renderContext, missionProgress) {
         this.setCamera(null);
 
         return false;
+    };
+
+    /**
+     * Update the terrain graphics and physics shape. Call this after modifying terrain.
+     */
+    this.updateTerrain = () => {
+        _terrainRenderer.free();
+        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
+
+        mission.getTerrain().makeTerrain(_physics);
     };
 
     /**

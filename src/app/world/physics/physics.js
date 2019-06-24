@@ -68,11 +68,14 @@ export function Physics(configuration) {
     };
 
     /**
-     * Set the terrain
-     * @param {Object} heights An array containing all terrain height points.
+     * Set the terrain.
+     * @param {Array} heights An array containing all terrain height points.
      * @param {Number} spacing The spacing between each height point in meters.
      */
     this.setTerrain = (heights, spacing) => {
+        if (_terrainBody)
+            _world.DestroyBody(_terrainBody);
+
         const bodyDef = new box2d.b2BodyDef();
         const points = [];
 
