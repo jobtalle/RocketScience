@@ -1,3 +1,5 @@
+import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
+
 /**
  * The terrain editor, used for editing terrain.
  * @param {RenderContext} renderContext A render context.
@@ -7,6 +9,14 @@
  * @constructor
  */
 export function PcbEditorTerrain(renderContext, pcb, cursor, editor) {
+    const _options = new EditOptionsTerrain();
+
+    /**
+     * Get the EditOptionsTerrain object.
+     * @returns {EditOptionsTerrain} The EditOptionsTerrain object.
+     */
+    this.getOptions = () => _options;
+
     /**
      * Change the PCB being edited.
      * @param {Pcb} newPcb The new PCB to edit.

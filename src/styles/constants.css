@@ -23,6 +23,9 @@
 
     --avatar-padding: 10px;
 
+    --edit-options-padding-left: 16px;
+    --edit-options-padding-top: 64px;
+
     /* Colors */
     --text-color-dark: #212121;
     --text-color-light: #ffffff;

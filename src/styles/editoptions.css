@@ -1,0 +1,11 @@
+#edit-options {
+    position: absolute;
+    left: calc(var(--edit-options-padding-left) + var(--library-width));
+    top: var(--edit-options-padding-top);
+}
+
+#edit-options .container {
+    width: 128px;
+    height: 128px;
+    background-color: blue;
+}

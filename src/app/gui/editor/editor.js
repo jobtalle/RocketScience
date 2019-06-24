@@ -15,6 +15,7 @@ import Myr from "myr.js"
 import {Data} from "../../file/data";
 import {DownloadBinary} from "../../utils/downloadBinary";
 import {Tabbar} from "./tabbar/tabbar";
+import {EditOptions} from "./editoptions/editOptions";
 
 /**
  * Provides am editor for editing PCB's.
@@ -37,8 +38,10 @@ export function Editor(renderContext, world, game, isMissionEditor) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
+    const _editOptions = new EditOptions(renderContext.getOverlay());
     const _pcbEditor = new PcbEditor(
         renderContext,
+        _editOptions,
         world,
         _view,
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
@@ -147,6 +150,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      */
     this.hide = () => {
         _toolbar.hide();
+        _editOptions.hide();
         _library.hide();
         _pcbEditor.hide();
         _overlay.hide();
@@ -161,6 +165,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.show = () => {
         _pcbEditor.show();
         _library.show();
+        _editOptions.show();
         _toolbar.show();
         _overlay.show();
         _tabbar.show();

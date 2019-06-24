@@ -14,10 +14,12 @@ import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
 import {PcbEditorTerrain} from "./pcbEditorTerrain";
+import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
  * @param {RenderContext} renderContext A render context.
+ * @param {EditOptions} editOptions An edit options block to add additional edit options.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
  * @param {Number} width The editor width.
@@ -27,7 +29,7 @@ import {PcbEditorTerrain} from "./pcbEditorTerrain";
  * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
+export function PcbEditor(renderContext, editOptions, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
     const _rawCursor = _cursor.copy();
 
@@ -264,6 +266,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
             case PcbEditor.EDIT_MODE_RESHAPE:
                 this.setEditor(new PcbEditorReshape(renderContext, _editable.getPcb(), _cursor, this));
 
+                editOptions.set(null);
+
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
                 this.setEditor(new PcbEditorSelect(
@@ -274,17 +278,27 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
                     new Selection(renderContext),
                     _editable.getBudget()));
 
+                editOptions.set(null);
+
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
                 this.setEditor(new PcbEditorEtch(renderContext, _editable.getPcb(), _cursor, this));
+
+                editOptions.set(null);
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
                 this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view, isMissionEditor));
 
+                editOptions.set(null);
+
                 break;
             case PcbEditor.EDIT_MODE_TERRAIN:
-                this.setEditor(new PcbEditorTerrain(renderContext, _editable.getPcb(), _cursor, this));
+                const terrainEditor = new PcbEditorTerrain(renderContext, _editable.getPcb(), _cursor, this);
+
+                this.setEditor(terrainEditor);
+
+                editOptions.set(terrainEditor.getOptions().getElement());
 
                 break;
         }
