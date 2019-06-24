@@ -9,13 +9,19 @@ import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
  * @constructor
  */
 export function PcbEditorTerrain(renderContext, pcb, cursor, editor) {
-    const _options = new EditOptionsTerrain();
+    let _radius = PcbEditorTerrain.RADIUS_DEFAULT;
 
     /**
-     * Get the EditOptionsTerrain object.
-     * @returns {EditOptionsTerrain} The EditOptionsTerrain object.
+     * Set the brush radius.
+     * @param {Number} radius The new radius, which must be a whole positive number.
      */
-    this.getOptions = () => _options;
+    this.setRadius = radius => _radius = radius;
+
+    /**
+     * Get the brush radius.
+     * @returns {Number} The brush radius.
+     */
+    this.getRadius = () => _radius;
 
     /**
      * Change the PCB being edited.
@@ -125,4 +131,14 @@ export function PcbEditorTerrain(renderContext, pcb, cursor, editor) {
     this.draw = () => {
 
     };
+
+    const _options = new EditOptionsTerrain(this);
+
+    /**
+     * Get the EditOptionsTerrain object.
+     * @returns {EditOptionsTerrain} The EditOptionsTerrain object.
+     */
+    this.getOptions = () => _options;
 }
+
+PcbEditorTerrain.RADIUS_DEFAULT = 12;

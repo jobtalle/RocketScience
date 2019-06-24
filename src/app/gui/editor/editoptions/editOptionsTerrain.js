@@ -2,20 +2,21 @@ import {FormLayout} from "../../../utils/formLayout";
 
 /**
  * Terrain editor options.
+ * @param {PcbEditorTerrain} editor The terrain editor.
  * @constructor
  */
-export function EditOptionsTerrain() {
+export function EditOptionsTerrain(editor) {
     const _element = document.createElement("div");
 
     const makeRadiusSlider = () => {
-        const slider = document.createElement("input");
-
-        slider.type = "range";
-        slider.min = "1";
-        slider.max = "64";
-        slider.value = "8";
-
-        return slider;
+        return FormLayout.makeSlider(
+            1,
+            64,
+            1,
+            editor.getRadius(),
+            value => {
+                editor.setRadius(value);
+            });
     };
 
     const makeIcon = sprite => {
