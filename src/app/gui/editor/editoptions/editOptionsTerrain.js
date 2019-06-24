@@ -10,8 +10,8 @@ export function EditOptionsTerrain(editor) {
 
     const makeRadiusSlider = () => {
         return FormLayout.makeSlider(
-            1,
-            64,
+            0,
+            16,
             1,
             editor.getRadius(),
             value => {
