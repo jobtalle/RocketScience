@@ -1,8 +1,10 @@
 import {SpringApproach} from "../utils/springApproach";
-import Myr from "myr.js"
+import {Scale} from "../world/scale";
+import Myr from "myr.js";
 
 const refs = {
     Myr: Myr,
+    Scale: Scale,
     SpringApproach: SpringApproach
 };
 
