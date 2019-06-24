@@ -87,6 +87,7 @@ export function PcbRenderer(renderContext, pcb, level) {
     /**
      * Get the part renderer of a specific part.
      * @param {Fixture} fixture A valid fixture to get the renderer of.
+     * @returns {PartRenderer} The part renderer of the fixture.
      */
     this.getPartRenderer = fixture => _partRenderers[getFixtureIndex(fixture)];
 
