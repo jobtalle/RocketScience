@@ -119,10 +119,36 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         if (_deltas) {
             const dy = (y - _dragY) / world.getView().getZoom();
 
-            for (let i = 0; i < _deltas.length; ++i) {
-                const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
+            switch (_mode) {
+                case PcbEditorTerrain.MODE_ELEVATE:
+                    for (let i = 0; i < _deltas.length; ++i) {
+                        const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
 
-                _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * dy * Scale.METERS_PER_PIXEL;
+                        _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * dy * Scale.METERS_PER_PIXEL;
+                    }
+
+                    break;
+                case PcbEditorTerrain.MODE_SMOOTH:
+                    const smoothFactor = 1 - 1 / (1 + Math.abs(dy) * PcbEditorTerrain.SMOOTH_FACTOR);
+
+                    for (let i = PcbEditorTerrain.SMOOTH_RADIUS; i < _deltas.length - PcbEditorTerrain.SMOOTH_RADIUS; ++i) {
+                        if (_cursor - _radius + i - PcbEditorTerrain.SMOOTH_RADIUS < 0)
+                            continue;
+
+                        if (_cursor - _radius + i + PcbEditorTerrain.SMOOTH_RADIUS >= world.getMission().getTerrain().getHeights().length)
+                            break;
+
+                        let aim = 0;
+
+                        for (let j = i - PcbEditorTerrain.SMOOTH_RADIUS; j <= i + PcbEditorTerrain.SMOOTH_RADIUS; ++j)
+                            aim += world.getMission().getTerrain().getHeights()[_cursor - _radius + j];
+
+                        aim /= PcbEditorTerrain.SMOOTH_RADIUS * 2 + 1;
+
+                        _deltas[i] = smoothFactor * (aim - world.getMission().getTerrain().getHeights()[_cursor - _radius + i]);
+                    }
+
+                    break;
             }
         }
         else {
@@ -226,17 +252,12 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
 
-        switch (_mode) {
-            case PcbEditorTerrain.MODE_ELEVATE:
-                if (_deltas) {
-                    drawAnchorsElevated(_cursor, _radius, _spriteElevate, _deltas);
-                    drawAnchors(_cursor, _radius, _spriteAnchor);
-                }
-                else
-                    drawAnchors(_cursor, _radius, _spriteElevate);
-
-                break;
+        if (_deltas) {
+            drawAnchorsElevated(_cursor, _radius, _spriteElevate, _deltas);
+            drawAnchors(_cursor, _radius, _spriteAnchor);
         }
+        else
+            drawAnchors(_cursor, _radius, _spriteElevate);
     };
 
     const _options = new EditOptionsTerrain(this);
@@ -254,4 +275,5 @@ PcbEditorTerrain.MODE_SMOOTH = 1;
 PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
 PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
 PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";
-PcbEditorTerrain.COLOR_DELTA = StyleUtils.getColor("--game-color-terrain-elevate");
+PcbEditorTerrain.SMOOTH_FACTOR = 0.02;
+PcbEditorTerrain.SMOOTH_RADIUS = 2;
