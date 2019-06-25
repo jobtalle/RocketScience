@@ -1,4 +1,4 @@
-import {Scale} from "../scale";
+import {Scale} from "../world/scale";
 
 /**
  * An environment to place bots in.

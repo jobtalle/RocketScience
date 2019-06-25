@@ -1,6 +1,6 @@
-import {StyleUtils} from "../../utils/styleUtils";
+import {StyleUtils} from "../utils/styleUtils";
 import {TerrainSegment} from "./terrainSegment";
-import {Scale} from "../scale";
+import {Scale} from "../world/scale";
 import {Terrain} from "./terrain";
 
 /**

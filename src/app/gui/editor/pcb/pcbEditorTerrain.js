@@ -1,5 +1,5 @@
 import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
-import {Terrain} from "../../../world/terrain/terrain";
+import {Terrain} from "../../../terrain/terrain";
 import {Scale} from "../../../world/scale";
 import * as Myr from "myr.js";
 import {StyleUtils} from "../../../utils/styleUtils";

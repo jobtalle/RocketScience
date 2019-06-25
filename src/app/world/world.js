@@ -8,7 +8,7 @@ import {MouseEvent} from "../input/mouse/mouseEvent";
 import {ControllerState} from "./controllerState";
 import {CameraSmooth} from "../view/camera/cameraSmooth";
 import {StyleUtils} from "../utils/styleUtils";
-import {TerrainRenderer} from "./terrain/terrainRenderer";
+import {TerrainRenderer} from "../terrain/terrainRenderer";
 import Myr from "myr.js"
 
 /**

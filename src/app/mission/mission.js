@@ -1,7 +1,7 @@
 import {Objective} from "./objective";
 import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
-import {Terrain} from "../world/terrain/terrain";
+import {Terrain} from "../terrain/terrain";
 
 /**
  * A mission consists of one or multiple objectives.

@@ -1,6 +1,6 @@
-import Myr from "myr.js";
-import {Scale} from "../scale";
-import {StyleUtils} from "../../utils/styleUtils";
+import Myr from "../../../node_modules/myr.js/myr";
+import {Scale} from "../world/scale";
+import {StyleUtils} from "../utils/styleUtils";
 
 /**
  * A renderable terrain segment.
