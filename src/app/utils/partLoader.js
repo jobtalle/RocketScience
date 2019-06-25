@@ -22,25 +22,24 @@ function PartLoader() {
         return false;
     };
 
+    const findInsertIndex = (label, array) => {
+        if (array.indexOf(label) > 0)
+            for (const category of _parts.categories)
+                if (category.label === array[array.indexOf(label) - 1])
+                    return _parts.categories.indexOf(category) + 1;
+
+        return 0;
+    };
+
     const buildCategories = () => {
         for (const text of _categoriesRaw) {
             const json = JSON.parse(text);
 
             for (const label of json.labels)
-                if (!isDuplicate(label, _parts.categories)) {
-                    let insertIndex = 0;
-
-                    if (json.labels.indexOf(label) > 0)
-                        for (const category of _parts.categories)
-                            if (category.label === json.labels[json.labels.indexOf(label) - 1]) {
-                                insertIndex = _parts.categories.indexOf(category) + 1;
-
-                                break;
-                            }
-
-                    _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
-                }
+                if (!isDuplicate(label, _parts.categories))
+                    _parts.categories.splice(findInsertIndex(label, json.labels), 0, {label: label, parts: []});
         }
+
         _categoriesRaw.splice(0, _categoriesRaw.length);
     };
 
