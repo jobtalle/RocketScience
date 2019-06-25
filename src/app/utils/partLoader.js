@@ -5,133 +5,140 @@ function PartLoader() {
     let _counter = 0;
     let _onLoad;
 
+    const _categoriesRaw = [];
+    const _scriptsRaw = [];
+    const _definitionsRaw = [];
+    const _languageRaw = [];
+
     const _language = {};
     const _objects = [];
     const _parts = {categories: []};
 
-    const onFinish = () => {
-        _counter--;
-        if (_counter === 0) {
-            for (const category of _parts.categories)
-                category.parts.sort((a, b) => a.label - b.label);
-            loadObjects(_objects, _parts);
-            _onLoad();
-        }
+    const isDuplicate = (label, array) => {
+        for (const entry of array)
+            if (entry.label === label)
+                return true;
+
+        return false;
     };
 
-    const loadScript = file => {
-        _counter++;
-        file.async("string").then(text => {
-            try {
-                _objects.push(new Function('"use strict"; return(' + text + ')')());
-            } catch (e) {
-                console.log(e);
-                console.log("Unable to import following code:");
-                console.log(text);
-            }
-
-            onFinish();
-        });
-    };
-
-    const loadLanguage = file => {
-        _counter++;
-        file.async("string").then(text => {
+    const buildCategories = () => {
+        for (const text of _categoriesRaw) {
             const json = JSON.parse(text);
-            for (const key in json) {
-                if (!_language.hasOwnProperty(key)) {
-                    _language[key] = json[key];
-                } else {
-                    console.log("Duplicate language entry: " + key + ", " + json[key]);
+
+            for (const label of json.labels)
+                if (!isDuplicate(label, _parts.categories)) {
+                    let insertIndex = 0;
+
+                    if (json.labels.indexOf(label) > 0)
+                        for (const category of _parts.categories)
+                            if (category.label === json.labels[json.labels.indexOf(label) - 1]) {
+                                insertIndex = _parts.categories.indexOf(category) + 1;
+
+                                break;
+                            }
+
+                    _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
                 }
-            }
-
-            onFinish();
-        });
+        }
+        _categoriesRaw.splice(0, _categoriesRaw.length);
     };
 
-    const loadDefinition = file => {
-        _counter++;
-        file.async("string").then(text => {
+    const buildDefinitions = () => {
+        for (const text of _definitionsRaw) {
             const json = JSON.parse(text);
-            for (const category of _parts.categories) {
-                if (category.label === json.category) {
-                    let duplicate = false;
-                    for (const part of category.parts) {
-                        if (part.label === json.label) {
-                            duplicate = true;
 
-                            break;
-                        }
-                    }
-                    if (!duplicate)
+            for (const category of _parts.categories)
+                if (category.label === json.category) {
+                    if (!isDuplicate(json.label, category.parts))
                         category.parts.push(json);
                     else
                         console.log("Duplicate part entry: " + json.label);
 
                     break;
                 }
+        }
+
+        for (const category of _parts.categories)
+            category.parts.sort((a, b) => a.label - b.label);
+
+        _definitionsRaw.splice(0, _definitionsRaw.length);
+    };
+
+    const buildScripts = () => {
+        for (const text of _scriptsRaw)
+            try {
+                const script = new Function('"use strict"; return(' + text + ')')();
+
+                if (!_objects.includes(script))
+                    _objects.push(script);
+                else
+                    console.log("Duplicate script entry: " + text);
+            } catch (e) {
+                console.log(e);
+                console.log("Unable to import following code:");
+                console.log(text);
             }
 
-            onFinish();
+        _scriptsRaw.splice(0, _scriptsRaw.length);
+    };
+
+    const buildLanguage = () => {
+        for (const text of _languageRaw) {
+            const json = JSON.parse(text);
+
+            for (const key in json)
+                if (!_language.hasOwnProperty(key))
+                    _language[key] = json[key];
+                else
+                    console.log("Duplicate language entry: " + key + ", " + json[key]);
+        }
+
+        _languageRaw.splice(0, _languageRaw.length);
+    };
+
+    const buildParts = () => {
+        buildCategories();
+        buildDefinitions();
+        buildScripts();
+        buildLanguage();
+
+        loadObjects(_objects, _parts);
+
+        _objects.splice(0, _objects.length);
+
+        _onLoad();
+    };
+
+    const addRaw = (file, array) => {
+        ++_counter;
+        file.async("string").then(text => {
+            array.push(text);
+            if (--_counter === 0)
+                buildParts();
         });
     };
 
-    const loadParts = (zip, language) => {
-        zip.forEach((path, file) => {
-            if (path.endsWith(".js"))
-                loadScript(file);
-            else if (path.endsWith(language))
-                loadLanguage(file);
-            else if (path.endsWith("definition.json"))
-                loadDefinition(file);
-        });
-    };
-
-    const loadCategories = (mods, language) => {
-        for (const modPath of mods) {
+    const loadRawFiles = (mods, language) => {
+        for (const modPath of mods)
             fetch(modPath)
                 .then(response => response.arrayBuffer())
                 .then(buffer => JSZip.loadAsync(buffer))
-                .then(zip => {
-                    zip.forEach((path, file) => {
-                        if (path.endsWith("categories.json")) {
-                            file.async("string").then(text => {
-                                const json = JSON.parse(text);
-
-                                for (const label of json.labels) {
-                                    let duplicate = false;
-
-                                    for (const category of _parts.categories)
-                                        if (label === category.label) {
-                                            duplicate = true;
-
-                                            break;
-                                        }
-                                    if (!duplicate) {
-                                        let insertIndex = 0;
-
-                                        if (json.labels.indexOf(label) > 0)
-                                            for (const category of _parts.categories)
-                                                if (category.label === json.labels[json.labels.indexOf(label) - 1]) {
-                                                    insertIndex = _parts.categories.indexOf(category) + 1;
-
-                                                    break;
-                                                }
-                                        _parts.categories.splice(insertIndex, 0, {label: label, parts: []});
-                                    }
-                                }
-                                loadParts(zip, language);
-                            });
-                        }
-                    })
-                });
-        }
+                .then(zip => zip.forEach((path, file) => {
+                    if (path.endsWith("categories.json"))
+                        addRaw(file, _categoriesRaw);
+                    else if (path.endsWith(".js"))
+                        addRaw(file, _scriptsRaw);
+                    else if (path.endsWith(language))
+                        addRaw(file, _languageRaw);
+                    else if (path.endsWith("definition.json"))
+                        addRaw(file, _definitionsRaw);
+                }));
     };
 
     this.load = (mods, language, onLoad) => {
         _onLoad = onLoad;
-        loadCategories(mods, language);
+        loadRawFiles(mods, language);
     };
 
     this.getParts = () => _parts;
@@ -141,6 +148,12 @@ function PartLoader() {
 
 const _partLoader = new PartLoader();
 
+/**
+ * Load the parts from all mods (in .zip format).
+ * @param {Array} mods An array of paths to mod files (.zip)
+ * @param {String} language A string representing the language JSON file.
+ * @param {Function} onLoad A function to call after loading all mods.
+ */
 export function loadParts(mods, language, onLoad) {
     _partLoader.load(mods, language, onLoad);
 }
