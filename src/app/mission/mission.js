@@ -191,7 +191,7 @@ export function Mission(objectives, editables, terrain, physicsConfiguration, ti
             if (objective.isEdited())
                 return true;
 
-        return _isEdited || physicsConfiguration.isEdited();
+        return terrain.isEdited() || _isEdited || physicsConfiguration.isEdited();
     };
 
     /**

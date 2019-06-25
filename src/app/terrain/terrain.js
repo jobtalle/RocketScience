@@ -6,6 +6,8 @@ import {Scale} from "../world/scale";
  * @constructor
  */
 export function Terrain(heights) {
+    let _edited = false;
+
     /**
      * Make a physics body for this terrain.
      * @param {Physics} physics A physics instance.
@@ -25,6 +27,22 @@ export function Terrain(heights) {
      * @returns {Array} An array of heights. Negative numbers elevate, positive numbers are below sea level.
      */
     this.getHeights = () => heights;
+
+    /**
+     * Set the height points of this terrain.
+     * @param {Array} newHeights The new height points.
+     */
+    this.setHeights = newHeights => {
+        heights = newHeights;
+
+        _edited = true;
+    };
+
+    /**
+     * Check whether the terrain has been edited.
+     * @returns {Boolean} A boolean indicating whether the terrain has been edited.
+     */
+    this.isEdited = () => _edited;
 
     /**
      * Serialize this terrain.

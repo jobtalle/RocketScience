@@ -49,6 +49,7 @@ export function PcbEditorTerrain(renderContext, editor, world) {
     const apply = (cursor, radius, deltas) => {
         const min = getMin(cursor, radius);
         const max = getMax(cursor, radius);
+        const newHeights = Array.from(world.getMission().getTerrain().getHeights());
 
         for (let segment = min; segment <= max; ++segment) {
             let newHeight = world.getMission().getTerrain().getHeights()[segment] + deltas[segment - cursor + radius];
@@ -58,9 +59,10 @@ export function PcbEditorTerrain(renderContext, editor, world) {
             else if (newHeight < -Terrain.MAX_HEIGHT)
                 newHeight = -Terrain.MAX_HEIGHT;
 
-            world.getMission().getTerrain().getHeights()[segment] = newHeight;
+            newHeights[segment] = newHeight;
         }
 
+        world.getMission().getTerrain().setHeights(newHeights);
         world.updateTerrain();
     };
 
