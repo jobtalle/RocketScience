@@ -67,6 +67,12 @@ export function PcbEditorTerrain(renderContext, editor, world) {
     };
 
     /**
+     * Set the edit mode.
+     * @param {Number} mode A valid edit mode.
+     */
+    this.setMode = mode => _mode = mode;
+
+    /**
      * Set the brush radius.
      * @param {Number} radius The new radius, which must be a whole positive number.
      */
@@ -244,6 +250,7 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
 PcbEditorTerrain.RADIUS_DEFAULT = 3;
 PcbEditorTerrain.MODE_ELEVATE = 0;
+PcbEditorTerrain.MODE_SMOOTH = 1;
 PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
 PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
 PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";

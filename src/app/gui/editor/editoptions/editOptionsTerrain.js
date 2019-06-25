@@ -1,4 +1,8 @@
 import {FormLayout} from "../../../utils/formLayout";
+import {ToolbarButton} from "../../../utils/toolbarButton";
+import {getString} from "../../../text/language";
+import {PcbEditorTerrain} from "../pcb/pcbEditorTerrain";
+import {EditOptions} from "./editOptions";
 
 /**
  * Terrain editor options.
@@ -27,6 +31,31 @@ export function EditOptionsTerrain(editor) {
         return icon;
     };
 
+    const buildToolbar = () => {
+        const wrapper = document.createElement("div");
+        const toggleGroup = new ToolbarButton.ToggleGroup();
+        const buttonModeElevate = new ToolbarButton(
+            () => editor.setMode(PcbEditorTerrain.MODE_ELEVATE),
+            getString(EditOptionsTerrain.TEXT_MODE_ELEVATE),
+            "terrain-mode-elevate",
+            ToolbarButton.TYPE_TOGGLE_GROUP,
+            toggleGroup);
+        const buttonModeSmooth = new ToolbarButton(
+            () => editor.setMode(PcbEditorTerrain.MODE_SMOOTH),
+            getString(EditOptionsTerrain.TEXT_MODE_SMOOTH),
+            "terrain-mode-smooth",
+            ToolbarButton.TYPE_TOGGLE_GROUP,
+            toggleGroup);
+
+        wrapper.className = EditOptions.CLASS_TOOLBAR;
+        wrapper.appendChild(buttonModeElevate.getElement());
+        wrapper.appendChild(buttonModeSmooth.getElement());
+
+        buttonModeElevate.getElement().click();
+
+        return wrapper;
+    };
+
     const build = () => {
         const form = new FormLayout();
 
@@ -34,7 +63,8 @@ export function EditOptionsTerrain(editor) {
             makeIcon(EditOptionsTerrain.ICON_BRUSH_WIDTH),
             makeRadiusSlider());
 
-        _element.className = EditOptionsTerrain.CLASS;
+        _element.className = EditOptions.CLASS_CONTAINER;
+        _element.appendChild(buildToolbar());
         _element.appendChild(form.getElement());
     };
 
@@ -47,5 +77,6 @@ export function EditOptionsTerrain(editor) {
     build();
 }
 
-EditOptionsTerrain.CLASS = "container";
 EditOptionsTerrain.ICON_BRUSH_WIDTH = "terrain-brush-width";
+EditOptionsTerrain.TEXT_MODE_ELEVATE = "TERRAIN_MODE_ELEVATE";
+EditOptionsTerrain.TEXT_MODE_SMOOTH = "TERRAIN_MODE_SMOOTH";

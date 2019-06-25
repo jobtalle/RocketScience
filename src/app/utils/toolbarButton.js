@@ -1,5 +1,5 @@
 /**
- * A button for toolbars.
+ * A button for toolbars`.
  * @param {Function} onClick A function to execute when the button is active.
  * @param {String} toolTip A tool tip message.
  * @param {String} sprite The sprite class.

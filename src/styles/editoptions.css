@@ -7,3 +7,11 @@
 #edit-options .container {
     background-color: var(--menu-color-background);
 }
+
+#edit-options .toolbar * {
+    float: left;
+}
+
+#edit-options .toolbar .button {
+    cursor: pointer;
+}

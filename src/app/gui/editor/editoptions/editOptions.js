@@ -38,3 +38,5 @@ export function EditOptions(overlay) {
 }
 
 EditOptions.ID = "edit-options";
+EditOptions.CLASS_CONTAINER = "container";
+EditOptions.CLASS_TOOLBAR = "toolbar";
