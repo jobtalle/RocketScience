@@ -1,5 +1,5 @@
 import "../../../../styles/toolbar.css"
-import {ToolbarButton} from "./toolbarButton";
+import {ToolbarButton} from "../../../utils/toolbarButton";
 import {PcbEditor} from "../pcb/pcbEditor";
 import {getString} from "../../../text/language";
 import {Game} from "../../../game";
