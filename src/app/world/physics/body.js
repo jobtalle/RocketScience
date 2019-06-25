@@ -74,8 +74,8 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
                     _buoyancyPosition.x,
                     _buoyancyPosition.y),
                 true);
-            _body.SetLinearDamping(2 * submerged);
-            _body.SetAngularDamping(2 * submerged);
+            _body.SetLinearDamping(Body.WATER_DAMPING * submerged);
+            _body.SetAngularDamping(Body.WATER_DAMPING * submerged);
         }
     };
 
@@ -225,3 +225,4 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
 }
 
 Body.BUOYANCY_FACTOR = 2;
+Body.WATER_DAMPING = 4;
