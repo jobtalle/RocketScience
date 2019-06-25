@@ -1,14 +1,13 @@
 /**
- * A signal
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * A signal meter.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Meter(context) {
-    let _spring = new context.refs.SpringApproach(0, 0, 0, Math.PI);
-
     const PIN_INPUT = 0;
     const SPRITE_INDEX_DIAL = 1;
+
+    let _spring = new context.refs.SpringApproach(0, 0, 0, Math.PI);
 
     /**
      * Initialize the state.

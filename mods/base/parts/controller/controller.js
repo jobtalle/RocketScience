@@ -1,12 +1,9 @@
 /**
  * A controller chip, which conveys keyboard or gamepad controls to a pcb through its pins.
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Controller(context) {
-    let _controllerState = null;
-
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_ACTION_1 = 1;
     const PIN_INDEX_ACTION_2 = 2;
@@ -15,6 +12,8 @@ function Controller(context) {
     const PIN_INDEX_UP = 5;
     const PIN_INDEX_RIGHT = 6;
     const PIN_INDEX_DOWN = 7;
+
+    let _controllerState = null;
 
     /**
      * Initialize the state.

@@ -1,11 +1,16 @@
+/**
+ * An altimeter.
+ * @param {Object} context An object containing the game context, and references to some important utils.
+ * @constructor
+ */
 function Altimeter(context) {
-    let _spring = new context.refs.SpringApproach(0, 0, 0, Math.PI);
-    let _body = null;
-
     const SPRITE_INDEX_DIAL = 1;
     const MAX_ALTITUDE = 30;
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_OUTPUT = 1;
+
+    let _spring = new context.refs.SpringApproach(0, 0, 0, Math.PI);
+    let _body = null;
 
     this.initialize = body => {
         _body = body;

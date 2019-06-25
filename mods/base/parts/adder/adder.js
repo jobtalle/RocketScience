@@ -1,6 +1,6 @@
 /**
  * An adder circuit.
- * @param {Object} context A context with an array containing the pin indices.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Adder(context) {

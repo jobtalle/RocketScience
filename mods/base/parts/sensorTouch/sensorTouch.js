@@ -1,16 +1,14 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
- * @param {Number} x The X location on the board.
- * @param {Number} y The Y location on the board.
+ * A touch sensor.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function SensorTouch(context) {
-    let sensor = null;
-    let cooldown = 0;
-
     const PIN_INDEX_SIGNAL = 0;
     const SIGNAL_TICK_COOLDOWN = 1;
+
+    let sensor = null;
+    let cooldown = 0;
 
     const beginContact = () => {
         cooldown = SIGNAL_TICK_COOLDOWN;

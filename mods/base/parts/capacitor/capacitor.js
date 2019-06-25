@@ -1,17 +1,16 @@
 /**
- * A
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * A capacitor.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Capacitor(context) {
-    let _charge = 0;
-
     const SPRITE_INDEX_METER = 0;
     const SPRITE_FRAME_FULL = 4;
     const MAX_CHARGE = 10;
     const PIN_INDEX_INPUT = 0;
     const PIN_INDEX_OUTPUT = 1;
+
+    let _charge = 0;
 
     this.initialize = () => {
 

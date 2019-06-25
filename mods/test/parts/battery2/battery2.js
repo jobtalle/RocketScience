@@ -1,6 +1,6 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * A modded battery with the same features as the standard battery.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Battery2(context) {

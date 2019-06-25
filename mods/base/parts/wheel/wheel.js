@@ -1,8 +1,6 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
- * @param {Number} x The X location on the board.
- * @param {Number} y The Y location on the board.
+ * A wheel that can be powered.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Wheel(context) {

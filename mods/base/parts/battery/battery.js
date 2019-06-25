@@ -1,5 +1,6 @@
 /**
- * @param {Object} context A context for pins and the renderer.
+ * A battery.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Battery(context) {

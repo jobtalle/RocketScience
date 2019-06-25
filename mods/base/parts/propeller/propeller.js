@@ -1,18 +1,16 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
- * @param {Number} x The X location on the board.
- * @param {Number} y The Y location on the board.
+ * A propeller.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Propeller(context) {
-    let mover = null;
-    let moving = false;
-
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_INPUT = 1;
     const SPRITE_INDEX_PROPELLER = 1;
     const MAX_FORCE = -4500;
+
+    let mover = null;
+    let moving = false;
 
     /**
      * Initialize the state.

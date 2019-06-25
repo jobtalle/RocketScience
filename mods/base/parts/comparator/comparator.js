@@ -1,3 +1,8 @@
+/**
+ * A comparator.
+ * @param {Object} context An object containing the game context, and references to some important utils.
+ * @constructor
+ */
 function Comparator(context) {
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_OUTPUT = 1;

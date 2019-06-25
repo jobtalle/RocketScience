@@ -1,13 +1,13 @@
 /**
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * An oscillator.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Oscillator(context) {
-    let _state = 0;
-
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_PULSE = 1;
+
+    let _state = 0;
 
     /**
      * Initialize the state.

@@ -1,16 +1,9 @@
 /**
- * A press-able
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
- * @param {Number} x The x position on the board.
- * @param {Number} y The y position on the board.
+ * A press-able button.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Button(context) {
-    let _body = null;
-    let _controllerState = null;
-    let _pressed = 0;
-
     const X_OFFSET = 0;
     const Y_OFFSET = -1;
     const WIDTH = 2;
@@ -21,6 +14,10 @@ function Button(context) {
     const SPRITE_FRAME_PRESSED = 1;
     const PIN_INDEX_IN = 0;
     const PIN_INDEX_OUT = 1;
+
+    let _body = null;
+    let _controllerState = null;
+    let _pressed = 0;
 
     /**
      * Initialize the state.

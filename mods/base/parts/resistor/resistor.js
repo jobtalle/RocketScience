@@ -1,6 +1,6 @@
 /**
- * A
- * @param {Array} pins An array containing the pin indices.
+ * A resistor.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Resistor(context) {

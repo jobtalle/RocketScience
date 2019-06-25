@@ -1,5 +1,6 @@
 /**
- * @param {Array} pins An array containing the pin indices.
+ * An AND gate.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function GateAnd(context) {

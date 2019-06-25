@@ -1,7 +1,6 @@
 /**
  * A transistor used as a switch. It conducts a signal from its collector to its emitter if the base is powered.
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Transistor(context) {

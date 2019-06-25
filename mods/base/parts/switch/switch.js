@@ -1,16 +1,9 @@
 /**
  * A switch that can be toggled.
- * @param {Array} pins An array containing the pin indices.
- * @param {PartRenderer} renderer A part renderer to render state to.
- * @param {Number} x The x position on the board.
- * @param {Number} y The y position on the board.
+ * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
 function Switch(context) {
-    let _body = null;
-    let _controllerState = null;
-    let _toggled = 0;
-
     const X_OFFSET = 0;
     const Y_OFFSET = -1;
     const WIDTH = 2;
@@ -18,6 +11,10 @@ function Switch(context) {
     const SPRITE_INDEX_BUTTON = 1;
     const PIN_INDEX_IN = 0;
     const PIN_INDEX_OUT = 1;
+
+    let _body = null;
+    let _controllerState = null;
+    let _toggled = 0;
 
     /**
      * Initialize the state.

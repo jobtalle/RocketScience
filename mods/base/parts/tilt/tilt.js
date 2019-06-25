@@ -1,12 +1,17 @@
+/**
+ * A tilt sensor.
+ * @param {Object} context An object containing the game context, and references to some important utils.
+ * @constructor
+ */
 function Tilt(context) {
-    let _body = null;
-    let _tilt = DEFAULT;
-
     const DEFAULT = 0.5;
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_OUTPUT = 1;
     const SPRITE_INDEX_SLIDER = 1;
     const SLIDER_EXTENSION = 3;
+
+    let _body = null;
+    let _tilt = DEFAULT;
 
     this.initialize = body => {
         _body = body;
