@@ -202,11 +202,12 @@ PcbPoint.prototype.withConnected = function(f, exclude) {
 /**
  * Serialize this PCB point to a buffer.
  * @param {ByteBuffer} buffer A byte buffer to serialize this PCB point to.
+ * @param {PcbPartDict} partDict A part dictionary.
  * @param {Array} encodedParts An array of already encoded parts.
  * @param {Boolean} isChain A boolean indicating whether a next point comes directly after this one.
  * @param {Boolean} isLast A boolean indicating whether this point is the last point on a PCB.
  */
-PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
+PcbPoint.prototype.serialize = function(buffer, partDict, encodedParts, isChain, isLast) {
     let byte = isChain?PcbPoint.SERIALIZE_BIT_CHAIN:0;
 
     for (let direction = 1; direction < 5; ++direction) if (this.hasDirection(direction))
@@ -223,7 +224,7 @@ PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
 
         buffer.writeByte(byte | PcbPoint.SERIALIZE_BIT_PART);
 
-        this.part.serialize(buffer);
+        this.part.serialize(buffer, partDict);
     }
     else
         buffer.writeByte(byte);
@@ -232,6 +233,7 @@ PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
 /**
  * Deserialize this PCB point from a buffer.
  * @param {ByteBuffer} buffer A byte buffer to serialize this PCB point from.
+ * @param {PcbPartDict} partDict A part dictionary.
  * @param {Array} fixtures An array to place new fixtures in.
  * @param {Number} x The points x coordinate.
  * @param {Number} y The points y coordinate.
@@ -239,7 +241,7 @@ PcbPoint.prototype.serialize = function(buffer, encodedParts, isChain, isLast) {
  * @param {PcbPoint.DeserializationReport} [report] An optional deserialization report.
  * @returns {PcbPoint} The deserialized PCB point.
  */
-PcbPoint.deserialize = function(buffer, fixtures, x, y, pcb, report) {
+PcbPoint.deserialize = function(buffer, partDict, fixtures, x, y, pcb, report) {
     const point = new PcbPoint();
     const byte = buffer.readByte();
 
@@ -251,7 +253,7 @@ PcbPoint.deserialize = function(buffer, fixtures, x, y, pcb, report) {
     }
 
     if ((byte & PcbPoint.SERIALIZE_BIT_PART) !== 0)
-        fixtures.push(new Fixture(Part.deserialize(buffer), x, y));
+        fixtures.push(new Fixture(Part.deserialize(buffer, partDict), x, y));
 
     if ((byte & PcbPoint.SERIALIZE_BIT_LOCKED) !== 0)
         point.lock();

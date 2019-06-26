@@ -55,9 +55,10 @@ export function Part(definition, configurationIndex) {
     /**
      * Serialize this part to a buffer.
      * @param {ByteBuffer} buffer A byte buffer to serialize this part to.
+     * @param {PcbPartDict} partDict A part dictionary.
      */
-    this.serialize = buffer => {
-        buffer.writeByte(getPartId(definition.object));
+    this.serialize = (buffer, partDict) => {
+        buffer.writeShort(partDict.getID(definition.object));
         buffer.writeByte(configurationIndex);
     };
 }
@@ -65,11 +66,12 @@ export function Part(definition, configurationIndex) {
 /**
  * Deserialize a part from a buffer.
  * @param {ByteBuffer} buffer A byte buffer to serialize a part from.
+ * @param {PcbPartDict} partDict A part dictionary.
  * @returns {Part} The deserialized part.
  */
-Part.deserialize = buffer => {
-    const id = buffer.readByte();
+Part.deserialize = (buffer, partDict) => {
+    const id = buffer.readShort();
     const configuration = buffer.readByte();
 
-    return new Part(getPartFromId(id), configuration);
+    return new Part(getPartFromId(getPartId(partDict.getPart(id))), configuration);
 };

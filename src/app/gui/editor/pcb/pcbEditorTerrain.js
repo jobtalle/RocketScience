@@ -276,4 +276,4 @@ PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
 PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
 PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";
 PcbEditorTerrain.SMOOTH_FACTOR = 0.02;
-PcbEditorTerrain.SMOOTH_RADIUS = 2;
+PcbEditorTerrain.SMOOTH_RADIUS = 1;

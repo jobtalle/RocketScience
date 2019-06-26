@@ -4,6 +4,8 @@ import {Pin} from "../part/pin";
 import {PcbPath} from "./point/pcbPath";
 import {Extendability} from "./extendability";
 import {Part} from "../part/part";
+import {PcbPartDict} from "./pcbPartDict";
+import {PartSummary} from "./partSummary";
 import Myr from "myr.js"
 
 /**
@@ -516,9 +518,15 @@ export function Pcb() {
      * @param {ByteBuffer} buffer A byte buffer to serialize this PCB to.
      */
     this.serialize = buffer => {
+        const partDict = new PcbPartDict(new PartSummary(this));
         const encodeRunPoints = (points, encodedParts, terminate) => {
             for (let i = 0; i < points.length; ++i)
-                points[i].serialize(buffer, encodedParts, i !== points.length - 1, terminate && i === points.length - 1);
+                points[i].serialize(
+                    buffer,
+                    partDict,
+                    encodedParts,
+                    i !== points.length - 1,
+                    terminate && i === points.length - 1);
         };
 
         const encodedParts = [];
@@ -532,6 +540,8 @@ export function Pcb() {
             head |= Pcb.SERIALIZE_HEAD_BIT_START_EMPTY;
 
         buffer.writeShort(head);
+
+        partDict.serialize(buffer);
 
         for (let y = 0; y < this.getHeight(); ++y) for (let x = 0; x < this.getWidth(); ++x) {
             const point = this.getPoint(x, y);
@@ -578,6 +588,7 @@ export function Pcb() {
 Pcb.deserialize = buffer => {
     const pcb = new Pcb();
     const head = buffer.readShort();
+    const partDict = PcbPartDict.deserialize(buffer);
     const width = head & Pcb.SERIALIZE_HEAD_BITS_WIDTH;
     const fixtures = [];
 
@@ -587,7 +598,7 @@ Pcb.deserialize = buffer => {
     let pointReport = new PcbPoint.DeserializationReport();
 
     if ((head & Pcb.SERIALIZE_HEAD_BIT_START_EMPTY) === 0)
-        point = PcbPoint.deserialize(buffer, fixtures, x, y, pcb ,pointReport);
+        point = PcbPoint.deserialize(buffer, partDict, fixtures, x, y, pcb ,pointReport);
 
     while (true) {
         if (point) {
@@ -606,7 +617,7 @@ Pcb.deserialize = buffer => {
         else if (pointReport.state === PcbPoint.DESERIALIZE_STATE_LAST)
             break;
 
-        point = PcbPoint.deserialize(buffer, fixtures, x, y, pcb ,pointReport);
+        point = PcbPoint.deserialize(buffer, partDict, fixtures, x, y, pcb ,pointReport);
     }
 
     for (const fixture of fixtures)
