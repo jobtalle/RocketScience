@@ -38,6 +38,7 @@ export function Scatters(renderContext, terrain, profile) {
             const sprite = renderContext.getSprites().getSprite(entry.spriteName);
             const interval = Math.ceil(sprite.getWidth() * 0.5);
             const distribution = makeDistribution(seed, interval);
+            let lastFrame = -1;
             let x = 0;
 
             for (const place of distribution) {
@@ -45,12 +46,18 @@ export function Scatters(renderContext, terrain, profile) {
 
                 if (place) {
                     const y = Math.round(terrain.getHeight(x * Scale.METERS_PER_PIXEL) * Scale.PIXELS_PER_METER);
+                    let frame = getSpriteIndex(x + y * 0.1, sprite.getFrameCount());
+
+                    if (frame === lastFrame)
+                        frame = (frame + 1) % sprite.getFrameCount();
 
                     _sprites.push(new Scatters.SpriteEntry(
                         sprite,
-                        getSpriteIndex(x + y * 0.1, sprite.getFrameCount()),
+                        frame,
                         x - Math.round(sprite.getWidth() * 0.5),
                         y - sprite.getHeight()));
+
+                    lastFrame = frame;
                 }
             }
         }

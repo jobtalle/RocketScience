@@ -40,13 +40,13 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters) {
                 yStart,
                 xEnd,
                 yEnd);
+        }
 
-            for (const scatter of scatters) {
-                scatter.sprite.setFrame(scatter.frame);
-                scatter.sprite.draw(
-                    scatter.x,
-                    Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + scatter.y);
-            }
+        for (const scatter of scatters) {
+            scatter.sprite.setFrame(scatter.frame);
+            scatter.sprite.draw(
+                scatter.x,
+                Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + scatter.y);
         }
     };
 
