@@ -29,6 +29,25 @@ export function Terrain(heights) {
     this.getHeights = () => heights;
 
     /**
+     * Get the height of this terrain at a certain x position within the terrain.
+     * @param {Number} x The X position in meters.
+     * @returns {Number} The elevation in meters.
+     */
+    this.getHeight = x => {
+        if (x < 0)
+            return heights[0];
+
+        const left = Math.floor(x / Terrain.METERS_PER_SEGMENT);
+
+        if (left >= heights.length - 1)
+            return heights[heights.length - 1];
+
+        const f = (x - left * Terrain.METERS_PER_SEGMENT) / Terrain.METERS_PER_SEGMENT;
+
+        return heights[left] + (heights[left + 1] - heights[left]) * f;
+    };
+
+    /**
      * Set the height points of this terrain.
      * @param {Array} newHeights The new height points.
      */
@@ -74,7 +93,7 @@ Terrain.SEGMENTS_PER_METER = 2;
 Terrain.PIXELS_PER_SEGMENT = Scale.PIXELS_PER_METER / Terrain.SEGMENTS_PER_METER;
 Terrain.METERS_PER_SEGMENT = 1 / Terrain.SEGMENTS_PER_METER;
 Terrain.SEGMENTS_PER_SECTION = 8;
-Terrain.SEGMENT_WIDTH = Terrain.PIXELS_PER_SEGMENT * Terrain.SEGMENTS_PER_SECTION;
+Terrain.SECTION_WIDTH = Terrain.PIXELS_PER_SEGMENT * Terrain.SEGMENTS_PER_SECTION;
 Terrain.MAX_HEIGHT = 8;
 Terrain.MAX_DEPTH = 3;
 Terrain.SEGMENT_ELEVATION = Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT;

@@ -10,6 +10,8 @@ import {CameraSmooth} from "../view/camera/cameraSmooth";
 import {StyleUtils} from "../utils/styleUtils";
 import {TerrainRenderer} from "../terrain/terrainRenderer";
 import Myr from "myr.js"
+import {ScatterProfile} from "../terrain/scatters/scatterProfile";
+import {Scatters} from "../terrain/scatters/scatters";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -35,7 +37,7 @@ export function World(renderContext, missionProgress) {
             0));
 
     let _camera = null;
-    let _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
+    let _terrainRenderer = null;
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
     let _paused = true;
@@ -66,8 +68,16 @@ export function World(renderContext, missionProgress) {
      * Update the terrain graphics and physics shape. Call this after modifying terrain.
      */
     this.updateTerrain = () => {
-        _terrainRenderer.free();
-        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain());
+        if (_terrainRenderer)
+            _terrainRenderer.free();
+
+        const scatterProfile = new ScatterProfile([
+            new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.5)
+        ]);
+
+        const scatters = new Scatters(renderContext, mission.getTerrain(), scatterProfile);
+
+        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain(), scatters);
 
         mission.getTerrain().makeTerrain(_physics);
     };
@@ -300,7 +310,8 @@ export function World(renderContext, missionProgress) {
 
     _view.focus(-mission.getTerrain().getWidth() * 0.5, 0, 0.5);
     _surface.setClearColor(World.COLOR_SKY);
-    mission.getTerrain().makeTerrain(_physics);
+
+    this.updateTerrain();
 }
 
 World.COLOR_SKY = StyleUtils.getColor("--game-color-sky");

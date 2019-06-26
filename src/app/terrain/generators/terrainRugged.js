@@ -1,6 +1,6 @@
 import noisejs from "noisejs"
 import {Terrain} from "../terrain";
-import {makeOctaves} from "./octaves";
+import {makeOctaves} from "../../utils/octaves";
 
 /**
  * A recipe for rough unvaried terrain.

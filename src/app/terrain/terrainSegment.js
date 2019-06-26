@@ -1,6 +1,7 @@
 import Myr from "../../../node_modules/myr.js/myr";
 import {Scale} from "../world/scale";
 import {StyleUtils} from "../utils/styleUtils";
+import {Terrain} from "./terrain";
 
 /**
  * A renderable terrain segment.
@@ -9,9 +10,10 @@ import {StyleUtils} from "../utils/styleUtils";
  * @param {Number} height The height in pixels.
  * @param {Number} depth The water depth in pixels.
  * @param {Array} heights An array of all relevant heights for this segment from left to right.
+ * @param {Array} scatters An array of Scatters.SpriteEntry instances.
  * @constructor
  */
-export function TerrainSegment(myr, width, height, depth, heights) {
+export function TerrainSegment(myr, width, height, depth, heights, scatters) {
     const _surface = new myr.Surface(width, height + depth);
 
     const update = () => {
@@ -38,6 +40,13 @@ export function TerrainSegment(myr, width, height, depth, heights) {
                 yStart,
                 xEnd,
                 yEnd);
+
+            for (const scatter of scatters) {
+                scatter.sprite.setFrame(scatter.frame);
+                scatter.sprite.draw(
+                    scatter.x,
+                    Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + scatter.y);
+            }
         }
     };
 
@@ -60,3 +69,4 @@ export function TerrainSegment(myr, width, height, depth, heights) {
 
 TerrainSegment.COLOR_EDGE = StyleUtils.getColor("--game-color-terrain-border");
 TerrainSegment.COLOR_FILL = StyleUtils.getColor("--game-color-terrain-fill");
+TerrainSegment.SCATTER_SHIFT = 1;
