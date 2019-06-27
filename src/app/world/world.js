@@ -72,7 +72,7 @@ export function World(renderContext, missionProgress) {
             _terrainRenderer.free();
 
         const scatterProfile = new ScatterProfile([
-            new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.5)
+            new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.5, 0.3)
         ]);
 
         const scatters = new Scatters(renderContext, mission.getTerrain(), scatterProfile);

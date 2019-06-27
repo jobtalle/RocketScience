@@ -48,6 +48,23 @@ export function Terrain(heights) {
     };
 
     /**
+     * Get the slope of this terrain at a certain x position within the terrain.
+     * @param {Number} x The X position in meters.
+     * @returns {Number} The slope.
+     */
+    this.getSlope = x => {
+        if (x < 0)
+            return 0;
+
+        const left = Math.floor(x / Terrain.METERS_PER_SEGMENT);
+
+        if (left >= heights.length - 1)
+            return 0;
+
+        return (heights[left + 1] - heights[left]) / Terrain.METERS_PER_SEGMENT;
+    };
+
+    /**
      * Set the height points of this terrain.
      * @param {Array} newHeights The new height points.
      */

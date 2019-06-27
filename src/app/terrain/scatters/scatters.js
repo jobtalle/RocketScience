@@ -45,6 +45,9 @@ export function Scatters(renderContext, terrain, profile) {
                 x += interval;
 
                 if (place) {
+                    if (Math.abs(terrain.getSlope(x * Scale.METERS_PER_PIXEL)) > entry.maxSlope)
+                        continue;
+
                     const y = Math.round(terrain.getHeight(x * Scale.METERS_PER_PIXEL) * Scale.PIXELS_PER_METER);
                     let frame = getSpriteIndex(x + y * 0.1, sprite.getFrameCount());
 
@@ -82,6 +85,4 @@ Scatters.SpriteEntry = function(sprite, frame, x, y) {
     this.frame = frame;
     this.x = x;
     this.y = y;
-
-    this.copy = () => new Scatters.SpriteEntry(sprite, frame, x, y);
 };

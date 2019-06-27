@@ -11,9 +11,10 @@ import {Terrain} from "./terrain";
  * @param {Number} depth The water depth in pixels.
  * @param {Array} heights An array of all relevant heights for this segment from left to right.
  * @param {Array} scatters An array of Scatters.SpriteEntry instances.
+ * @param {Number} offset The X offset of this segment in pixels.
  * @constructor
  */
-export function TerrainSegment(myr, width, height, depth, heights, scatters) {
+export function TerrainSegment(myr, width, height, depth, heights, scatters, offset) {
     const _surface = new myr.Surface(width, height + depth);
 
     const update = () => {
@@ -45,7 +46,7 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters) {
         for (const scatter of scatters) {
             scatter.sprite.setFrame(scatter.frame);
             scatter.sprite.draw(
-                scatter.x,
+                scatter.x - offset,
                 Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + scatter.y);
         }
     };

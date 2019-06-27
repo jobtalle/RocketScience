@@ -21,21 +21,14 @@ export function TerrainRenderer(myr, terrain, scatters) {
         for (let section = 0; section < heights.length - 1; section += Terrain.SEGMENTS_PER_SECTION) {
             const sprites = [];
 
-            for (const sprite of scatters.getSprites()) {
-                const shifted = sprite.copy();
-
-                shifted.x -= section * Terrain.PIXELS_PER_SEGMENT;
-
-                sprites.push(shifted);
-            }
-
             segments.push(new TerrainSegment(
                 myr,
                 Terrain.SECTION_WIDTH,
                 Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT,
                 Scale.PIXELS_PER_METER * Terrain.MAX_DEPTH,
                 heights.slice(section, section + Terrain.SEGMENTS_PER_SECTION + 1),
-                sprites));
+                scatters.getSprites(),
+                section * Terrain.PIXELS_PER_SEGMENT));
         }
 
         return segments;

@@ -16,10 +16,12 @@ export function ScatterProfile(entries) {
  * An entry to add to the scattering process.
  * @param {Number} type A valid scatter profile type.
  * @param {Number} prevalence A percentage of the terrain to cover with this entry in the range [0, 1].
+ * @param {Number} maxSlope The maximum slope this entry will be placed at.
  */
-ScatterProfile.Entry = function(type, prevalence) {
+ScatterProfile.Entry = function(type, prevalence, maxSlope) {
     this.spriteName = type;
     this.prevalence = prevalence;
+    this.maxSlope = maxSlope;
 };
 
 ScatterProfile.TYPE_ROCKS = "rocks";
