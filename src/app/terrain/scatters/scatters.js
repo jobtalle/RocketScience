@@ -18,7 +18,7 @@ export function Scatters(renderContext, terrain, profile) {
         const noise = new noisejs.Noise(seed);
         const values = [];
 
-        for (let x = 0; x < terrain.getHeights().length * Terrain.PIXELS_PER_SEGMENT; x += resolution) {
+        for (let x = 0; x < (terrain.getHeights().length - 1) * Terrain.PIXELS_PER_SEGMENT - resolution; x += resolution) {
             values.push(noise.simplex2(x * Scale.METERS_PER_PIXEL, 0.5) > 0.3);
         }
 
@@ -44,10 +44,7 @@ export function Scatters(renderContext, terrain, profile) {
             for (const place of distribution) {
                 x += interval;
 
-                if (place) {
-                    if (Math.abs(terrain.getSlope(x * Scale.METERS_PER_PIXEL)) > entry.maxSlope)
-                        continue;
-
+                if (place && Math.abs(terrain.getSlope(x * Scale.METERS_PER_PIXEL)) < entry.maxSlope) {
                     const y = Math.round(terrain.getHeight(x * Scale.METERS_PER_PIXEL) * Scale.PIXELS_PER_METER);
                     let frame = getSpriteIndex(x + y * 0.1, sprite.getFrameCount());
 

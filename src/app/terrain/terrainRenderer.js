@@ -17,9 +17,21 @@ export function TerrainRenderer(myr, terrain, scatters) {
 
     const makeSegments = heights => {
         const segments = [];
+        let scattersBegin = 0;
+        let scattersEnd = scattersBegin;
 
         for (let section = 0; section < heights.length - 1; section += Terrain.SEGMENTS_PER_SECTION) {
-            const sprites = [];
+            const offset = section * Terrain.PIXELS_PER_SEGMENT;
+
+            while (
+                scattersEnd < scatters.getSprites().length &&
+                scatters.getSprites()[scattersEnd].x < offset + Terrain.SECTION_WIDTH)
+                ++scattersEnd;
+
+            while (
+                scattersBegin < scattersEnd &&
+                scatters.getSprites()[scattersBegin].x + scatters.getSprites()[scattersBegin].sprite.getWidth() <= offset)
+                ++scattersBegin;
 
             segments.push(new TerrainSegment(
                 myr,
@@ -27,8 +39,8 @@ export function TerrainRenderer(myr, terrain, scatters) {
                 Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT,
                 Scale.PIXELS_PER_METER * Terrain.MAX_DEPTH,
                 heights.slice(section, section + Terrain.SEGMENTS_PER_SECTION + 1),
-                scatters.getSprites(),
-                section * Terrain.PIXELS_PER_SEGMENT));
+                scatters.getSprites().slice(scattersBegin, scattersEnd),
+                offset));
         }
 
         return segments;
