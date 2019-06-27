@@ -9,9 +9,10 @@ import {ControllerState} from "./controllerState";
 import {CameraSmooth} from "../view/camera/cameraSmooth";
 import {StyleUtils} from "../utils/styleUtils";
 import {TerrainRenderer} from "../terrain/terrainRenderer";
-import Myr from "myr.js"
 import {ScatterProfile} from "../terrain/scatters/scatterProfile";
 import {Scatters} from "../terrain/scatters/scatters";
+import Myr from "myr.js"
+import {CloudsRenderer} from "../clouds/cloudsRenderer";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -20,10 +21,10 @@ import {Scatters} from "../terrain/scatters/scatters";
  * @constructor
  */
 export function World(renderContext, missionProgress) {
-    const mission = missionProgress.getMission();
     const _objects = [];
     const _controllerState = new ControllerState();
-    const _physics = new Physics(mission.getPhysicsConfiguration());
+    const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
+    const _cloudsRenderer = new CloudsRenderer(renderContext.getMyr(), 5);
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -75,11 +76,11 @@ export function World(renderContext, missionProgress) {
             new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.5, 0.4)
         ]);
 
-        const scatters = new Scatters(renderContext, mission.getTerrain(), scatterProfile);
+        const scatters = new Scatters(renderContext, missionProgress.getMission().getTerrain(), scatterProfile);
 
-        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), mission.getTerrain(), scatters);
+        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), missionProgress.getMission().getTerrain(), scatters);
 
-        mission.getTerrain().makeTerrain(_physics);
+        missionProgress.getMission().getTerrain().makeTerrain(_physics);
     };
 
     /**
@@ -92,7 +93,7 @@ export function World(renderContext, missionProgress) {
      * Get this world's mission.
      * @returns {Mission} A mission object.
      */
-    this.getMission = () => mission;
+    this.getMission = () => missionProgress.getMission();
 
     /**
      * Get this world's physics.
@@ -212,7 +213,7 @@ export function World(renderContext, missionProgress) {
     this.activate = focus => {
         this.unpause();
 
-        mission.prime(_objects);
+        missionProgress.getMission().prime(_objects);
 
         if (focus !== -1)
             this.setCamera(CameraSmooth, _objects[focus]);
@@ -259,7 +260,7 @@ export function World(renderContext, missionProgress) {
             if (_camera)
                 _camera.update(timeStep);
 
-            mission.validate();
+            missionProgress.getMission().validate();
 
             if (ticks)
                 _controllerState.tick();
@@ -271,10 +272,13 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        _terrainRenderer.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth() / _view.getZoom());
+        _cloudsRenderer.drawBack();
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
+
+        _terrainRenderer.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth() / _view.getZoom());
+        _cloudsRenderer.drawFront();
 
         renderContext.getMyr().pop();
     };
@@ -303,12 +307,13 @@ export function World(renderContext, missionProgress) {
      * Free all resources occupied by the world
      */
     this.free = () => {
+        _cloudsRenderer.free();
         _terrainRenderer.free();
         _surface.free();
         _physics.free();
     };
 
-    _view.focus(-mission.getTerrain().getWidth() * 0.5, 0, 0.5);
+    _view.focus(-missionProgress.getMission().getTerrain().getWidth() * 0.5, 0, 0.5);
     _surface.setClearColor(World.COLOR_SKY);
 
     this.updateTerrain();
