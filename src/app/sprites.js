@@ -1,4 +1,5 @@
-import atlas from "../assets/sprites/atlas"
+// import atlas from "../assets/sprites/atlas"
+import {SpriteSheet} from "./sprites/spriteSheet";
 
 /**
  * Provides access to all sprites in the sprite atlas.
@@ -6,11 +7,12 @@ import atlas from "../assets/sprites/atlas"
  * @constructor
  */
 export function Sprites(myr) {
-    const _surface = new myr.Surface(Sprites.ATLAS_PATH);
+    // const _surface = new myr.Surface(Sprites.ATLAS_PATH);
+    const _spriteSheet = new SpriteSheet(myr);
 
     const getFrame = (name, index) => {
         const frameName = name + '_' + index;
-        return atlas.frames[frameName];
+        return _spriteSheet.getAtlas().frames[frameName];
     };
 
     const registerSprite = name => {
@@ -21,7 +23,7 @@ export function Sprites(myr) {
 
         const spriteFrames = [];
         while (frame != null) {
-            let spriteFrame = myr.makeSpriteFrame(_surface, frame.frame.x, frame.frame.y,
+            let spriteFrame = myr.makeSpriteFrame(_spriteSheet.getSurface(), frame.frame.x, frame.frame.y,
                                                   frame.frame.w, frame.frame.h, 0, 0,
                                                   frame.duration * 0.001);
 

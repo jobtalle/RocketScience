@@ -1,5 +1,6 @@
 import JSZip from "jszip";
 import {loadObjects} from "../part/objects";
+import {readAse} from "../sprites/asereader/aseReader";
 
 function PartLoader() {
     let _counter = 0;
@@ -9,6 +10,9 @@ function PartLoader() {
     const _scriptsRaw = [];
     const _definitionsRaw = [];
     const _languageRaw = [];
+    const _spriteRawBuffers = {};
+    const _spriteRawFiles = [];
+    const _guiRawFiles = [];
 
     const _language = {};
     const _objects = [];
@@ -96,11 +100,34 @@ function PartLoader() {
         _languageRaw.splice(0, _languageRaw.length);
     };
 
+    const buildSprites = () => {
+        for (const category of _parts.categories)
+            for (const part of category.parts)
+                for (const config of part.configurations)
+                    for (const key in config.sprites)
+                        for (const sprite of config.sprites[key]) {
+                            const file = readAse(_spriteRawBuffers[sprite.name]);
+                            file.name = sprite.name;
+                            _spriteRawFiles.push(file);
+                        }
+    };
+
+    const buildGuiSprites = () => {
+        for (const category of _parts.categories)
+            for (const part of category.parts) {
+                const file = readAse(_spriteRawBuffers[part.icon]);
+                file.name = part.icon;
+                _guiRawFiles.push(file);
+            }
+    };
+
     const buildParts = () => {
         buildCategories();
         buildDefinitions();
         buildScripts();
         buildLanguage();
+        buildSprites();
+        // buildGuiSprites();
 
         loadObjects(_objects, _parts);
 
@@ -113,6 +140,18 @@ function PartLoader() {
         ++_counter;
         file.async("string").then(text => {
             array.push(text);
+
+            if (--_counter === 0)
+                buildParts();
+        });
+    };
+
+    const addRawBuffer = (file, path, object) => {
+        ++_counter;
+        file.async("arraybuffer").then(buffer => {
+            const name = path.split('/').pop().split('.')[0];
+            object[name] = buffer;
+
             if (--_counter === 0)
                 buildParts();
         });
@@ -132,6 +171,8 @@ function PartLoader() {
                         addRaw(file, _languageRaw);
                     else if (path.endsWith("definition.json"))
                         addRaw(file, _definitionsRaw);
+                    else if (path.endsWith(".aseprite") || path.endsWith(".ase"))
+                        addRawBuffer(file, path, _spriteRawBuffers);
                 }));
     };
 
@@ -143,6 +184,10 @@ function PartLoader() {
     this.getParts = () => _parts;
 
     this.getLanguage = () => _language;
+
+    this.getRawSprites = () => _spriteRawFiles;
+
+    this.getRawGuiSprites = () => _guiRawFiles;
 }
 
 const _partLoader = new PartLoader();
@@ -163,4 +208,12 @@ export function getParts() {
 
 export function getLanguage() {
     return _partLoader.getLanguage();
+}
+
+export function getRawSprites() {
+    return _partLoader.getRawSprites();
+}
+
+export function getRawGuiSprites() {
+    return _partLoader.getRawGuiSprites();
 }
