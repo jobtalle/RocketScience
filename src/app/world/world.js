@@ -11,8 +11,8 @@ import {StyleUtils} from "../utils/styleUtils";
 import {TerrainRenderer} from "../terrain/terrainRenderer";
 import {ScatterProfile} from "../terrain/scatters/scatterProfile";
 import {Scatters} from "../terrain/scatters/scatters";
-import Myr from "myr.js"
 import {CloudsRenderer} from "../clouds/cloudsRenderer";
+import Myr from "myr.js"
 
 /**
  * Simulates physics and led for all objects in the same space.

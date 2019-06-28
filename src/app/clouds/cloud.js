@@ -1,5 +1,6 @@
 import Myr from "myr.js";
 import {StyleUtils} from "../utils/styleUtils";
+import {FractalNoise} from "../utils/fractalNoise";
 
 /**
  * A renderable cloud.
@@ -12,6 +13,12 @@ export function Cloud(myr, base) {
         Cloud.SHADER = Cloud.makeShader(myr);
 
     const paintCloud = () => {
+        const Sphere = function(x, y, radius) {
+            this.x = x;
+            this.y = y;
+            this.radius = radius;
+        };
+
         const paintSphere = (x, y, radius) => {
             const step = Math.PI * -2 / Cloud.SPHERE_PRECISION;
             let dxEnd = 1;
@@ -26,8 +33,8 @@ export function Cloud(myr, base) {
 
                 myr.primitives.drawTriangleGradient(
                     new Myr.Color(
-                        0,
-                        0,
+                        0.5,
+                        0.5,
                         1,
                         1),
                     x,
@@ -49,20 +56,49 @@ export function Cloud(myr, base) {
             }
         };
 
-        const source = new myr.Surface(base, Math.round(base * 0.5));
+        const shape = new FractalNoise(Math.random(), 1 / Cloud.SPHERE_RADIUS_MAX * 3, 3);
+        const spheres = [];
+        let x = 0;
+        let xMin = 0;
+        let xMax = 0;
+        let yMin = 0;
+        let yMax = 0;
+
+        while (x < base) {
+            const amp = Math.max(0, 1 - (2 * (x / base) - 1) * (2 * (x / base) - 1));
+            const noiseY = 0.5 + 0.5 * shape.sample(x);
+            const y = -(noiseY * noiseY) * base * Cloud.HEIGHT_FACTOR * amp;
+            const radius = Cloud.SPHERE_RADIUS_MIN + (Cloud.SPHERE_RADIUS_MAX - Cloud.SPHERE_RADIUS_MIN) * Math.random() * amp;
+
+            x += radius * Cloud.SPACING;
+
+            const sphere = new Sphere(x, y - radius, radius);
+
+            spheres.push(sphere);
+
+            if (sphere.x - sphere.radius < xMin)
+                xMin = sphere.x - sphere.radius;
+            if (sphere.x + sphere.radius > xMax)
+                xMax = sphere.x + sphere.radius;
+            if (sphere.y - sphere.radius < yMin)
+                yMin = sphere.y - sphere.radius;
+            if (sphere.y + sphere.radius > yMax)
+                yMax = sphere.y + sphere.radius;
+
+            x += radius * Cloud.SPACING;
+        }
+
+        spheres[spheres.length - 1].y = -spheres[spheres.length - 1].radius;
+
+        const source = new myr.Surface(Math.round(xMax - xMin), Math.round(yMax - yMin));
         const surface = new myr.Surface(source.getWidth(), source.getHeight());
 
         source.bind();
-        source.setClearColor(Myr.Color.BLUE);
-        source.clear();
 
-        paintSphere(10, 10, 10);
-        paintSphere(30, 20, 20);
-        paintSphere(50, 40, 20);
+        for (const sphere of spheres)
+            paintSphere(sphere.x - xMin,sphere.y - yMin, sphere.radius);
 
         surface.bind();
-        surface.setClearColor(Myr.Color.RED);
-        surface.clear();
 
         Cloud.SHADER.setSurface("source", source);
         Cloud.SHADER.setSize(source.getWidth(), source.getHeight());
@@ -93,16 +129,45 @@ export function Cloud(myr, base) {
     };
 }
 
-Cloud.SPHERE_PRECISION = 16;
+Cloud.SPHERE_PRECISION = 24;
+Cloud.SPHERE_RADIUS_MIN = 12;
+Cloud.SPHERE_RADIUS_MAX = 40;
 Cloud.COLOR_BORDER = StyleUtils.getColor("--game-color-cloud-border");
 Cloud.COLOR_FILL = StyleUtils.getColor("--game-color-cloud-fill");
 Cloud.COLOR_SHADE = StyleUtils.getColor("--game-color-cloud-shade");
+Cloud.SPACING = 0.7;
+Cloud.HEIGHT_FACTOR = 0.2;
 Cloud.SHADER = null;
 Cloud.makeShader = myr => {
-    return new myr.Shader(
+    const shader = new myr.Shader(
         "void main() {" +
-        "color = texture(source, uv);" +
+        "mediump vec4 source = texture(source, uv).xyzw;" +
+        "mediump vec3 normal = normalize((source.xyz - vec3(0.5)) * 2.0);" +
+        "if (dot(normalize(vec3(0.5, -0.5, 1)), normal) < 0.5 * uv.y)" +
+        "color = vec4(rShade, gShade, bShade, aShade * source.w);" +
+        "else " +
+        "color = vec4(r, g, b, a * source.w);" +
         "}",
         ["source"],
-        []);
+        [
+            "r",
+            "g",
+            "b",
+            "a",
+            "rShade",
+            "gShade",
+            "bShade",
+            "aShade"
+        ]);
+
+    shader.setVariable("r", Cloud.COLOR_FILL.r);
+    shader.setVariable("g", Cloud.COLOR_FILL.g);
+    shader.setVariable("b", Cloud.COLOR_FILL.b);
+    shader.setVariable("a", Cloud.COLOR_FILL.a);
+    shader.setVariable("rShade", Cloud.COLOR_SHADE.r);
+    shader.setVariable("gShade", Cloud.COLOR_SHADE.g);
+    shader.setVariable("bShade", Cloud.COLOR_SHADE.b);
+    shader.setVariable("aShade", Cloud.COLOR_SHADE.a);
+
+    return shader;
 };
