@@ -5,38 +5,42 @@ import {getRawSprites} from "../utils/partLoader";
 
 export function SpriteSheet(myr) {
     const _atlas = {frames: {}};
+    const _names = [];
 
     const buildPacked = () => {
         const surfaces = [];
 
         for (const file of getRawSprites()) {
-            for (const frame of file.frames) {
-                const surface = new myr.Surface(file.header.width, file.header.height);
-                const name = file.name + '_' + file.frames.indexOf(frame);
-                surface.bind();
-                surface.clear();
+            if (!_names.includes(file.name)) {
+                _names.push(file.name);
+                for (const frame of file.frames) {
+                    const surface = new myr.Surface(file.header.width, file.header.height);
+                    const name = file.name + '_' + file.frames.indexOf(frame);
+                    surface.bind();
+                    surface.clear();
 
-                for (const chunk of frame.chunks) {
-                    if (chunk.type === 0x2005) {
-                        for (let x = 0; x < chunk.width; ++x)
-                            for (let y = 0; y < chunk.height; ++y) {
-                                myr.primitives.drawPoint(new Myr.Color(
-                                    chunk.pixels[y][x].r / 255,
-                                    chunk.pixels[y][x].g / 255,
-                                    chunk.pixels[y][x].b / 255,
-                                    chunk.pixels[y][x].a / 255
-                                ), x + chunk.xpos, y + chunk.ypos);
-                            }
-                        break;
+                    for (const chunk of frame.chunks) {
+                        if (chunk.type === 0x2005) {
+                            for (let x = 0; x < chunk.width; ++x)
+                                for (let y = 0; y < chunk.height; ++y) {
+                                    myr.primitives.drawPoint(new Myr.Color(
+                                        chunk.pixels[y][x].r / 255,
+                                        chunk.pixels[y][x].g / 255,
+                                        chunk.pixels[y][x].b / 255,
+                                        chunk.pixels[y][x].a / 255
+                                    ), x + chunk.xpos, y + chunk.ypos);
+                                }
+                            break;
+                        }
                     }
+                    surfaces.push({
+                        width: surface.getWidth(),
+                        height: surface.getHeight(),
+                        surface: surface,
+                        name: name,
+                        duration: frame.frameHeader.frameDuration
+                    });
                 }
-                surfaces.push({
-                    width: surface.getWidth(),
-                    height: surface.getHeight(),
-                    surface: surface,
-                    name: name,
-                    duration: frame.frameHeader.frameDuration
-                });
             }
         }
 
@@ -56,18 +60,27 @@ export function SpriteSheet(myr) {
         }
     };
 
-    this.getSurface = () => _spriteSheet;
+    const registerSprites = () => {
+        for (const name of _names) {
+            const spriteFrames = [];
+            let frameIndex = 0;
+            let frame = _atlas.frames[name + '_' + frameIndex];
 
-    this.getAtlas = () => _atlas;
+            while (frame != null) {
+                const spriteFrame = myr.makeSpriteFrame(_spriteSheet, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h, 0, 0, frame.duration * 0.001);
+
+                spriteFrames.push(spriteFrame);
+                frame = _atlas.frames[name + '_' + ++frameIndex];
+            }
+
+            myr.register(name, ...spriteFrames);
+        }
+    };
 
     const _packedSprites = buildPacked();
     const _spriteSheet = new myr.Surface(powerCeil(_packedSprites.width), powerCeil(_packedSprites.height));
 
     drawSheet();
 
-    // myr.bind();
-    // myr.setClearColor(Myr.Color.WHITE);
-    // myr.clear();
-    // _spriteSheet.draw(0,0);
-    // myr.flush();
+    registerSprites();
 }

@@ -1,6 +1,7 @@
 import {Objective} from "./objective";
 import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
+import * as Myr from "myr.js";
 
 /**
  * A mission consists of one or multiple objectives.
@@ -212,7 +213,7 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
 
 /**
  * Deserialize a mission.
- * @param {Object} buffer A byte buffer.
+ * @param {ByteBuffer} buffer A byte buffer.
  * @returns {Mission} The deserialized mission.
  */
 Mission.deserialize = buffer => {
@@ -232,4 +233,12 @@ Mission.deserialize = buffer => {
     let descr = buffer.readString();
 
     return new Mission(objectives, editables, physics, title, descr);
+};
+
+/**
+ * Create an empty mission.
+ * @returns {Mission} An empty mission.
+ */
+Mission.emptyMission = () => {
+    return new Mission([], [Editable.defaultEditable(new Myr.Vector(50, -10))], new PhysicsConfiguration(1), "New Mission", "Create your own mission!");
 };

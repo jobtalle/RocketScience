@@ -1,4 +1,4 @@
-// import atlas from "../assets/sprites/atlas"
+import atlas from "../assets/sprites/atlas"
 import {SpriteSheet} from "./sprites/spriteSheet";
 
 /**
@@ -7,12 +7,15 @@ import {SpriteSheet} from "./sprites/spriteSheet";
  * @constructor
  */
 export function Sprites(myr) {
-    // const _surface = new myr.Surface(Sprites.ATLAS_PATH);
-    const _spriteSheet = new SpriteSheet(myr);
+    const _surface = new myr.Surface(Sprites.ATLAS_PATH);
+
+    const buildPartSprites = () => {
+        const spriteSheet = new SpriteSheet(myr); //TODO: rewrite to function instead of object.
+    };
 
     const getFrame = (name, index) => {
         const frameName = name + '_' + index;
-        return _spriteSheet.getAtlas().frames[frameName];
+        return atlas.frames[frameName];
     };
 
     const registerSprite = name => {
@@ -23,7 +26,7 @@ export function Sprites(myr) {
 
         const spriteFrames = [];
         while (frame != null) {
-            let spriteFrame = myr.makeSpriteFrame(_spriteSheet.getSurface(), frame.frame.x, frame.frame.y,
+            let spriteFrame = myr.makeSpriteFrame(_surface, frame.frame.x, frame.frame.y,
                                                   frame.frame.w, frame.frame.h, 0, 0,
                                                   frame.duration * 0.001);
 
@@ -45,6 +48,8 @@ export function Sprites(myr) {
 
         return new myr.Sprite(name);
     };
+
+    buildPartSprites();
 }
 
 Sprites.ATLAS_PATH = "sprites.png";
