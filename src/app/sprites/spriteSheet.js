@@ -41,6 +41,8 @@ export function SpriteSheet(myr) {
                         duration: frame.frameHeader.frameDuration
                     });
                 }
+            } else {
+                console.log("DUPLICATE SPRITE NAME");
             }
         }
 

@@ -14,9 +14,10 @@ function PartLoader() {
     const _spriteRawFiles = [];
     const _guiRawFiles = [];
 
-    const _language = {};
     const _objects = [];
+    const _language = {};
     const _parts = {categories: []};
+    const _guiIcons = {};
 
     const isDuplicate = (label, array) => {
         for (const entry of array)
@@ -108,6 +109,10 @@ function PartLoader() {
                         for (const sprite of config.sprites[key]) {
                             const file = readAse(_spriteRawBuffers[sprite.name]);
                             file.name = sprite.name;
+                            if (_spriteRawFiles.includes(file)) {
+                                console.log("Duplicate sprite found!");
+                                continue;
+                            }
                             _spriteRawFiles.push(file);
                         }
     };
@@ -121,13 +126,47 @@ function PartLoader() {
             }
     };
 
+    const buildGuiIcons = () => {
+        const names = [];
+        for (const file of _guiRawFiles) {
+            if (!names.includes(file.name)) {
+                names.push(file.name);
+                for (const frame of file.frames) {
+                    const pixelArray = new Uint8ClampedArray(file.header.width * file.header.height * 4);
+                    for (const chunk of frame.chunks) {
+                        if (chunk.type === 0x2005) {
+                            for (let x = 0; x < chunk.width; ++x)
+                                for (let y = 0; y < chunk.height; ++y) {
+                                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4] = chunk.pixels[y][x].r;
+                                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 1] = chunk.pixels[y][x].g;
+                                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 2] = chunk.pixels[y][x].b;
+                                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 3] = chunk.pixels[y][x].a;
+                                }
+                        }
+                    }
+                    const imgData = new ImageData(pixelArray, file.header.width, file.header.height);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = file.header.width;
+                    canvas.height = file.header.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.putImageData(imgData, 0, 0);
+
+                    _guiIcons[file.name] = canvas.toDataURL();
+                }
+            } else {
+                console.log("Skipping duplicate icon name");
+            }
+        }
+    };
+
     const buildParts = () => {
         buildCategories();
         buildDefinitions();
         buildScripts();
         buildLanguage();
         buildSprites();
-        // buildGuiSprites();
+        buildGuiSprites();
+        buildGuiIcons();
 
         loadObjects(_objects, _parts);
 
@@ -188,6 +227,8 @@ function PartLoader() {
     this.getRawSprites = () => _spriteRawFiles;
 
     this.getRawGuiSprites = () => _guiRawFiles;
+
+    this.getGuiIcons = () => _guiIcons;
 }
 
 const _partLoader = new PartLoader();
@@ -216,4 +257,8 @@ export function getRawSprites() {
 
 export function getRawGuiSprites() {
     return _partLoader.getRawGuiSprites();
+}
+
+export function getGuiDataUrls() {
+    return _partLoader.getGuiIcons();
 }
