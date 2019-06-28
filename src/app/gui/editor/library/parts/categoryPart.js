@@ -1,18 +1,18 @@
-import {getString} from "../../../text/language";
-import {BudgetInventory} from "../../../mission/budget/budgetInventory";
-import {Budget} from "../../../mission/budget/budget";
-import {CategoryPartCountSetter} from "./categoryPartCountSetter";
-import {CategoryPartCount} from "./categoryPartCount";
+import {getString} from "../../../../text/language";
+import {BudgetInventory} from "../../../../mission/budget/budgetInventory";
+import {Budget} from "../../../../mission/budget/budget";
+import {CategoryPartCountSetter} from "./count/categoryPartCountSetter";
+import {CategoryPartCount} from "./count/categoryPartCount";
 
 /**
  * A part button used to instantiate a part.
  * @param {Object} part A part from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
- * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
+ * @param {Boolean} isEditable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function CategoryPart(part, setPart, info, editable) {
+export function CategoryPart(part, setPart, info, isEditable) {
     const _element = document.createElement("div");
 
     const onClick = () => {
@@ -67,7 +67,7 @@ export function CategoryPart(part, setPart, info, editable) {
 
         switch (budget.getType()) {
             case Budget.TYPE_INVENTORY:
-                if (editable) {
+                if (isEditable) {
                     const counter = new CategoryPartCount(budget.getCount(part.object), part.object, summary);
 
                     _element.appendChild(new CategoryPartCountSetter(budget, part.object, counter).getElement());

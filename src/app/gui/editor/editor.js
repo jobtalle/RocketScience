@@ -14,7 +14,7 @@ import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
 import {Data} from "../../file/data";
 import {DownloadBinary} from "../../utils/downloadBinary";
-import {Tabbar} from "./tabbar/tabbar";
+import {TabBar} from "./tabbar/tabBar";
 
 /**
  * Provides am editor for editing PCB's.
@@ -64,7 +64,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         world.getMission(),
         game,
         isMissionEditor);
-    const _tabbar = new Tabbar(
+    const _tabbar = new TabBar(
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
         world,

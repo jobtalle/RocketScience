@@ -7,6 +7,7 @@ import {Mission} from "../mission/mission";
 import {WebStorage} from "../storage/webStorage";
 import {MissionProgress} from "../mission/missionProgress";
 import {Story} from "../mission/story";
+import {PcbStorage} from "./pcbStorage";
 
 /**
  * The user information stored locally and online.
@@ -15,6 +16,7 @@ import {Story} from "../mission/story";
 export function User() {
     let _id = User.ID_ANONYMOUS_USER;
     let _avatarSprites = new AvatarSprites();
+    let _pcbStorage = new PcbStorage();
     let _webStorage = new WebStorage();
 
     const loadUserFromCookie = () => {
@@ -186,6 +188,31 @@ export function User() {
             _webStorage.setMissionIncomplete(missionProgress.getFileName());
 
         onComplete(true);
+    };
+
+    /**
+     * Store the PCB to storage.
+     * @param {String} pcbName The name of the PCB.
+     * @param {Pcb} pcb The PCB object.
+     */
+    this.savePCB = (pcbName, pcb) => {
+        const data = new Data();
+
+        pcb.serialize(data.getBuffer());
+        _webStorage.savePcb("test", data.toString())
+    };
+
+    /**
+     * Obtain a PCB from storage
+     * @param {String} pcbName The name of the PCB.
+     * @return {Pcb} The PCB.
+     */
+    this.getPCB = (pcbName) => {
+        const data = new Data();
+
+        data.fromString(_webStorage.getPcb(pcbName));
+
+        return Pcb.deserialize(data.getBuffer());
     };
 
     loadUserFromCookie();

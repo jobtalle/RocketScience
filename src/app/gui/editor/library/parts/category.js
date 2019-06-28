@@ -1,5 +1,5 @@
 import {CategoryTitle} from "./categoryTitle";
-import {getString} from "../../../text/language";
+import {getString} from "../../../../text/language";
 import {CategoryPartList} from "./categoryPartList";
 
 /**
@@ -7,14 +7,14 @@ import {CategoryPartList} from "./categoryPartList";
  * @param {Object} category A part category from parts.json.
  * @param {Function} setPart The function to be called when a part is selected.
  * @param {Info} info The information box.
- * @param {Boolean} editable A boolean indicating whether the displayed part budgets are editable.
+ * @param {Boolean} isEditable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function Category(category, setPart, info, editable) {
+export function Category(category, setPart, info, isEditable) {
     const _element = document.createElement("div");
-    const _partList = new CategoryPartList(category.parts, setPart, info, editable);
+    const _partList = new CategoryPartList(category.parts, setPart, info, isEditable);
 
-    const build = () => {
+    const make = () => {
         _element.className = Category.CLASS;
         _element.appendChild(new CategoryTitle(getString(category.label), _partList).getElement());
         _element.appendChild(_partList.getElement());
@@ -38,7 +38,7 @@ export function Category(category, setPart, info, editable) {
             _element.classList.add(Category.CLASS_EMPTY);
     };
 
-    build();
+    make();
 }
 
 Category.CLASS = "category";

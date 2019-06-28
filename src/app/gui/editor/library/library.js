@@ -3,8 +3,7 @@ import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../info/info";
-import {LibraryContents} from "./libraryContents";
-import {BudgetChooser} from "./budgetChooser";
+import {LibraryTabBar} from "./libraryTabBar";
 
 /**
  * An HTML based part library.
@@ -16,27 +15,13 @@ import {BudgetChooser} from "./budgetChooser";
  * @constructor
  */
 export function Library(editor, toolbar, info, overlay, isEditable) {
-    const setPart = part => {
-        toolbar.default();
-
-        editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
-    };
-
-    const setBudget = budget => {
-        editor.setBudget(budget);
-    };
-
     const _container = document.createElement("div");
-    const _contents = new LibraryContents(parts.categories, setPart, info, isEditable);
-    const _budgetChooser = isEditable ? new BudgetChooser(setBudget) : null;
+    const _libraryTab = new LibraryTabBar(editor, toolbar, info, isEditable);
 
     const build = () => {
         _container.id = Library.ID;
 
-        if (isEditable)
-            _container.appendChild(_budgetChooser.getElement());
-
-        _container.appendChild(_contents.getElement());
+        _container.appendChild(_libraryTab.getElement());
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
     };
@@ -47,10 +32,7 @@ export function Library(editor, toolbar, info, overlay, isEditable) {
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
-        _contents.setBudget(budget, summary);
-
-        if (_budgetChooser)
-            _budgetChooser.setBudget(budget);
+        _libraryTab.setBudget(budget, summary);
     };
 
     /**

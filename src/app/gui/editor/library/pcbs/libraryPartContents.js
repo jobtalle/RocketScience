@@ -1,16 +1,19 @@
-import {Category} from "./category";
+import {Category} from "../parts/category";
+import {BudgetChooser} from "../budgetChooser";
 
 /**
  * A scrolling list containing all library contents.
  * @param {Array} categories The categories containing all parts from parts.json.
  * @param {Function} setPart A function to call when a part should be set.
  * @param {Info} info The info object.
- * @param {Boolean} editable A boolean indicating whether the part budget is editable.
+ * @param {Boolean} isEditable A boolean indicating whether the part budget is editable.
  * @constructor
  */
-export function LibraryContents(categories, setPart, info, editable) {
+export function LibraryPartContents(categories, setPart, editor, info, isEditable) {
     const _element = document.createElement("div");
     const _categories = [];
+
+    const _budgetChooser = isEditable ? new BudgetChooser((budget) => editor.setBudget(budget)) : null;
 
     const scroll = delta => {
         _element.scrollTop += delta;
@@ -21,16 +24,19 @@ export function LibraryContents(categories, setPart, info, editable) {
     };
 
     const make = () => {
-        _element.id = LibraryContents.ID;
+        _element.id = LibraryPartContents.ID;
         _element.addEventListener("wheel", event => {
             if (event.deltaY < 0)
-                scroll(-LibraryContents.SCROLL_SPEED);
+                scroll(-LibraryPartContents.SCROLL_SPEED);
             else
-                scroll(LibraryContents.SCROLL_SPEED);
+                scroll(LibraryPartContents.SCROLL_SPEED);
         });
 
+        if (isEditable)
+            _element.appendChild(_budgetChooser.getElement());
+
         for (const category of categories) {
-            const newCategory = new Category(category, setPart, info, editable);
+            const newCategory = new Category(category, setPart, info, isEditable);
 
             _categories.push(newCategory);
 
@@ -54,10 +60,13 @@ export function LibraryContents(categories, setPart, info, editable) {
             category.setBudget(budget, summary);
 
         scrollReset();
+
+        if (_budgetChooser)
+            _budgetChooser.setBudget(budget);
     };
 
     make();
 }
 
-LibraryContents.ID = "contents";
-LibraryContents.SCROLL_SPEED = 32;
+LibraryPartContents.ID = "part-contents";
+LibraryPartContents.SCROLL_SPEED = 32;

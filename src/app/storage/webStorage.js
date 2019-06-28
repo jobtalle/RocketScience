@@ -100,7 +100,8 @@ export function WebStorage() {
 
     /**
      * Obtain the PCB data.
-     * @param {String} pcbName The PCB data.
+     * @param {String} pcbName The PCB name.
+     * @return {String} The PCB data.
      */
     this.getPcb = (pcbName) => {
         getItem(WebStorage.PREFIX_PCB + pcbName);
@@ -113,6 +114,43 @@ export function WebStorage() {
     this.getAllPcbs = (onLoad) => {
         for (const key in getAllKeys()) {
             if (key.startsWith(WebStorage.PREFIX_PCB))
+                onLoad(getItem(key));
+        }
+    };
+
+    /**
+     * Remove the subPCB from storage.
+     * @param {String} pcbName The name of the subPCB
+     */
+    this.removeSubPcb = (pcbName) => {
+        removeItem(WebStorage.PREFIX_SUB_PCB + pcbName);
+    };
+
+    /**
+     * Store the subPCB to storage.
+     * @param {String} pcbName The name of the subPCB.
+     * @param {String} data The data of the subPCB.
+     */
+    this.saveSubPcb = (pcbName, data) => {
+        setItem(WebStorage.PREFIX_SUB_PCB + pcbName, data);
+    };
+
+    /**
+     * Obtain the subPCB.
+     * @param {String} pcbName The name of the subPCB.
+     * @return {String} The subPCB data.
+     */
+    this.getSubPcb = (pcbName) => {
+        return getItem(WebStorage.PREFIX_SUB_PCB + pcbName);
+    };
+
+    /**
+     * Obtain all subPCBs from storage.
+     * @param {Function} onLoad Function that is called for each loaded subPCB.
+     */
+    this.getAllSubPcbs = (onLoad) => {
+        for (const key in getAllKeys()) {
+            if (key.startsWith(WebStorage.PREFIX_SUB_PCB))
                 onLoad(getItem(key));
         }
     };
@@ -149,3 +187,4 @@ WebStorage.PREFIX_COMPLETED_MISSION = "completed-mission-";
 WebStorage.PREFIX_MISSION_PROGRESS = "mission-progress-";
 WebStorage.PREFIX_CUSTOM_MISSION = "custom-mission-";
 WebStorage.PREFIX_PCB = "PCB-";
+WebStorage.PREFIX_SUB_PCB = "SUB-PCB";

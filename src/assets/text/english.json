@@ -46,6 +46,9 @@
   "TABPAGE_PHYSICS_LABEL": "The factor of Earth's gravity.",
   "TABPAGE_DESCRIPTION_LABEL": "The description of the mission.",
 
+  "LIBRARY_TABBAR_PARTS": "Show all the parts",
+  "LIBRARY_TABBAR_PCBS": "Show all the stored PCBs",
+
   "CATEGORY_INPUT": "Input",
   "CATEGORY_OUTPUT": "Output",
   "CATEGORY_LOGIC": "Logic",
