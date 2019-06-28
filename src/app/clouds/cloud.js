@@ -53,8 +53,8 @@ export function Cloud(myr, base) {
         const surface = new myr.Surface(source.getWidth(), source.getHeight());
 
         source.bind();
-        surface.setClearColor(Myr.Color.BLUE);
-        surface.clear();
+        source.setClearColor(Myr.Color.BLUE);
+        source.clear();
 
         paintSphere(10, 10, 10);
         paintSphere(30, 20, 20);
@@ -65,6 +65,7 @@ export function Cloud(myr, base) {
         surface.clear();
 
         Cloud.SHADER.setSurface("source", source);
+        Cloud.SHADER.setSize(source.getWidth(), source.getHeight());
         Cloud.SHADER.draw(0, 0);
 
         myr.flush();
