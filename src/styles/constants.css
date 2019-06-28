@@ -12,6 +12,10 @@
 
     --library-width: 320px;
 
+    --pcb-grid-cell-width: var(--library-width);
+    --pcb-grid-cells-per-row: 1;
+
+
     --part-grid-cell-size: 64px;
     --part-grid-cells-per-row: 5;
     --part-grid-count-size: 14px;

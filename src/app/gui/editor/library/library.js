@@ -1,9 +1,8 @@
 import "../../../../styles/library.css"
-import parts from "../../../../assets/parts.json"
-import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../info/info";
 import {LibraryTabBar} from "./libraryTabBar";
+import {LibraryTabContents} from "./contents/libraryTabContents";
 
 /**
  * An HTML based part library.
@@ -16,12 +15,14 @@ import {LibraryTabBar} from "./libraryTabBar";
  */
 export function Library(editor, toolbar, info, overlay, isEditable) {
     const _container = document.createElement("div");
-    const _libraryTab = new LibraryTabBar(editor, toolbar, info, isEditable);
+    const _libraryContent = new LibraryTabContents();
+    const _libraryTab = new LibraryTabBar(editor, toolbar, info, _libraryContent, isEditable);
 
     const build = () => {
         _container.id = Library.ID;
 
         _container.appendChild(_libraryTab.getElement());
+        _container.appendChild(_libraryContent.getElement());
         _container.appendChild(info.getElement());
         _container.appendChild(info.getExtension());
     };

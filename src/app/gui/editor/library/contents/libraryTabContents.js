@@ -3,8 +3,20 @@ export function LibraryTabContents() {
     const _element = document.createElement("div");
     let _contents = null;
 
+    const scroll = delta => {
+        _element.scrollTop += delta;
+    };
+
     const make = () => {
         _element.id = LibraryTabContents.ID;
+
+        _element.addEventListener("wheel", event => {
+            if (event.deltaY < 0)
+                scroll(-LibraryTabContents.SCROLL_SPEED);
+            else
+                scroll(LibraryTabContents.SCROLL_SPEED);
+        });
+
     };
 
     /**
@@ -29,3 +41,4 @@ export function LibraryTabContents() {
 }
 
 LibraryTabContents.ID = "contents";
+LibraryTabContents.SCROLL_SPEED = 35;

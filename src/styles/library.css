@@ -11,11 +11,71 @@
     z-index: var(--z-index-top);
 }
 
+/* Tab Bar*/
+
+#library .tab-bar {
+position: relative;
+top: 0;
+width: 100%;
+min-height: 35px;
+max-height: 35px;
+background-color: var(--library-color-category);
+}
+
+#library .tab-bar .button {
+display: inline-block;
+}
+
+#library #contents {
+overflow: hidden;
+flex-grow: 1;
+}
+
+/*PCB Contents*/
+
+#library .drawer-title {
+    padding: var(--text-padding);
+    background-color: var(--library-color-category);
+    color: var(--text-color-light);
+    font-weight: bold;
+    font-size: var(--font-size-headers);
+}
+
+#pcb-contents .drawer.empty {
+display: none;
+}
+
+#pcb-contents .drawer .pcb-list {
+    display: grid;
+    grid-template-columns: repeat(var(--pcb-grid-cells-per-row), var(--part-grid-cell-size));
+}
+
+#pcb-contents .drawer .pcb-list.closed {
+    display: none;
+}
+
+#pcb-contents .drawer .pcb-list .drawer-pcb {
+    display: block;
+    cursor: pointer;
+    background-color: var(--library-color-part-background);
+    position: relative;
+    height: 64px;
+    width: 100%;
+}
+
+#pcb-contents .drawer .pcb-list .drawer-pcb:hover {
+    background-color: var(--library-color-part-background-hover);
+}
+
+/*Part Contents*/
+
 #library #budget-chooser {
+    height: 30px;
     width: 100%;
 }
 
 #library #budget-chooser select {
+    height: 30px;
     width: 100%;
 }
 
@@ -27,49 +87,44 @@
     font-size: var(--font-size-headers);
 }
 
-#library #contents {
-    overflow: hidden;
-    flex-grow: 1;
-}
-
-#library #contents .category.empty {
+#library #contents #part-contents .category.empty {
     display: none;
 }
 
-#library #contents .category .part-list {
+#library #contents #part-contents .category .part-list {
     display: grid;
     grid-template-columns: repeat(var(--part-grid-cells-per-row), var(--part-grid-cell-size));
 }
 
-#library #contents .category .part-list.closed {
+#library #contents #part-contents .category .part-list.closed {
     display:none;
 }
 
-#library #contents .category .part-list .part {
+#library #contents #part-contents .category .part-list .part {
     display: block;
     cursor: pointer;
     background-color: var(--library-color-part-background);
     position: relative;
 }
 
-#library #contents .category .part-list .part .sprite:hover {
+#library #contents #part-contents .category .part-list .part .sprite:hover {
     background-color: var(--library-color-part-background-hover);
 }
 
-#library #contents .category .part-list .part.not-available .sprite {
+#library #contents #part-contents .category .part-list .part.not-available .sprite {
     background-color: var(--library-color-part-background-unavailable);
     pointer-events: none;
 }
 
-#library #contents .category .part-list .part.not-available .sprite:hover {
+#library #contents #part-contents .category .part-list .part.not-available .sprite:hover {
     background-color: inherit;
 }
 
-#library #contents .category .part-list .part.not-specified {
+#library #contents #part-contents .category .part-list .part.not-specified {
     display: none;
 }
 
-#library #contents .category .part-list .part .count {
+#library #contents #part-contents .category .part-list .part .count {
     min-width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);
@@ -83,23 +138,23 @@
     top: 0;
 }
 
-#library #contents .category .part-list .part .count.negative {
+#library #contents #part-contents .category .part-list .part .count.negative {
     background-color: var(--library-color-count-background-negative);
 }
 
-#library #contents .category .part-list .part.not-available .count {
+#library #contents #part-contents .category .part-list .part.not-available .count {
     background-color: var(--library-color-count-background-unavailable);
 }
 
-#library #contents .category .part-list .part .count-setter {
+#library #contents #part-contents .category .part-list .part .count-setter {
     width: 100%;
 }
 
-#library #contents .category .part-list .part .count-setter input {
+#library #contents #part-contents .category .part-list .part .count-setter input {
     width: 50%;
     box-sizing: border-box;
 }
 
-#library #contents .category .part-list .part .count-setter button {
+#library #contents #part-contents .category .part-list .part .count-setter button {
     width: 50%;
 }

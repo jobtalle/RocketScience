@@ -15,22 +15,8 @@ export function LibraryPartContents(categories, setPart, editor, info, isEditabl
 
     const _budgetChooser = isEditable ? new BudgetChooser((budget) => editor.setBudget(budget)) : null;
 
-    const scroll = delta => {
-        _element.scrollTop += delta;
-    };
-
-    const scrollReset = () => {
-        _element.scrollTop = 0;
-    };
-
     const make = () => {
         _element.id = LibraryPartContents.ID;
-        _element.addEventListener("wheel", event => {
-            if (event.deltaY < 0)
-                scroll(-LibraryPartContents.SCROLL_SPEED);
-            else
-                scroll(LibraryPartContents.SCROLL_SPEED);
-        });
 
         if (isEditable)
             _element.appendChild(_budgetChooser.getElement());
@@ -58,8 +44,6 @@ export function LibraryPartContents(categories, setPart, editor, info, isEditabl
     this.setBudget = (budget, summary) => {
         for (const category of _categories)
             category.setBudget(budget, summary);
-
-        scrollReset();
 
         if (_budgetChooser)
             _budgetChooser.setBudget(budget);

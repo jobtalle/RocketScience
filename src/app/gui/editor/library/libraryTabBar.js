@@ -1,30 +1,28 @@
 import {LibraryTabButton} from "./libraryTabButton";
 import {getString} from "../../../text/language";
-import {LibraryPartContents} from "./pcbs/libraryPartContents";
-import {LibraryPcbContents} from "./pcbs/libraryPcbContents";
+import {LibraryPartContents} from "./contents/libraryPartContents";
+import {LibraryPcbContents} from "./contents/libraryPcbContents";
 import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
-import {LibraryTabContents} from "./pcbs/libraryTabContents";
 
 
-export function LibraryTabBar(editor, toolbar, info, isEditable) {
+export function LibraryTabBar(editor, toolbar, info, tabContent, isEditable) {
     const _element = document.createElement("div");
     const _libraryTab = new LibraryPartContents(parts.categories, (part) => {
         toolbar.default();
 
         editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
     }, editor, info, isEditable);
-    const _content = new LibraryTabContents();
 
     const _tabs = [
         new LibraryTabButton(
-            (content) => _content.setContents(content.getElement()),
+            (content) => tabContent.setContents(content.getElement()),
             getString("LIBRARY_TABBAR_PARTS"),
             "library-tabbar-parts",
             _libraryTab
         ),
         new LibraryTabButton(
-            (content) => _content.setContents(content.getElement()),
+            (content) => tabContent.setContents(content.getElement()),
             getString("LIBRARY_TABBAR_PCBS"),
             "library-tabbar-pcbs",
             new LibraryPcbContents([], info)
@@ -32,14 +30,12 @@ export function LibraryTabBar(editor, toolbar, info, isEditable) {
     ];
 
     const make = () => {
-        _element.class = LibraryTabBar.CLASS;
+        _element.className = LibraryTabBar.CLASS;
 
-        _content.setContents(_libraryTab.getElement());
+        tabContent.setContents(_libraryTab.getElement());
 
         for (const button of _tabs)
             _element.appendChild(button.getElement());
-
-        _element.appendChild(_content.getElement());
     };
 
     /**
@@ -60,4 +56,4 @@ export function LibraryTabBar(editor, toolbar, info, isEditable) {
     make();
 }
 
-LibraryTabBar.CLASS = "tabbar";
+LibraryTabBar.CLASS = "tab-bar";

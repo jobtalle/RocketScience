@@ -6,7 +6,7 @@ export function Drawer(name, info) {
     const _pcbList = new DrawerPcbList(info);
 
     const make = () => {
-        _element.class = Drawer.CLASS;
+        _element.className = Drawer.CLASS;
         _element.appendChild(new DrawerTitle("title", _pcbList).getElement());
         _element.appendChild(_pcbList.getElement());
     };
