@@ -391,10 +391,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * @param {Boolean} isCam A boolean indicating whether this is a camera press.
      */
     this.onMousePress = (x, y, isCam) => {
-        if (isCam || !mouseDown(x, y)) {
+        if (isCam) {
             view.onMouseMove(x, y);
             view.onMousePress();
-        }
+        } else
+            mouseDown(x, y);
     };
 
     /**
