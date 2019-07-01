@@ -1,6 +1,6 @@
 import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
-import Myr from "myr.js"
+import Myr from "myr.js";
 import {getValidOrigin} from "../../../mission/editable/editableEscaper";
 import {getValidRegion} from "../../../mission/editable/editableRegionShrinker";
 
@@ -11,15 +11,14 @@ import {getValidRegion} from "../../../mission/editable/editableRegionShrinker";
  * @param {Myr.Vector} cursor The cursor position in cells.
  * @param {PcbEditor} editor A PCB editor.
  * @param {View} view The editor view.
- * @param {Boolean} hover Whether or not the cursor is hovering over the movable area.
  * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditorMove(renderContext, pcb, cursor, editor, view, hover, isMissionEditor) {
+export function PcbEditorMove(renderContext, pcb, cursor, editor, view, isMissionEditor) {
     const SPRITE_MOVE = renderContext.getSprites().getSprite("pcbMove");
     const SPRITE_RESIZE = renderContext.getSprites().getSprite("pcbAreaExtend");
 
-    let _cursorInFrame = hover;
+    let _cursorInFrame = editor.getHover();
     let _mode = PcbEditorMove.NOT_MOVABLE;
     let _dragging = null;
     let _moveStart = new Myr.Vector(0, 0);
@@ -113,12 +112,12 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view, hover, i
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
                 cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
                 cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
-                1))
+                PcbEditorMove.MARGIN_MOVE))
                 _mode = PcbEditorMove.REGION_MOVE;
             else if (isMissionEditor && editor.getEditable().getRegion().containsPoint(
                 cursor.x * Scale.METERS_PER_POINT + editor.getEditable().getOffset().x + editor.getEditable().getRegion().getOrigin().x,
                 cursor.y * Scale.METERS_PER_POINT + editor.getEditable().getOffset().y + editor.getEditable().getRegion().getOrigin().y,
-                5)) {
+                PcbEditorMove.MARGIN_RESIZE)) {
                 _mode = PcbEditorMove.REGION_RESIZE;
 
                 setResizeQuadrant();
@@ -269,6 +268,22 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view, hover, i
     };
 
     /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return !(_mode === PcbEditorMove.REGION_RESIZE || _mode === PcbEditorMove.REGION_MOVE);
+    };
+
+    /**
+     * Return the current mode of the move editor.
+     * @returns {Number}
+     */
+    this.getMode = () => {
+        return _mode;
+    };
+
+    /**
      * Draw this editor.
      */
     this.draw = () => {
@@ -329,3 +344,6 @@ PcbEditorMove.BIT_MASK_LEFT = 0x01;
 PcbEditorMove.BIT_MASK_RIGHT = 0x02;
 PcbEditorMove.BIT_MASK_UP = 0x04;
 PcbEditorMove.BIT_MASK_DOWN = 0x08;
+
+PcbEditorMove.MARGIN_MOVE = 1;
+PcbEditorMove.MARGIN_RESIZE = 5;
