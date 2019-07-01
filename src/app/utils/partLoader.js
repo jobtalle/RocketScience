@@ -1,9 +1,10 @@
 import JSZip from "jszip";
 import {loadObjects} from "../part/objects";
 import {readAse} from "../sprites/asereader/aseReader";
-import {forChunkPixels} from "./aseutils";
+import {forAllIcons, forAllSprites, forChunkPixels} from "./aseutils";
 import {setLanguage} from "../text/language";
 import {registerSprites} from "../sprites/registerSprites";
+import {pixelArrayToBase64} from "./pixelArrayToBase64";
 
 /**
  * Load the parts from all mods (in .zip format).
@@ -113,32 +114,27 @@ export function loadParts(mods, language, renderContext, onLoad) {
     };
 
     const readSpriteFiles = () => {
-        for (const category of _parts.categories)
-            for (const part of category.parts)
-                for (const config of part.configurations)
-                    for (const key in config.sprites)
-                        for (const sprite of config.sprites[key]) {
-                            const file = readAse(_spriteRawBuffers[sprite.name]);
+        forAllSprites(_parts, sprite => {
+            const file = readAse(_spriteRawBuffers[sprite.name]);
 
-                            file.name = sprite.name;
-                            if (!isDuplicateName(file.name, _spriteRawFiles))
-                                _spriteRawFiles.push(file);
-                            else
-                                console.log("Duplicate sprite found!");
-                        }
+            file.name = sprite.name;
+            if (!isDuplicateName(file.name, _spriteRawFiles))
+                _spriteRawFiles.push(file);
+            else
+                console.log("Duplicate sprite found!");
+        });
     };
 
     const readGuiSpriteFiles = () => {
-        for (const category of _parts.categories)
-            for (const part of category.parts) {
-                const file = readAse(_spriteRawBuffers[part.icon]);
+        forAllIcons(_parts, part => {
+            const file = readAse(_spriteRawBuffers[part.icon]);
 
-                file.name = part.icon;
-                if (!isDuplicateName(file.name, _guiRawFiles))
-                    _guiRawFiles.push(file);
-                else
-                    console.log("Duplicate icon sprite found!");
-            }
+            file.name = part.icon;
+            if (!isDuplicateName(file.name, _guiRawFiles))
+                _guiRawFiles.push(file);
+            else
+                console.log("Duplicate icon sprite found!");
+        });
     };
 
     const buildGuiIcons = () => {
@@ -153,15 +149,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
                     pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 3] = chunk.pixels[y][x].a;
                 });
 
-                const imgData = new ImageData(pixelArray, file.header.width, file.header.height);
-                const canvas = document.createElement('canvas');
-
-                canvas.width = file.header.width;
-                canvas.height = file.header.height;
-                const ctx = canvas.getContext('2d');
-                ctx.putImageData(imgData, 0, 0);
-
-                _guiIcons[file.name] = canvas.toDataURL();
+                _guiIcons[file.name] = pixelArrayToBase64(pixelArray, file.header.width, file.header.height)
             }
     };
 
