@@ -266,6 +266,8 @@ export function World(renderContext, missionProgress) {
                 _controllerState.tick();
         }
 
+        let renderClouds = _view.getOrigin().y;
+        console.log(_view.getOrigin().y);
         _surface.bind();
         _surface.clear();
 

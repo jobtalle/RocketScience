@@ -1,33 +1,47 @@
 /**
  * A physics configuration.
- * @param {Number} gravity The gravity constant multiplier.
+ * @param {Number} gravityFactor The gravity constant multiplier.
+ * @param {Number} atmosphereHeight The height at which the atmosphere density starts to drop in meters.
  * @constructor
  */
 
-export function PhysicsConfiguration(gravity) {
-    let _factor = gravity;
+export function PhysicsConfiguration(gravityFactor, atmosphereHeight) {
     let _isEdited = false;
 
     /**
      * Get the gravity constant.
      * @returns {Number} The gravity constant.
      */
-    this.getGravity = () => _factor * PhysicsConfiguration.GRAVITY_CONSTANT;
+    this.getGravity = () => gravityFactor * PhysicsConfiguration.GRAVITY_CONSTANT;
 
     /**
      * Get the gravity factor.
       * @returns {Number} The gravity factor.
      */
-    this.getGravityFactor = () => _factor;
+    this.getGravityFactor = () => gravityFactor;
+
+    /**
+     * Get the atmosphere height.
+     * @returns {Number} The atmosphere height in meters.
+     */
+    this.getAtmosphereHeight = () => atmosphereHeight;
 
     /**
      * Set the gravity factor.
      * @param {Number} factor The gravity factor.
      */
     this.setGravityFactor = factor => {
-        _factor = factor;
+        gravityFactor = factor;
+
         _isEdited = true;
     };
+
+    /**
+     * Set the atmosphere height.
+     * @param {Number} height The new atmosphere height in meters.
+     * @returns {*}
+     */
+    this.setAtmosphereHeight = height => atmosphereHeight = height;
 
     /**
      * Check whether the physics configuration has been edited (mission editor only).
@@ -40,7 +54,8 @@ export function PhysicsConfiguration(gravity) {
      * @param {ByteBuffer} buffer A byte buffer to serialize to.
      */
     this.serialize = buffer => {
-        buffer.writeFloat(_factor);
+        buffer.writeFloat(gravityFactor);
+        buffer.writeFloat(atmosphereHeight);
     };
 }
 
@@ -49,9 +64,9 @@ export function PhysicsConfiguration(gravity) {
  * @param {ByteBuffer} buffer A byte buffer to serialize from.
  */
 PhysicsConfiguration.deserialize = buffer => {
-    let gravity = buffer.readFloat();
-
-    return new PhysicsConfiguration(gravity);
+    return new PhysicsConfiguration(
+        buffer.readFloat(),
+        buffer.readFloat());
 };
 
 PhysicsConfiguration.GRAVITY_CONSTANT = 9.81;

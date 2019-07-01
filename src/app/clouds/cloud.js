@@ -108,6 +108,12 @@ export function Cloud(myr, base) {
     };
 
     /**
+     * Get the base size of this cloud.
+     * @returns {Number} The base width in pixels.
+     */
+    this.getBase = () => base;
+
+    /**
      * Free all resources maintained by this cloud.
      */
     this.free = () => {
