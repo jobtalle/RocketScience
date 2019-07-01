@@ -23,26 +23,27 @@ def pack_missions():
 
     story_list = []
 
-    for dirName in os.listdir(DEST_DIR):
-        if not os.path.isdir(os.path.join(DEST_DIR, dirName)):
-            continue
-
-        file_list = []
-        story = {'label': dirName}
-
-        for fileName in os.listdir(os.path.join(DEST_DIR, dirName)):
-            if not fileName.endswith(MISSION_EXTENSION):
+    if os.path.isdir(DEST_DIR):
+        for dirName in os.listdir(DEST_DIR):
+            if not os.path.isdir(os.path.join(DEST_DIR, dirName)):
                 continue
 
-            mission = {"title": fileName.split('.')[0],
-                       "file": os.path.join(MISSION_DIR, dirName, fileName)}
+            file_list = []
+            story = {'label': dirName}
 
-            file_list.append(mission)
+            for fileName in os.listdir(os.path.join(DEST_DIR, dirName)):
+                if not fileName.endswith(MISSION_EXTENSION):
+                    continue
 
-            print('- \'' + os.path.join(MISSION_DIR, dirName, fileName) + '\'')
+                mission = {"title": fileName.split('.')[0],
+                           "file": os.path.join(MISSION_DIR, dirName, fileName)}
 
-        story['missions'] = file_list
-        story_list.append(story)
+                file_list.append(mission)
+
+                print('- \'' + os.path.join(MISSION_DIR, dirName, fileName) + '\'')
+
+            story['missions'] = file_list
+            story_list.append(story)
 
     missions = {'stories': story_list}
 
