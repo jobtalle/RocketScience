@@ -15,6 +15,8 @@ import {pixelArrayToBase64} from "./pixelArrayToBase64";
  */
 export function loadParts(mods, language, renderContext, onLoad) {
     let _counter = 0;
+    let _modsLoaded = 0;
+    let _partBuilt = false;
 
     const _categoriesRaw = [];
     const _scriptsRaw = [];
@@ -154,6 +156,8 @@ export function loadParts(mods, language, renderContext, onLoad) {
     };
 
     const buildParts = () => {
+        _partBuilt = true;
+
         buildCategories();
         buildDefinitions();
         buildScripts();
@@ -172,18 +176,18 @@ export function loadParts(mods, language, renderContext, onLoad) {
         file.async("string").then(text => {
             array.push(text);
 
-            if (--_counter === 0)
+            if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();
         });
     };
 
-    const addRawBuffer = (file, path, object) => {
+    const addRawBuffer = (file, path, dict) => {
         ++_counter;
         file.async("arraybuffer").then(buffer => {
             const name = path.split('/').pop().split('.')[0];
-            object[name] = buffer;
+            dict[name] = buffer;
 
-            if (--_counter === 0)
+            if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();
         });
     };
@@ -193,18 +197,23 @@ export function loadParts(mods, language, renderContext, onLoad) {
             fetch(modPath)
                 .then(response => response.arrayBuffer())
                 .then(buffer => JSZip.loadAsync(buffer))
-                .then(zip => zip.forEach((path, file) => {
-                    if (path.endsWith("categories.json"))
-                        addRaw(file, _categoriesRaw);
-                    else if (path.endsWith(".js"))
-                        addRaw(file, _scriptsRaw);
-                    else if (path.endsWith(language))
-                        addRaw(file, _languageRaw);
-                    else if (path.endsWith("definition.json"))
-                        addRaw(file, _definitionsRaw);
-                    else if (path.endsWith(".aseprite") || path.endsWith(".ase"))
-                        addRawBuffer(file, path, _spriteRawBuffers);
-                }));
+                .then(zip => {
+                    zip.forEach((path, file) => {
+                        if (path.endsWith("categories.json"))
+                            addRaw(file, _categoriesRaw);
+                        else if (path.endsWith(".js"))
+                            addRaw(file, _scriptsRaw);
+                        else if (path.endsWith(language))
+                            addRaw(file, _languageRaw);
+                        else if (path.endsWith("definition.json"))
+                            addRaw(file, _definitionsRaw);
+                        else if (path.endsWith(".aseprite") || path.endsWith(".ase"))
+                            addRawBuffer(file, path, _spriteRawBuffers);
+                    });
+                    
+                    if (++_modsLoaded === mods.length && _counter === 0 && _partBuilt === false)
+                        buildParts();
+                });
     };
 
     loadRawFiles();

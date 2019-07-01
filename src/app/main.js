@@ -11,9 +11,6 @@ import {loadParts} from "./utils/partLoader";
 
 const start = (renderContext) => {
     const user = new User();
-    // const renderContext = new RenderContext(
-    //     document.getElementById("renderer"),
-    //     document.getElementById("overlay"));
     const input = new Input(window, renderContext);
     const game = new Game(renderContext, input, user);
 
