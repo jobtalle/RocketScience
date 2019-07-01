@@ -21,10 +21,11 @@ import {TabBar} from "./tabbar/tabBar";
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.
+ * @param {User} user The user.
  * @param {Boolean} isMissionEditor Shows whether the editor should show functionality for editing missions.
  * @constructor
  */
-export function Editor(renderContext, world, game, isMissionEditor) {
+export function Editor(renderContext, world, game, user, isMissionEditor) {
     const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
     const _info = new Info(_overlay);
     const _view = new View(
@@ -52,7 +53,9 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _editables,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
+        world,
         game,
+        user,
         isMissionEditor);
     const _library = new Library(
         _pcbEditor,
@@ -262,18 +265,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.onKeyEvent = event => {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
-
-        // TODO: REMOVE THIS
-        if (event.down) switch(event.key) {
-            case Editor.KEY_MISSION_DOWNLOAD:
-                const missionData = new Data();
-
-                world.getMission().serialize(missionData.getBuffer());
-
-                DownloadBinary(missionData.getBlob(), world.getMission().getTitle().replace(/[\\/:\*\?"<>\|\s+]/g, '').toLowerCase() + ".bin");
-
-                return;
-        }
     };
 
     /**

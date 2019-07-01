@@ -3,25 +3,25 @@
  * @param {Function} onClick A function to execute when the button is active.
  * @param {String} toolTip A tool tip message.
  * @param {String} spriteClass The spriteClass class.
- * @param {TabbarButton.ToggleGroup} toggleGroup The toggle group to assign this button to.
+ * @param {TabBarButton.ToggleGroup} toggleGroup The toggle group to assign this button to.
  * @constructor
  */
-export function TabbarButton(onClick, toolTip, spriteClass, toggleGroup) {
+export function TabBarButton(onClick, toolTip, spriteClass, toggleGroup) {
     const _element = document.createElement("div");
 
     const build = () => {
-        _element.classList.add(TabbarButton.CLASS, "spriteClass", spriteClass);
+        _element.classList.add(TabBarButton.CLASS, "spriteClass", spriteClass);
         _element.title = toolTip;
 
         _element.onclick = () => {
-            if (_element.classList.contains(TabbarButton.CLASS_ACTIVE))
+            if (_element.classList.contains(TabBarButton.CLASS_ACTIVE))
                 onClick(false);
             else
                 onClick(true);
 
             toggleGroup.press(_element);
 
-            _element.classList.toggle(TabbarButton.CLASS_ACTIVE);
+            _element.classList.toggle(TabBarButton.CLASS_ACTIVE);
         };
 
         toggleGroup.add(_element);
@@ -36,14 +36,14 @@ export function TabbarButton(onClick, toolTip, spriteClass, toggleGroup) {
     build();
 }
 
-TabbarButton.CLASS_ACTIVE = "active";
+TabBarButton.CLASS_ACTIVE = "active";
 
 /**
  * Buttons constructed with a reference to this toggle group will become inactive
  * when another button in this group is pressed.
  * @constructor
  */
-TabbarButton.ToggleGroup = function() {
+TabBarButton.ToggleGroup = function() {
     const _buttons = [];
 
     this.add = button => _buttons.push(button);
@@ -57,4 +57,4 @@ TabbarButton.ToggleGroup = function() {
     };
 };
 
-TabbarButton.CLASS = "button";
+TabBarButton.CLASS = "button";

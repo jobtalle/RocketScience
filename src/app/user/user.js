@@ -195,7 +195,7 @@ export function User() {
      * @param {String} pcbName The name of the PCB.
      * @param {Pcb} pcb The PCB object.
      */
-    this.savePCB = (pcbName, pcb) => {
+    this.savePcb = (pcbName, pcb) => {
         const data = new Data();
 
         pcb.serialize(data.getBuffer());
@@ -207,7 +207,7 @@ export function User() {
      * @param {String} pcbName The name of the PCB.
      * @return {Pcb} The PCB.
      */
-    this.getPCB = (pcbName) => {
+    this.getPcb = (pcbName) => {
         const data = new Data();
 
         data.fromString(_webStorage.getPcb(pcbName));

@@ -1,5 +1,5 @@
 import "../../../../styles/tabbar.css";
-import {TabbarButton} from "./tabbarButton";
+import {TabBarButton} from "./tabBarButton";
 import {PhysicsPage} from "./pages/physicsPage";
 import {getString} from "../../../text/language";
 import {DescriptionPage} from "./pages/descriptionPage";
@@ -14,18 +14,18 @@ import {DescriptionPage} from "./pages/descriptionPage";
  */
 export function TabBar(overlay, xPosition, world, isMissionEditor) {
     const _container = document.createElement("div");
-    const _toggleGroup = new TabbarButton.ToggleGroup();
+    const _toggleGroup = new TabBarButton.ToggleGroup();
     const _buttons = document.createElement("div");
     const _pageElement = document.createElement("div");
     let _page;
 
-    const _buttonPhysics = new TabbarButton(
+    const _buttonPhysics = new TabBarButton(
         (show) => _setPage(show, new PhysicsPage(world)),
         getString(TabBar.TEXT_PHYSICS),
         "tabbar-physics",
         _toggleGroup
     );
-    const _buttonDescription = new TabbarButton(
+    const _buttonDescription = new TabBarButton(
         (show) => _setPage(show, new DescriptionPage(world.getMission())),
         getString(TabBar.TEXT_DESCRIPTION),
         "tabbar-description",

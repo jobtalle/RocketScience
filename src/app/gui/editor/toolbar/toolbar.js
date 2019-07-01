@@ -5,6 +5,8 @@ import {getString} from "../../../text/language";
 import {Game} from "../../../game";
 import {Editable} from "../../../mission/editable/editable";
 import * as Myr from "myr.js";
+import {Data} from "../../../file/data";
+import {DownloadBinary} from "../../../utils/downloadBinary";
 
 /**
  * A toolbar containing buttons for the PCB editor.
@@ -12,11 +14,13 @@ import * as Myr from "myr.js";
  * @param {Editables} editables An Editables object which holds all editables.
  * @param {HTMLElement} overlay The element to place the toolbar on.
  * @param {Number} x The X position of the toolbar in pixels.
+ * @param {World} world The game world.
  * @param {Game} game A game.
+ * @param {User} user The user.
  * @param {Boolean} isMissionEditor Enables mission editor functionality.
  * @constructor
  */
-export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
+export function Toolbar(editor, editables, overlay, x, world, game, user, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
@@ -83,6 +87,26 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         getString(Toolbar.TEXT_REMOVE_REGION),
         "toolbar-remove-region",
         ToolbarButton.TYPE_CLICK);
+    const _buttonSavePcb = new ToolbarButton(
+        () => user.savePcb("test", editor.getEditable().getPcb()),
+        getString(Toolbar.TEXT_SAVE_PCB),
+        "toolbar-save-pcb",
+        ToolbarButton.TYPE_CLICK
+        );
+    const _buttonSaveMission = new ToolbarButton(
+        () => {
+            const missionData = new Data();
+
+            world.getMission().serialize(missionData.getBuffer());
+
+            const fileName = world.getMission().getTitle().replace(/[\\/:\*\?"<>\|\s+]/g, '').toLowerCase() + ".bin";
+
+            DownloadBinary(missionData.getBlob(), fileName);
+        },
+        getString(Toolbar.TEXT_SAVE_MISSION),
+        "toolbar-save-mission",
+        ToolbarButton.TYPE_CLICK
+        );
 
     const makeSpacer = () => {
         const element = document.createElement("div");
@@ -102,6 +126,7 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
         _container.appendChild(_buttonSelect.getElement());
         _container.appendChild(_buttonEtch.getElement());
         _container.appendChild(_buttonMove.getElement());
+        _container.appendChild(_buttonSavePcb.getElement());
         _container.appendChild(makeSpacer());
         _container.appendChild(_buttonLaunch.getElement());
         _container.appendChild(_buttonXRay.getElement());
@@ -116,6 +141,8 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
             _container.appendChild(_buttonAddRegion.getElement());
             _container.appendChild(_buttonCopyRegion.getElement());
             _container.appendChild(_buttonRemoveRegion.getElement());
+            _container.appendChild(makeSpacer());
+            _container.appendChild(_buttonSaveMission.getElement());
         }
     };
 
@@ -223,3 +250,5 @@ Toolbar.TEXT_RESIZE_REGION = "TOOLBAR_RESIZE_REGION";
 Toolbar.TEXT_COPY_REGION = "TOOLBAR_COPY_REGION";
 Toolbar.TEXT_ADD_REGION = "TOOLBAR_ADD_REGION";
 Toolbar.TEXT_REMOVE_REGION = "TOOLBAR_REMOVE_REGION";
+Toolbar.TEXT_SAVE_PCB = "TOOLBAR_SAVE_PCB";
+Toolbar.TEXT_SAVE_MISSION = "TEXT_SAVE_MISSION";
