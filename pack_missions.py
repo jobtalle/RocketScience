@@ -19,7 +19,8 @@ def pack_missions():
     print("Packing missions:")
 
     shutil.rmtree(DEST_DIR, True)
-    copytree(SOURCE_DIR, DEST_DIR)
+    if os.path.isdir(SOURCE_DIR):
+        copytree(SOURCE_DIR, DEST_DIR)
 
     story_list = []
 
