@@ -213,7 +213,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
                 const pressedEditable = _editables.getEditableAt(event.x, event.y);
                 const isCam = event.type === Editor.MOUSE_BUTTON_PRESS_VIEW;
 
-                if (isCam || !pressedEditable || pressedEditable === _editable || _pcbEditor.mouseInBoundsOfEditor())
+                if (isCam || !pressedEditable || pressedEditable === _editable || !_pcbEditor.maySwitchEditable())
                     _pcbEditor.onMousePress(
                         event.x - renderContext.getViewport().getSplitX(),
                         event.y,

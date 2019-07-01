@@ -7,7 +7,6 @@ import {PcbEditorSelect} from "./pcbEditorSelect";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js";
 import {StyleUtils} from "../../../utils/styleUtils";
-import {PcbEditor} from "./pcbEditor";
 
 /**
  * A placement editor used to place a part on a pcb.
@@ -257,11 +256,11 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
     };
 
     /**
-     * Return the type of pcbEditor.
-     * @returns {Number}
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
      */
-    this.type = () => {
-        return PcbEditor.EDIT_MODE_PLACE;
+    this.maySwitchEditable = () => {
+        return true;
     };
 
     /**

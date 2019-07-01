@@ -1,6 +1,5 @@
 import {Pcb} from "../../../pcb/pcb";
 import {Scale} from "../../../world/scale";
-import {PcbEditor} from "./pcbEditor";
 import Myr from "myr.js";
 import {getValidOrigin} from "../../../mission/editable/editableEscaper";
 import {getValidRegion} from "../../../mission/editable/editableRegionShrinker";
@@ -269,11 +268,11 @@ export function PcbEditorMove(renderContext, pcb, cursor, editor, view, isMissio
     };
 
     /**
-     * Return the type of pcbEditor.
-     * @returns {Number}
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
      */
-    this.type = () => {
-        return PcbEditor.EDIT_MODE_MOVE;
+    this.maySwitchEditable = () => {
+        return !(_mode === PcbEditorMove.REGION_RESIZE || _mode === PcbEditorMove.REGION_MOVE);
     };
 
     /**

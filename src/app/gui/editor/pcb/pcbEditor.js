@@ -513,11 +513,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
-     * Returns true if the mouse is in a functional position (even if the mouse is not above the editable region).
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
      * @returns {Boolean}
      */
-    this.mouseInBoundsOfEditor = () => {
-        return _editor.type() === PcbEditor.EDIT_MODE_MOVE && (_editor.getMode() === PcbEditorMove.REGION_MOVE || _editor.getMode() === PcbEditorMove.REGION_RESIZE);
+    this.maySwitchEditable = () => {
+        return _editor.maySwitchEditable();
     };
 
     /**
@@ -568,6 +568,5 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
-PcbEditor.EDIT_MODE_PLACE = 4;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

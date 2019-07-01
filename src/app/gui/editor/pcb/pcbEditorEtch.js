@@ -6,7 +6,6 @@ import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 import {Pin} from "../../../part/pin";
 import {Scale} from "../../../world/scale";
 import Myr from "myr.js";
-import {PcbEditor} from "./pcbEditor";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -462,11 +461,11 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
     };
 
     /**
-     * Return the type of pcbEditor.
-     * @returns {Number}
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
      */
-    this.type = () => {
-        return PcbEditor.EDIT_MODE_ETCH;
+    this.maySwitchEditable = () => {
+        return true;
     };
 
     /**

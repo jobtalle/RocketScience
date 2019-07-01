@@ -5,7 +5,6 @@ import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {PartSummary} from "../../../pcb/partSummary";
 import {Budget} from "../../../mission/budget/budget";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
-import {PcbEditor} from "./pcbEditor";
 import Myr from "myr.js";
 
 /**
@@ -430,11 +429,11 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
     };
 
     /**
-     * Return the type of pcbEditor.
-     * @returns {Number}
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
      */
-    this.type = () => {
-        return PcbEditor.EDIT_MODE_SELECT;
+    this.maySwitchEditable = () => {
+        return true;
     };
 
     /**
