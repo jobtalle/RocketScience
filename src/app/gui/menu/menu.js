@@ -3,7 +3,6 @@ import {MenuTitle} from "./title";
 import {MenuRoot} from "./root/menuRoot";
 import {UserIcon} from "./user/userIcon";
 import {User} from "../../user/user";
-import {MenuStories} from "./missions/menuStories";
 
 /**
  * The menu object creates an HTML menu which changes Game state.
