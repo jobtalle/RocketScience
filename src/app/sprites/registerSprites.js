@@ -3,6 +3,11 @@ import {createAtlas} from "apl-image-packer";
 import {powerCeil} from "../utils/powerCeil";
 import {forChunkPixels} from "../utils/aseutils";
 
+/**
+ * Register all sprites in myr.
+ * @param {Myr} myr The game engine.
+ * @param {Array} rawSprites The array of all sprite files.
+ */
 export function registerSprites(myr, rawSprites) {
     const _surfaces = [];
 

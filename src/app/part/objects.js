@@ -51,6 +51,12 @@ function ObjectLoader() {
 
 const _objectLoader = new ObjectLoader();
 
+/**
+ * Load all part objects, icons and specifications.
+ * @param {Array} objects An array of part objects.
+ * @param {Object} parts A JSON definition of all parts.
+ * @param {Object} guiIcons A dictionary of all icons per part.
+ */
 export function loadObjects(objects, parts, guiIcons) {
     _objectLoader.load(objects, parts, guiIcons);
 }
@@ -91,10 +97,19 @@ export function getPartIds() {
     return _objectLoader.getPartIds();
 }
 
+/**
+ * Return the specification for the parts.
+ * @returns {Object}
+ */
 export function getParts() {
     return _objectLoader.getParts();
 }
 
-export function getGuiIconString(string) {
-    return _objectLoader.getGuiIconStrings()[string];
+/**
+ * Return the base64 encoded PNG of the icon.
+ * @param {String} part The part name.
+ * @returns {String} A base64 encoded PNG.
+ */
+export function getGuiIconString(part) {
+    return _objectLoader.getGuiIconStrings()[part];
 }
