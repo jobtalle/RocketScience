@@ -272,7 +272,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
 
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view, _hover, isMissionEditor));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view, isMissionEditor));
 
                 break;
         }
@@ -513,6 +513,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
+     * Returns true if the mouse is in a functional position (even if the mouse is not above the editable region).
+     * @returns {Boolean}
+     */
+    this.mouseInBoundsOfEditor = () => {
+        return _editor.type() === PcbEditor.EDIT_MODE_MOVE && (_editor.getMode() === PcbEditorMove.REGION_MOVE || _editor.getMode() === PcbEditorMove.REGION_RESIZE);
+    };
+
+    /**
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */
@@ -560,7 +568,6 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
-PcbEditor.EDIT_MODE_MOVE_REGION = 4;
-PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
+PcbEditor.EDIT_MODE_PLACE = 4;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

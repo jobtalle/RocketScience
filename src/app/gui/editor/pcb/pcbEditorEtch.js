@@ -5,7 +5,8 @@ import {PcbPath} from "../../../pcb/point/pcbPath";
 import {PcbPathRenderer} from "../../../pcb/point/pcbPathRenderer";
 import {Pin} from "../../../part/pin";
 import {Scale} from "../../../world/scale";
-import Myr from "myr.js"
+import Myr from "myr.js";
+import {PcbEditor} from "./pcbEditor";
 
 /**
  * The etch editor, meant for etching connections onto the PCB.
@@ -458,6 +459,14 @@ export function PcbEditorEtch(renderContext, pcb, cursor, editor) {
      */
     this.makeActive = () => {
 
+    };
+
+    /**
+     * Return the type of pcbEditor.
+     * @returns {Number}
+     */
+    this.type = () => {
+        return PcbEditor.EDIT_MODE_ETCH;
     };
 
     /**

@@ -5,7 +5,8 @@ import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {PartSummary} from "../../../pcb/partSummary";
 import {Budget} from "../../../mission/budget/budget";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
-import Myr from "myr.js"
+import {PcbEditor} from "./pcbEditor";
+import Myr from "myr.js";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -426,6 +427,14 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
      */
     this.makeActive = () => {
         updateSelectedInfo();
+    };
+
+    /**
+     * Return the type of pcbEditor.
+     * @returns {Number}
+     */
+    this.type = () => {
+        return PcbEditor.EDIT_MODE_SELECT;
     };
 
     /**

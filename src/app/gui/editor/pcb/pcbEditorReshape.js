@@ -2,7 +2,8 @@ import {Pcb} from "../../../pcb/pcb";
 import {PointGroup} from "./pointGroup";
 import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {Scale} from "../../../world/scale";
-import Myr from "myr.js"
+import Myr from "myr.js";
+import {PcbEditor} from "./pcbEditor";
 
 /**
  * A reshape editor used for extending or deleting portions of a PCB.
@@ -416,6 +417,14 @@ export function PcbEditorReshape(renderContext, pcb, cursor, editor) {
      */
     this.makeActive = () => {
 
+    };
+
+    /**
+     * Return the type of pcbEditor.
+     * @returns {Number}
+     */
+    this.type = () => {
+        return PcbEditor.EDIT_MODE_RESHAPE;
     };
 
     /**
