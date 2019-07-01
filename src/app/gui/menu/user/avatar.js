@@ -14,19 +14,19 @@ export function Avatar(avatarSprites) {
         sprite.classList.add(avatarSprites.getCharacterSprite());
         sprite.id = Avatar.ID_CHARACTER;
 
-        const background = document.createElement("div");
-        background.classList.add("sprite");
-        background.classList.add(avatarSprites.getBackgroundSprite());
-        background.id = Avatar.ID_BACKGROUND;
+        // const background = document.createElement("div");
+        // background.classList.add("sprite");
+        // background.classList.add(avatarSprites.getBackgroundSprite());
+        // background.id = Avatar.ID_BACKGROUND;
+        //
+        // const border = document.createElement("div");
+        // border.classList.add("sprite");
+        // border.classList.add(avatarSprites.getBorderSprite());
+        // border.id = Avatar.ID_BORDER;
 
-        const border = document.createElement("div");
-        border.classList.add("sprite");
-        border.classList.add(avatarSprites.getBorderSprite());
-        border.id = Avatar.ID_BORDER;
-
-        _element.appendChild(background);
+        // _element.appendChild(background);
         _element.appendChild(sprite);
-        _element.appendChild(border);
+        // _element.appendChild(border);
     };
 
     /**

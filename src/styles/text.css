@@ -3,13 +3,13 @@
 }
 
 .signal.high {
-    color: red;
+    color: var(--text-color-signal-high);
 }
 
 .signal.low {
-    color: blue;
+    color: var(--text-color-signal-low);
 }
 
 .signal.varying {
-    color: #cc66ff;
+    color: var(--text-color-signal-varying);
 }

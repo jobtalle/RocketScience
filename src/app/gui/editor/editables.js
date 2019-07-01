@@ -2,6 +2,7 @@ import {PcbRenderer} from "../../pcb/pcbRenderer";
 import {Scale} from "../../world/scale";
 import Myr from "myr.js"
 import {getValidOrigin} from "../../mission/editable/editableEscaper";
+import {StyleUtils} from "../../utils/styleUtils";
 
 /**
  * The editables in the world that may be edited.
@@ -228,4 +229,4 @@ export function Editables(editor, renderContext, world) {
 }
 
 Editables.SPRITE_GRID = "pcbGrid";
-Editables.BORDER_COLOR = Myr.Color.RED;
+Editables.BORDER_COLOR = StyleUtils.getColorHex("--game-color-pcb-editables-border");

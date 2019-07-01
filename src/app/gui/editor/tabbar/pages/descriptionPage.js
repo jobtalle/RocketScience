@@ -11,7 +11,6 @@ export function DescriptionPage(mission) {
 
     const build = () => {
         _element.classList.add(DescriptionPage.CLASS);
-        _element.style.backgroundColor = DescriptionPage.BACKGROUND_COLOR;
 
         _element.appendChild(makeInputField(mission.getDescription(), value => {
             mission.setDescription(value);
@@ -29,6 +28,5 @@ export function DescriptionPage(mission) {
 }
 
 DescriptionPage.CLASS = "page";
-DescriptionPage.BACKGROUND_COLOR = "#37946e";
 DescriptionPage.DESCRIPTION_LABEL = "TABPAGE_DESCRIPTION_LABEL";
 DescriptionPage.DESCRIPTION_INPUT_SIZE = 40;

@@ -96,7 +96,7 @@ export function Game(renderContext, input, user) {
         user.saveMissionProgress(new MissionProgress(_world.getMission(),
             _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE,
             _world.getMissionProgress().getFileName()),
-            (result) => console.log("Saved mission " + result));
+            (result) => null);
 
     };
 
@@ -194,7 +194,7 @@ export function Game(renderContext, input, user) {
 
         _world = new World(renderContext, missionProgress);
         _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this, true);
+        _editor = new Editor(renderContext, _world, this, Game.IS_MISSION_EDITOR_MODE);
 
         _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();
@@ -229,6 +229,7 @@ export function Game(renderContext, input, user) {
 }
 
 Game.KEY_TOGGLE_EDIT = " ";
+Game.IS_MISSION_EDITOR_MODE = true;
 Game.MODE_MENU = 0;
 Game.MODE_EDIT = 1;
 Game.MODE_GAME = 2;
