@@ -13,6 +13,7 @@ import {ScatterProfile} from "../terrain/scatters/scatterProfile";
 import {Scatters} from "../terrain/scatters/scatters";
 import {CloudsRenderer} from "../clouds/cloudsRenderer";
 import Myr from "myr.js"
+import {Scale} from "./scale";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -24,7 +25,7 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
-    const _cloudsRenderer = new CloudsRenderer(renderContext.getMyr(), 5);
+    const _cloudsRenderer = new CloudsRenderer(renderContext.getMyr(), 1);
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -266,21 +267,27 @@ export function World(renderContext, missionProgress) {
                 _controllerState.tick();
         }
 
-        let renderClouds = _view.getOrigin().y;
-        console.log(_view.getOrigin().y);
+        const cloudHeight = -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER;
+        const renderClouds = cloudHeight > _view.getOrigin().y;
+        const left = _view.getOrigin().x;
+        const right = left + _view.getWidth() / _view.getZoom();
+
         _surface.bind();
         _surface.clear();
 
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        _cloudsRenderer.drawBack();
+        if (renderClouds)
+            _cloudsRenderer.drawBack(cloudHeight, left, right);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
 
-        _terrainRenderer.draw(_view.getOrigin().x, _view.getOrigin().x + _view.getWidth() / _view.getZoom());
-        _cloudsRenderer.drawFront();
+        _terrainRenderer.draw(left, right);
+
+        if (renderClouds)
+            _cloudsRenderer.drawFront(cloudHeight, left, right);
 
         renderContext.getMyr().pop();
     };

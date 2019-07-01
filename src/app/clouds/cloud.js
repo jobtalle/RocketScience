@@ -104,7 +104,7 @@ export function Cloud(myr, base) {
      * @param {Number} y The Y position of the base of the cloud in pixels.
      */
     this.draw = (x, y) => {
-        _surface.draw(x - _surface.getWidth() * 0.5, y - _surface.getHeight());
+        _surface.draw(x, y - _surface.getHeight());
     };
 
     /**
