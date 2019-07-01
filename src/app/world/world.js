@@ -25,7 +25,10 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
-    const _cloudsRenderer = new CloudsRenderer(renderContext.getMyr(), 1);
+    const _cloudsRenderer = new CloudsRenderer(
+        renderContext.getMyr(),
+        -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER,
+        0.4);
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -265,12 +268,14 @@ export function World(renderContext, missionProgress) {
 
             if (ticks)
                 _controllerState.tick();
+
+            _cloudsRenderer.shift(World.WIND * Scale.PIXELS_PER_METER * timeStep);
         }
 
-        const cloudHeight = -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER;
-        const renderClouds = cloudHeight > _view.getOrigin().y;
         const left = _view.getOrigin().x;
         const right = left + _view.getWidth() / _view.getZoom();
+        const top = _view.getOrigin().y;
+        const bottom = top + _view.getHeight() / +_view.getZoom();
 
         _surface.bind();
         _surface.clear();
@@ -279,16 +284,13 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
-        if (renderClouds)
-            _cloudsRenderer.drawBack(cloudHeight - 16, left, right);
+        _cloudsRenderer.drawBack(left, right, top, bottom);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
 
         _terrainRenderer.draw(left, right);
-
-        if (renderClouds)
-            _cloudsRenderer.drawFront(cloudHeight, left, right);
+        _cloudsRenderer.drawFront(left, right, top, bottom);
 
         renderContext.getMyr().pop();
     };
@@ -335,3 +337,4 @@ World.ZOOM_MIN = 0.25;
 World.ZOOM_MAX = 8;
 World.TPS = 15;
 World.TICK_DELAY = 1 / World.TPS;
+World.WIND = 0.15;

@@ -6,9 +6,10 @@ import {FractalNoise} from "../utils/fractalNoise";
  * A renderable cloud.
  * @param {Myr} myr A Myriad instance.
  * @param {Number} base The width of the cloud base.
+ * @param {Number} scale The cloud scale factor.
  * @constructor
  */
-export function Cloud(myr, base) {
+export function Cloud(myr, base, scale) {
     if (!Cloud.SHADER)
         Cloud.SHADER = Cloud.makeShader(myr);
 
@@ -68,7 +69,7 @@ export function Cloud(myr, base) {
     };
 
     const paintCloud = () => {
-        const sphereSet = Cloud.makeSpheres(base);
+        const sphereSet = Cloud.makeSpheres(base, scale);
         const source = new myr.Surface(
             Math.round(sphereSet.xMax - sphereSet.xMin),
             Math.round(sphereSet.yMax - sphereSet.yMin));
@@ -109,10 +110,10 @@ export function Cloud(myr, base) {
     };
 
     /**
-     * Get the base size of this cloud.
+     * Get the base size of this cloud. This is the actual base, which may be larger than the given base.
      * @returns {Number} The base width in pixels.
      */
-    this.getBase = () => base;
+    this.getBase = () => _surface.getWidth();
 
     /**
      * Free all resources maintained by this cloud.
@@ -128,8 +129,8 @@ Cloud.Sphere = function(x, y, radius) {
     this.radius = radius;
 };
 
-Cloud.makeSpheres = base => {
-    const shape = new FractalNoise(Math.random(), 1 / Cloud.SPHERE_RADIUS_MAX * 3, 3);
+Cloud.makeSpheres = (base, scale) => {
+    const shape = new FractalNoise(Math.random(), Cloud.NOISE_PHASE * scale, 3);
     const spheres = [];
     let x = 0;
 
@@ -138,7 +139,7 @@ Cloud.makeSpheres = base => {
         const noiseY = 0.5 + 0.5 * shape.sample(x);
         const y = -(noiseY * noiseY) * base * Cloud.HEIGHT_FACTOR * amp;
         const xp = x;
-        let radius = Cloud.SPHERE_RADIUS_MIN + (Cloud.SPHERE_RADIUS_MAX - Cloud.SPHERE_RADIUS_MIN) * Math.random() * amp;
+        let radius = (Cloud.SPHERE_RADIUS_MIN + (Cloud.SPHERE_RADIUS_MAX - Cloud.SPHERE_RADIUS_MIN) * Math.random() * amp) * scale;
 
         x += radius * Cloud.SPACING;
 
@@ -188,6 +189,7 @@ Cloud.makeSpheres = base => {
     };
 };
 
+Cloud.NOISE_PHASE = 0.005;
 Cloud.SPHERE_PRECISION = 24;
 Cloud.SPHERE_RADIUS_MIN = 8;
 Cloud.SPHERE_RADIUS_MAX = 46;
