@@ -29,5 +29,5 @@ const start = (renderContext) => {
     resize();
 };
 
-loadParts(["../mods/base.zip", "../mods/test.zip"], Languages.ENGLISH, new RenderContext(document.getElementById("renderer"), document.getElementById("overlay")), start);
+loadParts(["../mods/base.zip"], Languages.ENGLISH, new RenderContext(document.getElementById("renderer"), document.getElementById("overlay")), start);
 

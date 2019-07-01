@@ -92,7 +92,7 @@ export function Menu(game, parent, user) {
 
     build();
 
-    _contentObject = MenuStories;
+    _contentObject = MenuRoot;
     _divContent.appendChild(new _contentObject(this, user).getElement());
 }
 
