@@ -248,9 +248,7 @@ export function PcbEditorTerrain(renderContext, editor, world) {
      * Draw this editor.
      */
     this.draw = () => {
-        renderContext.getMyr().pop();
-        renderContext.getMyr().push();
-        renderContext.getMyr().transform(world.getView().getTransform());
+        renderContext.getMyr().transformSet(world.getView().getTransform());
 
         if (_deltas) {
             drawAnchorsElevated(_cursor, _radius, _spriteElevate, _deltas);

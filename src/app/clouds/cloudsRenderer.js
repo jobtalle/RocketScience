@@ -7,6 +7,7 @@ import {Cloud} from "./cloud";
  * @constructor
  */
 export function CloudsRenderer(myr, density) {
+    const _setBack = new CloudsRenderer.Set(myr, density);
     const _setFront = new CloudsRenderer.Set(myr, density);
 
     /**
@@ -16,7 +17,7 @@ export function CloudsRenderer(myr, density) {
      * @param {Number} right The rightmost pixel to start drawing at.
      */
     this.drawBack = (y, left, right) => {
-
+        _setBack.draw(y, left, right);
     };
 
     /**

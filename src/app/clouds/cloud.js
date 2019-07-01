@@ -85,6 +85,7 @@ export function Cloud(myr, base) {
                 sphere.radius);
 
         surface.bind();
+        surface.clear();
 
         Cloud.SHADER.setSurface("source", source);
         Cloud.SHADER.setSize(source.getWidth(), source.getHeight());

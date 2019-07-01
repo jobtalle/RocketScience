@@ -274,12 +274,13 @@ export function World(renderContext, missionProgress) {
 
         _surface.bind();
         _surface.clear();
+        renderContext.getMyr().blendEnable();
 
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
 
         if (renderClouds)
-            _cloudsRenderer.drawBack(cloudHeight, left, right);
+            _cloudsRenderer.drawBack(cloudHeight - 16, left, right);
 
         for (let index = 0; index < _objects.length; index++)
             _objects[index].draw();
