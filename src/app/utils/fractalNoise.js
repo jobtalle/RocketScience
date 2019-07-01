@@ -12,8 +12,8 @@ import Myr from "myr.js";
 export function FractalNoise(seed, scale, octaves) {
     const _octaves = makeOctaves(octaves, 2);
     const _noise = new noisejs.Noise(seed);
-    const _origin = new Myr.Vector(Math.random(), Math.random());
-    const _direction = Math.random() * Math.PI * 2;
+    const _origin = new Myr.Vector(seed, seed);
+    const _direction = seed * Math.PI * 2;
     const _directionVector = new Myr.Vector(Math.cos(_direction), Math.sin(_direction));
 
     /**

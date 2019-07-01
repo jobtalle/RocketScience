@@ -1,26 +1,26 @@
 import {Terrain} from "../terrain";
-import noisejs from "noisejs"
 import {Scale} from "../../world/scale";
+import {Profiles} from "./profiles";
+import {FractalNoise} from "../../utils/fractalNoise";
 
 /**
  * A set of terrain ornaments scattered over the terrain.
  * Scatters have a heterogeneous distribution.
  * @param {RenderContext} renderContext A render context.
  * @param {Terrain} terrain A terrain to scatter on.
- * @param {ScatterProfile} profile A scatter profile.
  * @constructor
  */
-export function Scatters(renderContext, terrain, profile) {
+export function Scatters(renderContext, terrain) {
     const _sprites = [];
     const _seed = Scatters.makeSeed(terrain);
 
-    const makeDistribution = (seed, resolution) => {
-        const noise = new noisejs.Noise(seed);
+    const makeDistribution = (seed, resolution, threshold) => {
+        const noise = new FractalNoise(seed, Scatters.NOISE_RESOLUTION, 3);
+        const detailNoise = new FractalNoise(seed * seed, 1, 1);
         const values = [];
 
-        for (let x = 0; x < (terrain.getHeights().length - 1) * Terrain.PIXELS_PER_SEGMENT - resolution; x += resolution) {
-            values.push(noise.simplex2(x * Scale.METERS_PER_PIXEL, 0.5) > 0.3);
-        }
+        for (let x = 0; x < (terrain.getHeights().length - 1) * Terrain.PIXELS_PER_SEGMENT - resolution; x += resolution)
+            values.push(noise.sample(x) * 0.5 + 0.5 < threshold && detailNoise.sample(x) > 0);
 
         return values;
     };
@@ -32,12 +32,12 @@ export function Scatters(renderContext, terrain, profile) {
     const generate = () => {
         let seed = _seed;
 
-        for (const entry of profile.getEntries()) {
-            seed = (seed + entry.prevalence) % 1;
+        for (const entry of Profiles.profiles[terrain.getProfile()].getEntries()) {
+            seed = (seed + entry.threshold) % 1;
 
             const sprite = renderContext.getSprites().getSprite(entry.spriteName);
-            const interval = Math.ceil(sprite.getWidth() * 0.5);
-            const distribution = makeDistribution(seed, interval);
+            const interval = Math.ceil(sprite.getWidth() * entry.interval);
+            const distribution = makeDistribution(seed, interval, entry.threshold);
             let lastFrame = -1;
             let x = 0;
 
@@ -83,3 +83,5 @@ Scatters.SpriteEntry = function(sprite, frame, x, y) {
     this.x = x;
     this.y = y;
 };
+
+Scatters.NOISE_RESOLUTION = 0.007;

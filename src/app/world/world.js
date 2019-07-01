@@ -76,13 +76,12 @@ export function World(renderContext, missionProgress) {
         if (_terrainRenderer)
             _terrainRenderer.free();
 
-        const scatterProfile = new ScatterProfile([
-            new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.5, 0.4)
-        ]);
-
-        const scatters = new Scatters(renderContext, missionProgress.getMission().getTerrain(), scatterProfile);
-
-        _terrainRenderer = new TerrainRenderer(renderContext.getMyr(), missionProgress.getMission().getTerrain(), scatters);
+        _terrainRenderer = new TerrainRenderer(
+            renderContext.getMyr(),
+            missionProgress.getMission().getTerrain(),
+            new Scatters(
+                renderContext,
+                missionProgress.getMission().getTerrain()));
 
         missionProgress.getMission().getTerrain().makeTerrain(_physics);
     };

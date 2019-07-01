@@ -3,9 +3,10 @@ import {Scale} from "../world/scale";
 /**
  * An environment to place bots in.
  * @param {Array} heights An array of heights. Negative numbers elevate, positive numbers are below sea level.
+ * @param {Number} profile A valid graphics profile ID.
  * @constructor
  */
-export function Terrain(heights) {
+export function Terrain(heights, profile) {
     let _edited = false;
 
     /**
@@ -27,6 +28,12 @@ export function Terrain(heights) {
      * @returns {Array} An array of heights. Negative numbers elevate, positive numbers are below sea level.
      */
     this.getHeights = () => heights;
+
+    /**
+     * Get the graphics profile.
+     * @returns {Number} The ID of the graphics profile.
+     */
+    this.getProfile = () => profile;
 
     /**
      * Get the height of this terrain at a certain x position within the terrain.
@@ -75,6 +82,16 @@ export function Terrain(heights) {
     };
 
     /**
+     * Set the graphics profile.
+     * @param {Number} newProfile A valid graphics profile.
+     */
+    this.setProfile = newProfile => {
+        profile = newProfile;
+
+        _edited = true;
+    };
+
+    /**
      * Check whether the terrain has been edited.
      * @returns {Boolean} A boolean indicating whether the terrain has been edited.
      */
@@ -85,6 +102,7 @@ export function Terrain(heights) {
      * @param {ByteBuffer} buffer A byte buffer.
      */
     this.serialize = buffer => {
+        buffer.writeByte(profile);
         buffer.writeShort(heights.length - 1);
 
         for (const height of heights)
@@ -98,12 +116,13 @@ export function Terrain(heights) {
  * @returns {Terrain} The deserialized terrain.
  */
 Terrain.deserialize = buffer => {
+    const profile = buffer.readByte();
     const heights = new Array(buffer.readShort() + 1);
 
     for (let i = 0; i < heights.length; ++i)
         heights[i] = buffer.readFloat();
 
-    return new Terrain(heights);
+    return new Terrain(heights, profile);
 };
 
 Terrain.SEGMENTS_PER_METER = 2;
