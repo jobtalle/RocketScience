@@ -3,17 +3,17 @@ import "../styles/main.css"
 import "../styles/gui.css"
 
 import {Game} from "./game"
-import {getString, Languages, setLanguage} from "./text/language";
+import {getString, Languages} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
 import {loadParts} from "./utils/partLoader";
 
-const start = () => {
+const start = (renderContext) => {
     const user = new User();
-    const renderContext = new RenderContext(
-        document.getElementById("renderer"),
-        document.getElementById("overlay"));
+    // const renderContext = new RenderContext(
+    //     document.getElementById("renderer"),
+    //     document.getElementById("overlay"));
     const input = new Input(window, renderContext);
     const game = new Game(renderContext, input, user);
 
@@ -32,9 +32,5 @@ const start = () => {
     resize();
 };
 
-const loadLanguage = () => {
-    setLanguage(Languages.ENGLISH, start, () => console.log("Language file was not found"));
-};
-
-loadParts(["../mods/base.zip", "../mods/test.zip"], Languages.ENGLISH, loadLanguage);
+loadParts(["../mods/base.zip", "../mods/test.zip"], Languages.ENGLISH, new RenderContext(document.getElementById("renderer"), document.getElementById("overlay")), start);
 

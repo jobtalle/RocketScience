@@ -3,7 +3,7 @@ import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Budget} from "../../../mission/budget/budget";
 import {CategoryPartCountSetter} from "./categoryPartCountSetter";
 import {CategoryPartCount} from "./categoryPartCount";
-import {getGuiDataUrls} from "../../../utils/partLoader";
+import {getGuiIconString} from "../../../part/objects";
 
 /**
  * A part button used to instantiate a part.
@@ -35,7 +35,7 @@ export function CategoryPart(part, setPart, info, editable) {
         element.onmouseover = onEnter;
         element.onmouseout = onLeave;
         const img = document.createElement('img');
-        img.src = getGuiDataUrls()[part.icon];
+        img.src = getGuiIconString(part.icon);
         element.appendChild(img);
 
         return element;

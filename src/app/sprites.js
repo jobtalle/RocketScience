@@ -1,5 +1,4 @@
 import atlas from "../assets/sprites/atlas"
-import {SpriteSheet} from "./sprites/spriteSheet";
 
 /**
  * Provides access to all sprites in the sprite atlas.
@@ -8,10 +7,6 @@ import {SpriteSheet} from "./sprites/spriteSheet";
  */
 export function Sprites(myr) {
     const _surface = new myr.Surface(Sprites.ATLAS_PATH);
-
-    const buildPartSprites = () => {
-        const spriteSheet = new SpriteSheet(myr); //TODO: rewrite to function instead of object.
-    };
 
     const getFrame = (name, index) => {
         const frameName = name + '_' + index;
@@ -48,8 +43,6 @@ export function Sprites(myr) {
 
         return new myr.Sprite(name);
     };
-
-    buildPartSprites();
 }
 
 Sprites.ATLAS_PATH = "sprites.png";

@@ -4,7 +4,7 @@ import {Toolbar} from "../toolbar/toolbar";
 import {Info} from "../info/info";
 import {LibraryContents} from "./libraryContents";
 import {BudgetChooser} from "./budgetChooser";
-import {getParts} from "../../../utils/partLoader";
+import {getParts} from "../../../part/objects";
 
 /**
  * An HTML based part library.

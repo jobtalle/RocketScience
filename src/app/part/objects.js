@@ -5,7 +5,10 @@ function ObjectLoader() {
     const idToDefinition = {};
     const ids = [];
 
-    this.load = (objects, parts) => {
+    let _parts;
+    let _guiIconStrings;
+
+    this.load = (objects, parts, guiIcons) => {
         for (let i = 0; i < objects.length; ++i) {
             ids.push(i);
             nameToId[objects[i].name] = i;
@@ -16,6 +19,9 @@ function ObjectLoader() {
         for (const category of parts.categories)
             for (const part of category.parts)
                 idToDefinition[nameToId[part.object]] = part;
+
+        _parts = parts;
+        _guiIconStrings = guiIcons;
     };
 
     this.getPartObject = name => {
@@ -33,12 +39,20 @@ function ObjectLoader() {
     this.getPartIds = () => {
         return ids;
     };
+
+    this.getParts = () => {
+        return _parts;
+    };
+
+    this.getGuiIconStrings = () => {
+        return _guiIconStrings;
+    };
 }
 
 const _objectLoader = new ObjectLoader();
 
-export function loadObjects(objects, parts) {
-    _objectLoader.load(objects, parts);
+export function loadObjects(objects, parts, guiIcons) {
+    _objectLoader.load(objects, parts, guiIcons);
 }
 
 /**
@@ -75,4 +89,12 @@ export function getPartFromId(id) {
  */
 export function getPartIds() {
     return _objectLoader.getPartIds();
+}
+
+export function getParts() {
+    return _objectLoader.getParts();
+}
+
+export function getGuiIconString(string) {
+    return _objectLoader.getGuiIconStrings()[string];
 }
