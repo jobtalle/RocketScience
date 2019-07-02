@@ -5,7 +5,7 @@ import {forAllIcons, forAllSprites, forChunkPixels} from "./aseutils";
 import {setLanguage} from "../text/language";
 import {registerSprites} from "../sprites/registerSprites";
 import {pixelArrayToBase64} from "./pixelArrayToBase64";
-import {appendArrayBufferUnique, appendLanguageUnique, appendSpriteUnique, appendStringUnique} from "./appendUnique";
+import {appendArrayBufferUnique, appendLanguageUnique, appendStringUnique} from "./appendUnique";
 
 /**
  * Load the parts from all mods (in .zip format).
