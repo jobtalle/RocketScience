@@ -1,43 +1,35 @@
 function ObjectLoader() {
-    const nameToId = {};
-    const idToName = {};
-    const idToObject = {};
-    const idToDefinition = {};
-    const ids = [];
+    const nameToObject = {};
+    const nameToDefinition = {};
+    const names = [];
 
     let _parts;
     let _guiIconStrings;
 
     this.load = (objects, parts, guiIcons) => {
-        for (let i = 0; i < objects.length; ++i) {
-            ids.push(i);
-            nameToId[objects[i].name] = i;
-            idToName[i] = objects[i].name;
-            idToObject[i] = objects[i];
+        for (const object of objects) {
+            nameToObject[object.name] = object;
+            names.push(object.name);
         }
 
         for (const category of parts.categories)
             for (const part of category.parts)
-                idToDefinition[nameToId[part.object]] = part;
+                nameToDefinition[part.object] = part;
 
         _parts = parts;
         _guiIconStrings = guiIcons;
     };
 
     this.getPartObject = name => {
-        return idToObject[nameToId[name]];
+        return nameToObject[name];
     };
 
-    this.getPartId = name => {
-        return nameToId[name];
+    this.getPartFromName = name => {
+        return nameToDefinition[name];
     };
 
-    this.getPartFromId = id => {
-        return idToDefinition[id];
-    };
-
-    this.getPartIds = () => {
-        return ids;
+    this.getPartNames = () => {
+        return names;
     };
 
     this.getParts = () => {
@@ -71,34 +63,24 @@ export function getPartObject(name) {
 }
 
 /**
- * Get a unique id based on a part name.
- * @param {String} name The part name.
- * @returns {Number} A unique id. -1 if the part name is invalid.
+ * Get a part definition from parts.json based on its name
+ * @param {String} name A part name.
+ * @returns {Object} A valid part configuration. If the name is invalid, null is returned.
  */
-export function getPartId(name) {
-    return _objectLoader.getPartId(name);
+export function getPartFromName(name) {
+    return _objectLoader.getPartFromName(name);
 }
 
 /**
- * Get a part definition from parts.json based on its id,
- * retrieved from the getPartId function.
- * @param {Number} id A part id retrieved from the getPartId function.
- * @returns {Object} A valid part configuration. If the id is invalid, null is returned.
+ * Return all part names in an array.
+ * @returns {Array} An array of strings.
  */
-export function getPartFromId(id) {
-    return _objectLoader.getPartFromId(id);
+export function getPartNames() {
+    return _objectLoader.getPartNames();
 }
 
 /**
- * Return all part ID's in an array.
- * @returns {Array} An array of numbers.
- */
-export function getPartIds() {
-    return _objectLoader.getPartIds();
-}
-
-/**
- * Return the specification for the parts.
+ * Return the definition for the parts.
  * @returns {Object}
  */
 export function getParts() {
