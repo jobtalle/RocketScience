@@ -1,5 +1,4 @@
 import {Budget} from "./budget";
-import {getPartFromId, getPartId} from "../../part/objects";
 
 /**
  * A part budget to limit the number of parts used.
@@ -93,7 +92,7 @@ export function BudgetInventory(entries) {
         buffer.writeByte(entries.length);
 
         for (const entry of entries) {
-            buffer.writeByte(getPartId(entry.name));
+            buffer.writeString(entry.name);
             buffer.writeShortSigned(entry.count);
         }
     };
@@ -106,7 +105,7 @@ BudgetInventory.deserialize = buffer => {
     let entryLength = buffer.readByte();
 
     for (let idx = 0; idx < entryLength; ++idx) {
-        entries.push(new BudgetInventory.Entry(getPartFromId(buffer.readByte()).object, buffer.readShortSigned()));
+        entries.push(new BudgetInventory.Entry(buffer.readString(), buffer.readShortSigned()));
     }
 
     return new BudgetInventory(entries);

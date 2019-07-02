@@ -39,7 +39,6 @@
 #library #contents .category .part-list {
     display: grid;
     grid-template-columns: repeat(var(--part-grid-cells-per-row), var(--part-grid-cell-size));
-    grid-auto-rows: var(--part-grid-cell-size);
 }
 
 #library #contents .category .part-list.closed {
@@ -54,8 +53,7 @@
 }
 
 #library #contents .category .part-list .part .icon {
-    width: 100%;
-    height: 100%;
+    height: var(--part-grid-cell-size);
 }
 
 #library #contents .category .part-list .part .icon img {

@@ -1,7 +1,7 @@
 import {ChecklistObjectiveGoalPanel} from "./checklistObjectiveGoalPanel";
 import {getString} from "../../../../text/language";
 import {PartPicker} from "./partPicker";
-import {getPartFromId, getPartId} from "../../../../part/objects";
+import {getPartFromName} from "../../../../part/objects";
 import {ValuePicker} from "./valuePicker";
 import {PinPicker} from "./pinPicker";
 
@@ -33,14 +33,14 @@ export function ChecklistObjectiveGoalPinState(goal, onDelete) {
 
     const makeTable = () => {
         const element = document.createElement("table");
-        const pinPicker = new PinPicker(goal.getPinIndex(), getPartFromId(getPartId(goal.getPart())), selected => {
+        const pinPicker = new PinPicker(goal.getPinIndex(), getPartFromName(goal.getPart()), selected => {
             goal.setPinIndex(parseInt(selected));
         });
 
         element.appendChild(makeRow(
             getString(ChecklistObjectiveGoalPinState.TEXT_PART),
-            new PartPicker(getPartId(goal.getPart()), selected => {
-                const part = getPartFromId(parseInt(selected));
+            new PartPicker(goal.getPart(), selected => {
+                const part = getPartFromName(selected);
 
                 goal.setPart(part.object);
                 pinPicker.set(0, part);

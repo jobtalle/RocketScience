@@ -14,11 +14,9 @@ export function readChunk(aseBuffer) {
 
     switch(chunk.type) {
         case 0x0004:
-            console.log('Skipping old chunk type (0x0004)');
             aseBuffer.skipBytes(chunk.size - 6);
             break;
         case 0x0011:
-            console.log('Skipping old chunk type (0x0011)');
             aseBuffer.skipBytes(chunk.size - 6);
             break;
         case 0x2004:
@@ -34,11 +32,9 @@ export function readChunk(aseBuffer) {
             chunk = {...chunk, ...read0x2007(aseBuffer)};
             break;
         case 0x2016:
-            console.log('Skipping deprecated chunk type (0x2016)');
             aseBuffer.skipBytes(chunk.size - 6);
             break;
         case 0x2017:
-            console.warn('Encountered unknown chunk type (0x2017) skipping...');
             aseBuffer.skipBytes(chunk.size - 6);
             break;
         case 0x2018:

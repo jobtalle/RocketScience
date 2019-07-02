@@ -1,4 +1,4 @@
-import {getPartFromId, getPartId} from "./objects";
+import {getPartFromName} from "./objects";
 
 /**
  * Constructs a part.
@@ -57,7 +57,7 @@ export function Part(definition, configurationIndex) {
      * @param {ByteBuffer} buffer A byte buffer to serialize this part to.
      */
     this.serialize = buffer => {
-        buffer.writeByte(getPartId(definition.object));
+        buffer.writeString(definition.object);
         buffer.writeByte(configurationIndex);
     };
 }
@@ -68,8 +68,8 @@ export function Part(definition, configurationIndex) {
  * @returns {Part} The deserialized part.
  */
 Part.deserialize = buffer => {
-    const id = buffer.readByte();
+    const name = buffer.readString();
     const configuration = buffer.readByte();
 
-    return new Part(getPartFromId(id), configuration);
+    return new Part(getPartFromName(name), configuration);
 };
