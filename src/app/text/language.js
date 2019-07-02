@@ -1,6 +1,7 @@
 import "../../styles/text.css";
 import {Macro} from "./macro";
 import {requestText} from "../utils/requestText";
+import {appendLanguageUnique} from "../utils/appendUnique";
 
 function Language() {
     let _language;
@@ -29,11 +30,7 @@ function Language() {
         requestText(source, file => {
             _language = JSON.parse(file);
 
-            for (const key in modEntries)
-                if (!_language.hasOwnProperty(key))
-                    _language[key] = modEntries[key];
-                else
-                    console.log("Duplicate language entry from a mod: " + key + ", " + modEntries[key]);
+            appendLanguageUnique(modEntries, _language, "Duplicate language entry from a mod");
 
             applyMacros();
 

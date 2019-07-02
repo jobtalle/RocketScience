@@ -5,6 +5,7 @@ import {forAllIcons, forAllSprites, forChunkPixels} from "./aseutils";
 import {setLanguage} from "../text/language";
 import {registerSprites} from "../sprites/registerSprites";
 import {pixelArrayToBase64} from "./pixelArrayToBase64";
+import {appendArrayBufferUnique, appendLanguageUnique, appendSpriteUnique, appendStringUnique} from "./appendUnique";
 
 /**
  * Load the parts from all mods (in .zip format).
@@ -63,8 +64,6 @@ export function loadParts(mods, language, renderContext, onLoad) {
             for (const label of json.labels)
                 if (!isDuplicateLabel(label, _parts.categories))
                     _parts.categories.splice(findInsertIndex(label, json.labels), 0, {label: label, parts: []});
-                else
-                    console.log("Duplicate category: " + label);
         }
     };
 
@@ -77,7 +76,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
                     if (!isDuplicateLabel(json.label, category.parts))
                         category.parts.push(json);
                     else
-                        console.log("Duplicate part entry: " + json.label);
+                        throw "Duplicate part entry: " + json.label;
 
                     break;
                 }
@@ -88,54 +87,47 @@ export function loadParts(mods, language, renderContext, onLoad) {
     };
 
     const buildScripts = () => {
-        for (const text of _scriptsRaw)
-            try {
-                const script = new Function('"use strict"; return(' + text + ')')();
+        for (const text of _scriptsRaw) {
+            const script = new Function('"use strict"; return(' + text + ')')();
 
-                if (!_objects.includes(script))
-                    _objects.push(script);
-                else
-                    console.log("Duplicate script entry: " + text);
-            } catch (e) {
-                console.log(e);
-                console.log("Unable to import following code:");
-                console.log(text);
-            }
+            if (!isDuplicateName(script.name, _objects))
+                _objects.push(script);
+            else
+                throw "Duplicate script entry: " + text;
+        }
     };
 
     const buildLanguage = () => {
         for (const text of _languageRaw) {
             const json = JSON.parse(text);
 
-            for (const key in json)
-                if (!_languageEntries.hasOwnProperty(key))
-                    _languageEntries[key] = json[key];
-                else
-                    console.log("Duplicate language entry: " + key + ", " + json[key]);
+            appendLanguageUnique(json, _languageEntries, "Duplicate language entry");
         }
     };
 
     const readSpriteFiles = () => {
         forAllSprites(_parts, sprite => {
-            const file = readAse(_spriteRawBuffers[sprite.name]);
+            if (!_spriteRawBuffers.hasOwnProperty(sprite))
+                throw "Missing sprite file: " + sprite;
 
-            file.name = sprite.name;
+            const file = readAse(_spriteRawBuffers[sprite]);
+
+            file.name = sprite;
             if (!isDuplicateName(file.name, _spriteRawFiles))
                 _spriteRawFiles.push(file);
-            else
-                console.log("Duplicate sprite found!");
         });
     };
 
     const readGuiSpriteFiles = () => {
-        forAllIcons(_parts, part => {
-            const file = readAse(_spriteRawBuffers[part.icon]);
+        forAllIcons(_parts, icon => {
+            if (!_spriteRawBuffers.hasOwnProperty(icon))
+                throw "Missing sprite file: " + icon;
 
-            file.name = part.icon;
+            const file = readAse(_spriteRawBuffers[icon]);
+
+            file.name = icon;
             if (!isDuplicateName(file.name, _guiRawFiles))
                 _guiRawFiles.push(file);
-            else
-                console.log("Duplicate icon sprite found!");
         });
     };
 
@@ -174,7 +166,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
     const addRaw = (file, array) => {
         ++_counter;
         file.async("string").then(text => {
-            array.push(text);
+            appendStringUnique(text, array);
 
             if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();
@@ -185,7 +177,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
         ++_counter;
         file.async("arraybuffer").then(buffer => {
             const name = path.split('/').pop().split('.')[0];
-            dict[name] = buffer;
+            appendArrayBufferUnique(name, buffer, dict);
 
             if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();

@@ -5,7 +5,7 @@ import {forChunkPixels} from "../utils/aseutils";
 
 /**
  * Register all sprites in myr.
- * @param {Myr} myr The game engine.
+ * @param {Myr} myr The graphics engine.
  * @param {Array} rawSprites The array of all sprite files.
  */
 export function registerSprites(myr, rawSprites) {
@@ -18,6 +18,7 @@ export function registerSprites(myr, rawSprites) {
             surface.bind();
             surface.clear();
 
+            //TODO: extend Myr with method to draw pixel array in one function call.
             forChunkPixels(frame.chunks, (x, y, chunk) => {
                 myr.primitives.drawPoint(new Myr.Color(
                     chunk.pixels[y][x].r / 255,
