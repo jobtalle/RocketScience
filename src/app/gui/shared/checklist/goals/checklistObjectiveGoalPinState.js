@@ -40,7 +40,6 @@ export function ChecklistObjectiveGoalPinState(goal, onDelete) {
         element.appendChild(makeRow(
             getString(ChecklistObjectiveGoalPinState.TEXT_PART),
             new PartPicker(goal.getPart(), selected => {
-                console.log(selected);
                 const part = getPartFromName(selected);
 
                 goal.setPart(part.object);
