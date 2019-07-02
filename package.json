@@ -34,6 +34,8 @@
     "noisejs": "^2.1.0",
     "npm": "^6.9.0",
     "pako": "^1.0.10",
-    "poly-decomp": "^0.3.0"
+    "poly-decomp": "^0.3.0",
+    "jszip": "^3.2.1",
+    "apl-image-packer": "^1.1.0"
   }
 }

@@ -1,69 +1,65 @@
-import {Led} from "./parts/led";
-import {Oscillator} from "./parts/oscillator";
-import {Battery} from "./parts/battery";
-import {GateOr} from "./parts/gateOr";
-import {GateAnd} from "./parts/gateAnd";
-import {GateNot} from "./parts/gateNot";
-import {Wheel} from "./parts/wheel";
-import {SensorTouch} from "./parts/sensorTouch";
-import {Propeller} from "./parts/propeller";
-import {Controller} from "./parts/controller";
-import parts from "../../assets/parts.json"
-import {Button} from "./parts/button";
-import {Switch} from "./parts/switch";
-import {Transistor} from "./parts/transistor";
-import {Meter} from "./parts/meter";
-import {Resistor} from "./parts/resistor";
-import {Adder} from "./parts/adder";
-import {Capacitor} from "./parts/capacitor";
-import {Altimeter} from "./parts/altimeter";
-import {Comparator} from "./parts/comparator";
-import {Tilt} from "./parts/tilt";
-import {Subtractor} from "./parts/subtractor";
-import {SensorSonar} from "./parts/sensorSonar";
-import {GateXor} from "./parts/gateXor";
+function ObjectLoader() {
+    const nameToId = {};
+    const idToName = {};
+    const idToObject = {};
+    const idToDefinition = {};
+    const ids = [];
 
-const objects = [
-    Led,
-    Oscillator,
-    Battery,
-    GateOr,
-    GateXor,
-    GateAnd,
-    GateNot,
-    Wheel,
-    SensorTouch,
-    Propeller,
-    Controller,
-    Button,
-    Switch,
-    Transistor,
-    Meter,
-    Resistor,
-    Adder,
-    Capacitor,
-    Altimeter,
-    Comparator,
-    Tilt,
-    Subtractor,
-    SensorSonar];
+    let _parts;
+    let _guiIconStrings;
 
-const nameToId = {};
-const idToName = {};
-const idToObject = {};
-const idToDefinition = {};
-const ids = [];
+    this.load = (objects, parts, guiIcons) => {
+        for (let i = 0; i < objects.length; ++i) {
+            ids.push(i);
+            nameToId[objects[i].name] = i;
+            idToName[i] = objects[i].name;
+            idToObject[i] = objects[i];
+        }
 
-for (let i = 0; i < objects.length; ++i) {
-    ids.push(i);
-    nameToId[objects[i].name] = i;
-    idToName[i] = objects[i].name;
-    idToObject[i] = objects[i];
+        for (const category of parts.categories)
+            for (const part of category.parts)
+                idToDefinition[nameToId[part.object]] = part;
+
+        _parts = parts;
+        _guiIconStrings = guiIcons;
+    };
+
+    this.getPartObject = name => {
+        return idToObject[nameToId[name]];
+    };
+
+    this.getPartId = name => {
+        return nameToId[name];
+    };
+
+    this.getPartFromId = id => {
+        return idToDefinition[id];
+    };
+
+    this.getPartIds = () => {
+        return ids;
+    };
+
+    this.getParts = () => {
+        return _parts;
+    };
+
+    this.getGuiIconStrings = () => {
+        return _guiIconStrings;
+    };
 }
 
-for (const category of parts.categories)
-    for (const part of category.parts)
-        idToDefinition[nameToId[part.object]] = part;
+const _objectLoader = new ObjectLoader();
+
+/**
+ * Load all part objects, icons and specifications.
+ * @param {Array} objects An array of part objects.
+ * @param {Object} parts A JSON definition of all parts.
+ * @param {Object} guiIcons A dictionary of all icons per part.
+ */
+export function loadObjects(objects, parts, guiIcons) {
+    _objectLoader.load(objects, parts, guiIcons);
+}
 
 /**
  * Get part state from its name.
@@ -71,7 +67,7 @@ for (const category of parts.categories)
  * @returns {Object} the state object.
  */
 export function getPartObject(name) {
-    return idToObject[nameToId[name]];
+    return _objectLoader.getPartObject(name);
 }
 
 /**
@@ -80,7 +76,7 @@ export function getPartObject(name) {
  * @returns {Number} A unique id. -1 if the part name is invalid.
  */
 export function getPartId(name) {
-    return nameToId[name];
+    return _objectLoader.getPartId(name);
 }
 
 /**
@@ -90,13 +86,30 @@ export function getPartId(name) {
  * @returns {Object} A valid part configuration. If the id is invalid, null is returned.
  */
 export function getPartFromId(id) {
-    return idToDefinition[id];
+    return _objectLoader.getPartFromId(id);
 }
 
 /**
  * Return all part ID's in an array.
  * @returns {Array} An array of numbers.
  */
+export function getPartIds() {
+    return _objectLoader.getPartIds();
+}
+
+/**
+ * Return the specification for the parts.
+ * @returns {Object}
+ */
 export function getParts() {
-    return ids;
+    return _objectLoader.getParts();
+}
+
+/**
+ * Return the base64 encoded PNG of the icon.
+ * @param {String} part The part name.
+ * @returns {String} A base64 encoded PNG.
+ */
+export function getGuiIconString(part) {
+    return _objectLoader.getGuiIconStrings()[part];
 }
