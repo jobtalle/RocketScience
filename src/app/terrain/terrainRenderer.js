@@ -1,4 +1,3 @@
-import {StyleUtils} from "../utils/styleUtils";
 import {TerrainSegment} from "./terrainSegment";
 import {Scale} from "../world/scale";
 import {Terrain} from "./terrain";
@@ -11,10 +10,6 @@ import {Terrain} from "./terrain";
  * @constructor
  */
 export function TerrainRenderer(myr, terrain, scatters) {
-    const WATER_DEPTH = 200;
-    const COLOR_WATER_TOP = StyleUtils.getColor("--game-color-water-top");
-    const COLOR_WATER_BOTTOM = StyleUtils.getColor("--game-color-water-bottom");
-
     const makeSegments = heights => {
         const segments = [];
         let scattersBegin = 0;
@@ -59,14 +54,6 @@ export function TerrainRenderer(myr, terrain, scatters) {
 
         for (let segment = first; segment < last; ++segment)
             _segments[segment].draw(segment * Terrain.SECTION_WIDTH, -Terrain.SEGMENT_ELEVATION);
-
-        myr.primitives.fillRectangleGradient(
-            COLOR_WATER_TOP,
-            COLOR_WATER_TOP,
-            COLOR_WATER_BOTTOM,
-            COLOR_WATER_BOTTOM,
-            0, 0,
-            terrain.getWidth(), WATER_DEPTH);
     };
 
     /**

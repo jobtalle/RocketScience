@@ -9,11 +9,12 @@ import {ControllerState} from "./controllerState";
 import {CameraSmooth} from "../view/camera/cameraSmooth";
 import {StyleUtils} from "../utils/styleUtils";
 import {TerrainRenderer} from "../terrain/terrainRenderer";
-import {ScatterProfile} from "../terrain/scatters/scatterProfile";
 import {Scatters} from "../terrain/scatters/scatters";
-import {CloudsRenderer} from "../clouds/cloudsRenderer";
-import Myr from "myr.js"
+import {CloudsRenderer} from "./clouds/cloudsRenderer";
 import {Scale} from "./scale";
+import {Water} from "./water/water";
+import {WaterRenderer} from "./water/waterRenderer";
+import Myr from "myr.js"
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -25,6 +26,12 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
+    const _water = new Water(16);
+    const _waterRenderer = new WaterRenderer(
+        renderContext.getMyr(),
+        _water,
+        renderContext.getWidth(),
+        renderContext.getHeight());
     const _cloudsRenderer = new CloudsRenderer(
         renderContext.getMyr(),
         -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER,
@@ -46,6 +53,8 @@ export function World(renderContext, missionProgress) {
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
     let _paused = true;
+    let _waterLevelTop;
+    let _waterLevelBottom;
 
     const clickObject = (x, y) => {
         const at = new Myr.Vector(x, y);
@@ -67,6 +76,20 @@ export function World(renderContext, missionProgress) {
         this.setCamera(null);
 
         return false;
+    };
+
+    const zoomIn = () => {
+        if (_camera)
+            _camera.zoomIn();
+        else
+            _view.zoomIn();
+    };
+
+    const zoomOut = () => {
+        if (_camera)
+            _camera.zoomOut();
+        else
+            _view.zoomOut();
     };
 
     /**
@@ -135,18 +158,10 @@ export function World(renderContext, missionProgress) {
     this.onMouseEvent = event => {
         switch (event.type) {
             case MouseEvent.EVENT_SCROLL:
-                if (event.wheelDelta > 0) {
-                    if (_camera)
-                        _camera.zoomIn();
-                    else
-                        _view.zoomIn();
-                }
-                else {
-                    if (_camera)
-                        _camera.zoomOut();
-                    else
-                        _view.zoomOut();
-                }
+                if (event.wheelDelta > 0)
+                    zoomIn();
+                else
+                    zoomOut();
 
                 break;
             case MouseEvent.EVENT_MOVE:
@@ -242,7 +257,8 @@ export function World(renderContext, missionProgress) {
      */
     this.update = timeStep => {
         if (!_paused) {
-            _physics.update(1 / 60);
+            _physics.update(timeStep);
+            _water.update(timeStep);
 
             let ticks = 0;
             _tickCounter -= timeStep;
@@ -275,10 +291,14 @@ export function World(renderContext, missionProgress) {
         const right = left + _view.getWidth() / _view.getZoom();
         const top = _view.getOrigin().y;
         const bottom = top + _view.getHeight() / +_view.getZoom();
+        const waterY = -_view.getOrigin().y * _view.getZoom();
+        const amp = Math.ceil(_water.getAmplitude() * _view.getZoom());
+
+        _waterLevelTop = Math.round(waterY - amp);
+        _waterLevelBottom = Math.round(_waterLevelTop + amp * 2);
 
         _surface.bind();
         _surface.clear();
-        renderContext.getMyr().blendEnable();
 
         renderContext.getMyr().push();
         renderContext.getMyr().transform(_view.getTransform());
@@ -292,13 +312,32 @@ export function World(renderContext, missionProgress) {
         _cloudsRenderer.drawFront(left, right, top, bottom);
 
         renderContext.getMyr().pop();
+
+        if (_waterLevelTop < _surface.getHeight())
+            _waterRenderer.update(_view.getTransform(), left, right, bottom);
     };
 
     /**
      * Draw the world
      */
     this.draw = () => {
-        _surface.draw(0, 0);
+        if (_waterLevelBottom > 0)
+            _surface.drawPart(
+                0,
+                0,
+                0,
+                0,
+                _surface.getWidth(),
+                Math.min(_waterLevelBottom, _surface.getHeight()));
+
+        if (_waterLevelTop < _surface.getHeight())
+            _waterRenderer.drawPart(
+                0,
+                Math.max(0, _waterLevelTop),
+                0,
+                Math.max(0, _waterLevelTop),
+                _surface.getWidth(),
+                _surface.getHeight() - Math.max(0, _waterLevelTop));
     };
 
     /**
@@ -312,6 +351,9 @@ export function World(renderContext, missionProgress) {
         _surface.free();
         _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
         _surface.setClearColor(World.COLOR_SKY);
+
+        _waterRenderer.resize(width, height);
+        _waterRenderer.setSurface(_surface);
     };
 
     /**
@@ -328,6 +370,8 @@ export function World(renderContext, missionProgress) {
     _surface.setClearColor(World.COLOR_SKY);
 
     this.updateTerrain();
+
+    _waterRenderer.setSurface(_surface);
 }
 
 World.COLOR_SKY = StyleUtils.getColor("--game-color-sky");

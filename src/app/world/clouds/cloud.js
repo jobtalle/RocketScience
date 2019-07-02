@@ -1,6 +1,6 @@
-import Myr from "myr.js";
-import {StyleUtils} from "../utils/styleUtils";
-import {FractalNoise} from "../utils/fractalNoise";
+import Myr from "../../../../node_modules/myr.js/myr";
+import {StyleUtils} from "../../utils/styleUtils";
+import {FractalNoise} from "../../utils/fractalNoise";
 
 /**
  * A renderable cloud.
@@ -86,7 +86,6 @@ export function Cloud(myr, base, scale) {
                 sphere.radius);
 
         surface.bind();
-        surface.clear();
 
         Cloud.SHADER.setSurface("source", source);
         Cloud.SHADER.setSize(source.getWidth(), source.getHeight());

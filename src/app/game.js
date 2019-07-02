@@ -21,12 +21,12 @@ export function Game(renderContext, input, user) {
     const update = timeStep => {
         switch (_mode) {
             case Game.MODE_EDIT:
-                _world.update(timeStep);
-                _editor.update(timeStep);
+                _world.update(1 / 60);
+                _editor.update(1 / 60);
 
                 break;
             case Game.MODE_GAME:
-                _world.update(timeStep);
+                _world.update(1 / 60);
 
                 break;
         }
