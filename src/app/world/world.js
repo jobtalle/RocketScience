@@ -28,7 +28,7 @@ export function World(renderContext, missionProgress) {
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
     const _water = new Water(16);
     const _waterRenderer = new WaterRenderer(
-        renderContext.getMyr(),
+        renderContext,
         _water,
         renderContext.getWidth(),
         renderContext.getHeight());
@@ -314,13 +314,17 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().pop();
 
         if (_waterLevelTop < _surface.getHeight())
-            _waterRenderer.update(_view.getTransform(), left, right, bottom);
+            _waterRenderer.update(timeStep, _view.getTransform(), left, right, top, bottom);
     };
 
     /**
      * Draw the world
      */
     this.draw = () => {
+        // TODO: Draw sky gradient
+        renderContext.getMyr().setClearColor(World.COLOR_SKY);
+        renderContext.getMyr().clear();
+
         if (_waterLevelBottom > 0)
             _surface.drawPart(
                 0,
@@ -350,7 +354,6 @@ export function World(renderContext, missionProgress) {
 
         _surface.free();
         _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
-        _surface.setClearColor(World.COLOR_SKY);
 
         _waterRenderer.resize(width, height);
         _waterRenderer.setSurface(_surface);
@@ -367,7 +370,6 @@ export function World(renderContext, missionProgress) {
     };
 
     _view.focus(-missionProgress.getMission().getTerrain().getWidth() * 0.5, 0, 0.5);
-    _surface.setClearColor(World.COLOR_SKY);
 
     this.updateTerrain();
 

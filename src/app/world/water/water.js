@@ -38,7 +38,7 @@ export function Water(amplitude) {
      * @returns {Number} The vertical displacement in pixels.
      */
     this.sampleIndex = i => {
-        return Math.cos(i * Water.INTERVAL * 0.07 + _phase) * amplitude * Math.sin(_phase);
+        return Math.cos(i * Water.INTERVAL * 0.07 + _phase) * amplitude * Math.sin(_phase) * 0.3;
     };
 }
 

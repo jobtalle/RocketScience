@@ -1,33 +1,47 @@
-import {StyleUtils} from "../../utils/styleUtils";
 import {Water} from "./water";
+import {Scale} from "../scale";
+import {Terrain} from "../../terrain/terrain";
 import Myr from "myr.js";
+import {cubicNoiseConfig, cubicNoiseSample2} from "../../utils/cubicNoise";
+import {RenderContext} from "../../renderContext";
 
 /**
  * A water renderer.
- * @param {Myr} myr A Myriad instance.
+ * @param {RenderContext} renderContext A render context.
  * @param {Water} water A water object.
  * @param {Number} width The view width in pixels.
  * @param {Number} height The view height in pixels.
  * @constructor
  */
-export function WaterRenderer(myr, water, width, height) {
-    const _shader = WaterRenderer.makeShader(myr);
+export function WaterRenderer(renderContext, water, width, height) {
+    const _gradient = WaterRenderer.makeGradient(renderContext);
+    const _noise = WaterRenderer.makeNoise(renderContext.getMyr());
+    const _shader = WaterRenderer.makeShader(renderContext.getMyr(), _gradient, _noise);
     let _surface = null;
+    let _noiseShift = 0;
 
     /**
      * Update the water renderer. Call this before rendering.
+     * @param {Number} timeStep The amount of time time that has passed since the last update.
      * @param {Myr.Transform} transform A world view transformation.
      * @param {Number} left The left position of the viewport in pixels.
      * @param {Number} right The right position of the viewport in pixels.
+     * @param {Number} top The top position of the viewport in pixels.
      * @param {Number} bottom The bottom position of the viewport in pixels.
      */
-    this.update = (transform, left, right, bottom) => {
+    this.update = (timeStep, transform, left, right, top, bottom) => {
+        _noiseShift += timeStep * WaterRenderer.NOISE_SPEED;
+
+        if (_noiseShift > 1)
+            _noiseShift -= 1;
+
         _surface.bind();
         _surface.clear();
 
-        myr.push();
-        myr.transform(transform);
+        renderContext.getMyr().push();
+        renderContext.getMyr().transform(transform);
 
+        const opaqueBoundary = Terrain.MAX_DEPTH * Scale.PIXELS_PER_METER;
         const iLeft = Math.floor(left / Water.INTERVAL);
         const iRight = Math.ceil(right / Water.INTERVAL);
         let dLeft = 0;
@@ -41,23 +55,53 @@ export function WaterRenderer(myr, water, width, height) {
             dRight = water.sampleIndex(i + 1);
             xRight = (i + 1) * Water.INTERVAL;
 
-            myr.primitives.drawTriangleGradient(
-                Myr.Color.WHITE,
+            renderContext.getMyr().primitives.drawTriangleGradient(
+                WaterRenderer.COLOR_TOP,
                 xLeft, dLeft,
-                Myr.Color.WHITE,
-                xLeft, bottom,
-                Myr.Color.WHITE,
-                xRight, bottom);
-            myr.primitives.drawTriangleGradient(
-                Myr.Color.WHITE,
-                xRight, bottom,
-                Myr.Color.WHITE,
+                WaterRenderer.COLOR_PRESSURE,
+                xLeft, dLeft + WaterRenderer.SURFACE_THICKNESS,
+                WaterRenderer.COLOR_PRESSURE,
+                xRight, dRight +  + WaterRenderer.SURFACE_THICKNESS);
+            renderContext.getMyr().primitives.drawTriangleGradient(
+                WaterRenderer.COLOR_PRESSURE,
+                xRight, dRight +  + WaterRenderer.SURFACE_THICKNESS,
+                WaterRenderer.COLOR_TOP,
                 xRight, dRight,
-                Myr.Color.WHITE,
+                WaterRenderer.COLOR_TOP,
                 xLeft, dLeft);
+
+            renderContext.getMyr().primitives.drawTriangleGradient(
+                WaterRenderer.COLOR_PRESSURE,
+                xLeft, dLeft + WaterRenderer.SURFACE_THICKNESS,
+                WaterRenderer.COLOR_BOTTOM,
+                xLeft, opaqueBoundary,
+                WaterRenderer.COLOR_BOTTOM,
+                xRight, opaqueBoundary);
+            renderContext.getMyr().primitives.drawTriangleGradient(
+                WaterRenderer.COLOR_BOTTOM,
+                xRight, opaqueBoundary,
+                WaterRenderer.COLOR_PRESSURE,
+                xRight, dRight + WaterRenderer.SURFACE_THICKNESS,
+                WaterRenderer.COLOR_PRESSURE,
+                xLeft, dLeft + WaterRenderer.SURFACE_THICKNESS);
         }
 
-        myr.pop();
+        if (bottom > opaqueBoundary)
+            renderContext.getMyr().primitives.fillRectangle(
+                WaterRenderer.COLOR_BOTTOM,
+                left,
+                opaqueBoundary,
+                right - left,
+                bottom - opaqueBoundary);
+
+        renderContext.getMyr().pop();
+
+        _shader.setVariable("shift", _noiseShift);
+        _shader.setVariable("top", top / WaterRenderer.NOISE_SCALE);
+        _shader.setVariable("left", left / WaterRenderer.NOISE_SCALE);
+        _shader.setVariable("xScale", (right - left) / WaterRenderer.NOISE_SCALE);
+        _shader.setVariable("yScale", (bottom - top) / WaterRenderer.NOISE_SCALE);
+        _shader.setVariable("scale", renderContext.getWidth() / (right - left));
     };
 
     /**
@@ -77,7 +121,7 @@ export function WaterRenderer(myr, water, width, height) {
         if (_surface)
             _surface.free();
 
-        _surface = new myr.Surface(width, height);
+        _surface = new (renderContext.getMyr().Surface)(width, height);
         _shader.setSurface("water", _surface);
         _shader.setSize(width, height);
     };
@@ -99,6 +143,8 @@ export function WaterRenderer(myr, water, width, height) {
      * Free all resources maintained by this water renderer.
      */
     this.free = () => {
+        _noise.free();
+        _gradient.free();
         _surface.free();
         _shader.free();
     };
@@ -106,20 +152,81 @@ export function WaterRenderer(myr, water, width, height) {
     this.resize(width, height);
 }
 
-WaterRenderer.SURFACE_THICKNESS = 8;
-WaterRenderer.COLOR_WATER_TOP = StyleUtils.getColor("--game-color-water-top");
-WaterRenderer.COLOR_WATER_BOTTOM = StyleUtils.getColor("--game-color-water-bottom");
-WaterRenderer.makeShader = (myr) => {
-    return new myr.Shader(
+WaterRenderer.SURFACE_THICKNESS = 16;
+WaterRenderer.PRECISION = 1 / 32;
+WaterRenderer.NOISE_RESOLUTION = 128;
+WaterRenderer.NOISE_SCALE = 128;
+WaterRenderer.NOISE_PERIOD = 4;
+WaterRenderer.NOISE_SPEED = 0.12;
+WaterRenderer.COLOR_TOP = new Myr.Color(0, 0, 0, 1);
+WaterRenderer.COLOR_PRESSURE = new Myr.Color(WaterRenderer.SURFACE_THICKNESS / (Terrain.MAX_DEPTH * Scale.PIXELS_PER_METER), 1, 0, 1);
+WaterRenderer.COLOR_BOTTOM = new Myr.Color(1, 1, 0, 1);
+WaterRenderer.SPRITE_GRADIENT = "water";
+WaterRenderer.makeShader = (myr, gradient, noise) => {
+    const shader = new myr.Shader(
         "void main() {" +
-        "mediump vec4 pixelWorld = texture(world, uv).rgba;" +
         "mediump vec4 pixelWater = texture(water, uv).rgba;" +
+        "mediump vec2 noiseSample = texture(noise, mod(vec2(left + uv.x * xScale, top + uv.y * yScale + shift), 1.0)).xy;" +
+        "mediump vec2 distortion = noiseSample * 2.0 - vec2(1.0);" +
+        "mediump vec2 sampleLocation = uv + distortion * scale * 0.002;" +
+        "mediump vec4 pixelWorld = texture(world, sampleLocation).rgba;" +
+        "mediump vec4 pixelGradient = texture(gradient, vec2(pixelWater.r, pixelWater.g)).rgba;" +
         "if (pixelWater.a == 0.0) discard;" +
-        "color = vec4(pixelWorld.rgb * 0.5, pixelWorld.a);" +
+        "mediump vec3 background = mix(texture(gradient, vec2(1.0)).rgb, pixelWorld.rgb, pixelWorld.a);" +
+        "color = vec4(mix(background, pixelGradient.rgb, pixelGradient.a), 1);" +
         "}",
         [
             "world",
-            "water"
+            "water",
+            "gradient",
+            "noise",
         ],
-        []);
+        [
+            "shift",
+            "top",
+            "left",
+            "xScale",
+            "yScale",
+            "scale"
+        ]);
+
+    shader.setSurface("gradient", gradient);
+    shader.setSurface("noise", noise);
+
+    return shader;
+};
+
+WaterRenderer.makeGradient = renderContext => {
+    const sprite = renderContext.getSprites().getSprite(WaterRenderer.SPRITE_GRADIENT);
+    const surface = new (renderContext.getMyr().Surface)(sprite.getWidth(), sprite.getHeight());
+
+    surface.bind();
+    sprite.draw(0, 0);
+
+    return surface;
+};
+
+WaterRenderer.makeNoise = myr => {
+    const surface = new myr.Surface(WaterRenderer.NOISE_RESOLUTION, WaterRenderer.NOISE_RESOLUTION, 0, true);
+    const dxConfig = cubicNoiseConfig(
+        Math.random() * Number.MAX_SAFE_INTEGER,
+        WaterRenderer.NOISE_PERIOD,
+        WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD,
+        WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD);
+    const dyConfig = cubicNoiseConfig(
+        Math.random() * Number.MAX_SAFE_INTEGER,
+        WaterRenderer.NOISE_PERIOD,
+        WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD,
+        WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD);
+
+    surface.bind();
+
+    for (let y = 0; y < WaterRenderer.NOISE_RESOLUTION; ++y) for (let x = 0; x < WaterRenderer.NOISE_RESOLUTION; ++x) {
+        const dxs = cubicNoiseSample2(dxConfig, x, y);
+        const dys = cubicNoiseSample2(dyConfig, x, y);
+
+        myr.primitives.drawPoint(new Myr.Color(dxs, dys, 0, 1), x, y);
+    }
+
+    return surface;
 };
