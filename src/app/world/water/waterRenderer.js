@@ -207,7 +207,7 @@ WaterRenderer.makeGradient = renderContext => {
 };
 
 WaterRenderer.makeNoise = myr => {
-    const surface = new myr.Surface(WaterRenderer.NOISE_RESOLUTION, WaterRenderer.NOISE_RESOLUTION, 0, true);
+    const surface = new myr.Surface(WaterRenderer.NOISE_RESOLUTION, WaterRenderer.NOISE_RESOLUTION, 0, true, true);
     const dxConfig = cubicNoiseConfig(
         Math.random() * Number.MAX_SAFE_INTEGER,
         WaterRenderer.NOISE_PERIOD,
