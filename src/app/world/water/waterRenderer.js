@@ -101,7 +101,8 @@ export function WaterRenderer(renderContext, water, width, height) {
         _shader.setVariable("left", left / WaterRenderer.NOISE_SCALE);
         _shader.setVariable("xScale", (right - left) / WaterRenderer.NOISE_SCALE);
         _shader.setVariable("yScale", (bottom - top) / WaterRenderer.NOISE_SCALE);
-        _shader.setVariable("scale", renderContext.getWidth() / (right - left));
+        _shader.setVariable("xPixel", 1 / (right - left));
+        _shader.setVariable("yPixel", 1 / (bottom - top));
     };
 
     /**
@@ -157,7 +158,8 @@ WaterRenderer.PRECISION = 1 / 32;
 WaterRenderer.NOISE_RESOLUTION = 128;
 WaterRenderer.NOISE_SCALE = 128;
 WaterRenderer.NOISE_PERIOD = 4;
-WaterRenderer.NOISE_SPEED = 0.12;
+WaterRenderer.NOISE_SPEED = 0.2;
+WaterRenderer.NOISE_DISPLACEMENT = 1.8;
 WaterRenderer.COLOR_TOP = new Myr.Color(0, 0, 0, 1);
 WaterRenderer.COLOR_PRESSURE = new Myr.Color(WaterRenderer.SURFACE_THICKNESS / (Terrain.MAX_DEPTH * Scale.PIXELS_PER_METER), 1, 0, 1);
 WaterRenderer.COLOR_BOTTOM = new Myr.Color(1, 1, 0, 1);
@@ -166,9 +168,9 @@ WaterRenderer.makeShader = (myr, gradient, noise) => {
     const shader = new myr.Shader(
         "void main() {" +
         "mediump vec4 pixelWater = texture(water, uv).rgba;" +
-        "mediump vec2 noiseSample = texture(noise, mod(vec2(left + uv.x * xScale, top + uv.y * yScale + shift), 1.0)).xy;" +
+        "mediump vec2 noiseSample = texture(noise, mod(vec2(left, top + shift) + uv * vec2(xScale, yScale), 1.0)).xy;" +
         "mediump vec2 distortion = noiseSample * 2.0 - vec2(1.0);" +
-        "mediump vec2 sampleLocation = uv + distortion * scale * 0.002;" +
+        "mediump vec2 sampleLocation = uv + distortion * vec2(xPixel, yPixel) * " + Number(WaterRenderer.NOISE_DISPLACEMENT).toFixed(1) + ";" +
         "mediump vec4 pixelWorld = texture(world, sampleLocation).rgba;" +
         "mediump vec4 pixelGradient = texture(gradient, vec2(pixelWater.r, pixelWater.g)).rgba;" +
         "if (pixelWater.a == 0.0) discard;" +
@@ -187,7 +189,8 @@ WaterRenderer.makeShader = (myr, gradient, noise) => {
             "left",
             "xScale",
             "yScale",
-            "scale"
+            "xPixel",
+            "yPixel"
         ]);
 
     shader.setSurface("gradient", gradient);

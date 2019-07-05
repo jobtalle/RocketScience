@@ -1,18 +1,16 @@
-import Myr from "../../../../node_modules/myr.js/myr";
 import {StyleUtils} from "../../utils/styleUtils";
 import {FractalNoise} from "../../utils/fractalNoise";
+import Myr from "../../../../node_modules/myr.js/myr";
 
 /**
  * A renderable cloud.
  * @param {Myr} myr A Myriad instance.
+ * @param {Myr.Shader} shader A cloud shader.
  * @param {Number} base The width of the cloud base.
  * @param {Number} scale The cloud scale factor.
  * @constructor
  */
-export function Cloud(myr, base, scale) {
-    if (!Cloud.SHADER)
-        Cloud.SHADER = Cloud.makeShader(myr);
-
+export function Cloud(myr, shader, base, scale) {
     const paintSphere = (x, y, radius) => {
         const step = Math.PI * -2 / Cloud.SPHERE_PRECISION;
         let dxEnd = 1;
@@ -87,9 +85,9 @@ export function Cloud(myr, base, scale) {
 
         surface.bind();
 
-        Cloud.SHADER.setSurface("source", source);
-        Cloud.SHADER.setSize(source.getWidth(), source.getHeight());
-        Cloud.SHADER.draw(0, 0);
+        shader.setSurface("source", source);
+        shader.setSize(source.getWidth(), source.getHeight());
+        shader.draw(0, 0);
 
         myr.flush();
         source.free();
@@ -202,24 +200,23 @@ Cloud.NORMAL_SHADE = new Myr.Color(
 Cloud.SPACING = 0.7;
 Cloud.SPACING_CORRECTION = 0.1;
 Cloud.HEIGHT_FACTOR = 0.2;
-Cloud.SHADER = null;
-Cloud.makeShader = myr => {
+Cloud.makeShader = (myr, colorFill, colorShade) => {
     return new myr.Shader(
         "void main() {" +
         "mediump vec4 source = texture(source, uv).xyzw;" +
         "mediump vec3 normal = normalize((source.xyz - vec3(0.5)) * 2.0);" +
         "if (dot(normalize(vec3(0.5, -0.5, 1)), normal) < 0.5 * uv.y)" +
         "color = vec4(" +
-        Number(Cloud.COLOR_SHADE.r).toFixed(2) + ", " +
-        Number(Cloud.COLOR_SHADE.g).toFixed(2) + ", " +
-        Number(Cloud.COLOR_SHADE.b).toFixed(2) + ", " +
-        Number(Cloud.COLOR_SHADE.a).toFixed(2) + " * source.w);" +
+        Number(colorShade.r).toFixed(3) + ", " +
+        Number(colorShade.g).toFixed(3) + ", " +
+        Number(colorShade.b).toFixed(3) + ", " +
+        Number(colorShade.a).toFixed(3) + " * source.w);" +
         "else " +
         "color = vec4(" +
-        Number(Cloud.COLOR_FILL.r).toFixed(2) + ", " +
-        Number(Cloud.COLOR_FILL.g).toFixed(2) + ", " +
-        Number(Cloud.COLOR_FILL.b).toFixed(2) + ", " +
-        Number(Cloud.COLOR_FILL.a).toFixed(2) + " * source.w);" +
+        Number(colorFill.r).toFixed(3) + ", " +
+        Number(colorFill.g).toFixed(3) + ", " +
+        Number(colorFill.b).toFixed(3) + ", " +
+        Number(colorFill.a).toFixed(3) + " * source.w);" +
         "}",
         ["source"],
         []);

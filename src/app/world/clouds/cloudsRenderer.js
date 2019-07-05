@@ -116,15 +116,21 @@ CloudsRenderer.Set = function(myr, density, scale) {
                 _slots[first] = Math.floor(Math.random() * _bank.length);
     };
 
-    for (let i = 0; i < CloudsRenderer.BANK_SIZE; ++i) {
-        const base = (CloudsRenderer.CLOUD_BASE_MIN + Math.round((CloudsRenderer.CLOUD_BASE_MAX - CloudsRenderer.CLOUD_BASE_MIN) * Math.random())) * scale;
-        const cloud = new Cloud(myr, base * scale, scale);
+    const makeClouds = () => {
+        const shader = Cloud.makeShader(myr, Cloud.COLOR_FILL, Cloud.COLOR_SHADE);
 
-        if (cloud.getBase() > _maxBase)
-            _maxBase = cloud.getBase();
+        for (let i = 0; i < CloudsRenderer.BANK_SIZE; ++i) {
+            const base = (CloudsRenderer.CLOUD_BASE_MIN + Math.round((CloudsRenderer.CLOUD_BASE_MAX - CloudsRenderer.CLOUD_BASE_MIN) * Math.random())) * scale;
+            const cloud = new Cloud(myr, shader, base * scale, scale);
 
-        _bank.push(cloud);
-    }
+            if (cloud.getBase() > _maxBase)
+                _maxBase = cloud.getBase();
+
+            _bank.push(cloud);
+        }
+
+        shader.free();
+    };
 
     this.shift = delta => {
         _shift += delta;
@@ -160,6 +166,7 @@ CloudsRenderer.Set = function(myr, density, scale) {
             cloud.free();
     };
 
+    makeClouds();
     populateSlots();
 };
 
