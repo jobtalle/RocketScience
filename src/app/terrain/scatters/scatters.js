@@ -20,7 +20,7 @@ export function Scatters(renderContext, terrain) {
         const values = [];
 
         for (let x = 0; x < (terrain.getHeights().length - 1) * Terrain.PIXELS_PER_SEGMENT - resolution; x += resolution)
-            values.push(noise.sample(x) * 0.5 + 0.5 < threshold && detailNoise.sample(x) > 0);
+            values.push(noise.sample(x) < threshold && detailNoise.sample(x) > 0.5);
 
         return values;
     };

@@ -1,6 +1,5 @@
 import {makeOctaves} from "./octaves";
-import noisejs from "noisejs"
-import Myr from "myr.js";
+import {cubicNoiseConfig, cubicNoiseSample1} from "./cubicNoise";
 
 /**
  * A 2D fractal simplex noise with octaves.
@@ -11,10 +10,7 @@ import Myr from "myr.js";
  */
 export function FractalNoise(seed, scale, octaves) {
     const _octaves = makeOctaves(octaves, 2);
-    const _noise = new noisejs.Noise(seed);
-    const _origin = new Myr.Vector(seed, seed);
-    const _direction = seed * Math.PI * 2;
-    const _directionVector = new Myr.Vector(Math.cos(_direction), Math.sin(_direction));
+    const _noise = cubicNoiseConfig(seed);
 
     /**
      * Sample this noise at value x.
@@ -25,9 +21,7 @@ export function FractalNoise(seed, scale, octaves) {
         let result = 0;
 
         for (const octave of _octaves)
-            result += octave * _noise.simplex2(
-                _origin.x + _directionVector.x * x * scale,
-                _origin.y + _directionVector.y * x * scale);
+            result += octave * cubicNoiseSample1(_noise, x * scale);
 
         return result;
     };

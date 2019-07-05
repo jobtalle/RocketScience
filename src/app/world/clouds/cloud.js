@@ -133,7 +133,7 @@ Cloud.makeSpheres = (base, scale) => {
 
     while (x < base) {
         const amp = 1 - (2 * (x / base) - 1) * (2 * (x / base) - 1);
-        const noiseY = 0.5 + 0.5 * shape.sample(x);
+        const noiseY = shape.sample(x);
         const y = -(noiseY * noiseY) * base * Cloud.HEIGHT_FACTOR * amp;
         const xp = x;
         let radius = (Cloud.SPHERE_RADIUS_MIN + (Cloud.SPHERE_RADIUS_MAX - Cloud.SPHERE_RADIUS_MIN) * Math.random() * amp) * scale;
