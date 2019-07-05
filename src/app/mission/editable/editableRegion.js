@@ -52,10 +52,10 @@ export function EditableRegion(origin, size) {
     };
 
     /**
-     * Check whether a point is in the region, with a margin of x POINTs on all sides.
+     * Check whether a point is in the region, with a margin of x points on all sides.
      * @param {Number} x The X coordinate relative to the origin.
      * @param {Number} y The Y coordinate relative to the origin.
-     * @param {Number} margin The amount of POINTs outside the region to count as part of the region.
+     * @param {Number} margin The amount of points outside the region to count as part of the region.
      * @returns {Boolean} A boolean indicating whether the point is inside this region.
      */
     this.containsPoint = (x, y, margin=0) =>
@@ -74,6 +74,10 @@ export function EditableRegion(origin, size) {
         && origin.x + size.x > region.getOrigin().x
         && origin.y < region.getOrigin().y + region.getSize().y
         && origin.y + size.y > region.getOrigin().y;
+
+    this.fits = pcb => {
+
+    };
 
     /**
      * Make a copy of this region.

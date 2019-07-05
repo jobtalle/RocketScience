@@ -6,17 +6,18 @@ import {LibraryTabContents} from "./contents/libraryTabContents";
 
 /**
  * An HTML based part library.
+ * @param {User} user The user.
  * @param {PcbEditor} editor A PcbEditor.
  * @param {Toolbar} toolbar A toolbar to press buttons on.
  * @param {Info} info An information box.
- * @param {Object} overlay An element to place the library on.
+ * @param {HTMLElement} overlay An element to place the library on.
  * @param {Boolean} isEditable A boolean indicating whether the displayed part budgets are editable.
  * @constructor
  */
-export function Library(editor, toolbar, info, overlay, isEditable) {
+export function Library(user, editor, toolbar, info, overlay, isEditable) {
     const _container = document.createElement("div");
     const _libraryContent = new LibraryTabContents();
-    const _libraryTab = new LibraryTabBar(editor, toolbar, info, _libraryContent, isEditable);
+    const _libraryTab = new LibraryTabBar(user, editor, toolbar, info, _libraryContent, isEditable);
 
     const build = () => {
         _container.id = Library.ID;
@@ -34,6 +35,10 @@ export function Library(editor, toolbar, info, overlay, isEditable) {
      */
     this.setBudget = (budget, summary) => {
         _libraryTab.setBudget(budget, summary);
+    };
+
+    this.rebuildPcbContent = () => {
+        _libraryTab.rebuildPcbContent();
     };
 
     /**

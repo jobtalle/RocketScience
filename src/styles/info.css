@@ -24,6 +24,38 @@
     font-size: var(--font-size-descriptions);
 }
 
+#info .part-summary {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#info .part-summary td {
+    padding: 0;
+}
+
+#info .part-summary td + td {
+    width: 100%;
+}
+
+#info .part-summary .entry {
+    font-family: monospace;
+    font-size: var(--font-size-descriptions);
+    border-bottom: 1px solid var(--border-color);
+    width: 100%;
+    background-color: white;
+}
+
+#info .part-summary .entry .name {
+    /*display: block;*/
+    text-align: center;
+}
+
+#info .part-summary .entry .count {
+    /*display: block;*/
+    text-align: center;
+    /*right: 0;*/
+}
+
 #info .pinouts {
     width: 100%;
     border-collapse: collapse;

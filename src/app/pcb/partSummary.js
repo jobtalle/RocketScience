@@ -15,6 +15,14 @@ export function PartSummary(pcb) {
     };
 
     /**
+     * Get all the parts in the entries by name.
+     * @return {String[]} A string
+     */
+    this.getAllParts = () => {
+        return Object.keys(_entries);
+    };
+
+    /**
      * Count the number of parts with a given name.
      * @param {String} name A part name to look for.
      * @returns {Number} The number of occurrences.

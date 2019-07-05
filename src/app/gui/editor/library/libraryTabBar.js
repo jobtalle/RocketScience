@@ -6,36 +6,62 @@ import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 
 
-export function LibraryTabBar(editor, toolbar, info, tabContent, isEditable) {
+/**
+ * The Tab Bar that contains the tab buttons.
+ * @param {User} user The user.
+ * @param {PcbEditor} editor A PcbEditor.
+ * @param {Toolbar} toolbar A toolbar to press buttons on.
+ * @param {Info} info An information box.
+ * @param {LibraryTabContents} tabContent The contents of the tab page.
+ * @param {Boolean} isEditable A boolean indicating whether the displayed part budgets are editable.
+ * @constructor
+ */
+export function LibraryTabBar(user, editor, toolbar, info, tabContent, isEditable) {
     const _element = document.createElement("div");
-    const _libraryTab = new LibraryPartContents(parts.categories, (part) => {
-        toolbar.default();
+    const _partContents = new LibraryPartContents(parts.categories, (part) => {
+            toolbar.default();
 
-        editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
-    }, editor, info, isEditable);
+            editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
+        }, editor, info, isEditable);
+    let _pcbContents = new LibraryPcbContents(user.getPcbStorage().getDrawers(), (pcb) => {
+            toolbar.default();
+
+            editor.placePcb(pcb);
+        }, info);
 
     const _tabs = [
         new LibraryTabButton(
-            (content) => tabContent.setContents(content.getElement()),
+            () => tabContent.setContents(_partContents.getElement()),
             getString("LIBRARY_TABBAR_PARTS"),
             "library-tabbar-parts",
-            _libraryTab
         ),
         new LibraryTabButton(
-            (content) => tabContent.setContents(content.getElement()),
+            () => tabContent.setContents(_pcbContents.getElement()),
             getString("LIBRARY_TABBAR_PCBS"),
             "library-tabbar-pcbs",
-            new LibraryPcbContents([], info)
         )
     ];
 
     const make = () => {
         _element.className = LibraryTabBar.CLASS;
 
-        tabContent.setContents(_libraryTab.getElement());
+        tabContent.setContents(_partContents.getElement());
 
         for (const button of _tabs)
             _element.appendChild(button.getElement());
+    };
+
+    /**
+     * Rebuild all the pcb contents from scratch. Should be performed when a saved pcb is added or removed.
+     */
+    this.rebuildPcbContent = () => {
+        _pcbContents = new LibraryPcbContents(user.getPcbStorage().getDrawers(), (pcb) => {
+            toolbar.default();
+
+            editor.placePcb(pcb);
+        }, info);
+
+        tabContent.setContents(_pcbContents.getElement());
     };
 
     /**
@@ -44,7 +70,7 @@ export function LibraryTabBar(editor, toolbar, info, tabContent, isEditable) {
      * @param {PartSummary} summary A summary of all the currently used parts.
      */
     this.setBudget = (budget, summary) => {
-        _libraryTab.setBudget(budget, summary);
+        _partContents.setBudget(budget, summary);
     };
 
     /**

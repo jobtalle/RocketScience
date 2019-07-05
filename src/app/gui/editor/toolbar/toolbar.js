@@ -10,39 +10,39 @@ import {DownloadBinary} from "../../../utils/downloadBinary";
 
 /**
  * A toolbar containing buttons for the PCB editor.
- * @param {PcbEditor} editor A PcbEditor which places selected objects.
+ * @param {Editor} editor The editor.
+ * @param {PcbEditor} pcbEditor A PcbEditor which places selected objects.
  * @param {Editables} editables An Editables object which holds all editables.
  * @param {HTMLElement} overlay The element to place the toolbar on.
- * @param {Number} x The X position of the toolbar in pixels.
+ * @param {Number} xPosition The X position of the toolbar in pixels.
  * @param {World} world The game world.
  * @param {Game} game A game.
- * @param {User} user The user.
  * @param {Boolean} isMissionEditor Enables mission editor functionality.
  * @constructor
  */
-export function Toolbar(editor, editables, overlay, x, world, game, user, isMissionEditor) {
+export function Toolbar(editor, pcbEditor, editables, overlay, xPosition, world, game, isMissionEditor) {
     const _container = document.createElement("div");
     const _toggleGroupSelectMode = new ToolbarButton.ToggleGroup();
     const _buttonExtend = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
+        () => pcbEditor.setEditMode(PcbEditor.EDIT_MODE_RESHAPE),
         getString(Toolbar.TEXT_EXTEND),
         "toolbar-extend",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonSelect = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
+        () => pcbEditor.setEditMode(PcbEditor.EDIT_MODE_SELECT),
         getString(Toolbar.TEXT_SELECT),
         "toolbar-select",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonEtch = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_ETCH),
+        () => pcbEditor.setEditMode(PcbEditor.EDIT_MODE_ETCH),
         getString(Toolbar.TEXT_ETCH),
         "toolbar-etch",
         ToolbarButton.TYPE_TOGGLE_GROUP,
         _toggleGroupSelectMode);
     const _buttonMove = new ToolbarButton(
-        () => editor.setEditMode(PcbEditor.EDIT_MODE_MOVE),
+        () => pcbEditor.setEditMode(PcbEditor.EDIT_MODE_MOVE),
         getString(Toolbar.TEXT_MOVE),
         "toolbar-move",
         ToolbarButton.TYPE_TOGGLE_GROUP,
@@ -53,7 +53,7 @@ export function Toolbar(editor, editables, overlay, x, world, game, user, isMiss
         "toolbar-launch",
         ToolbarButton.TYPE_CLICK);
     const _buttonXRay = new ToolbarButton(
-        pressed => editor.setXRay(pressed),
+        pressed => pcbEditor.setXRay(pressed),
         getString(Toolbar.TEXT_X_RAY),
         "toolbar-xray",
         ToolbarButton.TYPE_TOGGLE);
@@ -63,32 +63,34 @@ export function Toolbar(editor, editables, overlay, x, world, game, user, isMiss
         "toolbar-exit",
         ToolbarButton.TYPE_CLICK);
     const _buttonUndo = new ToolbarButton(
-        () => editor.undo(),
+        () => pcbEditor.undo(),
         getString(Toolbar.TEXT_UNDO),
         "toolbar-undo",
         ToolbarButton.TYPE_CLICK);
     const _buttonRedo = new ToolbarButton(
-        () => editor.redo(),
+        () => pcbEditor.redo(),
         getString(Toolbar.TEXT_REDO),
         "toolbar-redo",
         ToolbarButton.TYPE_CLICK);
     const _buttonAddRegion = new ToolbarButton(
-        () => editables.addEditable(Editable.defaultEditable(editor.getEditable().getRegion().getOrigin().copy())),
+        () => editables.addEditable(Editable.defaultEditable(pcbEditor.getEditable().getRegion().getOrigin().copy())),
         getString(Toolbar.TEXT_ADD_REGION),
         "toolbar-add-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonCopyRegion = new ToolbarButton(
-        () => editables.addEditable(editor.getEditable().copy()),
+        () => editables.addEditable(pcbEditor.getEditable().copy()),
         getString(Toolbar.TEXT_COPY_REGION),
         "toolbar-copy-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonRemoveRegion = new ToolbarButton(
-        () => editables.removeEditable(editor.getEditable()),
+        () => editables.removeEditable(pcbEditor.getEditable()),
         getString(Toolbar.TEXT_REMOVE_REGION),
         "toolbar-remove-region",
         ToolbarButton.TYPE_CLICK);
     const _buttonSavePcb = new ToolbarButton(
-        () => user.savePcb("test", editor.getEditable().getPcb()),
+        () => {
+            editor.savePcb();
+        },
         getString(Toolbar.TEXT_SAVE_PCB),
         "toolbar-save-pcb",
         ToolbarButton.TYPE_CLICK
@@ -120,7 +122,7 @@ export function Toolbar(editor, editables, overlay, x, world, game, user, isMiss
 
     const build = () => {
         _container.id = Toolbar.ID;
-        _container.style.left = x + "px";
+        _container.style.left = xPosition + "px";
 
         _container.appendChild(_buttonExtend.getElement());
         _container.appendChild(_buttonSelect.getElement());

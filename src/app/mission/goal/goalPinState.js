@@ -1,5 +1,5 @@
 import {PcbGraph} from "../../pcb/pcbGraph";
-import {getPartFromId, getPartId} from "../../part/objects";
+import {getPartDefinitionFromId, getPartId} from "../../part/objects";
 import {Goal} from "./goal";
 
 /**
@@ -120,7 +120,7 @@ export function GoalPinState(part, pinIndex, pinValue) {
  * @returns {GoalPinState} The deserialized GoalPinState.
  */
 GoalPinState.deserialize = buffer => {
-    let part = getPartFromId(buffer.readByte()).object;
+    let part = getPartDefinitionFromId(buffer.readByte()).object;
     let pinIndex = buffer.readByte();
     let pinValue = buffer.readByte();
 

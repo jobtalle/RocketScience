@@ -220,6 +220,13 @@ export function Pcb() {
         return true;
     };
 
+    const hasConnectingPointAround = (x, y) => {
+        return (this.getPoint(x - 1, y) ||
+            this.getPoint(x + 1, y) ||
+            this.getPoint(x, y - 1) ||
+            this.getPoint(x, y + 1));
+    };
+
     /**
      * Get the extendability profile for this PCB.
      * @returns {Extendability} An extendability object.
@@ -240,6 +247,53 @@ export function Pcb() {
      */
     this.fits = (x, y, configuration) => {
         return fitsFootprint(x, y, configuration.footprint) && fitsPins(x, y, configuration.io);
+    };
+
+    /**
+     * Check if the current pcb overlaps with a given pcb
+     * @param {Pcb} pcb Another pcb which points will be compared.
+     * @param {Number} xDifference The difference of the origin of the given pcb on the x-axis.
+     * @param {Number} yDifference The difference of the origin of the given pcb on the y-axis.
+     * @return {Boolean} True if it overlaps, false otherwise.
+     */
+    this.doesOverlapWith = (pcb, xDifference, yDifference) => {
+        for (let y = 0; y < this.getHeight(); ++y)
+            for (let x = 0; x < this.getWidth(); ++x)
+                if ((this.getPoint(x, y) ||
+                    !this.isAir(x, y)) &&
+                    (pcb.getPoint(x - xDifference, y - yDifference) ||
+                    !pcb.isAir(x - xDifference, y - yDifference)))
+                    return true;
+
+        return false;
+    };
+
+    /**
+     * This
+     * @param {Pcb} pcb The pcb that should extend the current one.
+     * @param {Number} xDifference The difference of the origin of the given pcb on the x-axis.
+     * @param {Number} yDifference The difference of the origin of the given pcb on the y-axis.
+     * @return {Boolean}
+     */
+    this.canExtendWithPcb = (pcb, xDifference, yDifference) => {
+        let isConnected = false;
+
+        for (let y = -1; y < this.getHeight() + 1; ++y) {
+            for (let x = -1; x < this.getWidth() + 1; ++x) {
+                if ((this.getPoint(x, y) ||
+                    !this.isAir(x, y)) &&
+                    (pcb.getPoint(x - xDifference, y - yDifference) ||
+                        !pcb.isAir(x - xDifference, y - yDifference)))
+                    return false; // overlaps
+
+                if (this.isExtendable(x, y) &&
+                    pcb.getPoint(x - xDifference, y - yDifference) &&
+                    hasConnectingPointAround(x, y))
+                    isConnected = true;
+            }
+        }
+
+        return isConnected;
     };
 
     /**

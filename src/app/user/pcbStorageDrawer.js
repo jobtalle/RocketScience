@@ -1,5 +1,9 @@
+import {Pcb} from "../pcb/pcb";
+
 export function PcbStorageDrawer() {
     const _pcbs = [];
+
+    this.getPcbs = () => _pcbs;
 
     this.canAdd = () => {
         return _pcbs.length < PcbStorageDrawer.DRAWER_SIZE;
@@ -9,21 +13,21 @@ export function PcbStorageDrawer() {
         if (this.canAdd())
             _pcbs.push(pcb);
         else
-            throw new Error("drawer is full");
+            console.error("drawer is full");
     };
 
     this.removePcb = pcb => {
         if (_pcbs.indexOf(pcb) >= 0)
             _pcbs.splice(_pcbs.indexOf(pcb), 1);
         else
-            throw new Error("Pcb not in drawer");
+            console.error("pcb not in drawer");
     };
 
     this.removePcbAtIndex = index => {
         if (index < _pcbs.length)
             _pcbs.splice(index, 1);
         else
-            throw new Error("Index not in range");
+            console.error("pcb index not in range");
     };
 
     this.serialize = buffer => {

@@ -61,7 +61,7 @@ export function Editable(region, pcb, pcbOffset, budget) {
 
     /**
      * Set a new budget for this editable.
-     * @param {Object} newBudget A valid budget object or null for an infinite budget.
+     * @param {Object|Null} newBudget A valid budget object or null for an infinite budget.
      */
     this.setBudget = newBudget => {
         budget = newBudget;

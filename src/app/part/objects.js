@@ -87,10 +87,20 @@ export function getPartId(name) {
  * Get a part definition from parts.json based on its id,
  * retrieved from the getPartId function.
  * @param {Number} id A part id retrieved from the getPartId function.
- * @returns {Object} A valid part configuration. If the id is invalid, null is returned.
+ * @returns {Object|Null} A valid part configuration. If the id is invalid, null is returned.
  */
-export function getPartFromId(id) {
+export function getPartDefinitionFromId(id) {
     return idToDefinition[id];
+}
+
+/**
+ * Get a part definition from parts.json based on its name,
+ * retrieved from the getPartId function.
+ * @param {String} name The part name.
+ * @return {Object|Null} A valid part configuration. If the id is invalid, null is returned.
+ */
+export function getPartDefinitionFromName(name) {
+    return idToDefinition[nameToId[name]];
 }
 
 /**

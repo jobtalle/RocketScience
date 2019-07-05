@@ -1,7 +1,7 @@
 import {Goal} from "../../../mission/goal/goal";
 import {ChecklistObjectiveGoalPinState} from "./goals/checklistObjectiveGoalPinState";
 import {ChecklistObjectiveGoalNew} from "./checklistObjectiveGoalNew";
-import {getPartFromId} from "../../../part/objects";
+import {getPartDefinitionFromId} from "../../../part/objects";
 import {GoalPinState} from "../../../mission/goal/goalPinState";
 
 /**
@@ -21,7 +21,7 @@ export function ChecklistObjectiveGoals(objective) {
 
             switch (type) {
                 case Goal.TYPE_PIN_STATE:
-                    goal = new GoalPinState(getPartFromId(0).object, 0, 0);
+                    goal = new GoalPinState(getPartDefinitionFromId(0).object, 0, 0);
 
                     break;
             }

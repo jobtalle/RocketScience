@@ -13,6 +13,8 @@ import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
 import Myr from "myr.js"
+import {PcbEditorPlacePcb} from "./pcbEditorPlacePcb";
+import {StyleUtils} from "../../../utils/styleUtils";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
@@ -35,6 +37,7 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     let _editor = null;
     let _stashedEditor = null;
     let _hover = true;
+    let _isPcbOverlapping = false;
 
     const matchWorldPosition = () => {
         world.getView().focus(
@@ -304,7 +307,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         renderContext.getMyr().translate(renderContext.getViewport().getSplitX(), 0);
         renderContext.getMyr().transform(view.getTransform());
 
+        if (_isPcbOverlapping)
+            renderContext.getMyr().setColor(PcbEditor.COLOR_UNSUITABLE);
+
         _renderer.drawBody(0, 0);
+
+        if (_isPcbOverlapping)
+            renderContext.getMyr().setColor(Myr.Color.WHITE);
+
         _editor.draw();
 
         renderContext.getMyr().pop();
@@ -341,6 +351,29 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         _editor.reset();
 
         this.setEditor(new PcbEditorPlace(renderContext, _editable.getPcb(), _cursor, this, fixtures, null));
+    };
+
+    /**
+     * Start placing a pcb.
+     * @param {Pcb} pcb A pcb that should replace a existing pcb.
+     */
+    this.placePcb = pcb => {
+        _editor.reset();
+
+        this.setEditor(new PcbEditorPlacePcb(renderContext, _editable, _editable.getPcb(), _cursor, this, pcb));
+        // TODO: check if the margins fit.
+        // _editable.setPcb(pcb);
+        // updatePcb();
+        // _editor.reset();
+    };
+
+    /**
+     * Set the boolean stating that the pcb of the pcbEditor is overlapping with some other element and that
+     * this pcb should be colored red.
+     * @param {Boolean} bool A boolean indicating if the pcb overlaps or not.
+     */
+    this.setPcbOverlapping = (bool) => {
+        _isPcbOverlapping = bool;
     };
 
     /**
@@ -571,3 +604,4 @@ PcbEditor.EDIT_MODE_MOVE_REGION = 4;
 PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";
+PcbEditor.COLOR_UNSUITABLE = StyleUtils.getColorHex("--game-color-pcb-edit-place-unsuitable");

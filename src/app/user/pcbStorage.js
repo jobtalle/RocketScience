@@ -7,6 +7,8 @@ export function PcbStorage() {
         return _drawers.length < PcbStorage.MAX_DRAWERS;
     };
 
+    this.getDrawers = () => _drawers;
+
     this.addDrawer = drawer => {
         if (this.canAdd())
             _drawers.push(drawer);

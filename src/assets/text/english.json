@@ -27,6 +27,8 @@
   "GOAL_PIN_STATE_PIN": "Pin",
   "GOAL_PIN_STATE_VALUE": "Value",
 
+  "DRAWER_NAME": "Drawer",
+
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
   "TOOLBAR_ETCH": "Make connections on the PCB",

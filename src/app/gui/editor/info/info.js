@@ -2,6 +2,7 @@ import "../../../../styles/info.css"
 import {InfoTitle} from "./description/InfoTitle";
 import {InfoDescription} from "./description/InfoDescription";
 import {InfoPinouts} from "./pinouts/infoPinouts";
+import {InfoPartSummary} from "./infoPartSummary/infoPartSummary";
 
 /**
  * An information box about the currently selected part.
@@ -170,6 +171,16 @@ export function Info(overlay) {
             // TODO: 1 is a magic number here. Define border width in constants.css instead.
             _element.scrollTop = (_pinouts.getSelectedElement().clientHeight + 1) * index;
         }
+    };
+
+    /**
+     * Display the part summary of a pcb.
+     * @param {PartSummary} partSummary A partSummary.
+     */
+    this.setPartSummary = (partSummary) => {
+        clear();
+
+        _element.appendChild(new InfoPartSummary(partSummary).getElement());
     };
 
     /**

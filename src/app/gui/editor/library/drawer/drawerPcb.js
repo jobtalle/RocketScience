@@ -1,3 +1,5 @@
+import {PartSummary} from "../../../../pcb/partSummary";
+
 export function DrawerPcb(pcb, setPcb, info) {
     const _element = document.createElement("div");
 
@@ -7,7 +9,9 @@ export function DrawerPcb(pcb, setPcb, info) {
         setPcb(pcb);
     };
 
-    const onEnter = () => info.setText("PCB", "text");
+    const onEnter = () => {
+        info.setPartSummary(new PartSummary(pcb));
+    };
 
     const onLeave = () => info.clearText();
 
@@ -15,10 +19,10 @@ export function DrawerPcb(pcb, setPcb, info) {
         const element = document.createElement("div");
 
         element.classList.add("sprite");
-        // element.classList.add();
+        element.classList.add("library-stored-pcb");
         element.onclick = onClick;
         element.onmouseover = onEnter;
-        element.onmouseout = onLeave;
+        // element.onmouseout = onLeave;
 
         return element;
     };

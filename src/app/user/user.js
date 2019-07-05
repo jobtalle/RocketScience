@@ -8,6 +8,7 @@ import {WebStorage} from "../storage/webStorage";
 import {MissionProgress} from "../mission/missionProgress";
 import {Story} from "../mission/story";
 import {PcbStorage} from "./pcbStorage";
+import {PcbStorageDrawer} from "./pcbStorageDrawer";
 
 /**
  * The user information stored locally and online.
@@ -16,8 +17,21 @@ import {PcbStorage} from "./pcbStorage";
 export function User() {
     let _id = User.ID_ANONYMOUS_USER;
     let _avatarSprites = new AvatarSprites();
-    let _pcbStorage = new PcbStorage();
     let _webStorage = new WebStorage();
+    let _pcbStorage = null;
+
+    const loadPcbStorage = () => {
+        if (_webStorage.getPcbStorage()) {
+            const data = new Data();
+            data.fromString(_webStorage.getPcbStorage());
+            _pcbStorage = PcbStorage.deserialize(data.getBuffer());
+        }
+        else {
+            _pcbStorage = new PcbStorage();
+            for (let index = 0; index < 5; ++index)
+                _pcbStorage.addDrawer(new PcbStorageDrawer());
+        }
+    };
 
     const loadUserFromCookie = () => {
         const cookie = new Cookie();
@@ -26,6 +40,8 @@ export function User() {
             _id = cookie.getValue(Cookie.KEY_USER_ID);
         else
             cookie.setValue(Cookie.KEY_USER_ID, _id);
+
+        loadPcbStorage();
     };
 
     const hasSavedMission = (mission) => {
@@ -191,15 +207,32 @@ export function User() {
     };
 
     /**
+     * Get the PcbStorage.
+     * @return {PcbStorage} The PcbStorage.
+     */
+    this.getPcbStorage = () => _pcbStorage;
+
+    /**
      * Store the PCB to storage.
      * @param {String} pcbName The name of the PCB.
      * @param {Pcb} pcb The PCB object.
+     * @return {Boolean} True if the pcb is stored, false otherwise.
      */
     this.savePcb = (pcbName, pcb) => {
-        const data = new Data();
+        for (const drawer of _pcbStorage.getDrawers()) {
+            if (drawer.canAdd()) {
+                drawer.addPcb(pcb);
 
-        pcb.serialize(data.getBuffer());
-        _webStorage.savePcb("test", data.toString())
+                const data = new Data();
+
+                _pcbStorage.serialize(data.getBuffer());
+                _webStorage.savePcbStorage(data.toString());
+
+                return true;
+            }
+        }
+
+        return false;
     };
 
     /**

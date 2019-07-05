@@ -49,15 +49,16 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
         isMissionEditor);
     const _editables = new Editables(this, renderContext, world);
     const _toolbar = new Toolbar(
+        this,
         _pcbEditor,
         _editables,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
         world,
         game,
-        user,
         isMissionEditor);
     const _library = new Library(
+        user,
         _pcbEditor,
         _toolbar,
         _info,
@@ -67,7 +68,7 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
         world.getMission(),
         game,
         isMissionEditor);
-    const _tabbar = new TabBar(
+    const _tabBar = new TabBar(
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
         world,
@@ -85,6 +86,15 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
             -_pcbScreenPosition.x,
             -_pcbScreenPosition.y,
             _view.getZoom());
+    };
+
+    /**
+     * Save the current PCB to storage.
+     */
+    this.savePcb = () => {
+        if (user.savePcb("", _pcbEditor.getEditable().getPcb())) {
+            _library.rebuildPcbContent();
+        }
     };
 
     /**
@@ -153,7 +163,7 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
         _library.hide();
         _pcbEditor.hide();
         _overlay.hide();
-        _tabbar.hide();
+        _tabBar.hide();
 
         renderContext.getOverlay().removeChild(_checklist.getElement());
     };
@@ -166,7 +176,7 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
         _library.show();
         _toolbar.show();
         _overlay.show();
-        _tabbar.show();
+        _tabBar.show();
 
         if (!isMissionEditor && world.getMission().isFinished())
             _checklist.finish();

@@ -81,6 +81,14 @@ export function WebStorage() {
         }
     };
 
+    this.savePcbStorage = (storage) => {
+        setItem(WebStorage.PCB_STORAGE, storage);
+    };
+
+    this.getPcbStorage = () => {
+        return getItem(WebStorage.PCB_STORAGE);
+    };
+
     /**
      * Remove the PCB from storage.
      * @param {String} pcbName The name of the PCB.
@@ -188,3 +196,4 @@ WebStorage.PREFIX_MISSION_PROGRESS = "mission-progress-";
 WebStorage.PREFIX_CUSTOM_MISSION = "custom-mission-";
 WebStorage.PREFIX_PCB = "PCB-";
 WebStorage.PREFIX_SUB_PCB = "SUB-PCB";
+WebStorage.PCB_STORAGE = "STORAGE_PCB";

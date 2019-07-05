@@ -96,7 +96,6 @@ export function Game(renderContext, input, user) {
             _world.getMission().isCompleted() ? MissionProgress.PROGRESS_COMPLETE : MissionProgress.PROGRESS_INCOMPLETE,
             _world.getMissionProgress().getFileName()),
             (result) => null);
-
     };
 
     const unsetMode = mode => {

@@ -1,20 +1,17 @@
 import {DrawerPcb} from "./drawerPcb";
 
-export function DrawerPcbList(info) {
+export function DrawerPcbList(pcbs, setPcb, info) {
     const _element = document.createElement("div");
-    const _pcbs = [];
+    const _pcbDrawers = [];
 
     const make = () => {
         _element.className = DrawerPcbList.CLASS;
 
-        _element.appendChild(new DrawerPcb(null, ()=> {}, info).getElement());
-
-        for (const pcb of _pcbs) {
-            // TODO: add args
-            const newPcb = new DrawerPcb(pcb, (pcb) => {}, info);
+        for (const pcb of pcbs) {
+            const newPcb = new DrawerPcb(pcb, setPcb, info);
 
             _element.appendChild(newPcb.getElement());
-            _pcbs.push(newPcb);
+            _pcbDrawers.push(newPcb);
         }
     };
 

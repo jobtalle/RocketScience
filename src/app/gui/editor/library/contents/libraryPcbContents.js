@@ -1,7 +1,8 @@
 import {Drawer} from "../drawer/drawer";
+import {getString} from "../../../../text/language";
 
 
-export function LibraryPcbContents(drawers, info) {
+export function LibraryPcbContents(drawers, setPcb, info) {
     const _element = document.createElement("div");
     const _drawers = [];
 
@@ -9,14 +10,13 @@ export function LibraryPcbContents(drawers, info) {
     const make = () => {
         _element.id = LibraryPcbContents.ID;
 
-        // TODO: remove
-        _element.appendChild(new Drawer("bla", info).getElement());
-
-        for (const drawer of _drawers) {
-            const newDrawer = new Drawer("bla", info);
+        let index = 1;
+        for (const drawer of drawers) {
+            const newDrawer = new Drawer(drawer, getString(LibraryPcbContents.DRAWER_NAME) + " " + index.toString(), setPcb, info);
 
             _drawers.push(newDrawer);
             _element.appendChild(newDrawer.getElement());
+            ++index;
         }
     };
 
@@ -29,5 +29,6 @@ export function LibraryPcbContents(drawers, info) {
     make();
 }
 
+LibraryPcbContents.DRAWER_NAME = "DRAWER_NAME";
 LibraryPcbContents.ID = "pcb-contents";
 LibraryPcbContents.SCROLL_SPEED = 32;
