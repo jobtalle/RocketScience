@@ -6,10 +6,10 @@ function randomize(seed, x, y) {
 }
 
 function tile(coordinate, period) {
-    if (coordinate < 0)
+    if (coordinate < 0) while (coordinate < 0)
         coordinate += period;
-
-    return coordinate % period;
+    else
+        return coordinate % period;
 }
 
 function interpolate(a, b, c, d, x) {
@@ -63,16 +63,23 @@ export function cubicNoiseSample2(config, x, y) {
     const lerpX = x - xi;
     const yi = Math.floor(y);
     const lerpY = y - yi;
+    const x0 = tile(xi - 1, config.periodX);
+    const x1 = tile(xi, config.periodX);
+    const x2 = tile(xi + 1, config.periodX);
+    const x3 = tile(xi + 2, config.periodX);
 
     const xSamples = new Array(4);
 
-    for(let i = 0; i < 4; ++i)
+    for(let i = 0; i < 4; ++i) {
+        const y = tile(yi - 1 + i, config.periodY);
+
         xSamples[i] = interpolate(
-            randomize(config.seed, tile(xi - 1, config.periodX), tile(yi - 1 + i, config.periodY)),
-            randomize(config.seed, tile(xi, config.periodX), tile(yi - 1 + i, config.periodY)),
-            randomize(config.seed, tile(xi + 1, config.periodX), tile(yi - 1 + i, config.periodY)),
-            randomize(config.seed, tile(xi + 2, config.periodX), tile(yi - 1 + i, config.periodY)),
+            randomize(config.seed, x0, y),
+            randomize(config.seed, x1, y),
+            randomize(config.seed, x2, y),
+            randomize(config.seed, x3, y),
             lerpX);
+    }
 
     return interpolate(xSamples[0], xSamples[1], xSamples[2], xSamples[3], lerpY) * 0.5 + 0.25;
 }
