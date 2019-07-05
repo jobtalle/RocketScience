@@ -18,42 +18,61 @@ function interpolate(a, b, c, d, x) {
     return x * (x * (x * p + ((a - b) - p)) + (c - a)) + b;
 }
 
-export function cubicNoiseConfig(seed, octave, periodx = Number.MAX_SAFE_INTEGER, periody = Number.MAX_SAFE_INTEGER) {
+/**
+ * Config a cubic noise.
+ * @param {Number} seed A seed in the range [0, 1].
+ * @param {Number} [periodX] The number of units after which the x coordinate repeats.
+ * @param {Number} [periodY] The number of units after which the y coordinate repeats.
+ * @returns {Object} A configuration object used by noise functions.
+ */
+export function cubicNoiseConfig(seed, periodX = Number.MAX_SAFE_INTEGER, periodY = Number.MAX_SAFE_INTEGER) {
     return {
-        seed: seed,
-        octave: octave,
-        periodx: periodx,
-        periody: periody
+        seed: Math.floor(seed * Number.MAX_SAFE_INTEGER),
+        periodX: periodX,
+        periodY: periodY
     }
 }
 
+/**
+ * Sample 1D cubic noise.
+ * @param {Object} config A valid noise configuration.
+ * @param {Number} x The X position to sample at.
+ * @returns {Number} A noise value in the range [0, 1].
+ */
 export function cubicNoiseSample1(config, x) {
-    const xi = Math.floor(x / config.octave);
-    const lerp = x / config.octave - xi;
+    const xi = Math.floor(x);
+    const lerp = x - xi;
 
     return interpolate(
-        randomize(config.seed, tile(xi - 1, config.periodx), 0),
-        randomize(config.seed, tile(xi, config.periodx), 0),
-        randomize(config.seed, tile(xi + 1, config.periodx), 0),
-        randomize(config.seed, tile(xi + 2, config.periodx), 0),
+        randomize(config.seed, tile(xi - 1, config.periodX), 0),
+        randomize(config.seed, tile(xi, config.periodX), 0),
+        randomize(config.seed, tile(xi + 1, config.periodX), 0),
+        randomize(config.seed, tile(xi + 2, config.periodX), 0),
         lerp) * 0.5 + 0.25;
 }
 
+/**
+ * Sample 2D cubic noise.
+ * @param {Object} config A valid noise configuration.
+ * @param {Number} x The X position to sample at.
+ * @param {Number} y The Y position to sample at.
+ * @returns {Number} A noise value in the range [0, 1].
+ */
 export function cubicNoiseSample2(config, x, y) {
-    const xi = Math.floor(x / config.octave);
-    const lerpx = x / config.octave - xi;
-    const yi = Math.floor(y / config.octave);
-    const lerpy = y / config.octave - yi;
+    const xi = Math.floor(x);
+    const lerpX = x - xi;
+    const yi = Math.floor(y);
+    const lerpY = y - yi;
 
     const xSamples = new Array(4);
 
     for(let i = 0; i < 4; ++i)
         xSamples[i] = interpolate(
-            randomize(config.seed, tile(xi - 1, config.periodx), tile(yi - 1 + i, config.periody)),
-            randomize(config.seed, tile(xi, config.periodx), tile(yi - 1 + i, config.periody)),
-            randomize(config.seed, tile(xi + 1, config.periodx), tile(yi - 1 + i, config.periody)),
-            randomize(config.seed, tile(xi + 2, config.periodx), tile(yi - 1 + i, config.periody)),
-            lerpx);
+            randomize(config.seed, tile(xi - 1, config.periodX), tile(yi - 1 + i, config.periodY)),
+            randomize(config.seed, tile(xi, config.periodX), tile(yi - 1 + i, config.periodY)),
+            randomize(config.seed, tile(xi + 1, config.periodX), tile(yi - 1 + i, config.periodY)),
+            randomize(config.seed, tile(xi + 2, config.periodX), tile(yi - 1 + i, config.periodY)),
+            lerpX);
 
-    return interpolate(xSamples[0], xSamples[1], xSamples[2], xSamples[3], lerpy) * 0.5 + 0.25;
+    return interpolate(xSamples[0], xSamples[1], xSamples[2], xSamples[3], lerpY) * 0.5 + 0.25;
 }

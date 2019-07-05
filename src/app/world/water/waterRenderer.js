@@ -212,21 +212,21 @@ WaterRenderer.makeGradient = renderContext => {
 WaterRenderer.makeNoise = myr => {
     const surface = new myr.Surface(WaterRenderer.NOISE_RESOLUTION, WaterRenderer.NOISE_RESOLUTION, 0, true, true);
     const dxConfig = cubicNoiseConfig(
-        Math.random() * Number.MAX_SAFE_INTEGER,
-        WaterRenderer.NOISE_PERIOD,
+        Math.random(),
         WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD,
         WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD);
     const dyConfig = cubicNoiseConfig(
-        Math.random() * Number.MAX_SAFE_INTEGER,
-        WaterRenderer.NOISE_PERIOD,
+        Math.random(),
         WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD,
         WaterRenderer.NOISE_RESOLUTION / WaterRenderer.NOISE_PERIOD);
 
     surface.bind();
 
     for (let y = 0; y < WaterRenderer.NOISE_RESOLUTION; ++y) for (let x = 0; x < WaterRenderer.NOISE_RESOLUTION; ++x) {
-        const dxs = cubicNoiseSample2(dxConfig, x, y);
-        const dys = cubicNoiseSample2(dyConfig, x, y);
+        const xSample = x / WaterRenderer.NOISE_PERIOD;
+        const ySample = y / WaterRenderer.NOISE_PERIOD;
+        const dxs = cubicNoiseSample2(dxConfig, xSample, ySample);
+        const dys = cubicNoiseSample2(dyConfig, xSample, ySample);
 
         myr.primitives.drawPoint(new Myr.Color(dxs, dys, 0, 1), x, y);
     }
