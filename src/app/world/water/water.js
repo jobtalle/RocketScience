@@ -84,14 +84,14 @@ export function Water(amplitude) {
 }
 
 Water.WAVE_FUNCTION_PHASES = 3;
-Water.WAVE_FUNCTION_FALLOFF = 1.35;
+Water.WAVE_FUNCTION_FALLOFF = 1.4;
 Water.WAVE_SCALE_A = 1;
-Water.WAVE_SCALE_B = 1.42;
-Water.WAVE_SCALE_C = -0.32;
-Water.WAVE_INDEX_SCALE_A = 1;
+Water.WAVE_SCALE_B = 1.41;
+Water.WAVE_SCALE_C = -0.31;
+Water.WAVE_INDEX_SCALE_A = 0.8;
 Water.WAVE_INDEX_SCALE_B = 1.31;
-Water.WAVE_INDEX_SCALE_C = 1.42;
+Water.WAVE_INDEX_SCALE_C = 1.41;
 Water.WAVE_PHASE_LIMIT = 100;
 Water.INTERVAL = 16;
 Water.SCALE = 0.08;
-Water.SPEED = 1.3;
+Water.SPEED = 1.5;
