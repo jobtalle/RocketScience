@@ -26,7 +26,7 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
-    const _water = new Water(4);
+    const _water = new Water();
     const _waterRenderer = new WaterRenderer(
         renderContext,
         _water,

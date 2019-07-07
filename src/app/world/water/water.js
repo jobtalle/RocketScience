@@ -2,10 +2,9 @@ import {makeOctaves} from "../../utils/octaves";
 
 /**
  * A water plane.
- * @param {Number} amplitude The maximum amplitude of this water surface in pixels.
  * @constructor
  */
-export function Water(amplitude) {
+export function Water() {
     const _octaves = makeOctaves(Water.WAVE_FUNCTION_PHASES, Water.WAVE_FUNCTION_FALLOFF);
     let _phase = 0;
 
@@ -24,7 +23,7 @@ export function Water(amplitude) {
      * Get the maximum wave amplitude in pixels.
      * @returns {Number} The maximum amplitude that can be reached, positive or negative.
      */
-    this.getAmplitude = () => amplitude;
+    this.getAmplitude = () => Water.AMPLITUDE;
 
     /**
      * Sample the vertical displacement.
@@ -63,7 +62,7 @@ export function Water(amplitude) {
             _octaves[0] * Math.cos(index * Water.WAVE_INDEX_SCALE_A - phase * Water.WAVE_SCALE_A) +
             _octaves[1] * Math.cos(index * Water.WAVE_INDEX_SCALE_B - phase * Water.WAVE_SCALE_B) +
             _octaves[2] * Math.cos(index * Water.WAVE_INDEX_SCALE_C - phase * Water.WAVE_SCALE_C)
-        ) * amplitude;
+        ) * Water.AMPLITUDE;
     };
 
     /**
@@ -79,10 +78,11 @@ export function Water(amplitude) {
             _octaves[0] * Water.WAVE_SCALE_A * Math.sin(index * Water.WAVE_INDEX_SCALE_A - phase * Water.WAVE_SCALE_A) +
             _octaves[1] * Water.WAVE_SCALE_B * Math.sin(index * Water.WAVE_INDEX_SCALE_B - phase * Water.WAVE_SCALE_B) +
             _octaves[2] * Water.WAVE_SCALE_C * Math.sin(index * Water.WAVE_INDEX_SCALE_C - phase * Water.WAVE_SCALE_C)
-        ) * -amplitude / Water.INTERVAL;
+        ) * -Water.AMPLITUDE / Water.INTERVAL;
     };
 }
 
+Water.AMPLITUDE = 4;
 Water.WAVE_FUNCTION_PHASES = 3;
 Water.WAVE_FUNCTION_FALLOFF = 1.4;
 Water.WAVE_SCALE_A = 1;
