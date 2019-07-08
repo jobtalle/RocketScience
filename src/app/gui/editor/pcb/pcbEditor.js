@@ -218,6 +218,15 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
+     * Set a new pcb as the current edited pcb.
+     * @param {Pcb} pcb The new pcb that should replace the current.
+     */
+    this.setPcb = (pcb) => {
+        _editable.setPcb(pcb);
+        updatePcb();
+    };
+
+    /**
      * Revalidate the editor state and PCB graphics.
      */
     this.revalidate = () => {

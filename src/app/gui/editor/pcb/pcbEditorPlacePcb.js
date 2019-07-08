@@ -10,7 +10,8 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
     const _marginRight = Math.round(placedPcb.getWidth() / 2);
     const _marginUp = Math.floor(placedPcb.getHeight() / 2);
     const _marginDown = Math.round(placedPcb.getHeight() / 2);
-    let _suitable = false;
+    let _isSuitable = false;
+    let _isOverlapping = false;
 
     const doesPcbFitInRegion = (width, height, regionSize) => {
         return width <= regionSize.x * Scale.POINTS_PER_METER && height <= regionSize.y * Scale.POINTS_PER_METER;
@@ -60,18 +61,20 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
      */
     this.moveCursor = () => {
         if (!_mouseLeftScreen) {
-            _suitable = true;
+            _isSuitable = true;
+            _isOverlapping = false;
             editor.setPcbOverlapping(false);
 
             if (!(doesPcbFitInRegion(placedPcb.getWidth(), placedPcb.getHeight(), editable.getRegion().getSize()) &&
                 isPcbInRegion(editable.getRegion()))) {
-                _suitable = false;
+                _isSuitable = false;
             } else {
                 if (isPcbOverlapping()) {
                     editor.setPcbOverlapping(true);
+                    _isOverlapping = true;
                 } else {
                     if (!selectedPcb.canExtendWithPcb(placedPcb, cursor.x - _marginLeft, cursor.y - _marginUp))
-                        _suitable = false;
+                        _isSuitable = false;
                 }
             }
         }
@@ -93,8 +96,25 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
     this.mouseDown = () => {
         editor.setPcbOverlapping(false);
 
-        if (_suitable) {
+        if (_isSuitable) {
+            const x = cursor.x - _marginLeft;
+            const y = cursor.y - _marginUp;
 
+            editor.getUndoStack().push();
+
+            if (_isOverlapping) {
+                // Replace PCB
+                // TODO: fix issue that pcb is red now.
+                editor.setPcb(placedPcb);
+                editor.moveOffset(x * Scale.METERS_PER_POINT, y * Scale.METERS_PER_POINT);
+            } else {
+                // Extend PCB
+                selectedPcb.extendWithPcb(placedPcb, x, y);
+                editor.moveOffset(x < 0 ? x * Scale.METERS_PER_POINT : 0, y < 0 ? y * Scale.METERS_PER_POINT : 0);
+            }
+
+
+            editor.revalidate();
             _renderer.free();
             editor.revertEditor();
 
@@ -180,13 +200,13 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
         if (!editor.getHover())
             return;
 
-        if (!_suitable)
+        if (!_isSuitable)
             renderContext.getMyr().setColor(PcbEditorPlacePcb.COLOR_UNSUITABLE);
 
         _renderer.drawBody((cursor.x - _marginLeft) * Scale.PIXELS_PER_POINT,
             (cursor.y - _marginUp) * Scale.PIXELS_PER_POINT);
 
-        if (!_suitable)
+        if (!_isSuitable)
             renderContext.getMyr().setColor(Myr.Color.WHITE);
     }
 }

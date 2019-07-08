@@ -400,6 +400,44 @@ export function Pcb() {
     };
 
     /**
+     * Extend the current pcb with another pcb.
+     * To make sure that it is possible to place a pcb here, you need to call canExtendWithPcb first.
+     * @param {Pcb} pcb The pcb that will extend this one.
+     * @param {Number} xOffset The x offset of the added pcb
+     * @param {Number} yOffset The y offset of the added pcb.
+     */
+    this.extendWithPcb = (pcb, xOffset, yOffset) => {
+        this.shift(xOffset < 0 ? -xOffset : 0, yOffset < 0 ? -yOffset : 0);
+
+        xOffset = xOffset < 0 ? 0 : xOffset;
+        yOffset = yOffset < 0 ? 0 : yOffset;
+
+        console.log(pcb === this);
+        console.log(pcb.getHeight(), pcb.getWidth());
+
+        for (let x = 0; x < pcb.getWidth(); ++x) {
+            for (let y = 0; y < pcb.getHeight(); ++y) {
+                const point = pcb.getPoint(x, y);
+
+                if (point) {
+                    const newPoint = new PcbPoint();
+
+                    for (let direction = 0; direction <= 7; ++direction) {
+                        if (point.hasDirection(direction))
+                            newPoint.etchDirection(direction);
+                    }
+
+                    this.extend(x + xOffset, y + yOffset, newPoint);
+                }
+            }
+        }
+
+        for (const fixture of pcb.getFixtures()) {
+            this.place(fixture.part.copy(), fixture.x + xOffset, fixture.y + yOffset);
+        }
+    };
+
+    /**
      * Erase a Pcb cell. You'll need to pack afterwards to prevent sparse pcb's.
      * The cell must exist. Never erasePaths all points!
      * @param {Number} x The X position of the point.

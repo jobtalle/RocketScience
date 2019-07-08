@@ -92,7 +92,7 @@ export function Editor(renderContext, world, game, user, isMissionEditor) {
      * Save the current PCB to storage.
      */
     this.savePcb = () => {
-        if (user.savePcb("", _pcbEditor.getEditable().getPcb())) {
+        if (user.savePcb("", _pcbEditor.getEditable().getPcb().copy())) {
             _library.rebuildPcbContent();
         }
     };
