@@ -26,7 +26,7 @@ export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
     const _water = new Water();
-    const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
+    const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration(), _water);
     const _waterRenderer = new WaterRenderer(
         renderContext,
         _water,
@@ -332,8 +332,16 @@ export function World(renderContext, missionProgress) {
                 0,
                 0,
                 _surface.getWidth(),
-                Math.min(_waterLevelBottom, _surface.getHeight()));
+                Math.min(_waterLevelBottom, _surface.getHeight()))
 
+        _waterRenderer.drawPart(
+            0,
+            0,
+            0,
+            0,
+            _surface.getWidth(),
+            _surface.getHeight());
+        /*
         if (_waterLevelTop < _surface.getHeight())
             _waterRenderer.drawPart(
                 0,
@@ -342,6 +350,7 @@ export function World(renderContext, missionProgress) {
                 Math.max(0, _waterLevelTop),
                 _surface.getWidth(),
                 _surface.getHeight() - Math.max(0, _waterLevelTop));
+                */
     };
 
     /**

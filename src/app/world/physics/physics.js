@@ -7,9 +7,10 @@ import Myr from "myr.js"
 /**
  * An interface for the used physics engine.
  * @param {PhysicsConfiguration} configuration The physics configuration.
+ * @param {Water} water A water plane.
  * @constructor
  */
-export function Physics(configuration) {
+export function Physics(configuration, water) {
     const _world = new box2d.b2World(getb2Vec2(0, configuration.getGravity()), true);
     const _bodies = [];
 
@@ -64,7 +65,7 @@ export function Physics(configuration) {
         _world.Step(timeStep, Physics.VELOCITY_ITERATIONS, Physics.POSITION_ITERATIONS);
 
         for (const body of _bodies)
-            body.update(timeStep);
+            body.update(timeStep, water);
     };
 
     /**

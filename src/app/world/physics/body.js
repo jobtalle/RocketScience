@@ -17,6 +17,7 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
     const _buoyancyPosition = new Myr.Vector(0, 0);
+    const _submerged = new Array(points.length).fill(false);
     let _radius = 0;
     let _angle = 0;
 
@@ -42,7 +43,7 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
         return new Myr.Vector(dx - xOrigin, dy - yOrigin);
     };
 
-    const applyBuoyancy = timeStep => {
+    const applyBuoyancy = (timeStep, water) => {
         const cos = Math.cos(-_angle);
         const sin = Math.sin(-_angle);
         const bodyX = _body.GetPosition().get_x();
@@ -55,7 +56,8 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
 
         _buoyancyPosition.x = _buoyancyPosition.y = 0;
 
-        for (const point of points) {
+        for (let i = 0; i < points.length; ++i) {
+            const point = points[i];
             const y = bodyY + point.x * sin + point.y * cos - level;
 
             if (y > level) {
@@ -65,7 +67,25 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
                 _buoyancyPosition.y += y;
 
                 ++matches;
+
+                if (!_submerged[i]) {
+                    _submerged[i] = true;
+
+                    for (let j = 0; j < 5; ++j) {
+                        const dir = (Math.random() * 0.3) * Math.PI + Math.PI;
+                        const s = Math.random() * 130;
+
+                        water.addParticle(
+                            x * Scale.PIXELS_PER_METER,
+                            y * Scale.PIXELS_PER_METER + 7,
+                            Math.cos(dir) * s,
+                            Math.sin(dir) * s,
+                            9);
+                    }
+                }
             }
+            else
+                _submerged[i] = false;
         }
 
         if (matches !== 0) {
@@ -89,15 +109,16 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
     /**
      * Update the body state.
      * @param {Number} timeStep The time step.
+     * @param {Water} water A water plane.
      */
-    this.update = timeStep => {
+    this.update = (timeStep, water) => {
         for (const connected of _connected)
-            connected.update(timeStep);
+            connected.update(timeStep, water);
 
         updateTransform();
 
         if (_body.GetPosition().get_y() + _radius > 0)
-            applyBuoyancy(timeStep);
+            applyBuoyancy(timeStep, water);
         else {
             _body.SetLinearDamping(0);
             _body.SetAngularDamping(0);

@@ -17,6 +17,8 @@ export function WaterRenderer(renderContext, water, width, height) {
     const _gradient = WaterRenderer.makeGradient(renderContext);
     const _noise = WaterRenderer.makeNoise(renderContext.getMyr());
     const _shader = WaterRenderer.makeShader(renderContext.getMyr(), _gradient, _noise);
+    const _particleColorInner = new Myr.Color(0, 1, 0, 0.15);
+    const _particleColorOuter = new Myr.Color(0, 1, 0, 0);
     let _surface = null;
     let _noiseShift = 0;
 
@@ -86,6 +88,14 @@ export function WaterRenderer(renderContext, water, width, height) {
                 xLeft, dLeft + WaterRenderer.SURFACE_THICKNESS);
         }
 
+        for (const particle of water.getParticles())
+            renderContext.getMyr().primitives.fillCircleGradient(
+                _particleColorInner,
+                _particleColorOuter,
+                particle.x,
+                particle.y,
+                particle.radius);
+
         if (bottom > opaqueBoundary)
             renderContext.getMyr().primitives.fillRectangle(
                 WaterRenderer.COLOR_BOTTOM,
@@ -123,6 +133,7 @@ export function WaterRenderer(renderContext, water, width, height) {
             _surface.free();
 
         _surface = new (renderContext.getMyr().Surface)(width, height);
+        _surface.setClearColor(new Myr.Color(0, 0, 0, 0));
         _shader.setSurface("water", _surface);
         _shader.setSize(width, height);
     };
