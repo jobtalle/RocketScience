@@ -31,7 +31,7 @@ export function Water() {
      * @returns {Number} The vertical displacement in pixels.
      */
     this.sample = x => {
-        const left = this.sampleIndex(Math.floor(x / Water.INTERVAL));
+        const left = Math.floor(x / Water.INTERVAL);
         const f = (x - left * Water.INTERVAL) / Water.INTERVAL;
 
         return this.sampleIndex(left) + (this.sampleIndex(left + 1) - this.sampleIndex(left)) * f;
@@ -43,7 +43,7 @@ export function Water() {
      * @returns {Number} The derivative of the waves at this point.
      */
     this.sampleDerivative = x => {
-        const left = this.sampleIndex(Math.floor(x / Water.INTERVAL));
+        const left = Math.floor(x / Water.INTERVAL);
         const f = (x - left * Water.INTERVAL) / Water.INTERVAL;
 
         return this.sampleDerivativeIndex(left) + (this.sampleDerivativeIndex(left + 1) - this.sampleDerivativeIndex(left)) * f;

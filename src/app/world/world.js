@@ -25,8 +25,8 @@ import Myr from "myr.js"
 export function World(renderContext, missionProgress) {
     const _objects = [];
     const _controllerState = new ControllerState();
-    const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
     const _water = new Water();
+    const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration());
     const _waterRenderer = new WaterRenderer(
         renderContext,
         _water,

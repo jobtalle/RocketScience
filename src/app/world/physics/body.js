@@ -45,18 +45,25 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
     const applyBuoyancy = timeStep => {
         const cos = Math.cos(-_angle);
         const sin = Math.sin(-_angle);
+        const bodyX = _body.GetPosition().get_x();
+        const bodyY = _body.GetPosition().get_y();
         let matches = 0;
+        let level = -Body.BUOYANCY_DEADZONE * 0.5;
+
+        if (_body.GetLinearVelocity().get_y() > 0)
+            level = Body.BUOYANCY_DEADZONE * 0.5;
 
         _buoyancyPosition.x = _buoyancyPosition.y = 0;
 
         for (const point of points) {
-            const y = _body.GetPosition().get_y() + point.x * sin + point.y * cos;
+            const y = bodyY + point.x * sin + point.y * cos - level;
 
-            if (y > 0) {
-                const x = _body.GetPosition().get_x() + point.x * cos - point.y * sin;
+            if (y > level) {
+                const x = bodyX + point.x * cos - point.y * sin;
 
                 _buoyancyPosition.x += x;
                 _buoyancyPosition.y += y;
+
                 ++matches;
             }
         }
@@ -226,3 +233,4 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
 
 Body.BUOYANCY_FACTOR = 2;
 Body.WATER_DAMPING = 4;
+Body.BUOYANCY_DEADZONE = Scale.METERS_PER_POINT * 0.25;
