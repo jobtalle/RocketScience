@@ -54,7 +54,6 @@ export function World(renderContext, missionProgress) {
     let _tickCounter = 0;
     let _paused = true;
     let _waterLevelTop;
-    let _waterLevelBottom;
 
     const clickObject = (x, y) => {
         const at = new Myr.Vector(x, y);
@@ -292,10 +291,8 @@ export function World(renderContext, missionProgress) {
         const top = _view.getOrigin().y;
         const bottom = top + _view.getHeight() / +_view.getZoom();
         const waterY = -_view.getOrigin().y * _view.getZoom();
-        const amp = Math.ceil(_water.getAmplitude() * _view.getZoom());
 
-        _waterLevelTop = Math.round(waterY - amp);
-        _waterLevelBottom = Math.round(_waterLevelTop + amp * 2);
+        _waterLevelTop = Math.round(waterY + Math.ceil(_water.getTop() * _view.getZoom()));
 
         _surface.bind();
         _surface.clear();
@@ -325,23 +322,15 @@ export function World(renderContext, missionProgress) {
         renderContext.getMyr().setClearColor(World.COLOR_SKY);
         renderContext.getMyr().clear();
 
-        if (_waterLevelBottom > 0)
+        if (_waterLevelTop > 0)
             _surface.drawPart(
                 0,
                 0,
                 0,
                 0,
                 _surface.getWidth(),
-                Math.min(_waterLevelBottom, _surface.getHeight()))
+                Math.min(_waterLevelTop, _surface.getHeight()));
 
-        _waterRenderer.drawPart(
-            0,
-            0,
-            0,
-            0,
-            _surface.getWidth(),
-            _surface.getHeight());
-        /*
         if (_waterLevelTop < _surface.getHeight())
             _waterRenderer.drawPart(
                 0,
@@ -350,7 +339,6 @@ export function World(renderContext, missionProgress) {
                 Math.max(0, _waterLevelTop),
                 _surface.getWidth(),
                 _surface.getHeight() - Math.max(0, _waterLevelTop));
-                */
     };
 
     /**

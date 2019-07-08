@@ -179,14 +179,17 @@ WaterRenderer.makeShader = (myr, gradient, noise) => {
     const shader = new myr.Shader(
         "void main() {" +
         "mediump vec4 pixelWater = texture(water, uv).rgba;" +
+        "if (pixelWater.a == 0.0)" +
+        "color = texture(world, uv).rgba;" +
+        "else {" +
         "mediump vec2 noiseSample = texture(noise, mod(vec2(left, top + shift) + uv * vec2(xScale, yScale), 1.0)).xy;" +
         "mediump vec2 distortion = noiseSample * 2.0 - vec2(1.0);" +
         "mediump vec2 sampleLocation = uv + distortion * vec2(xPixel, yPixel) * " + Number(WaterRenderer.NOISE_DISPLACEMENT).toFixed(1) + ";" +
         "mediump vec4 pixelWorld = texture(world, sampleLocation).rgba;" +
         "mediump vec4 pixelGradient = texture(gradient, vec2(pixelWater.r, pixelWater.g)).rgba;" +
-        "if (pixelWater.a == 0.0) discard;" +
         "mediump vec3 background = mix(texture(gradient, vec2(1.0)).rgb, pixelWorld.rgb, pixelWorld.a);" +
         "color = vec4(mix(background, pixelGradient.rgb, pixelGradient.a), 1);" +
+        "}" +
         "}",
         [
             "world",

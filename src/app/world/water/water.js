@@ -7,9 +7,12 @@ import {makeOctaves} from "../../utils/octaves";
 export function Water() {
     const _octaves = makeOctaves(Water.WAVE_FUNCTION_PHASES, Water.WAVE_FUNCTION_FALLOFF);
     const _particles = [];
+    let _top = 0;
     let _phase = 0;
 
     const updateParticles = timeStep => {
+        _top = -Water.AMPLITUDE;
+
         for (let i = _particles.length; i-- > 0;) {
             const particle = _particles[i];
 
@@ -20,6 +23,8 @@ export function Water() {
 
             if (particle.y - particle.radius > Water.AMPLITUDE || particle.radius < 0)
                 _particles.splice(i, 1);
+            else if (particle.y - particle.radius < _top)
+                _top = particle.y - particle.radius;
         }
     };
 
@@ -55,10 +60,10 @@ export function Water() {
     };
 
     /**
-     * Get the maximum wave amplitude in pixels.
-     * @returns {Number} The maximum amplitude that can be reached, positive or negative.
+     * Get the topmost pixel where water exists.
+     * @returns {Number} The topmost pixel where water exists.
      */
-    this.getAmplitude = () => Water.AMPLITUDE;
+    this.getTop = () => _top;
 
     /**
      * Sample the vertical displacement.
