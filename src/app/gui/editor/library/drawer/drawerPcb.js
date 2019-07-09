@@ -1,5 +1,12 @@
 import {PartSummary} from "../../../../pcb/partSummary";
 
+/**
+ * A specific pcb that is stored in the drawer.
+ * @param {Pcb} pcb The pcb that is held in the drawer.
+ * @param {Function} setPcb The function that is called when the drawerPcb is clicked.
+ * @param {Info} info The info panel
+ * @constructor
+ */
 export function DrawerPcb(pcb, setPcb, info) {
     const _element = document.createElement("div");
 
@@ -33,8 +40,8 @@ export function DrawerPcb(pcb, setPcb, info) {
     };
 
     /**
-     * Get the HTML element of this category.
-     * @returns {HTMLElement} The HTML element of this category.
+     * Get the HTML element.
+     * @returns {HTMLElement} The HTML element.
      */
     this.getElement = () => _element;
 

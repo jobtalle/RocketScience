@@ -3,6 +3,16 @@ import {StyleUtils} from "../../../utils/styleUtils";
 import {Scale} from "../../../world/scale";
 import * as Myr from "myr.js";
 
+/**
+ * A placement editor for placing a pcb or pcb part. Can either extend or replace a pcb in the selected region.
+ * @param {RenderContext} renderContext A render context.
+ * @param {Editable} editable The editable of the pcbEditor.
+ * @param {Pcb} selectedPcb The pcb that is in the selected region.
+ * @param {Myr.Vector} cursor The cursor position in cells.
+ * @param {PcbEditor} editor A pcb editor.
+ * @param {Pcb} placedPcb The pcb that is being placed by the user.
+ * @constructor
+ */
 export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, editor, placedPcb) {
     let _mouseLeftScreen = true;
     const _renderer = new PcbRenderer(renderContext, placedPcb, PcbRenderer.LEVEL_BOARD);
@@ -37,8 +47,6 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
                 -(cursor.x - _marginLeft), -(cursor.y - _marginUp));
         }
     };
-
-    // TODO: add pcbEditor set to overlap (add boolean) Add check for overlapping pcb and addhesive to pcb
 
     /**
      * Change the PCB being edited.
@@ -94,8 +102,9 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
     this.mouseDown = () => {
+        _mouseLeftScreen = true;
+
         if (_isSuitable) {
-            _mouseLeftScreen = true;
             const x = cursor.x - _marginLeft;
             const y = cursor.y - _marginUp;
 

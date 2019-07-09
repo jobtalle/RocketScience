@@ -37,6 +37,9 @@ export function Library(user, editor, toolbar, info, overlay, isEditable) {
         _libraryTab.setBudget(budget, summary);
     };
 
+    /**
+     * Rebuild the pcb library contents.
+     */
     this.rebuildPcbContent = () => {
         _libraryTab.rebuildPcbContent();
     };

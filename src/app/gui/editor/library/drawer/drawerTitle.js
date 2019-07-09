@@ -1,13 +1,13 @@
 /**
- * The title of a part category element.
+ * The title of a drawer category element.
  * @param {String} title The title.
- * @param {DrawerPcbList} pcbList The part list which can collapse.
+ * @param {DrawerPcbList} pcbList The drawer list which can collapse.
  * @constructor
  */
 export function DrawerTitle(title, pcbList) {
     /**
-     * Get the HTML element of this category.
-     * @returns {HTMLElement} The HTML element of this category.
+     * Get the HTML element.
+     * @returns {HTMLElement} The HTML element.
      */
     this.getElement = () => {
         const element = document.createElement("div");

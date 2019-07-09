@@ -1,5 +1,12 @@
 import {DrawerPcb} from "./drawerPcb";
 
+/**
+ * A drawer pcb list holds all the pcbs of a drawer.
+ * @param {[Pcb]} pcbs A list of pcbs
+ * @param {Function} setPcb The function that must be called when the pcb is clicked.
+ * @param {Info} info The info panel.
+ * @constructor
+ */
 export function DrawerPcbList(pcbs, setPcb, info) {
     const _element = document.createElement("div");
     const _pcbDrawers = [];
@@ -21,7 +28,7 @@ export function DrawerPcbList(pcbs, setPcb, info) {
     this.toggle = () => _element.classList.toggle(DrawerPcbList.CLASS_CLOSED);
 
     /**
-     * Get the HTML element of this part list.
+     * Get the HTML element.
      * @returns {HTMLElement} The HTML element of this part list.
      */
     this.getElement = () => _element;

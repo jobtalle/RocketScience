@@ -5,7 +5,6 @@ import {LibraryPcbContents} from "./contents/libraryPcbContents";
 import parts from "../../../../assets/parts.json"
 import {PcbEditorPlace} from "../pcb/pcbEditorPlace";
 
-
 /**
  * The Tab Bar that contains the tab buttons.
  * @param {User} user The user.
