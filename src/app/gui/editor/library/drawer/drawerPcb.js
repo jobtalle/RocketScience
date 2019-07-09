@@ -6,7 +6,7 @@ export function DrawerPcb(pcb, setPcb, info) {
     const onClick = () => {
         info.clearText();
 
-        setPcb(pcb);
+        setPcb(pcb.copy());
     };
 
     const onEnter = () => {
@@ -22,7 +22,7 @@ export function DrawerPcb(pcb, setPcb, info) {
         element.classList.add("library-stored-pcb");
         element.onclick = onClick;
         element.onmouseover = onEnter;
-        // element.onmouseout = onLeave;
+        element.onmouseout = onLeave;
 
         return element;
     };

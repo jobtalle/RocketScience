@@ -370,10 +370,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
         _editor.reset();
 
         this.setEditor(new PcbEditorPlacePcb(renderContext, _editable, _editable.getPcb(), _cursor, this, pcb));
-        // TODO: check if the margins fit.
-        // _editable.setPcb(pcb);
-        // updatePcb();
-        // _editor.reset();
     };
 
     /**

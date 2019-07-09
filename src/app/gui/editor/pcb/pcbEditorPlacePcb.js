@@ -94,9 +94,8 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
      * @returns {Boolean} A boolean indicating whether a drag event has started.
      */
     this.mouseDown = () => {
-        editor.setPcbOverlapping(false);
-
         if (_isSuitable) {
+            _mouseLeftScreen = true;
             const x = cursor.x - _marginLeft;
             const y = cursor.y - _marginUp;
 
@@ -104,7 +103,6 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
 
             if (_isOverlapping) {
                 // Replace PCB
-                // TODO: fix issue that pcb is red now.
                 editor.setPcb(placedPcb);
                 editor.moveOffset(x * Scale.METERS_PER_POINT, y * Scale.METERS_PER_POINT);
             } else {
@@ -114,15 +112,18 @@ export function PcbEditorPlacePcb(renderContext, editable, selectedPcb, cursor, 
             }
 
 
-            editor.revalidate();
             _renderer.free();
+            editor.revalidate();
             editor.revertEditor();
 
+            editor.setPcbOverlapping(false);
             return false;
         }
         else {
             _renderer.free();
             editor.revertEditor();
+
+            editor.setPcbOverlapping(false);
             return false;
         }
     };
