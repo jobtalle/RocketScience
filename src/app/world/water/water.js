@@ -130,37 +130,29 @@ export function Water() {
      * @param {Number} mass The mass of the object.
      */
     this.splashDown = (left, right, velocity, mass) => {
+        if (velocity < Water.SPLASH_SPEED_THRESHOLD)
+            return;
+
         const intensity = velocity * mass;
-        const particleCount = 4;
+        const particleCount = Math.ceil((right - left) * Water.PARTICLES_PER_PIXEL);
 
         for (let i = 0; i < particleCount; ++i) {
-            const dirLeft = Math.random() * 0.3 * Math.PI + Math.PI * 1.2;
-            const dirRight = Math.random() * -0.3 * Math.PI - Math.PI * 0.2;
-            const speedLeft = Math.min(
+            const r = Math.random();
+            const f = (1 - 2 * r) * (1 - 2 * r);
+            const dir = Math.PI * (1.3 + f * 0.4);
+            const speed = Math.min(
                 Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), 2),
                 Water.SPLASH_SPEED_MAX);
-            const speedRight = Math.min(
-                Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), 2),
-                Water.SPLASH_SPEED_MAX);
-            const radiusLeft = Math.min(
-                Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * intensity,
-                Water.SPLASH_RADIUS_MAX);
-            const radiusRight = Math.min(
+            const radius = Math.min(
                 Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * intensity,
                 Water.SPLASH_RADIUS_MAX);
 
             this.addParticle(
-                left,
-                Water.AMPLITUDE + radiusLeft,
-                Math.cos(dirLeft) * speedLeft,
-                Math.sin(dirLeft) * speedLeft,
-                radiusLeft);
-            this.addParticle(
-                right,
-                Water.AMPLITUDE + radiusRight,
-                Math.cos(dirRight) * speedRight,
-                Math.sin(dirRight) * speedRight,
-                radiusRight);
+                left + (right - left) * f,
+                Water.AMPLITUDE + radius,
+                Math.cos(dir) * speed,
+                Math.sin(dir) * speed,
+                radius);
         }
     };
 }
@@ -186,9 +178,11 @@ Water.WAVE_PHASE_LIMIT = 100;
 Water.INTERVAL = 16;
 Water.SCALE = 0.08;
 Water.SPEED = 1.2;
-Water.SPLASH_SPEED_MIN = 20;
-Water.SPLASH_SPEED_MAX = 200;
-Water.SPLASH_SPEED_MULTIPLIER = 90;
+Water.PARTICLES_PER_PIXEL = 0.03;
+Water.SPLASH_SPEED_THRESHOLD = 0.5;
+Water.SPLASH_SPEED_MIN = 70;
+Water.SPLASH_SPEED_MAX = 240;
+Water.SPLASH_SPEED_MULTIPLIER = 25;
 Water.SPLASH_RADIUS_MIN = 7;
 Water.SPLASH_RADIUS_MAX = 20;
 Water.SPLASH_RADIUS_MULTIPLIER = 0.14;
