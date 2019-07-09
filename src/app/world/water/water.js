@@ -1,4 +1,5 @@
 import {makeOctaves} from "../../utils/octaves";
+import {Scale} from "../scale";
 
 /**
  * A water plane.
@@ -21,7 +22,7 @@ export function Water() {
             particle.y += particle.vy * timeStep;
             particle.radius -= 6 * timeStep;
 
-            if (particle.y - particle.radius > Water.AMPLITUDE || particle.radius < 0)
+            if (particle.radius < 0 || (particle.vy > 0 && particle.y - particle.radius > Water.AMPLITUDE))
                 _particles.splice(i, 1);
             else if (particle.y - particle.radius < _top)
                 _top = particle.y - particle.radius;
@@ -120,6 +121,48 @@ export function Water() {
             _octaves[2] * Water.WAVE_SCALE_C * Math.sin(index * Water.WAVE_INDEX_SCALE_C - phase * Water.WAVE_SCALE_C)
         ) * -Water.AMPLITUDE / Water.INTERVAL;
     };
+
+    /**
+     * Create the effect of a downwards splashing object in this water plane.
+     * @param {Number} left The leftmost pixel where the object enters the water.
+     * @param {Number} right The rightmost pixel where the object enters the water.
+     * @param {Number} velocity The velocity of the object.
+     * @param {Number} mass The mass of the object.
+     */
+    this.splashDown = (left, right, velocity, mass) => {
+        const intensity = velocity * mass;
+        const particleCount = 4;
+
+        for (let i = 0; i < particleCount; ++i) {
+            const dirLeft = Math.random() * 0.3 * Math.PI + Math.PI * 1.2;
+            const dirRight = Math.random() * -0.3 * Math.PI - Math.PI * 0.2;
+            const speedLeft = Math.min(
+                Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), 2),
+                Water.SPLASH_SPEED_MAX);
+            const speedRight = Math.min(
+                Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), 2),
+                Water.SPLASH_SPEED_MAX);
+            const radiusLeft = Math.min(
+                Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * intensity,
+                Water.SPLASH_RADIUS_MAX);
+            const radiusRight = Math.min(
+                Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * intensity,
+                Water.SPLASH_RADIUS_MAX);
+
+            this.addParticle(
+                left,
+                Water.AMPLITUDE + radiusLeft,
+                Math.cos(dirLeft) * speedLeft,
+                Math.sin(dirLeft) * speedLeft,
+                radiusLeft);
+            this.addParticle(
+                right,
+                Water.AMPLITUDE + radiusRight,
+                Math.cos(dirRight) * speedRight,
+                Math.sin(dirRight) * speedRight,
+                radiusRight);
+        }
+    };
 }
 
 Water.Particle = function(x, y, vx, vy, radius) {
@@ -143,3 +186,9 @@ Water.WAVE_PHASE_LIMIT = 100;
 Water.INTERVAL = 16;
 Water.SCALE = 0.08;
 Water.SPEED = 1.2;
+Water.SPLASH_SPEED_MIN = 20;
+Water.SPLASH_SPEED_MAX = 200;
+Water.SPLASH_SPEED_MULTIPLIER = 90;
+Water.SPLASH_RADIUS_MIN = 7;
+Water.SPLASH_RADIUS_MAX = 20;
+Water.SPLASH_RADIUS_MULTIPLIER = 0.14;

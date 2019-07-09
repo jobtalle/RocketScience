@@ -17,7 +17,9 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
     const _buoyancyPosition = new Myr.Vector(0, 0);
-    const _submerged = new Array(points.length).fill(false);
+    const _buoyancyLeft = new Myr.Vector(0, 0);
+    const _buoyancyRight = new Myr.Vector(0, 0);
+    let _submergedPrevious = 0;
     let _radius = 0;
     let _angle = 0;
 
@@ -48,10 +50,14 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
         const sin = Math.sin(-_angle);
         const bodyX = _body.GetPosition().get_x();
         const bodyY = _body.GetPosition().get_y();
+        const bodyVelocity = _body.GetLinearVelocity();
         let matches = 0;
         let level = -Body.BUOYANCY_DEADZONE * 0.5;
 
-        if (_body.GetLinearVelocity().get_y() > 0)
+        _buoyancyLeft.x = _buoyancyRight.x = bodyX;
+        _buoyancyLeft.y = _buoyancyRight.y = bodyY + _radius;
+
+        if (bodyVelocity.get_y() > 0)
             level = Body.BUOYANCY_DEADZONE * 0.5;
 
         _buoyancyPosition.x = _buoyancyPosition.y = 0;
@@ -63,29 +69,25 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
             if (y > level) {
                 const x = bodyX + point.x * cos - point.y * sin;
 
+                if (x < _buoyancyLeft.x) {
+                    _buoyancyLeft.x = x;
+
+                    if (y < _buoyancyLeft.y)
+                        _buoyancyLeft.y = y;
+                }
+
+                if (x > _buoyancyRight.x) {
+                    _buoyancyRight.x = x;
+
+                    if (y < _buoyancyRight.y)
+                        _buoyancyRight.y = y;
+                }
+
                 _buoyancyPosition.x += x;
                 _buoyancyPosition.y += y;
 
                 ++matches;
-
-                if (!_submerged[i]) {
-                    _submerged[i] = true;
-
-                    for (let j = 0; j < 5; ++j) {
-                        const dir = (Math.random() * 0.3) * Math.PI + Math.PI;
-                        const s = Math.random() * 130;
-
-                        water.addParticle(
-                            x * Scale.PIXELS_PER_METER,
-                            y * Scale.PIXELS_PER_METER + 7,
-                            Math.cos(dir) * s,
-                            Math.sin(dir) * s,
-                            9);
-                    }
-                }
             }
-            else
-                _submerged[i] = false;
         }
 
         if (matches !== 0) {
@@ -103,6 +105,17 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
                 true);
             _body.SetLinearDamping(Body.WATER_DAMPING * submerged);
             _body.SetAngularDamping(Body.WATER_DAMPING * submerged);
+
+            const vy = bodyVelocity.get_y();
+
+            if (vy > 0 && _submergedPrevious !== 1)
+                water.splashDown(
+                    _buoyancyLeft.x * Scale.PIXELS_PER_METER,
+                    _buoyancyRight.x * Scale.PIXELS_PER_METER,
+                    vy,
+                    _body.GetMass());
+
+            _submergedPrevious = submerged;
         }
     };
 
