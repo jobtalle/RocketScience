@@ -562,33 +562,6 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
-        // TODO: Move this to Toolbar
-        if (event.down) switch(event.key) {
-            case PcbEditor.KEY_SAVE:
-                const data = new Data();
-
-                _editable.getPcb().serialize(data.getBuffer());
-
-                const blob = data.getBlob();
-                const newData = new Data();
-
-                newData.setBlob(blob, () => {
-                    _editable.setPcb(Pcb.deserialize(newData.getBuffer())), updatePcb();
-                });
-
-                return;
-            case PcbEditor.KEY_LOAD:
-                navigator.clipboard.readText().then(text => {
-                    const data = new Data();
-
-                    data.fromString(text);
-
-                    _editable.setPcb(Pcb.deserialize(data.getBuffer())), updatePcb();
-                });
-
-                return;
-        }
-
         _editor.onKeyEvent(event);
     };
 
@@ -607,6 +580,4 @@ PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
 PcbEditor.EDIT_MODE_MOVE_REGION = 4;
 PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
-PcbEditor.KEY_SAVE = "q";
-PcbEditor.KEY_LOAD = "l";
 PcbEditor.COLOR_UNSUITABLE = StyleUtils.getColorHex("--game-color-pcb-edit-place-unsuitable");
