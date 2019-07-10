@@ -1,5 +1,4 @@
 import {makeOctaves} from "../../utils/octaves";
-import {Scale} from "../scale";
 
 /**
  * A water plane.
@@ -17,10 +16,10 @@ export function Water() {
         for (let i = _particles.length; i-- > 0;) {
             const particle = _particles[i];
 
-            particle.vy += timeStep * 200;
+            particle.vy += timeStep * Water.GRAVITY;
             particle.x += particle.vx * timeStep;
             particle.y += particle.vy * timeStep;
-            particle.radius -= 6 * timeStep;
+            particle.radius -= Water.PARTICLE_SHRINK * timeStep;
 
             if (particle.radius < 0 || (particle.vy > 0 && particle.y - particle.radius > Water.AMPLITUDE))
                 _particles.splice(i, 1);
@@ -58,6 +57,13 @@ export function Water() {
      */
     this.addParticle = (x, y, dx, dy, radius) => {
         _particles.push(new Water.Particle(x, y, dx, dy, radius));
+    };
+
+    /**
+     * Clear all particles.
+     */
+    this.clear = () => {
+        _particles.splice(0, _particles.length);
     };
 
     /**
@@ -130,21 +136,19 @@ export function Water() {
      * @param {Number} mass The mass of the object.
      */
     this.splashDown = (left, right, velocity, mass) => {
-        if (velocity < Water.SPLASH_SPEED_THRESHOLD)
-            return;
-
-        const intensity = velocity * mass;
-        const particleCount = Math.ceil((right - left) * Water.PARTICLES_PER_PIXEL);
+        const particleCount = Math.max(
+            Water.SPLASH_PARTICLES_MIN,
+            Math.ceil((right - left) * Water.PARTICLES_PER_PIXEL));
 
         for (let i = 0; i < particleCount; ++i) {
             const r = Math.random();
             const f = (1 - 2 * r) * (1 - 2 * r);
-            const dir = Math.PI * (1.3 + f * 0.4);
+            const dir = Math.PI * (1.4 + f * 0.2);
             const speed = Math.min(
-                Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), 2),
+                Water.SPLASH_SPEED_MIN + Water.SPLASH_SPEED_MULTIPLIER * velocity * Math.pow(Math.random(), Water.SPLASH_SPEED_POWER),
                 Water.SPLASH_SPEED_MAX);
             const radius = Math.min(
-                Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * intensity,
+                Water.SPLASH_RADIUS_MIN + Water.SPLASH_RADIUS_MULTIPLIER * velocity * mass * Math.random(),
                 Water.SPLASH_RADIUS_MAX);
 
             this.addParticle(
@@ -152,6 +156,36 @@ export function Water() {
                 Water.AMPLITUDE + radius,
                 Math.cos(dir) * speed,
                 Math.sin(dir) * speed,
+                radius);
+        }
+    };
+
+    /**
+     * Displace water when moving through it.
+     * @param {Number} x The pixel where the water is displaced from.
+     * @param {Number} velocity The horizontal velocity of the object.
+     * @param {Number} mass The mass of the object.
+     */
+    this.displace = (x, velocity, mass) => {
+        const av = Math.abs(velocity);
+
+        if (av < Water.DISPLACE_SPEED_THRESHOLD)
+            return;
+
+        const particleCount = 3;
+
+        for (let i = 0; i < particleCount; ++i) {
+            const radius = Water.DISPLACE_RADIUS_MIN + Water.DISPLACE_RADIUS_MULTIPLIER * mass * Math.random();
+
+            this.addParticle(
+                x,
+                Water.AMPLITUDE + radius,
+                Math.sign(velocity) * -Math.min(
+                    av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() + Water.DISPLACE_SPEED_MIN,
+                    Water.DISPLACE_SPEED_MAX),
+                Math.max(
+                    -av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() * Water.DISPLACE_UP_FACTOR - Water.DISPLACE_SPEED_MIN,
+                    -Water.DISPLACE_SPEED_MAX),
                 radius);
         }
     };
@@ -178,11 +212,22 @@ Water.WAVE_PHASE_LIMIT = 100;
 Water.INTERVAL = 16;
 Water.SCALE = 0.08;
 Water.SPEED = 1.2;
+Water.GRAVITY = 260;
+Water.PARTICLE_SHRINK = 6;
 Water.PARTICLES_PER_PIXEL = 0.03;
-Water.SPLASH_SPEED_THRESHOLD = 0.5;
-Water.SPLASH_SPEED_MIN = 70;
-Water.SPLASH_SPEED_MAX = 240;
-Water.SPLASH_SPEED_MULTIPLIER = 25;
-Water.SPLASH_RADIUS_MIN = 7;
-Water.SPLASH_RADIUS_MAX = 20;
-Water.SPLASH_RADIUS_MULTIPLIER = 0.14;
+Water.SPLASH_SPEED_THRESHOLD = 0.7;
+Water.SPLASH_SPEED_POWER = 3;
+Water.SPLASH_SPEED_MIN = 80;
+Water.SPLASH_SPEED_MAX = 220;
+Water.SPLASH_SPEED_MULTIPLIER = 40;
+Water.SPLASH_RADIUS_MIN = 6;
+Water.SPLASH_RADIUS_MAX = 50;
+Water.SPLASH_RADIUS_MULTIPLIER = 0.3;
+Water.SPLASH_PARTICLES_MIN = 8;
+Water.DISPLACE_SPEED_THRESHOLD = 0.04;
+Water.DISPLACE_RADIUS_MIN = 12;
+Water.DISPLACE_RADIUS_MULTIPLIER = 0.1;
+Water.DISPLACE_SPEED_MIN = 50;
+Water.DISPLACE_SPEED_MAX = 200;
+Water.DISPLACE_SPEED_MULTIPLIER = 50;
+Water.DISPLACE_UP_FACTOR = 1.5;

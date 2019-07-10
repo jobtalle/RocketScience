@@ -8,6 +8,7 @@ import {createSensorShape} from "./internal/shapes/sensor";
 import {Mover} from "./mover";
 import {Scale} from "../scale";
 import {Ray} from "./ray";
+import {Water} from "../water/water";
 import Myr from "myr.js"
 
 // Only instantiate bodies through Physics!
@@ -106,14 +107,24 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
             _body.SetLinearDamping(Body.WATER_DAMPING * submerged);
             _body.SetAngularDamping(Body.WATER_DAMPING * submerged);
 
-            const vy = bodyVelocity.get_y();
-
-            if (vy > 0 && _submergedPrevious !== 1)
-                water.splashDown(
-                    _buoyancyLeft.x * Scale.PIXELS_PER_METER,
-                    _buoyancyRight.x * Scale.PIXELS_PER_METER,
-                    vy,
-                    _body.GetMass());
+            if (_submergedPrevious !== 1) {
+                if (bodyVelocity.get_y() > Water.SPLASH_SPEED_THRESHOLD)
+                    water.splashDown(
+                        _buoyancyLeft.x * Scale.PIXELS_PER_METER,
+                        _buoyancyRight.x * Scale.PIXELS_PER_METER,
+                        bodyVelocity.get_y(),
+                        _body.GetMass());
+                else if (bodyVelocity.get_x() > 0)
+                    water.displace(
+                        _buoyancyRight.x * Scale.PIXELS_PER_METER,
+                        bodyVelocity.get_x(),
+                        _body.GetMass());
+                else
+                    water.displace(
+                        _buoyancyLeft.x * Scale.PIXELS_PER_METER,
+                        bodyVelocity.get_x(),
+                        _body.GetMass());
+            }
 
             _submergedPrevious = submerged;
         }

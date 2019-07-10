@@ -245,6 +245,7 @@ export function World(renderContext, missionProgress) {
         _camera = null;
         _view.onMouseRelease();
         _controllerState.reset();
+        _water.clear();
 
         while (_objects.length > 0)
             _objects.pop().free();
