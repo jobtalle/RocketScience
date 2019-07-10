@@ -133,7 +133,7 @@ export function Water() {
      * @param {Number} left The leftmost pixel where the object enters the water.
      * @param {Number} right The rightmost pixel where the object enters the water.
      * @param {Number} velocity The velocity of the object.
-     * @param {Number} mass The mass of the object.
+     * @param {Number} mass The mass of the object that is under water.
      */
     this.splashDown = (left, right, velocity, mass) => {
         const particleCount = Math.max(
@@ -163,8 +163,8 @@ export function Water() {
     /**
      * Displace water when moving through it.
      * @param {Number} x The pixel where the water is displaced from.
-     * @param {Number} velocity The horizontal velocity of the object.
-     * @param {Number} mass The mass of the object.
+     * @param {Number} velocity The horizontal velocity of the object in pixels per second.
+     * @param {Number} mass The mass of the object that is under water.
      */
     this.displace = (x, velocity, mass) => {
         const av = Math.abs(velocity);
@@ -180,12 +180,10 @@ export function Water() {
             this.addParticle(
                 x,
                 Water.AMPLITUDE + radius,
-                Math.sign(velocity) * -Math.min(
-                    av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() + Water.DISPLACE_SPEED_MIN,
+                velocity - Math.sign(velocity) * (Water.DISPLACE_SPEED_MIN + av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random()),
+                -Water.DISPLACE_SPEED_MIN - Math.min(
+                    av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() * Water.DISPLACE_UP_FACTOR,
                     Water.DISPLACE_SPEED_MAX),
-                Math.max(
-                    -av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() * Water.DISPLACE_UP_FACTOR - Water.DISPLACE_SPEED_MIN,
-                    -Water.DISPLACE_SPEED_MAX),
                 radius);
         }
     };
@@ -224,10 +222,10 @@ Water.SPLASH_RADIUS_MIN = 6;
 Water.SPLASH_RADIUS_MAX = 50;
 Water.SPLASH_RADIUS_MULTIPLIER = 0.3;
 Water.SPLASH_PARTICLES_MIN = 8;
-Water.DISPLACE_SPEED_THRESHOLD = 0.04;
+Water.DISPLACE_SPEED_THRESHOLD = 15;
 Water.DISPLACE_RADIUS_MIN = 12;
 Water.DISPLACE_RADIUS_MULTIPLIER = 0.1;
 Water.DISPLACE_SPEED_MIN = 50;
-Water.DISPLACE_SPEED_MAX = 200;
-Water.DISPLACE_SPEED_MULTIPLIER = 50;
-Water.DISPLACE_UP_FACTOR = 1.5;
+Water.DISPLACE_SPEED_MAX = 150;
+Water.DISPLACE_SPEED_MULTIPLIER = 0.35;
+Water.DISPLACE_UP_FACTOR = 2;

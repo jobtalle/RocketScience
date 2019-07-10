@@ -113,17 +113,17 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
                         _buoyancyLeft.x * Scale.PIXELS_PER_METER,
                         _buoyancyRight.x * Scale.PIXELS_PER_METER,
                         bodyVelocity.get_y(),
-                        _body.GetMass());
+                        _body.GetMass() * submerged);
                 else if (bodyVelocity.get_x() > 0)
                     water.displace(
                         _buoyancyRight.x * Scale.PIXELS_PER_METER,
-                        bodyVelocity.get_x(),
-                        _body.GetMass());
+                        bodyVelocity.get_x() * Scale.PIXELS_PER_METER,
+                        _body.GetMass() * submerged);
                 else
                     water.displace(
                         _buoyancyLeft.x * Scale.PIXELS_PER_METER,
-                        bodyVelocity.get_x(),
-                        _body.GetMass());
+                        bodyVelocity.get_x() * Scale.PIXELS_PER_METER,
+                        _body.GetMass() * submerged);
             }
 
             _submergedPrevious = submerged;
