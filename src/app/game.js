@@ -215,17 +215,17 @@ export function Game(renderContext, input, user) {
             _editor.resize(width, height);
     };
 
+    input.getKeyboard().addListener(onKeyEvent);
+    input.getMouse().addListener(onMouseEvent);
+
+    this.setMode(Game.MODE_MENU);
+
     renderContext.getMyr().utils.loop(function(timeStep) {
         update(timeStep);
         render();
 
         return true;
     });
-
-    input.getKeyboard().addListener(onKeyEvent);
-    input.getMouse().addListener(onMouseEvent);
-
-    this.setMode(Game.MODE_MENU);
 }
 
 Game.KEY_TOGGLE_EDIT = " ";

@@ -15,6 +15,7 @@ export function registerSprites(myr, rawSprites) {
         for (const frame of file.frames) {
             const surface = new myr.Surface(file.header.width, file.header.height);
             const name = file.name + '_' + file.frames.indexOf(frame);
+
             surface.bind();
             surface.clear();
 
@@ -67,6 +68,8 @@ export function registerSprites(myr, rawSprites) {
 
         myr.register(sprite.name, ...spriteFrames);
     }
+
+    myr.flush();
 
     for (const surface of _surfaces)
         surface.surface.free();
