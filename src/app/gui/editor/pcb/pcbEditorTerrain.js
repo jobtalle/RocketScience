@@ -2,7 +2,6 @@ import {EditOptionsTerrain} from "../editoptions/editOptionsTerrain";
 import {Terrain} from "../../../terrain/terrain";
 import {Scale} from "../../../world/scale";
 import * as Myr from "myr.js";
-import {StyleUtils} from "../../../utils/styleUtils";
 
 /**
  * The terrain editor, used for editing terrain.
@@ -90,6 +89,14 @@ export function PcbEditorTerrain(renderContext, editor, world) {
      */
     this.updatePcb = newPcb => {
 
+    };
+
+    /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return false;
     };
 
     /**
