@@ -5,7 +5,7 @@ import {OverlayRulerDefinition} from "../overlay/rulers/overlayRulerDefinition";
 import {PartSummary} from "../../../pcb/partSummary";
 import {Budget} from "../../../mission/budget/budget";
 import {BudgetInventory} from "../../../mission/budget/budgetInventory";
-import Myr from "myr.js"
+import Myr from "myr.js";
 
 /**
  * An extend editor, able to extend the current PCB.
@@ -426,6 +426,14 @@ export function PcbEditorSelect(renderContext, pcb, cursor, editor, selection, b
      */
     this.makeActive = () => {
         updateSelectedInfo();
+    };
+
+    /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return true;
     };
 
     /**

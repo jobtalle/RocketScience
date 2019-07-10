@@ -86,6 +86,7 @@ export function Objective(goals, title) {
 
         for (const goal of goals) {
             buffer.writeByte(goal.getType());
+
             goal.serialize(buffer);
         }
 

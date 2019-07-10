@@ -3,6 +3,7 @@ import {BudgetInventory} from "../../../mission/budget/budgetInventory";
 import {Budget} from "../../../mission/budget/budget";
 import {CategoryPartCountSetter} from "./categoryPartCountSetter";
 import {CategoryPartCount} from "./categoryPartCount";
+import {getGuiIconString} from "../../../part/objects";
 
 /**
  * A part button used to instantiate a part.
@@ -28,11 +29,14 @@ export function CategoryPart(part, setPart, info, editable) {
     const makeSprite = () => {
         const element = document.createElement("div");
 
-        element.classList.add("sprite");
-        element.classList.add(part.icon);
+        element.classList.add("icon");
+
         element.onclick = onClick;
         element.onmouseover = onEnter;
         element.onmouseout = onLeave;
+        const img = document.createElement('img');
+        img.src = getGuiIconString(part.icon);
+        element.appendChild(img);
 
         return element;
     };

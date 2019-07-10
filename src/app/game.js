@@ -3,6 +3,7 @@ import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
 import {Hud} from "./gui/hud/hud";
 import {MissionProgress} from "./mission/missionProgress";
+import {Mission} from "./mission/mission";
 
 /**
  * This class contains the game views.
@@ -172,7 +173,16 @@ export function Game(renderContext, input, user) {
      * Start free create mode.
      */
     this.startCreate = () => {
+        stopMission();
 
+        _world = new World(renderContext, new MissionProgress(Mission.emptyMission(), MissionProgress.PROGRESS_UNBEGUN, "newmission.bin"));
+        _hud = new Hud(renderContext, _world, this);
+        _editor = new Editor(renderContext, _world, this, true);
+
+        _editor.edit(_world.getMission().getEditables()[0]);
+        _editor.show();
+
+        this.setMode(Game.MODE_EDIT);
     };
 
     /**

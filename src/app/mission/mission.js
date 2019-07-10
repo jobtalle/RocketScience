@@ -2,6 +2,8 @@ import {Objective} from "./objective";
 import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
 import {Terrain} from "../terrain/terrain";
+import * as Myr from "myr.js";
+import {Profiles} from "../terrain/scatters/profiles";
 
 /**
  * A mission consists of one or multiple objectives.
@@ -249,4 +251,25 @@ Mission.deserialize = buffer => {
         physicsConfiguration,
         title,
         description);
+};
+
+/**
+ * Create an empty mission.
+ * @returns {Mission} An empty mission.
+ */
+Mission.emptyMission = () => {
+    const heights = new Array(200).fill(0);
+
+    return new Mission(
+        [],
+        [
+            Editable.defaultEditable(new Myr.Vector(50, -10))
+        ],
+        new Terrain(
+            heights,
+            Profiles.ID_FIELDS
+        ),
+        new PhysicsConfiguration(1, 8),
+        "New Mission",
+        "Create your own mission!");
 };

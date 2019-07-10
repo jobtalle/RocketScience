@@ -409,10 +409,11 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
      * @param {Boolean} isCam A boolean indicating whether this is a camera press.
      */
     this.onMousePress = (x, y, isCam) => {
-        if (isCam || !mouseDown(x, y)) {
+        if (isCam) {
             view.onMouseMove(x, y);
             view.onMousePress();
-        }
+        } else
+            mouseDown(x, y);
     };
 
     /**
@@ -528,6 +529,14 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
 
             matchWorldPosition();
         }
+    };
+
+    /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return _editor.maySwitchEditable();
     };
 
     /**

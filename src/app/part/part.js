@@ -1,4 +1,4 @@
-import {getPartFromId, getPartId} from "./objects";
+import {getPartFromName} from "./objects";
 
 /**
  * Constructs a part.
@@ -73,5 +73,5 @@ Part.deserialize = (buffer, partDict) => {
     const id = buffer.readShort();
     const configuration = buffer.readByte();
 
-    return new Part(getPartFromId(getPartId(partDict.getPart(id))), configuration);
+    return new Part(getPartFromName(partDict.getPart(id)), configuration);
 };

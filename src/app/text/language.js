@@ -1,6 +1,7 @@
 import "../../styles/text.css";
 import {Macro} from "./macro";
 import {requestText} from "../utils/requestText";
+import {appendLanguageUnique} from "../utils/appendUnique";
 
 function Language() {
     let _language;
@@ -25,9 +26,11 @@ function Language() {
         }
     };
 
-    this.set = (source, onReady, onError) => {
+    this.set = (source, modEntries, onReady, onError) => {
         requestText(source, file => {
             _language = JSON.parse(file);
+
+            appendLanguageUnique(modEntries, _language, "Duplicate language entry from a mod");
 
             applyMacros();
 
@@ -74,11 +77,12 @@ export const Languages = {
 /**
  * Set the current language.
  * @param {String} language Any valid language constant provided by the Language class.
+ * @param {Object} modEntries A JSON of extra language entries provided by the mods.
  * @param {Function} onReady A function to execute when the language file has been loaded.
  * @param {Function} onError A function te execute when loading failed.
  */
-export function setLanguage(language, onReady, onError) {
-    _language.set(language, onReady, onError);
+export function setLanguage(language, modEntries, onReady, onError) {
+    _language.set(language, modEntries, onReady, onError);
 }
 
 /**
