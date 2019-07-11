@@ -114,7 +114,8 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
                         _buoyancyRight.x * Scale.PIXELS_PER_METER,
                         bodyVelocity.get_y(),
                         _body.GetMass() * submerged);
-                else if (bodyVelocity.get_x() > 0)
+
+                if (bodyVelocity.get_x() > 0)
                     water.displace(
                         _buoyancyRight.x * Scale.PIXELS_PER_METER,
                         bodyVelocity.get_x() * Scale.PIXELS_PER_METER,
