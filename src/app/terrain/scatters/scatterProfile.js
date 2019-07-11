@@ -1,6 +1,6 @@
 /**
  * A profile according to which scatters are placed.
- * Different profiles can produce different graphical themes.
+ * Different scatters can produce different graphical themes.
  * @param {Array} entries An array of ScatterProfile.Entry objects.
  * @constructor
  */

@@ -1,7 +1,7 @@
 import {Terrain} from "../terrain";
 import {TerrainSegment} from "../terrainSegment";
 import {Scale} from "../../world/scale";
-import {Profiles} from "./profiles";
+import {Profiles} from "../profiles";
 import {FractalNoise} from "../../utils/fractalNoise";
 
 /**
@@ -33,7 +33,7 @@ export function Scatters(renderContext, terrain) {
     const generate = () => {
         let seed = _seed;
 
-        for (const entry of Profiles.profiles[terrain.getProfile()].getEntries()) {
+        for (const entry of Profiles.scatters[terrain.getProfile()].getEntries()) {
             seed = (seed + entry.threshold) % 1;
 
             const sprite = renderContext.getSprites().getSprite(entry.spriteName);

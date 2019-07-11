@@ -46,8 +46,10 @@
 
     /* In-game */
     --game-color-sky: #b3e2ec;
-    --game-color-terrain-fill: #5B8023;
-    --game-color-terrain-border: #262626;
+
+    --game-color-terrain-fields-fill: #5B8023;
+    --game-color-terrain-fields-shade: #425d19;
+    --game-color-terrain-fields-border: #262626;
 
     --game-color-cloud-border: #333333FF;
     --game-color-cloud-fill: #D7F7EF99;

@@ -68,6 +68,6 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters, off
     update();
 }
 
-TerrainSegment.COLOR_EDGE = StyleUtils.getColor("--game-color-terrain-border");
-TerrainSegment.COLOR_FILL = StyleUtils.getColor("--game-color-terrain-fill");
+TerrainSegment.COLOR_EDGE = StyleUtils.getColor("--game-color-terrain-fields-border");
+TerrainSegment.COLOR_FILL = StyleUtils.getColor("--game-color-terrain-fields-fill");
 TerrainSegment.SCATTER_SHIFT = 1;

@@ -3,7 +3,7 @@ import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
 import {Terrain} from "../terrain/terrain";
 import * as Myr from "myr.js";
-import {Profiles} from "../terrain/scatters/profiles";
+import {Profiles} from "../terrain/profiles";
 
 /**
  * A mission consists of one or multiple objectives.
