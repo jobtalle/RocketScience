@@ -173,14 +173,15 @@ export function Water() {
             return;
 
         const particleCount = 3;
+        const sign = Math.sign(velocity);
 
         for (let i = 0; i < particleCount; ++i) {
             const radius = Water.DISPLACE_RADIUS_MIN + Water.DISPLACE_RADIUS_MULTIPLIER * mass * Math.random();
 
             this.addParticle(
-                x,
+                x + sign * radius,
                 Water.AMPLITUDE + radius,
-                velocity - Math.sign(velocity) * (Water.DISPLACE_SPEED_MIN + av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random()),
+                velocity - sign * (Water.DISPLACE_SPEED_MIN + av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random()),
                 -Water.DISPLACE_SPEED_MIN - Math.min(
                     av * Water.DISPLACE_SPEED_MULTIPLIER * Math.random() * Water.DISPLACE_UP_FACTOR,
                     Water.DISPLACE_SPEED_MAX),
