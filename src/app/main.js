@@ -1,4 +1,5 @@
 import "../styles/constants.css"
+import "../styles/colors.css"
 import "../styles/main.css"
 import "../styles/gui.css"
 
