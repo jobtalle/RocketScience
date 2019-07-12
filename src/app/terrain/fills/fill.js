@@ -1,5 +1,5 @@
 import {Scale} from "../../world/scale";
-import {StyleUtils} from "../../utils/styleUtils";
+import {Profiles} from "../profiles";
 
 /**
  * A terrain filler, that paints the terrain.
@@ -8,8 +8,10 @@ import {StyleUtils} from "../../utils/styleUtils";
  * @constructor
  */
 export function Fill(renderContext, terrain) {
+    const _filler = Profiles.fills[terrain.getProfile()];
+
     /**
-     * Fill a segment of terrain.
+     * Fill a section of terrain.
      * @param {Array} heights An array of all relevant heights for this section from left to right.
      * @param {Number} width The width in pixels.
      * @param {Number} height The height in pixels.
@@ -18,33 +20,30 @@ export function Fill(renderContext, terrain) {
      */
     this.draw = (heights, width, height, depth, offset) => {
         const pixelsPerSegment = width / (heights.length - 1);
-        const cFill = StyleUtils.getColor("--game-color-terrain-fields-fill");
-        const cEdge = StyleUtils.getColor("--game-color-terrain-fields-border");
+        let xRight = 0;
+        let xLeft = 0;
+        let yRight = height + heights[0] * Scale.PIXELS_PER_METER;
+        let yLeft = 0;
 
-        let xEnd = 0;
-        let xStart = 0;
-        let yEnd = height + heights[0] * Scale.PIXELS_PER_METER;
-        let yStart = 0;
+        _filler.prime(renderContext);
 
         for (let i = 0; i < heights.length - 1; ++i) {
-            xStart = xEnd;
-            yStart = yEnd;
-            xEnd = xStart + pixelsPerSegment;
-            yEnd = height + heights[i + 1] * Scale.PIXELS_PER_METER;
+            xLeft = xRight;
+            yLeft = yRight;
+            xRight = xLeft + pixelsPerSegment;
+            yRight = height + heights[i + 1] * Scale.PIXELS_PER_METER;
 
-            renderContext.getMyr().primitives.drawTriangle(cFill,
-                xStart, yStart,
-                xStart, height + depth,
-                xEnd, height + depth);
-            renderContext.getMyr().primitives.drawTriangle(cFill,
-                xEnd, height + depth,
-                xEnd, yEnd,
-                xStart, yStart);
-            renderContext.getMyr().primitives.drawLine(cEdge,
-                xStart,
-                yStart,
-                xEnd,
-                yEnd);
+            _filler.drawSegment(
+                renderContext.getMyr(),
+                xLeft,
+                yLeft,
+                xRight,
+                yRight,
+                offset,
+                height + depth);
         }
+
+        renderContext.getMyr().flush();
+        _filler.free();
     };
 }
