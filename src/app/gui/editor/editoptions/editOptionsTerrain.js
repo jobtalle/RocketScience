@@ -46,10 +46,17 @@ export function EditOptionsTerrain(editor) {
             "terrain-mode-smooth",
             ToolbarButton.TYPE_TOGGLE_GROUP,
             toggleGroup);
+        const buttonModeFlatten = new ToolbarButton(
+            () => editor.setMode(PcbEditorTerrain.MODE_FLATTEN),
+            getString(EditOptionsTerrain.TEXT_MODE_FLATTEN),
+            "terrain-mode-flatten",
+            ToolbarButton.TYPE_TOGGLE_GROUP,
+            toggleGroup);
 
         wrapper.className = EditOptions.CLASS_TOOLBAR;
         wrapper.appendChild(buttonModeElevate.getElement());
         wrapper.appendChild(buttonModeSmooth.getElement());
+        wrapper.appendChild(buttonModeFlatten.getElement());
 
         buttonModeElevate.getElement().click();
 
@@ -80,3 +87,4 @@ export function EditOptionsTerrain(editor) {
 EditOptionsTerrain.ICON_BRUSH_WIDTH = "terrain-brush-width";
 EditOptionsTerrain.TEXT_MODE_ELEVATE = "TERRAIN_MODE_ELEVATE";
 EditOptionsTerrain.TEXT_MODE_SMOOTH = "TERRAIN_MODE_SMOOTH";
+EditOptionsTerrain.TEXT_MODE_FLATTEN = "TERRAIN_MODE_FLATTEN";

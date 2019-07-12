@@ -277,6 +277,7 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 PcbEditorTerrain.RADIUS_DEFAULT = 3;
 PcbEditorTerrain.MODE_ELEVATE = 0;
 PcbEditorTerrain.MODE_SMOOTH = 1;
+PcbEditorTerrain.MODE_FLATTEN = 2;
 PcbEditorTerrain.MODE_DEFAULT = PcbEditorTerrain.MODE_ELEVATE;
 PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
 PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";

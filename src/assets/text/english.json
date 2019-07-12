@@ -43,6 +43,7 @@
 
   "TERRAIN_MODE_ELEVATE": "Elevate the terrain",
   "TERRAIN_MODE_SMOOTH": "Smooth the terrain",
+  "TERRAIN_MODE_FLATTEN": "Flatten the terrain",
 
   "TABBAR_PHYSICS": "Set this mission's physics configuration",
   "TABBAR_DESCRIPTION": "Set this mission's description",
