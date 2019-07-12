@@ -1,6 +1,5 @@
 import Myr from "../../../node_modules/myr.js/myr";
 import {Scale} from "../world/scale";
-import {StyleUtils} from "../utils/styleUtils";
 import {Terrain} from "./terrain";
 
 /**
@@ -11,37 +10,17 @@ import {Terrain} from "./terrain";
  * @param {Number} depth The water depth in pixels.
  * @param {Array} heights An array of all relevant heights for this segment from left to right.
  * @param {Array} scatters An array of Scatters.SpriteEntry instances.
+ * @param {Fill} fill A terrain filler.
  * @param {Number} offset The X offset of this segment in pixels.
  * @constructor
  */
-export function TerrainSegment(myr, width, height, depth, heights, scatters, offset) {
+export function TerrainSegment(myr, width, height, depth, heights, scatters, fill, offset) {
     const _surface = new myr.Surface(width, height + depth);
 
     const update = () => {
-        const pixelsPerSegment = width / (heights.length - 1);
-
         _surface.bind();
 
-        for (let i = 0; i < heights.length - 1; ++i) {
-            const xStart = i * pixelsPerSegment;
-            const xEnd = xStart + pixelsPerSegment;
-            const yStart = height + heights[i] * Scale.PIXELS_PER_METER;
-            const yEnd = height + heights[i + 1] * Scale.PIXELS_PER_METER;
-
-            myr.primitives.drawTriangle(TerrainSegment.COLOR_FILL,
-                xStart, yStart,
-                xStart, height + depth,
-                xEnd, height + depth);
-            myr.primitives.drawTriangle(TerrainSegment.COLOR_FILL,
-                xEnd, height + depth,
-                xEnd, yEnd,
-                xStart, yStart);
-            myr.primitives.drawLine(TerrainSegment.COLOR_EDGE,
-                xStart,
-                yStart,
-                xEnd,
-                yEnd);
-        }
+        fill.draw(heights, width, height, depth, offset);
 
         for (const scatter of scatters) {
             scatter.sprite.setFrame(scatter.frame);
@@ -68,6 +47,4 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters, off
     update();
 }
 
-TerrainSegment.COLOR_EDGE = StyleUtils.getColor("--game-color-terrain-fields-border");
-TerrainSegment.COLOR_FILL = StyleUtils.getColor("--game-color-terrain-fields-fill");
 TerrainSegment.SCATTER_SHIFT = 1;

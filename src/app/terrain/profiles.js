@@ -1,4 +1,6 @@
 import {ScatterProfile} from "./scatters/scatterProfile";
+import {FillSmooth} from "./fills/fillSmooth";
+import {StyleUtils} from "../utils/styleUtils";
 
 /**
  * Themed graphics scatters.
@@ -12,8 +14,17 @@ export const Profiles = {
         // Mountains
         new ScatterProfile([
             new ScatterProfile.Entry(ScatterProfile.TYPE_ROCKS, 0.3, 0.7, 1.2)
-    ])
-]};
+        ])],
+    fills: [
+        // Fields
+        new FillSmooth(
+            StyleUtils.getColor("--game-color--terrain-fields-border"),
+            [
+                new FillSmooth.Entry(StyleUtils.getColor("--game-color-terrain-fields-shade"), 0.3),
+                new FillSmooth.Entry(StyleUtils.getColor("--game-color-terrain-fields-fill"), 0)
+            ])
+    ]
+};
 
 Profiles.ID_FIELDS = 0;
 Profiles.ID_MOUNTAINS = 1;

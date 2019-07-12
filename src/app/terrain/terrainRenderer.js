@@ -7,9 +7,10 @@ import {Terrain} from "./terrain";
  * @param {Myr} myr A Myriad instance.
  * @param {Terrain} terrain A terrain to render.
  * @param {Scatters} scatters Scatters to render to the terrain.
+ * @param {Fill} fill A terrain fill.
  * @constructor
  */
-export function TerrainRenderer(myr, terrain, scatters) {
+export function TerrainRenderer(myr, terrain, scatters, fill) {
     const makeSegments = heights => {
         const segments = [];
         let scattersBegin = 0;
@@ -35,6 +36,7 @@ export function TerrainRenderer(myr, terrain, scatters) {
                 Scale.PIXELS_PER_METER * Terrain.MAX_DEPTH,
                 heights.slice(section, section + Terrain.SEGMENTS_PER_SECTION + 1),
                 scatters.getSprites().slice(scattersBegin, scattersEnd),
+                fill,
                 offset));
         }
 

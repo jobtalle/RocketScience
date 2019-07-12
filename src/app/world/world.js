@@ -15,6 +15,7 @@ import {Scale} from "./scale";
 import {Water} from "./water/water";
 import {WaterRenderer} from "./water/waterRenderer";
 import Myr from "myr.js"
+import {Fill} from "../terrain/fills/fill";
 
 /**
  * Simulates physics and led for all objects in the same space.
@@ -102,6 +103,9 @@ export function World(renderContext, missionProgress) {
             renderContext.getMyr(),
             missionProgress.getMission().getTerrain(),
             new Scatters(
+                renderContext,
+                missionProgress.getMission().getTerrain()),
+            new Fill(
                 renderContext,
                 missionProgress.getMission().getTerrain()));
 
