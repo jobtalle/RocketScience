@@ -1,12 +1,11 @@
-import {StyleUtils} from "../../utils/styleUtils";
-
 /**
  * A smooth terrain fill.
  * @param {Myr.Color} border A border color.
- * @param {Array} entries An array of Entry objects, in threshold ascending order.
+ * @param {Myr.Color} background A background color.
+ * @param {Array} entries An array of Entry objects, in thickness descending order.
  * @constructor
  */
-export function FillSmooth(border, entries) {
+export function FillSmooth(border, background, entries) {
     /**
      * Prime this filler for sampling.
      * @param {RenderContext} renderContext A render context.
@@ -26,18 +25,35 @@ export function FillSmooth(border, entries) {
      * @param {Number} bottom The number of pixels until the bottom of the section.
      */
     this.drawSegment = (myr, xLeft, yLeft, xRight, yRight, offset, bottom) => {
-        const cFill = StyleUtils.getColor("--game-color-terrain-fields-fill");
-        const cEdge = StyleUtils.getColor("--game-color-terrain-fields-border");
-
-        myr.primitives.drawTriangle(cFill,
+        myr.primitives.drawTriangle(
+            background,
             xLeft, yLeft,
             xLeft, bottom,
             xRight, bottom);
-        myr.primitives.drawTriangle(cFill,
+        myr.primitives.drawTriangle(
+            background,
             xRight, bottom,
             xRight, yRight,
             xLeft, yLeft);
-        myr.primitives.drawLine(cEdge,
+
+        for (const entry of entries) {
+            const bottomLeft = yLeft + entry.thickness;
+            const bottomRight = yRight + entry.thickness;
+
+            myr.primitives.drawTriangle(
+                entry.color,
+                xLeft, yLeft,
+                xLeft, bottomLeft,
+                xRight, bottomRight);
+            myr.primitives.drawTriangle(
+                entry.color,
+                xRight, bottomRight,
+                xRight, yRight,
+                xLeft, yLeft);
+        }
+
+        myr.primitives.drawLine(
+            border,
             xLeft,
             yLeft,
             xRight,
@@ -52,7 +68,7 @@ export function FillSmooth(border, entries) {
     };
 }
 
-FillSmooth.Entry = function(color, threshold) {
+FillSmooth.Entry = function(color, thickness) {
     this.color = color;
-    this.threshold = threshold;
+    this.thickness = thickness;
 };

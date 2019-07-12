@@ -44,6 +44,7 @@ export function Fill(renderContext, terrain) {
         }
 
         renderContext.getMyr().flush();
+
         _filler.free();
     };
 }
