@@ -43,6 +43,23 @@ export function Fill(renderContext, terrain) {
                 height + depth);
         }
 
+        xRight = 0;
+        yRight = height + heights[0] * Scale.PIXELS_PER_METER;
+
+        for (let i = 0; i < heights.length - 1; ++i) {
+            xLeft = xRight;
+            yLeft = yRight;
+            xRight = xLeft + pixelsPerSegment;
+            yRight = height + heights[i + 1] * Scale.PIXELS_PER_METER;
+
+            _filler.drawBorder(
+                renderContext.getMyr(),
+                xLeft,
+                yLeft,
+                xRight,
+                yRight);
+        }
+
         renderContext.getMyr().flush();
 
         _filler.free();

@@ -51,7 +51,17 @@ export function FillSmooth(border, background, entries) {
                 xRight, yRight,
                 xLeft, yLeft);
         }
+    };
 
+    /**
+     * Draw the border for this segments fill.
+     * @param {Myr} myr A Myriad instance.
+     * @param {Number} xLeft The left x.
+     * @param {Number} yLeft The left y.
+     * @param {Number} xRight The right x.
+     * @param {Number} yRight The right y.
+     */
+    this.drawBorder = (myr, xLeft, yLeft, xRight, yRight) => {
         myr.primitives.drawLine(
             border,
             xLeft,
