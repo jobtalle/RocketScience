@@ -1,5 +1,5 @@
 import {Terrain} from "../terrain";
-import {TerrainSegment} from "../terrainSegment";
+import {TerrainSection} from "../terrainSection";
 import {Scale} from "../../world/scale";
 import {Profiles} from "../profiles";
 import {FractalNoise} from "../../utils/fractalNoise";
@@ -47,7 +47,7 @@ export function Scatters(renderContext, terrain) {
 
                 if (place && Math.abs(terrain.getSlope(x * Scale.METERS_PER_PIXEL)) < entry.maxSlope) {
                     const y = Math.round(terrain.getHeight(x * Scale.METERS_PER_PIXEL) * Scale.PIXELS_PER_METER) - sprite.getHeight();
-                    const yPixel = Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + y;
+                    const yPixel = Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSection.SCATTER_SHIFT + y;
 
                     if (yPixel < 0)
                         continue;

@@ -1,4 +1,4 @@
-import {TerrainSegment} from "./terrainSegment";
+import {TerrainSection} from "./terrainSection";
 import {Scale} from "../world/scale";
 import {Terrain} from "./terrain";
 
@@ -11,8 +11,8 @@ import {Terrain} from "./terrain";
  * @constructor
  */
 export function TerrainRenderer(myr, terrain, scatters, fill) {
-    const makeSegments = heights => {
-        const segments = [];
+    const makeSections = heights => {
+        const sections = [];
         let scattersBegin = 0;
         let scattersEnd = scattersBegin;
 
@@ -29,7 +29,7 @@ export function TerrainRenderer(myr, terrain, scatters, fill) {
                 scatters.getSprites()[scattersBegin].x + scatters.getSprites()[scattersBegin].sprite.getWidth() <= offset)
                 ++scattersBegin;
 
-            segments.push(new TerrainSegment(
+            sections.push(new TerrainSection(
                 myr,
                 Terrain.SECTION_WIDTH,
                 Scale.PIXELS_PER_METER * Terrain.MAX_HEIGHT,
@@ -40,10 +40,10 @@ export function TerrainRenderer(myr, terrain, scatters, fill) {
                 offset));
         }
 
-        return segments;
+        return sections;
     };
 
-    const _segments = makeSegments(terrain.getHeights());
+    const _sections = makeSections(terrain.getHeights());
 
     /**
      * Draws the terrain.
@@ -52,17 +52,17 @@ export function TerrainRenderer(myr, terrain, scatters, fill) {
      */
     this.draw = (left, right) => {
         const first = Math.max(Math.floor(left / Terrain.SECTION_WIDTH), 0);
-        const last = Math.min(Math.ceil(right / Terrain.SECTION_WIDTH), _segments.length);
+        const last = Math.min(Math.ceil(right / Terrain.SECTION_WIDTH), _sections.length);
 
-        for (let segment = first; segment < last; ++segment)
-            _segments[segment].draw(segment * Terrain.SECTION_WIDTH, -Terrain.SEGMENT_ELEVATION);
+        for (let section = first; section < last; ++section)
+            _sections[section].draw(section * Terrain.SECTION_WIDTH, -Terrain.SEGMENT_ELEVATION);
     };
 
     /**
      * Free this terrain renderer.
      */
     this.free = () => {
-        for (const segment of _segments)
-            segment.free();
+        for (const section of _sections)
+            section.free();
     };
 }

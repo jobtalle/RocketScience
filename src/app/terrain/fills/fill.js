@@ -10,7 +10,7 @@ import {StyleUtils} from "../../utils/styleUtils";
 export function Fill(renderContext, terrain) {
     /**
      * Fill a segment of terrain.
-     * @param {Array} heights An array of all relevant heights for this segment from left to right.
+     * @param {Array} heights An array of all relevant heights for this section from left to right.
      * @param {Number} width The width in pixels.
      * @param {Number} height The height in pixels.
      * @param {Number} depth The water depth in pixels.
@@ -21,11 +21,16 @@ export function Fill(renderContext, terrain) {
         const cFill = StyleUtils.getColor("--game-color-terrain-fields-fill");
         const cEdge = StyleUtils.getColor("--game-color-terrain-fields-border");
 
+        let xEnd = 0;
+        let xStart = 0;
+        let yEnd = height + heights[0] * Scale.PIXELS_PER_METER;
+        let yStart = 0;
+
         for (let i = 0; i < heights.length - 1; ++i) {
-            const xStart = i * pixelsPerSegment;
-            const xEnd = xStart + pixelsPerSegment;
-            const yStart = height + heights[i] * Scale.PIXELS_PER_METER;
-            const yEnd = height + heights[i + 1] * Scale.PIXELS_PER_METER;
+            xStart = xEnd;
+            yStart = yEnd;
+            xEnd = xStart + pixelsPerSegment;
+            yEnd = height + heights[i + 1] * Scale.PIXELS_PER_METER;
 
             renderContext.getMyr().primitives.drawTriangle(cFill,
                 xStart, yStart,

@@ -3,7 +3,7 @@ import {Scale} from "../world/scale";
 import {Terrain} from "./terrain";
 
 /**
- * A renderable terrain segment.
+ * A renderable terrain section.
  * @param {Myr} myr A Myriad instance.
  * @param {Number} width The width in pixels.
  * @param {Number} height The height in pixels.
@@ -14,7 +14,7 @@ import {Terrain} from "./terrain";
  * @param {Number} offset The X offset of this segment in pixels.
  * @constructor
  */
-export function TerrainSegment(myr, width, height, depth, heights, scatters, fill, offset) {
+export function TerrainSection(myr, width, height, depth, heights, scatters, fill, offset) {
     const _surface = new myr.Surface(width, height + depth);
 
     const update = () => {
@@ -26,7 +26,7 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters, fil
             scatter.sprite.setFrame(scatter.frame);
             scatter.sprite.draw(
                 scatter.x - offset,
-                Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSegment.SCATTER_SHIFT + scatter.y);
+                Terrain.MAX_HEIGHT * Scale.PIXELS_PER_METER + TerrainSection.SCATTER_SHIFT + scatter.y);
         }
     };
 
@@ -47,4 +47,4 @@ export function TerrainSegment(myr, width, height, depth, heights, scatters, fil
     update();
 }
 
-TerrainSegment.SCATTER_SHIFT = 1;
+TerrainSection.SCATTER_SHIFT = 1;
