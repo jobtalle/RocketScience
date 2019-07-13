@@ -65,6 +65,48 @@ export function PcbEditorTerrain(renderContext, editor, world) {
         world.updateTerrain();
     };
 
+    const calculateDeltasElevate = dy => {
+        for (let i = 0; i < _deltas.length; ++i) {
+            const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
+
+            _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * dy * Scale.METERS_PER_PIXEL;
+        }
+    };
+
+    const calculateDeltasSmooth = dy => {
+        const smoothFactor = 1 - 1 / (1 + Math.abs(dy) * PcbEditorTerrain.SMOOTH_FACTOR);
+
+        for (let i = PcbEditorTerrain.SMOOTH_RADIUS; i < _deltas.length - PcbEditorTerrain.SMOOTH_RADIUS; ++i) {
+            if (_cursor - _radius + i - PcbEditorTerrain.SMOOTH_RADIUS < 0)
+                continue;
+
+            if (_cursor - _radius + i + PcbEditorTerrain.SMOOTH_RADIUS >= world.getMission().getTerrain().getHeights().length)
+                break;
+
+            let aim = 0;
+
+            for (let j = i - PcbEditorTerrain.SMOOTH_RADIUS; j <= i + PcbEditorTerrain.SMOOTH_RADIUS; ++j)
+                aim += world.getMission().getTerrain().getHeights()[_cursor - _radius + j];
+
+            aim /= PcbEditorTerrain.SMOOTH_RADIUS * 2 + 1;
+
+            _deltas[i] = smoothFactor * (aim - world.getMission().getTerrain().getHeights()[_cursor - _radius + i]);
+        }
+    };
+
+    const calculateDeltasFlatten = dy => {
+        const multiplier = Math.abs(dy) * Scale.METERS_PER_PIXEL;
+        const power = 2 / (1 + Math.max(multiplier - 1, 0));
+        const target = world.getMission().getTerrain().getHeights()[_cursor];
+
+        for (let i = 0; i < _deltas.length; ++i) {
+            const f = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
+            const flattenFactor = Math.pow(Math.min(Math.pow(2 * (f - 0.5), 3) + 1, Math.pow(2 * (-f + 0.5), 3) + 1), power) * Math.min(1, multiplier);
+
+            _deltas[i] = (target - world.getMission().getTerrain().getHeights()[_cursor - _radius + i]) * flattenFactor;
+        }
+    };
+
     /**
      * Set the edit mode.
      * @param {Number} mode A valid edit mode.
@@ -128,32 +170,15 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
             switch (_mode) {
                 case PcbEditorTerrain.MODE_ELEVATE:
-                    for (let i = 0; i < _deltas.length; ++i) {
-                        const factor = _deltas.length > 0 ? (i + 0.5) / _deltas.length : 1;
-
-                        _deltas[i] = (1 - Math.cos(Math.PI * 2 * factor)) * 0.5 * dy * Scale.METERS_PER_PIXEL;
-                    }
+                    calculateDeltasElevate(dy);
 
                     break;
                 case PcbEditorTerrain.MODE_SMOOTH:
-                    const smoothFactor = 1 - 1 / (1 + Math.abs(dy) * PcbEditorTerrain.SMOOTH_FACTOR);
+                    calculateDeltasSmooth(dy);
 
-                    for (let i = PcbEditorTerrain.SMOOTH_RADIUS; i < _deltas.length - PcbEditorTerrain.SMOOTH_RADIUS; ++i) {
-                        if (_cursor - _radius + i - PcbEditorTerrain.SMOOTH_RADIUS < 0)
-                            continue;
-
-                        if (_cursor - _radius + i + PcbEditorTerrain.SMOOTH_RADIUS >= world.getMission().getTerrain().getHeights().length)
-                            break;
-
-                        let aim = 0;
-
-                        for (let j = i - PcbEditorTerrain.SMOOTH_RADIUS; j <= i + PcbEditorTerrain.SMOOTH_RADIUS; ++j)
-                            aim += world.getMission().getTerrain().getHeights()[_cursor - _radius + j];
-
-                        aim /= PcbEditorTerrain.SMOOTH_RADIUS * 2 + 1;
-
-                        _deltas[i] = smoothFactor * (aim - world.getMission().getTerrain().getHeights()[_cursor - _radius + i]);
-                    }
+                    break;
+                case PcbEditorTerrain.MODE_FLATTEN:
+                    calculateDeltasFlatten(dy);
 
                     break;
             }
