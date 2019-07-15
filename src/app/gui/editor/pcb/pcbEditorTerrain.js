@@ -20,6 +20,7 @@ export function PcbEditorTerrain(renderContext, editor, world) {
     let _radius = PcbEditorTerrain.RADIUS_DEFAULT;
     let _deltas = null;
     let _dragY = 0;
+    let _grid = false;
 
     const getMin = (cursor, radius) => Math.max(0, cursor - radius);
 
@@ -63,6 +64,17 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
         world.getMission().getTerrain().setHeights(newHeights);
         world.updateTerrain();
+    };
+
+    const snapDeltas = () => {
+        for (let i = 0; i < _deltas.length; ++i) {
+            const height = world.getMission().getTerrain().getHeights()[_cursor - _radius + i] + _deltas[i];
+            const snapped = Math.round(height / PcbEditorTerrain.GRID_SPACING) * PcbEditorTerrain.GRID_SPACING;
+
+            _deltas[i] = snapped - world.getMission().getTerrain().getHeights()[_cursor - _radius + i];
+        }
+
+        console.log("s");
     };
 
     const calculateDeltasElevate = dy => {
@@ -146,7 +158,16 @@ export function PcbEditorTerrain(renderContext, editor, world) {
      * @param {KeyEvent} event A key event.
      */
     this.onKeyEvent = event => {
+        if (event.control) {
+            if (event.down) {
+                _grid = true;
 
+                if (_deltas)
+                    snapDeltas();
+            }
+            else
+                _grid = false;
+        }
     };
 
     /**
@@ -182,6 +203,9 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
                     break;
             }
+
+            if (_grid)
+                snapDeltas();
         }
         else {
             _worldPosition.x = x + renderContext.getViewport().getSplitX();
@@ -308,3 +332,4 @@ PcbEditorTerrain.SPRITE_ELEVATE = "terrainElevate";
 PcbEditorTerrain.SPRITE_ANCHOR = "terrainAnchor";
 PcbEditorTerrain.SMOOTH_FACTOR = 0.02;
 PcbEditorTerrain.SMOOTH_RADIUS = 1;
+PcbEditorTerrain.GRID_SPACING = 0.1;
