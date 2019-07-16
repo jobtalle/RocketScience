@@ -73,8 +73,6 @@ export function PcbEditorTerrain(renderContext, editor, world) {
 
             _deltas[i] = snapped - world.getMission().getTerrain().getHeights()[_cursor - _radius + i];
         }
-
-        console.log("s");
     };
 
     const calculateDeltasElevate = dy => {
