@@ -9,6 +9,7 @@ import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
 import {loadParts} from "./utils/partLoader";
+import {Loader} from "./gui/loader/loader";
 
 const start = renderContext => {
     const user = new User();
@@ -30,10 +31,16 @@ const start = renderContext => {
     resize();
 };
 
+const renderContext = new RenderContext(
+    document.getElementById("renderer"),
+    document.getElementById("overlay"));
+const loader = new Loader(renderContext.getOverlay());
+
+/*
 loadParts(
     ["../mods/base.zip"],
     Languages.ENGLISH,
     new RenderContext(
         document.getElementById("renderer"),
         document.getElementById("overlay")),
-    start);
+    start);*/
