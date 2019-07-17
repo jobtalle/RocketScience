@@ -1,10 +1,10 @@
 import JSZip from "jszip";
-import {loadObjects} from "../part/objects";
-import {readAse} from "../sprites/asereader/aseReader";
-import {forAllIcons, forAllSprites, forChunkPixels} from "../sprites/asereader/aseUtils";
-import {registerSprites} from "../sprites/registerSprites";
-import {pixelArrayToBase64} from "./pixelArrayToBase64";
-import {Languages, setLanguage} from "../text/language";
+import {loadObjects} from "./part/objects";
+import {readAse} from "./sprites/asereader/aseReader";
+import {forAllIcons, forAllSprites, forChunkPixels} from "./sprites/asereader/aseUtils";
+import {registerSprites} from "./sprites/registerSprites";
+import {pixelArrayToBase64} from "./utils/pixelArrayToBase64";
+import {Languages, setLanguage} from "./text/language";
 
 /**
  * Load the parts from all mods (in .zip format).

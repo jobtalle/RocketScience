@@ -4,20 +4,20 @@ import "../styles/main.css"
 import "../styles/gui.css"
 
 import {Game} from "./game"
-import {getString, Languages, setLanguage} from "./text/language";
+import {getString, Languages} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
-import {loadParts} from "./utils/partLoader";
+import {loadParts} from "./loadParts";
 import {Intro} from "./gui/loader/intro";
 import {Loader} from "./loader/loader";
 import {LoaderTask} from "./loader/loaderTask";
 
-const start = renderContext => {
-    const user = new User();
-    const input = new Input(window, renderContext);
-    const game = new Game(renderContext, input, user);
+let user = null;
+let input = null;
+let game = null;
 
+const start = renderContext => {
     const resize = () => {
         const wrapper = document.getElementById("wrapper");
         const rect = renderContext.getOverlay().getBoundingClientRect();
@@ -39,17 +39,32 @@ const renderContext = new RenderContext(
 const intro = new Intro(renderContext.getOverlay());
 const loader = new Loader([
     new LoaderTask(onFinished => {
+        user = new User();
+
+        onFinished();
+    }),
+    new LoaderTask(onFinished => {
         loadParts(
-            ["../mods/base.zip"],
-            Languages.ENGLISH,
+            user.getMods(),
+            user.getLanguage(),
             renderContext,
             onFinished);
+    }),
+    new LoaderTask(onFinished => {
+        input = new Input(window, renderContext);
+
+        onFinished();
+    }),
+    new LoaderTask(onFinished => {
+        game = new Game(renderContext, input, user);
+
+        onFinished();
     })
 ],
 () => {
-    intro.hide();
-
     start(renderContext);
+
+    intro.hide();
 });
 
 loader.load();

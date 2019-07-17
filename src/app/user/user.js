@@ -7,6 +7,7 @@ import {Mission} from "../mission/mission";
 import {WebStorage} from "../storage/webStorage";
 import {MissionProgress} from "../mission/missionProgress";
 import {Story} from "../mission/story";
+import {Languages} from "../text/language";
 
 /**
  * The user information stored locally and online.
@@ -142,6 +143,24 @@ export function User() {
                     checkIfComplete();
                 });
         }
+    };
+
+    /**
+     * Get the language file used by this user.
+     * @returns {String} The language file.
+     */
+    this.getLanguage = () => {
+        return Languages.ENGLISH;
+    };
+
+    /**
+     * Get all mods currently active for this user.
+     * @returns {string[]} An array of mod files.
+     */
+    this.getMods = () => {
+        return [
+            "../mods/base.zip"
+        ];
     };
 
     /**
