@@ -9,7 +9,7 @@ import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
 import {loadParts} from "./loadParts";
-import {Intro} from "./gui/loader/intro";
+import {Intro} from "./gui/intro/intro";
 import {Loader} from "./loader/loader";
 import {LoaderTask} from "./loader/loaderTask";
 

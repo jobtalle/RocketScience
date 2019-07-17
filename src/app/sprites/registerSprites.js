@@ -1,7 +1,7 @@
 import Myr from "myr.js";
 import {createAtlas} from "apl-image-packer";
 import {powerCeil} from "../utils/powerCeil";
-import {forChunkPixels} from "./asereader/aseUtils";
+import {getChunksPixels} from "./asereader/aseUtils";
 
 /**
  * Register all sprites in myr.
@@ -13,21 +13,11 @@ export function registerSprites(myr, rawSprites) {
 
     for (const file of rawSprites)
         for (const frame of file.frames) {
-            const surface = new myr.Surface(file.header.width, file.header.height);
+            const surface = new myr.Surface(
+                file.header.width,
+                file.header.height,
+                getChunksPixels(frame.chunks, file.header.width, file.header.height));
             const name = file.name + '_' + file.frames.indexOf(frame);
-
-            surface.bind();
-            surface.clear();
-
-            //TODO: extend Myr with method to draw pixel array in one function call.
-            forChunkPixels(frame.chunks, (x, y, chunk) => {
-                myr.primitives.drawPoint(new Myr.Color(
-                    chunk.pixels[y][x].r / 255,
-                    chunk.pixels[y][x].g / 255,
-                    chunk.pixels[y][x].b / 255,
-                    chunk.pixels[y][x].a / 255
-                ), x + chunk.xpos, y + chunk.ypos);
-            });
 
             _surfaces.push({
                 width: surface.getWidth(),

@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import {loadObjects} from "./part/objects";
 import {readAse} from "./sprites/asereader/aseReader";
-import {forAllIcons, forAllSprites, forChunkPixels} from "./sprites/asereader/aseUtils";
+import {forAllIcons, forAllSprites, forChunksPixels} from "./sprites/asereader/aseUtils";
 import {registerSprites} from "./sprites/registerSprites";
 import {pixelArrayToBase64} from "./utils/pixelArrayToBase64";
 import {Languages, setLanguage} from "./text/language";
@@ -17,7 +17,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
     let _counter = 0;
     let _modsLoaded = 0;
     let _partBuilt = false;
-
+    const t = performance.now();
     const _categoriesRaw = [];
     const _scriptsRaw = [];
     const _definitionsRaw = [];
@@ -136,7 +136,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
             for (const frame of file.frames) {
                 const pixelArray = new Uint8ClampedArray(file.header.width * file.header.height * 4);
 
-                forChunkPixels(frame.chunks, (x, y, chunk) => {
+                forChunksPixels(frame.chunks, (x, y, chunk) => {
                     pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4] = chunk.pixels[y][x].r;
                     pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 1] = chunk.pixels[y][x].g;
                     pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 2] = chunk.pixels[y][x].b;
@@ -165,6 +165,8 @@ export function loadParts(mods, language, renderContext, onLoad) {
             _languageEntries,
             () => onLoad(renderContext),
             () => console.log("Language file was not found"));
+
+        console.log("Part loading took " + (performance.now() - t) + "ms");
     };
 
     const addRaw = (file, array) => {

@@ -1,14 +1,37 @@
 /**
  * Loop over all pixels in the cell chunk.
- * @param {Object} chunks The chunks to iterate over.
+ * @param {Array} chunks The chunks to iterate over.
  * @param {Function} onPixel The function to call per pixel.
  */
-export function forChunkPixels(chunks, onPixel) {
-    for (const chunk of chunks)
-        if (chunk.type === 0x2005)
-            for (let x = 0; x < chunk.width; ++x)
-                for (let y = 0; y < chunk.height; ++y)
-                    onPixel(x, y, chunk);
+export function forChunksPixels(chunks, onPixel) {
+    for (const chunk of chunks) if (chunk.type === 0x2005)
+        for (let x = 0; x < chunk.width; ++x)
+            for (let y = 0; y < chunk.height; ++y)
+                onPixel(x, y, chunk);
+}
+
+/**
+ * Get all pixels in an array of chunks.
+ * @param {Array} chunks The chunks to iterate over.
+ * @param {Number} width The sprite width.
+ * @param {Number} height The sprite height.
+ * @returns {Uint8Array} An array containing all pixel values as unsigned bytes.
+ */
+export function getChunksPixels(chunks, width, height) {
+    const pixels = new Uint8Array(width * height << 2);
+
+    for (const chunk of chunks) if (chunk.type === 0x2005) {
+        for (let y = 0; y < chunk.height; ++y) for (let x = 0; x < chunk.width; ++x) {
+            const index = ((y + chunk.ypos) * width + chunk.xpos + x) << 2;
+
+            pixels[index] = chunk.pixels[y][x].r;
+            pixels[index + 1] = chunk.pixels[y][x].g;
+            pixels[index + 2] = chunk.pixels[y][x].b;
+            pixels[index + 3] = chunk.pixels[y][x].a;
+        }
+    }
+
+    return pixels;
 }
 
 /**
