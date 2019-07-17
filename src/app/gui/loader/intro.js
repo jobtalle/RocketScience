@@ -5,11 +5,11 @@ import "../../../styles/loader.css"
  * @param {HTMLElement} parent An element to put loader graphics on.
  * @constructor
  */
-export function Loader(parent) {
+export function Intro(parent) {
     const _container = document.createElement("div");
 
     const make = () => {
-        _container.id = Loader.ID;
+        _container.id = Intro.ID;
 
         parent.appendChild(_container);
     };
@@ -24,4 +24,4 @@ export function Loader(parent) {
     make();
 }
 
-Loader.ID = "loader";
+Intro.ID = "loader";

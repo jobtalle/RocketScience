@@ -4,12 +4,14 @@ import "../styles/main.css"
 import "../styles/gui.css"
 
 import {Game} from "./game"
-import {getString, Languages} from "./text/language";
+import {getString, Languages, setLanguage} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
 import {loadParts} from "./utils/partLoader";
-import {Loader} from "./gui/loader/loader";
+import {Intro} from "./gui/loader/intro";
+import {Loader} from "./loader/loader";
+import {LoaderTask} from "./loader/loaderTask";
 
 const start = renderContext => {
     const user = new User();
@@ -34,13 +36,20 @@ const start = renderContext => {
 const renderContext = new RenderContext(
     document.getElementById("renderer"),
     document.getElementById("overlay"));
-const loader = new Loader(renderContext.getOverlay());
+const intro = new Intro(renderContext.getOverlay());
+const loader = new Loader([
+    new LoaderTask(onFinished => {
+        loadParts(
+            ["../mods/base.zip"],
+            Languages.ENGLISH,
+            renderContext,
+            onFinished);
+    })
+],
+() => {
+    intro.hide();
 
-/*
-loadParts(
-    ["../mods/base.zip"],
-    Languages.ENGLISH,
-    new RenderContext(
-        document.getElementById("renderer"),
-        document.getElementById("overlay")),
-    start);*/
+    start(renderContext);
+});
+
+loader.load();

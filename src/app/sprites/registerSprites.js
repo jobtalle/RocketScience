@@ -1,7 +1,7 @@
 import Myr from "myr.js";
 import {createAtlas} from "apl-image-packer";
 import {powerCeil} from "../utils/powerCeil";
-import {forChunkPixels} from "../utils/aseutils";
+import {forChunkPixels} from "./asereader/aseUtils";
 
 /**
  * Register all sprites in myr.

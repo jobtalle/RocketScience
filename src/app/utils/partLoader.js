@@ -1,11 +1,10 @@
 import JSZip from "jszip";
 import {loadObjects} from "../part/objects";
 import {readAse} from "../sprites/asereader/aseReader";
-import {forAllIcons, forAllSprites, forChunkPixels} from "./aseutils";
-import {setLanguage} from "../text/language";
+import {forAllIcons, forAllSprites, forChunkPixels} from "../sprites/asereader/aseUtils";
 import {registerSprites} from "../sprites/registerSprites";
 import {pixelArrayToBase64} from "./pixelArrayToBase64";
-import {appendArrayBufferUnique, appendLanguageUnique, appendStringUnique} from "./appendUnique";
+import {Languages, setLanguage} from "../text/language";
 
 /**
  * Load the parts from all mods (in .zip format).
@@ -101,7 +100,8 @@ export function loadParts(mods, language, renderContext, onLoad) {
         for (const text of _languageRaw) {
             const json = JSON.parse(text);
 
-            appendLanguageUnique(json, _languageEntries, "Duplicate language entry");
+            for (const key in json) if (!_languageEntries.hasOwnProperty(key))
+                _languageEntries[key] = json[key];
         }
     };
 
@@ -160,13 +160,19 @@ export function loadParts(mods, language, renderContext, onLoad) {
 
         registerSprites(renderContext.getMyr(), _spriteRawFiles);
         loadObjects(_objects, _parts, _guiIcons);
-        setLanguage(language, _languageEntries, () => onLoad(renderContext), () => console.log("Language file was not found"));
+        setLanguage(
+            Languages.ENGLISH,
+            _languageEntries,
+            () => onLoad(renderContext),
+            () => console.log("Language file was not found"));
     };
 
     const addRaw = (file, array) => {
         ++_counter;
+
         file.async("string").then(text => {
-            appendStringUnique(text, array);
+            if (array.indexOf(text) === -1)
+                array.push(text);
 
             if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();
@@ -175,9 +181,12 @@ export function loadParts(mods, language, renderContext, onLoad) {
 
     const addRawBuffer = (file, path, dict) => {
         ++_counter;
+
         file.async("arraybuffer").then(buffer => {
             const name = path.split('/').pop().split('.')[0];
-            appendArrayBufferUnique(name, buffer, dict);
+
+            if (!dict.hasOwnProperty(name))
+                dict[name] = buffer;
 
             if (--_counter === 0 && _modsLoaded === mods.length)
                 buildParts();
