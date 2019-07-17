@@ -1,16 +1,4 @@
 /**
- * Loop over all pixels in the cell chunk.
- * @param {Array} chunks The chunks to iterate over.
- * @param {Function} onPixel The function to call per pixel.
- */
-export function forChunksPixels(chunks, onPixel) {
-    for (const chunk of chunks) if (chunk.type === 0x2005)
-        for (let x = 0; x < chunk.width; ++x)
-            for (let y = 0; y < chunk.height; ++y)
-                onPixel(x, y, chunk);
-}
-
-/**
  * Get all pixels in an array of chunks.
  * @param {Array} chunks The chunks to iterate over.
  * @param {Number} width The sprite width.

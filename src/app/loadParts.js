@@ -1,7 +1,7 @@
 import JSZip from "jszip";
 import {loadObjects} from "./part/objects";
 import {readAse} from "./sprites/asereader/aseReader";
-import {forAllIcons, forAllSprites, forChunksPixels} from "./sprites/asereader/aseUtils";
+import {forAllIcons, forAllSprites, getChunksPixels} from "./sprites/asereader/aseUtils";
 import {registerSprites} from "./sprites/registerSprites";
 import {pixelArrayToBase64} from "./utils/pixelArrayToBase64";
 import {Languages, setLanguage} from "./text/language";
@@ -133,18 +133,11 @@ export function loadParts(mods, language, renderContext, onLoad) {
 
     const buildGuiIcons = () => {
         for (const file of _guiRawFiles)
-            for (const frame of file.frames) {
-                const pixelArray = new Uint8ClampedArray(file.header.width * file.header.height * 4);
-
-                forChunksPixels(frame.chunks, (x, y, chunk) => {
-                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4] = chunk.pixels[y][x].r;
-                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 1] = chunk.pixels[y][x].g;
-                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 2] = chunk.pixels[y][x].b;
-                    pixelArray[(x + chunk.xpos + (y + chunk.ypos) * file.header.width) * 4 + 3] = chunk.pixels[y][x].a;
-                });
-
-                _guiIcons[file.name] = pixelArrayToBase64(pixelArray, file.header.width, file.header.height)
-            }
+            for (const frame of file.frames)
+                _guiIcons[file.name] = pixelArrayToBase64(
+                    new Uint8ClampedArray(getChunksPixels(frame.chunks, file.header.width, file.header.height)),
+                    file.header.width,
+                    file.header.height)
     };
 
     const buildParts = () => {

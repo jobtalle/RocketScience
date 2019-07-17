@@ -11,8 +11,7 @@ export function pixelArrayToBase64(array, width, height) {
 
     canvas.width = width;
     canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    ctx.putImageData(imgData, 0, 0);
+    canvas.getContext('2d').putImageData(imgData, 0, 0);
 
     return canvas.toDataURL();
 }
