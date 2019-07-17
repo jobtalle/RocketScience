@@ -1,4 +1,4 @@
-import "../../../styles/loader.css"
+import "../../../styles/intro.css"
 
 /**
  * A load screen.
@@ -6,13 +6,7 @@ import "../../../styles/loader.css"
  * @constructor
  */
 export function Intro(parent) {
-    const _container = document.createElement("div");
-
-    const make = () => {
-        _container.id = Intro.ID;
-
-        parent.appendChild(_container);
-    };
+    const _container = document.getElementById(Intro.ID);
 
     /**
      * Hide the loader graphics.
@@ -20,8 +14,6 @@ export function Intro(parent) {
     this.hide = () => {
         parent.removeChild(_container);
     };
-
-    make();
 }
 
-Intro.ID = "loader";
+Intro.ID = "intro";

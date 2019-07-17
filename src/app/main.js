@@ -4,7 +4,7 @@ import "../styles/main.css"
 import "../styles/gui.css"
 
 import {Game} from "./game"
-import {getString, Languages} from "./text/language";
+import {getString} from "./text/language";
 import {RenderContext} from "./renderContext";
 import {Input} from "./input/input";
 import {User} from "./user/user";
@@ -37,7 +37,8 @@ const renderContext = new RenderContext(
     document.getElementById("renderer"),
     document.getElementById("overlay"));
 const intro = new Intro(renderContext.getOverlay());
-const loader = new Loader([
+
+new Loader([
     new LoaderTask(onFinished => {
         user = new User();
 
@@ -65,6 +66,4 @@ const loader = new Loader([
     start(renderContext);
 
     intro.hide();
-});
-
-loader.load();
+}).load();
