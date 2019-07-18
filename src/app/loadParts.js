@@ -1,10 +1,10 @@
 import JSZip from "jszip";
 import {loadObjects} from "./part/objects";
 import {readAse} from "./sprites/asereader/aseReader";
-import {forAllIcons, forAllSprites, getChunksPixels} from "./sprites/asereader/aseUtils";
+import {getChunksPixels} from "./sprites/asereader/aseUtils";
 import {registerSprites} from "./sprites/registerSprites";
 import {pixelArrayToBase64} from "./utils/pixelArrayToBase64";
-import {Languages, setLanguage} from "./text/language";
+import {setLanguage} from "./text/language";
 
 /**
  * Load the parts from all mods (in .zip format).
@@ -14,178 +14,192 @@ import {Languages, setLanguage} from "./text/language";
  * @param {Function} onLoad A function to call after loading all mods.
  */
 export function loadParts(mods, language, renderContext, onLoad) {
-    let _counter = 0;
-    let _modsLoaded = 0;
-    let _partsBuild = false;
+    const PartMod = function() {
+        this.icon = null;
+        this.definition = null;
+        this.implementation = null;
+    };
+
+    PartMod.FILE_ICON = "icon.aseprite";
+    PartMod.FILE_DEFINITION = "definition.json";
+    PartMod.FILE_IMPLEMENTATION = "implementation.js";
+
+    let loading = 0;
+    let modsLoaded = 0;
+    let partsBuilt = false;
+
     const t = performance.now();
-    const _categoriesRaw = [];
-    const _scriptsRaw = [];
-    const _definitionsRaw = [];
-    const _languageRaw = [];
-    const _spriteRawBuffers = {};
-    const _spriteRawFiles = [];
-    const _guiRawFiles = [];
+    const categorySets = [];
+    const languageSets = [];
+    const spriteFiles = [];
 
-    const _objects = [];
-    const _languageEntries = {};
-    const _parts = {categories: []};
-    const _guiIcons = {};
+    const objects = [];
+    const guiIcons = {};
 
-    const isDuplicateLabel = (label, array) => {
-        for (const entry of array)
-            if (entry.label === label)
-                return true;
+    const parts = {categories: []};
+    const partMods = {};
 
-        return false;
+    const filesLoaded = () => {
+        buildParts();
     };
 
-    const isDuplicateName = (name, array) => {
-        for (const entry of array)
-            if (entry.name === name)
-                return true;
-
-        return false;
+    const fileLoaded = () => {
+        if (modsLoaded === mods.length && loading === 0 && !partsBuilt)
+            filesLoaded();
     };
 
-    const findInsertIndex = (label, array) => {
-        if (array.indexOf(label) > 0)
-            for (const category of _parts.categories)
-                if (category.label === array[array.indexOf(label) - 1])
-                    return _parts.categories.indexOf(category) + 1;
+    const fileLoad = load => {
+        ++loading;
 
-        return 0;
+        load(() => {
+            --loading;
+
+            fileLoaded();
+        });
     };
 
     const buildCategories = () => {
-        for (const text of _categoriesRaw) {
-            const json = JSON.parse(text);
+        for (const categories of categorySets)
+            for (const label of categories.labels)
+                if (parts.categories.indexOf(label) === -1)
+                    parts.categories.push({
+                        label: label,
+                        parts: []
+                    });
 
-            for (const label of json.labels)
-                if (!isDuplicateLabel(label, _parts.categories))
-                    _parts.categories.splice(findInsertIndex(label, json.labels), 0, {label: label, parts: []});
-        }
+        // TODO: Properly sort categories if multiple definitions exist
     };
 
-    const buildDefinitions = () => {
-        for (const text of _definitionsRaw) {
-            const json = JSON.parse(text);
+    const buildObjects = () => {
+        for (const partName in partMods) if (partMods.hasOwnProperty(partName)) {
+            for (const category of parts.categories) if (category.label === partMods[partName].definition.category) {
+                category.parts.push(partMods[partName].definition);
 
-            for (const category of _parts.categories)
-                if (category.label === json.category) {
-                    if (!isDuplicateLabel(json.label, category.parts))
-                        category.parts.push(json);
-                    else
-                        throw "Duplicate part entry: " + json.label;
+                objects.push(partMods[partName].implementation);
+                guiIcons[partMods[partName].definition.object] = partMods[partName].icon;
 
-                    break;
-                }
+                break;
+            }
         }
 
-        for (const category of _parts.categories)
+        for (const category of parts.categories)
             category.parts.sort((a, b) => a.label - b.label);
     };
 
-    const buildScripts = () => {
-        for (const text of _scriptsRaw) {
-            const script = new Function('"use strict"; return(' + text + ')')();
-
-            if (!isDuplicateName(script.name, _objects))
-                _objects.push(script);
-            else
-                throw "Duplicate script entry: " + text;
-        }
-    };
-
-    const buildLanguage = () => {
-        for (const text of _languageRaw) {
-            const json = JSON.parse(text);
-
-            for (const key in json) if (!_languageEntries.hasOwnProperty(key))
-                _languageEntries[key] = json[key];
-        }
-    };
-
-    const readSpriteFiles = () => {
-        forAllSprites(_parts, sprite => {
-            if (!_spriteRawBuffers.hasOwnProperty(sprite))
-                throw "Missing sprite file: " + sprite;
-
-            const file = readAse(_spriteRawBuffers[sprite]);
-
-            file.name = sprite;
-            if (!isDuplicateName(file.name, _spriteRawFiles))
-                _spriteRawFiles.push(file);
-        });
-    };
-
-    const readGuiSpriteFiles = () => {
-        forAllIcons(_parts, icon => {
-            if (!_spriteRawBuffers.hasOwnProperty(icon))
-                throw "Missing sprite file: " + icon;
-
-            const file = readAse(_spriteRawBuffers[icon]);
-
-            file.name = icon;
-            if (!isDuplicateName(file.name, _guiRawFiles))
-                _guiRawFiles.push(file);
-        });
-    };
-
-    const buildGuiIcons = () => {
-        for (const file of _guiRawFiles)
-            for (const frame of file.frames)
-                _guiIcons[file.name] = pixelArrayToBase64(
-                    new Uint8ClampedArray(getChunksPixels(frame.chunks, file.header.width, file.header.height)),
-                    file.header.width,
-                    file.header.height)
-    };
-
     const buildParts = () => {
-        _partsBuild = true;
-
         buildCategories();
-        buildDefinitions();
-        buildScripts();
-        buildLanguage();
-        readSpriteFiles();
-        readGuiSpriteFiles();
-        buildGuiIcons();
+        buildObjects();
 
-        registerSprites(renderContext.getMyr(), _spriteRawFiles);
-        loadObjects(_objects, _parts, _guiIcons);
+        registerSprites(renderContext.getMyr(), spriteFiles);
+        loadObjects(objects, parts, guiIcons);
         setLanguage(
-            Languages.ENGLISH,
-            _languageEntries,
-            () => onLoad(renderContext),
+            language,
+            languageSets,
+            () => onLoad(),
             () => console.log("Language file was not found"));
 
         console.log("Part loading took " + (performance.now() - t) + "ms");
+
+        partsBuilt = true;
     };
 
-    const addRaw = (file, array) => {
-        ++_counter;
+    const loadFileCommon = (fileName, data) => {
+        switch (fileName) {
+            case language:
+                fileLoad(done => {
+                    data.async("string").then(string => {
+                        languageSets.push(JSON.parse(string));
 
-        file.async("string").then(text => {
-            if (array.indexOf(text) === -1)
-                array.push(text);
+                        done();
+                    });
+                });
 
-            if (--_counter === 0 && _modsLoaded === mods.length)
-                buildParts();
-        });
+                break;
+            case "categories.json":
+                fileLoad(done => {
+                    data.async("string").then(string => {
+                        categorySets.push(JSON.parse(string));
+
+                        done();
+                    });
+                });
+
+                break;
+            default:
+                if (fileName.endsWith(".aseprite")) {
+                    fileLoad(done => {
+                        data.async("arraybuffer").then(buffer => {
+                            const sprite = readAse(buffer);
+
+                            sprite.name = fileName.split(".")[0];
+
+                            spriteFiles.push(sprite);
+
+                            done();
+                        });
+                    });
+                }
+
+                break;
+        }
     };
 
-    const addRawBuffer = (file, path, dict) => {
-        ++_counter;
+    const loadFileMod = (mod, fileName, data) => {
+        if (partMods[mod] === undefined)
+            partMods[mod] = new PartMod();
 
-        file.async("arraybuffer").then(buffer => {
-            const name = path.split('/').pop().split('.')[0];
+        const modFile = partMods[mod];
 
-            if (!dict.hasOwnProperty(name))
-                dict[name] = buffer;
+        switch (fileName) {
+            case PartMod.FILE_ICON:
+                fileLoad(done => {
+                    data.async("arraybuffer").then(buffer => {
+                        const ase = readAse(buffer);
 
-            if (--_counter === 0 && _modsLoaded === mods.length)
-                buildParts();
-        });
+                        modFile.icon = pixelArrayToBase64(
+                            new Uint8ClampedArray(getChunksPixels(
+                                ase.frames[0].chunks,
+                                ase.header.width,
+                                ase.header.height)),
+                            ase.header.width,
+                            ase.header.height);
+
+                        done();
+                    });
+                });
+
+                break;
+            case PartMod.FILE_DEFINITION:
+                fileLoad(done => {
+                    data.async("string").then(string => {
+                        modFile.definition = JSON.parse(string);
+
+                        done();
+                    });
+                });
+
+                break;
+            case PartMod.FILE_IMPLEMENTATION:
+                fileLoad(done => {
+                    data.async("string").then(string => {
+                        modFile.implementation = new Function('"use strict"; return(' + string + ')')();
+
+                        done();
+                    });
+                });
+
+                break;
+        }
+    };
+
+    const loadFile = (directory, fileName, data) => {
+        if (directory !== null && (
+            fileName === PartMod.FILE_ICON ||
+            fileName === PartMod.FILE_DEFINITION ||
+            fileName === PartMod.FILE_IMPLEMENTATION))
+            loadFileMod(directory, fileName, data);
+        else
+            loadFileCommon(fileName, data);
     };
 
     const loadRawFiles = () => {
@@ -195,20 +209,18 @@ export function loadParts(mods, language, renderContext, onLoad) {
                 .then(buffer => JSZip.loadAsync(buffer))
                 .then(zip => {
                     zip.forEach((path, file) => {
-                        if (path.endsWith("categories.json"))
-                            addRaw(file, _categoriesRaw);
-                        else if (path.endsWith(".js"))
-                            addRaw(file, _scriptsRaw);
-                        else if (path.endsWith(language))
-                            addRaw(file, _languageRaw);
-                        else if (path.endsWith("definition.json"))
-                            addRaw(file, _definitionsRaw);
-                        else if (path.endsWith(".aseprite") || path.endsWith(".ase"))
-                            addRawBuffer(file, path, _spriteRawBuffers);
+                        if (path.endsWith("/"))
+                            return;
+
+                        const split = path.split("/");
+                        const directory = split.length > 1 ? split[split.length - 2] : null;
+
+                        loadFile(directory, split[split.length - 1], file);
                     });
-                    
-                    if (++_modsLoaded === mods.length && _counter === 0 && _partsBuild === false)
-                        buildParts();
+
+                    ++modsLoaded;
+
+                    fileLoaded();
                 });
     };
 

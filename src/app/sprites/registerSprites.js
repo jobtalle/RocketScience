@@ -6,13 +6,13 @@ import {copyChunkPixels} from "./asereader/aseUtils";
 /**
  * Register all sprites in myr.
  * @param {Myr} myr The graphics engine.
- * @param {Array} rawSprites The array of all sprite files.
+ * @param {Array} spriteFiles The array of all sprite files.
  */
-export function registerSprites(myr, rawSprites) {
+export function registerSprites(myr, spriteFiles) {
     const images = [];
     const sprites = {};
 
-    for (const sprite of rawSprites) {
+    for (const sprite of spriteFiles) {
         sprites[sprite.name] = new Array(sprite.frames.length).fill(null);
 
         for (let frame = 0; frame < sprite.frames.length; ++frame)
