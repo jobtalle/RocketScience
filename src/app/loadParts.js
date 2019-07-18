@@ -16,7 +16,7 @@ import {Languages, setLanguage} from "./text/language";
 export function loadParts(mods, language, renderContext, onLoad) {
     let _counter = 0;
     let _modsLoaded = 0;
-    let _partBuilt = false;
+    let _partsBuild = false;
     const t = performance.now();
     const _categoriesRaw = [];
     const _scriptsRaw = [];
@@ -141,7 +141,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
     };
 
     const buildParts = () => {
-        _partBuilt = true;
+        _partsBuild = true;
 
         buildCategories();
         buildDefinitions();
@@ -207,7 +207,7 @@ export function loadParts(mods, language, renderContext, onLoad) {
                             addRawBuffer(file, path, _spriteRawBuffers);
                     });
                     
-                    if (++_modsLoaded === mods.length && _counter === 0 && _partBuilt === false)
+                    if (++_modsLoaded === mods.length && _counter === 0 && _partsBuild === false)
                         buildParts();
                 });
     };

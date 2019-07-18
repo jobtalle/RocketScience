@@ -1,7 +1,7 @@
 import Myr from "myr.js";
 import {createAtlas} from "apl-image-packer";
 import {powerCeil} from "../utils/powerCeil";
-import {getChunksPixels} from "./asereader/aseUtils";
+import {copyChunkPixels} from "./asereader/aseUtils";
 
 /**
  * Register all sprites in myr.
@@ -9,58 +9,45 @@ import {getChunksPixels} from "./asereader/aseUtils";
  * @param {Array} rawSprites The array of all sprite files.
  */
 export function registerSprites(myr, rawSprites) {
-    const _surfaces = [];
-
-    for (const file of rawSprites)
-        for (const frame of file.frames) {
-            const surface = new myr.Surface(
-                file.header.width,
-                file.header.height,
-                getChunksPixels(frame.chunks, file.header.width, file.header.height));
-            const name = file.name + '_' + file.frames.indexOf(frame);
-
-            _surfaces.push({
-                width: surface.getWidth(),
-                height: surface.getHeight(),
-                surface: surface,
-                name: name,
-                duration: frame.frameHeader.frameDuration
-            });
-        }
-
-    const _packedSprites = createAtlas(_surfaces);
-    const _spriteSheet = new myr.Surface(powerCeil(_packedSprites.width), powerCeil(_packedSprites.height));
-
-    _spriteSheet.bind();
-    _spriteSheet.clear();
-
-    const _atlas = {frames: {}};
-
-    for (const entry of _packedSprites.coords) {
-        entry.img.surface.draw(entry.x, entry.y);
-        _atlas.frames[entry.img.name] = {
-            frame: {x: entry.x, y: entry.y, w: entry.img.width, h: entry.img.height},
-            duration: entry.img.duration
-        };
-    }
+    const images = [];
+    const sprites = {};
 
     for (const sprite of rawSprites) {
-        const spriteFrames = [];
-        let frameIndex = 0;
-        let frame = _atlas.frames[sprite.name + '_' + frameIndex];
+        sprites[sprite.name] = new Array(sprite.frames.length).fill(null);
 
-        while (frame != null) {
-            const spriteFrame = myr.makeSpriteFrame(_spriteSheet, frame.frame.x, frame.frame.y, frame.frame.w, frame.frame.h, 0, 0, frame.duration * 0.001);
-
-            spriteFrames.push(spriteFrame);
-            frame = _atlas.frames[sprite.name + '_' + ++frameIndex];
-        }
-
-        myr.register(sprite.name, ...spriteFrames);
+        for (let frame = 0; frame < sprite.frames.length; ++frame)
+            images.push({
+                width: sprite.header.width,
+                height: sprite.header.height,
+                chunks: sprite.frames[frame].chunks,
+                name: sprite.name,
+                frame: frame,
+                duration: sprite.frames[frame].frameHeader.frameDuration,
+            });
     }
 
-    myr.flush();
+    const atlas = createAtlas(images);
+    const width = powerCeil(atlas.width);
+    const height = powerCeil(atlas.height);
+    const pixels = new Uint8Array(width * height << 2);
 
-    for (const surface of _surfaces)
-        surface.surface.free();
+    for (const entry of atlas.coords)
+        copyChunkPixels(pixels, entry.img.chunks, entry.x, entry.y, width);
+
+    // TODO: The sprite sheet is never freed
+    const surface = new myr.Surface(width, height, pixels);
+
+    for (const entry of atlas.coords)
+        sprites[entry.img.name][entry.img.frame] = myr.makeSpriteFrame(
+            surface,
+            entry.x,
+            entry.y,
+            entry.img.width,
+            entry.img.height,
+            0,
+            0,
+            entry.img.duration * 0.001);
+
+    for (const name in sprites) if (sprites.hasOwnProperty(name))
+        myr.register(name, ...sprites[name]);
 }
