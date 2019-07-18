@@ -22,11 +22,11 @@ export function LibraryTabBar(user, editor, toolbar, info, tabContent, isEditabl
 
             editor.place([new PcbEditorPlace.Fixture(part, 0, 0)]);
         }, editor, info, isEditable);
-    let _pcbContents = new LibraryPcbContents(user.getPcbStorage().getDrawers(), (pcb) => {
+    let _pcbContents = new LibraryPcbContents(user, (pcb) => {
             toolbar.default();
 
             editor.placePcb(pcb);
-        }, info);
+        }, info, isEditable);
 
     const _tabs = [
         new LibraryTabButton(
@@ -54,11 +54,11 @@ export function LibraryTabBar(user, editor, toolbar, info, tabContent, isEditabl
      * Rebuild all the pcb contents from scratch. Should be performed when a saved pcb is added or removed.
      */
     this.rebuildPcbContent = () => {
-        _pcbContents = new LibraryPcbContents(user.getPcbStorage().getDrawers(), (pcb) => {
+        _pcbContents = new LibraryPcbContents(user, (pcb) => {
             toolbar.default();
 
             editor.placePcb(pcb);
-        }, info);
+        }, info, isEditable);
 
         tabContent.setContents(_pcbContents.getElement());
     };
@@ -70,6 +70,7 @@ export function LibraryTabBar(user, editor, toolbar, info, tabContent, isEditabl
      */
     this.setBudget = (budget, summary) => {
         _partContents.setBudget(budget, summary);
+        _pcbContents.setBudget(budget, summary);
     };
 
     /**

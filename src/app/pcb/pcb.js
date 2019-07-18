@@ -411,10 +411,7 @@ export function Pcb() {
 
         xOffset = xOffset < 0 ? 0 : xOffset;
         yOffset = yOffset < 0 ? 0 : yOffset;
-
-        console.log(pcb === this);
-        console.log(pcb.getHeight(), pcb.getWidth());
-
+        
         for (let x = 0; x < pcb.getWidth(); ++x) {
             for (let y = 0; y < pcb.getHeight(); ++y) {
                 const point = pcb.getPoint(x, y);

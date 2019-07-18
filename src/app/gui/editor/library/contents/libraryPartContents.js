@@ -5,6 +5,7 @@ import {BudgetChooser} from "../budgetChooser";
  * A scrolling list containing all library contents.
  * @param {Array} categories The categories containing all parts from parts.json.
  * @param {Function} setPart A function to call when a part should be set.
+ * @param {PcbEditor} editor The pcb editor.
  * @param {Info} info The info object.
  * @param {Boolean} isEditable A boolean indicating whether the part budget is editable.
  * @constructor

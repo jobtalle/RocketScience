@@ -9,6 +9,7 @@ import {MissionProgress} from "../mission/missionProgress";
 import {Story} from "../mission/story";
 import {PcbStorage} from "./pcbStorage";
 import {PcbStorageDrawer} from "./pcbStorageDrawer";
+import {StoredPcb} from "./storedPcb";
 
 /**
  * The user information stored locally and online.
@@ -89,6 +90,13 @@ export function User() {
                 () => onError("could not parse mission " + filePath)
             );
         }
+    };
+
+    const savePcbStorage = () => {
+        const data = new Data();
+
+        _pcbStorage.serialize(data.getBuffer());
+        _webStorage.savePcbStorage(data.toString());
     };
 
     /**
@@ -207,12 +215,6 @@ export function User() {
     };
 
     /**
-     * Get the PcbStorage.
-     * @return {PcbStorage} The PcbStorage.
-     */
-    this.getPcbStorage = () => _pcbStorage;
-
-    /**
      * Store the PCB to storage.
      * @param {String} pcbName The name of the PCB.
      * @param {Pcb} pcb The PCB object.
@@ -221,12 +223,9 @@ export function User() {
     this.savePcb = (pcbName, pcb) => {
         for (const drawer of _pcbStorage.getDrawers()) {
             if (drawer.canAdd()) {
-                drawer.addPcb(pcb);
+                drawer.addPcb(pcb, pcbName);
 
-                const data = new Data();
-
-                _pcbStorage.serialize(data.getBuffer());
-                _webStorage.savePcbStorage(data.toString());
+                savePcbStorage();
 
                 return true;
             }
@@ -236,16 +235,37 @@ export function User() {
     };
 
     /**
-     * Obtain a PCB from storage
-     * @param {String} pcbName The name of the PCB.
-     * @return {Pcb} The PCB.
+     * Load the drawers.
+     * @param {Function} onLoad Is called with a drawer when the drawer is loaded.
      */
-    this.getPcb = (pcbName) => {
-        const data = new Data();
+    this.loadDrawers = (onLoad) => {
+        for (const drawer of _pcbStorage.getDrawers())
+            onLoad(drawer);
+    };
 
-        data.fromString(_webStorage.getPcb(pcbName));
+    /**
+     * Set the title of a drawer.
+     * @param {PcbStorageDrawer} drawer The drawer that should be renamed.
+     * @param {String} title The title it should get.
+     */
+    this.setDrawerTitle = (drawer, title) => {
+        for (const pcbDrawer of _pcbStorage.getDrawers()) if (pcbDrawer === drawer)
+            pcbDrawer.setTitle(title);
 
-        return Pcb.deserialize(data.getBuffer());
+        savePcbStorage();
+    };
+
+    /**
+     * Set the name of a stored PCB.
+     * @param {Pcb} pcb The PCB that should be renamed.
+     * @param {String} name The name it should get.
+     */
+    this.setStoredPcbName = (pcb, name) => {
+        for (const pcbDrawer of _pcbStorage.getDrawers())
+            for (const storedPcb of pcbDrawer.getPcbs()) if (storedPcb.pcb === pcb)
+                storedPcb.name = name;
+
+        savePcbStorage();
     };
 
     loadUserFromCookie();

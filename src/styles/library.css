@@ -33,16 +33,35 @@ flex-grow: 1;
 
 /*PCB Contents*/
 
-#library .drawer-title {
+#pcb-contents .drawer.empty {
+display: none;
+}
+
+#pcb-contents .drawer .drawer-title {
     padding: var(--text-padding);
     background-color: var(--library-color-category);
     color: var(--text-color-light);
     font-weight: bold;
     font-size: var(--font-size-headers);
+    height: 30px;
 }
 
-#pcb-contents .drawer.empty {
-display: none;
+#pcb-contents .drawer .drawer-title .text {
+    display: inline-block;
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+}
+
+#pcb-contents .drawer .drawer-title .title-editor {
+    display: inline-block;
+    height: 100%;
+    width: 80%;
+}
+
+#pcb-contents .drawer .drawer-title .edit-button {
+    display: inline-block;
+    float: right;
 }
 
 #pcb-contents .drawer .pcb-list {
@@ -65,6 +84,11 @@ display: none;
 
 #pcb-contents .drawer .pcb-list .drawer-pcb:hover {
     background-color: var(--library-color-part-background-hover);
+}
+
+#pcb-contents .drawer .pcb-list .drawer-pcb.not-available {
+    background-color: var(--library-color-part-background-unavailable);
+    pointer-events: none;
 }
 
 /*Part Contents*/

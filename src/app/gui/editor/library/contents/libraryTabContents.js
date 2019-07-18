@@ -1,4 +1,7 @@
-
+/**
+ * Contents of the library.
+ * @constructor
+ */
 export function LibraryTabContents() {
     const _element = document.createElement("div");
     let _contents = null;

@@ -81,7 +81,7 @@ export function CategoryPart(part, setPart, info, isEditable) {
 
                         _element.appendChild(new CategoryPartCount(count, part.object, summary).getElement());
 
-                        if (available === 0)
+                        if (available <= 0)
                             _element.classList.add(CategoryPart.CLASS_NOT_AVAILABLE);
                     } else {
                         _element.classList.add(CategoryPart.CLASS_NOT_SPECIFIED);
