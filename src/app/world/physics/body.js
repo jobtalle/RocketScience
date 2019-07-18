@@ -17,6 +17,8 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
     const _body = world.CreateBody(_bodyDefinition.getDefinition());
     const _connected = [];
     const _position = new Myr.Vector(0, 0);
+    const _velocity = new Myr.Vector(0, 0);
+    const _acceleration = new Myr.Vector(0, 0);
     const _buoyancyPosition = new Myr.Vector(0, 0);
     const _buoyancyLeft = new Myr.Vector(0, 0);
     const _buoyancyRight = new Myr.Vector(0, 0);
@@ -140,6 +142,13 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
         for (const connected of _connected)
             connected.update(timeStep, water);
 
+        _acceleration.x = -_velocity.x;
+        _acceleration.y = -_velocity.y;
+        _velocity.x = _body.GetLinearVelocity().get_x();
+        _velocity.y = _body.GetLinearVelocity().get_y();
+        _acceleration.add(_velocity);
+        _acceleration.divide(timeStep);
+
         updateTransform();
 
         if (_body.GetPosition().get_y() + _radius > 0)
@@ -171,6 +180,22 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
      * @returns {Number} The rotation in radians.
      */
     this.getAngle = () => _angle;
+
+    /**
+     * Get the body velocity in meters per second.
+     * @returns {Myr.Vector} A vector representing the velocity.
+     */
+    this.getVelocity = () => {
+        return _velocity;
+    };
+
+    /**
+     * Get the body acceleration in meters per second.
+     * @returns {Myr.Vector} A vector representing the acceleration.
+     */
+    this.getAcceleration = () => {
+        return _acceleration;
+    };
 
     /**
      * Create a wheel on this body.
