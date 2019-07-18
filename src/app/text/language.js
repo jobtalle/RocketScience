@@ -29,8 +29,9 @@ function Language() {
         requestText(source, file => {
             _language = JSON.parse(file);
 
-            for (const key in modEntries) if (!_language.hasOwnProperty(key))
-                _language[key] = modEntries[key];
+            for (const entry of modEntries) for (const key in entry)
+                if (entry.hasOwnProperty(key) && !_language.hasOwnProperty(key))
+                    _language[key] = entry[key];
 
             applyMacros();
 
@@ -77,7 +78,7 @@ export const Languages = {
 /**
  * Set the current language.
  * @param {String} language Any valid language constant provided by the Language class.
- * @param {Object} modEntries A JSON of extra language entries provided by the mods.
+ * @param {Array} modEntries An array of JSONs of extra language entries provided by the mods.
  * @param {Function} onReady A function to execute when the language file has been loaded.
  * @param {Function} onError A function te execute when loading failed.
  */
