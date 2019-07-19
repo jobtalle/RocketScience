@@ -1,3 +1,60 @@
 ﻿{
-  "TITLE": "RocketScience"
+  "TITLE": "Rocket Science",
+
+  "MENU_ROOT_CREATE": "Maak",
+  "MENU_ROOT_MISSIONS": "Missies",
+
+  "CHECKLIST_FINISHED": "Beëindig",
+
+  "MACRO_HIGH": "hoog",
+  "MACRO_LOW": "laag",
+
+  "VALUE_PICKER_LOW": "Laag",
+  "VALUE_PICKER_HIGH": "Hoog",
+
+  "OBJECTIVE_NEW": "Voeg doel toe",
+  "OBJECTIVE_DEFAULT_TITLE": "Nieuw doel",
+
+  "GOAL_CREATE": "Voeg een sub-doel: ",
+  "GOAL_DELETE": "Verwijder",
+
+  "BUDGET_TYPE_NONE": "Oneindig budget",
+  "BUDGET_TYPE_INVENTORY": "Gelimiteerd budget",
+
+  "GOAL_PIN_STATE_TITLE": "Pin status",
+  "GOAL_PIN_STATE_DESCRIPTION": "Verifieer of een onderdeel bestaat, welke een bepaalde waarde heeft op een bepaalde pin.",
+  "GOAL_PIN_STATE_PART": "Onderdeel",
+  "GOAL_PIN_STATE_PIN": "Pin",
+  "GOAL_PIN_STATE_VALUE": "Waarde",
+
+  "TOOLBAR_EXTEND": "Verander de vorm van de printplaat",
+  "TOOLBAR_SELECT": "Selecteer en beweeg onderdelen op de printplaat",
+  "TOOLBAR_ETCH": "Creëer verbindingen op de printplaat",
+  "TOOLBAR_MOVE": "Verplaats de printplaat",
+  "TOOLBAR_TERRAIN": "Betwerk het terrein",
+  "TOOLBAR_LAUNCH": "Start het spel",
+  "TOOLBAR_X_RAY": "Bekijk de printplaat door de onderdelen heen",
+  "TOOLBAR_EXIT": "Verlaat de missie",
+  "TOOLBAR_UNDO": "Herstel vorige actie",
+  "TOOLBAR_REDO": "Voer actie opnieuw uit",
+  "TOOLBAR_ADD_REGION": "Voeg een nieuwe printplaat toe",
+  "TOOLBAR_COPY_REGION": "Voeg een kopie toe van de printplaat",
+  "TOOLBAR_REMOVE_REGION": "Verwijder de geselecteerde printplaat",
+
+  "TERRAIN_MODE_ELEVATE": "Verhoog het terrein",
+  "TERRAIN_MODE_SMOOTH": "Effen het terrein",
+  "TERRAIN_MODE_FLATTEN": "Maak het terrein plat",
+
+  "TABBAR_PHYSICS": "Stel de fysica van de huidige missie in",
+  "TABBAR_DESCRIPTION": "Stel de beschrijving van de huidige missie in",
+
+  "TABPAGE_PHYSICS_LABEL": "De factor van de zwaartekracht op aarde.",
+  "TABPAGE_DESCRIPTION_LABEL": "De beschrijving van de missie.",
+
+  "PIN_POWER_NAME": "Stroom",
+  "PIN_POWER_DESCRIPTION": "Dit onderdeel werkt alleen als het stroom ontvangt op deze pin.",
+  "PIN_OUTPUT_NAME": "Uitgang",
+  "PIN_INPUT_NAME": "Ingang",
+  "PIN_INPUT_1_NAME": "Ingang 1",
+  "PIN_INPUT_2_NAME": "Ingang 2"
 }
