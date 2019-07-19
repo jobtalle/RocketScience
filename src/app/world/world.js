@@ -50,6 +50,7 @@ export function World(renderContext, missionProgress) {
             0));
 
     let _camera = null;
+    let _selected = null;
     let _terrainRenderer = null;
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
@@ -67,11 +68,17 @@ export function World(renderContext, missionProgress) {
             if (point) {
                 _controllerState.onClick(object.getBody(), point);
 
-                this.setCamera(CameraSmooth, object);
+                if (_selected !== object) {
+                    _selected = object;
+
+                    this.setCamera(CameraSmooth, object);
+                }
 
                 return true;
             }
         }
+
+        _selected = null;
 
         this.setCamera(null);
 
