@@ -185,7 +185,6 @@ export function WaterRenderer(renderContext, water, width, height) {
 }
 
 WaterRenderer.SURFACE_THICKNESS = 16;
-WaterRenderer.PRECISION = 1 / 32;
 WaterRenderer.NOISE_RESOLUTION = 128;
 WaterRenderer.NOISE_SCALE = 128;
 WaterRenderer.NOISE_PERIOD = 4;
