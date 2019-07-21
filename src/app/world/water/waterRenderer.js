@@ -13,7 +13,7 @@ import {RenderContext} from "../../renderContext";
  * @param {Number} height The view height in pixels.
  * @constructor
  */
-export function WaterRenderer(renderContext, water, width, height) {
+export function WaterRenderer(renderContext, water, width, height, view) {
     const _gradient = WaterRenderer.makeGradient(renderContext);
     const _noise = WaterRenderer.makeNoise(renderContext.getMyr());
     const _shader = WaterRenderer.makeShader(renderContext.getMyr(), _gradient, _noise);
@@ -56,6 +56,9 @@ export function WaterRenderer(renderContext, water, width, height) {
         _surface.clear();
 
         renderContext.getMyr().push();
+        renderContext.getMyr().scale(
+            1 / view.getZoom(),
+            1 / view.getZoom());
         renderContext.getMyr().transform(transform);
 
         const opaqueBoundary = Terrain.MAX_DEPTH * Scale.PIXELS_PER_METER;
@@ -149,7 +152,9 @@ export function WaterRenderer(renderContext, water, width, height) {
         if (_surface)
             _surface.free();
 
-        _surface = new (renderContext.getMyr().Surface)(width, height);
+        _surface = new (renderContext.getMyr().Surface)(
+            width / view.getZoom(),
+            height / view.getZoom());
         _surface.setClearColor(new Myr.Color(0, 0, 0, 0));
         _shader.setSurface("water", _surface);
         _shader.setSize(width, height);

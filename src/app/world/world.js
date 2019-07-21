@@ -28,15 +28,6 @@ export function World(renderContext, missionProgress) {
     const _controllerState = new ControllerState();
     const _water = new Water();
     const _physics = new Physics(missionProgress.getMission().getPhysicsConfiguration(), _water);
-    const _waterRenderer = new WaterRenderer(
-        renderContext,
-        _water,
-        renderContext.getWidth(),
-        renderContext.getHeight());
-    const _cloudsRenderer = new CloudsRenderer(
-        renderContext.getMyr(),
-        -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER,
-        0.4);
     const _view = new View(
         renderContext.getWidth(),
         renderContext.getHeight(),
@@ -48,6 +39,16 @@ export function World(renderContext, missionProgress) {
             World.ZOOM_MAX),
         new ShiftProfile(
             0));
+    const _waterRenderer = new WaterRenderer(
+        renderContext,
+        _water,
+        renderContext.getWidth(),
+        renderContext.getHeight(),
+        _view);
+    const _cloudsRenderer = new CloudsRenderer(
+        renderContext.getMyr(),
+        -missionProgress.getMission().getPhysicsConfiguration().getAtmosphereHeight() * Scale.PIXELS_PER_METER,
+        0.4);
 
     let _camera = null;
     let _selected = null;
@@ -90,6 +91,10 @@ export function World(renderContext, missionProgress) {
             _camera.zoomIn();
         else
             _view.zoomIn();
+
+        _waterRenderer.resize(
+            renderContext.getWidth(),
+            renderContext.getHeight());
     };
 
     const zoomOut = () => {
@@ -97,6 +102,10 @@ export function World(renderContext, missionProgress) {
             _camera.zoomOut();
         else
             _view.zoomOut();
+
+        _waterRenderer.resize(
+            renderContext.getWidth(),
+            renderContext.getHeight());
     };
 
     /**
