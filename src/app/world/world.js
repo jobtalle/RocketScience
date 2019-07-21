@@ -190,19 +190,13 @@ export function World(renderContext, missionProgress) {
 
                 break;
             case MouseEvent.EVENT_PRESS_LMB:
+            case MouseEvent.EVENT_PRESS_RMB:
                 if (!clickObject(event.x, event.y)) {
                     if (_camera)
                         _camera.onMousePress();
                     else
                         _view.onMousePress();
                 }
-
-                break;
-            case MouseEvent.EVENT_PRESS_RMB:
-                if (_camera)
-                    _camera.onMousePress();
-                else
-                    _view.onMousePress();
 
                 break;
         }
