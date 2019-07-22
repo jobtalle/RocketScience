@@ -1,0 +1,5 @@
+{
+  "PART_ROCKET_NAME": "Rocket engine",
+  "PART_ROCKET_DESCRIPTION": "This rocket engine can be used to quickly propel robots through the sky. When powered, the thrust is relative to the input signal.",
+  "PART_ROCKET_PIN_DESCRIPTION": "A value between <low> and <high> can be provided to specify the amount of thrust for this rocket engine."
+}
