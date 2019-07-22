@@ -6,7 +6,7 @@
 function Rocket(context) {
     const PIN_INDEX_POWER = 0;
     const PIN_INDEX_INPUT = 1;
-    const MAX_FORCE = -550;
+    const MAX_FORCE = -650;
 
     let mover = null;
     let force = new context.refs.Myr.Vector(0, 0);
