@@ -258,6 +258,12 @@ export function Pcb() {
     };
 
     /**
+     * Get the points of occupied air.
+     * @returns {Array} An array containing the points.
+     */
+    this.getAirPoints = () => _air;
+
+    /**
      * Get a point on this pcb.
      * @param {Number} x The x position on the board.
      * @param {Number} y The y position on the board
