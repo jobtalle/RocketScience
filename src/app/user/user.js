@@ -159,7 +159,7 @@ export function User() {
      */
     this.getMods = () => {
         return [
-            "../mods/base.zip"
+            "mods/base.zip"
         ];
     };
 
