@@ -253,6 +253,7 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
     this.setEditMode = mode => {
         editor.getInfo().setPinouts(null);
         editor.getOverlay().clearRulers();
+        editor.setShowZone(false);
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
@@ -283,6 +284,8 @@ export function PcbEditor(renderContext, editOptions, world, view, width, height
                 this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view, isMissionEditor));
 
                 editOptions.set(null);
+
+                editor.setShowZone(true);
 
                 break;
             case PcbEditor.EDIT_MODE_TERRAIN:
