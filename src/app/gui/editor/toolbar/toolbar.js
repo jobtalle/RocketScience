@@ -190,11 +190,13 @@ export function Toolbar(editor, editables, overlay, x, game, isMissionEditor) {
 
                     break;
                 case Toolbar.KEY_PRESS_UNDO:
-                    _buttonUndo.getElement().click();
+                    if (event.control)
+                        _buttonUndo.getElement().click();
 
                     break;
                 case Toolbar.KEY_PRESS_REDO:
-                    _buttonRedo.getElement().click();
+                    if (event.control)
+                        _buttonRedo.getElement().click();
 
                     break;
             }
