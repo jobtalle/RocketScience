@@ -42,14 +42,12 @@ export function Editables(editor, renderContext, world) {
                 Math.ceil(editable.getRegion().getSize().x * Scale.PIXELS_PER_METER),
                 Math.ceil(editable.getRegion().getSize().y * Scale.PIXELS_PER_METER));
 
+            _grid.setClearColor(new Myr.Color(1, 1, 1, 0));
             _border.bind();
 
-            renderContext.getMyr().primitives.drawRectangle(
-                Editables.BORDER_COLOR,
-                1,
-                1,
-                _border.getWidth() -1,
-                _border.getHeight() - 1);
+            for (let x = 0; x < _grid.getWidth(); x += _spriteZone.getWidth())
+                for (let y = 0; y < _grid.getHeight(); y += _spriteZone.getHeight())
+                    _spriteZone.draw(x, y);
         };
 
         const resize = () => {
@@ -87,12 +85,12 @@ export function Editables(editor, renderContext, world) {
                     editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
                     editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
             else {
-                _renderer.drawBody(
-                    (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
-                    (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
                 _border.draw(
                     editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
                     editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
+                _renderer.drawBody(
+                    (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
+                    (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
             }
         };
 
@@ -109,6 +107,7 @@ export function Editables(editor, renderContext, world) {
     };
 
     const _spriteGrid = renderContext.getSprites().getSprite(Editables.SPRITE_GRID);
+    const _spriteZone = renderContext.getSprites().getSprite(Editables.SPRITE_ZONE);
     const _entries = [];
     let _current = null;
 
@@ -229,4 +228,5 @@ export function Editables(editor, renderContext, world) {
 }
 
 Editables.SPRITE_GRID = "pcbGrid";
+Editables.SPRITE_ZONE = "pcbZone";
 Editables.BORDER_COLOR = StyleUtils.getColor("--game-color-pcb-editables-border");
