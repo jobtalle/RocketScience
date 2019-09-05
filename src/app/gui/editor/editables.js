@@ -72,8 +72,9 @@ export function Editables(editor, renderContext, world) {
         /**
          * Draw the editable of the entry.
          * @param {Boolean} editing
+         * @param {Boolean} showZone
          */
-        this.draw = editing => {
+        this.draw = (editing, showZone) => {
             if (!_lastSize.equals(editable.getRegion().getSize())) {
                 _lastSize = editable.getRegion().getSize().copy();
 
@@ -85,9 +86,11 @@ export function Editables(editor, renderContext, world) {
                     editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
                     editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
             else {
-                _border.draw(
-                    editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
-                    editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
+                if (showZone)
+                    _border.draw(
+                        editable.getRegion().getOrigin().x * Scale.PIXELS_PER_METER,
+                        editable.getRegion().getOrigin().y * Scale.PIXELS_PER_METER);
+
                 _renderer.drawBody(
                     (editable.getRegion().getOrigin().x + editable.getOffset().x) * Scale.PIXELS_PER_METER,
                     (editable.getRegion().getOrigin().y + editable.getOffset().y) * Scale.PIXELS_PER_METER);
@@ -126,10 +129,11 @@ export function Editables(editor, renderContext, world) {
 
     /**
      * Draw all editables except for the one currently being edited.
+     * @param {Boolean} showZone
      */
-    this.draw = () => {
+    this.draw = showZone => {
         for (const entry of _entries)
-            entry.draw(entry.getEditable() === _current);
+            entry.draw(entry.getEditable() === _current, showZone);
     };
 
     /**

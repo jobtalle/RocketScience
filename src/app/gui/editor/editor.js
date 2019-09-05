@@ -75,6 +75,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
     const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
+    let _showZone = false;
 
     const onViewChanged = () => {
         _pcbScreenPosition.x = 0;
@@ -98,6 +99,12 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      * @returns {Overlay} The Overlay object.
      */
     this.getOverlay = () => _overlay;
+
+    /**
+     * Tell the editor to show the editableRegion zone.
+     * @param {Boolean} val
+     */
+    this.setShowZone = val => _showZone = val;
 
     /**
      * The PCB has changed.
@@ -200,7 +207,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
 
-        _editables.draw();
+        _editables.draw(_showZone);
 
         renderContext.getMyr().pop();
 
