@@ -160,7 +160,8 @@ export function loadParts(mods, language, renderContext, onLoad) {
                             new Uint8ClampedArray(getChunksPixels(
                                 ase.frames[0].chunks,
                                 ase.header.width,
-                                ase.header.height)),
+                                ase.header.height,
+                                ase.header.colorDepth)),
                             ase.header.width,
                             ase.header.height);
 
