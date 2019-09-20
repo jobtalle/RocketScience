@@ -1,5 +1,6 @@
 {
-    "PART_BATTERY_NAME": "Batterij",
-    "PART_BATTERY_DESCRIPTION": "Een batterij die altijd een hoog signaal geeft. Veel onderdelen hebben stroom nodig om te functioneren.",
-    "PART_BATTERY_PIN_DESCRIPTION": "Deze pin geeft altijd een <hoog> signaal."
+    "PART_BRIDGE_NAME": "Kabel Brug",
+    "PART_BRIDGE_DESCRIPTION": "Een kabel brug kan over een bezette pin gezet worden om een signaal naar de overkant te krijgen.",
+    "PART_BRIDGE_PIN_INPUT_DESCRIPTION": "Elk signaal kan gegeven worden aan de ingang pin.",
+    "PART_BRIDGE_PIN_OUTPUT_DESCRIPTION": "Het signaal van de uitgang is precies hetzelfde als het signaal van de ingang."
 }

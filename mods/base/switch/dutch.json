@@ -1,5 +1,6 @@
 {
-    "PART_BATTERY_NAME": "Batterij",
-    "PART_BATTERY_DESCRIPTION": "Een batterij die altijd een hoog signaal geeft. Veel onderdelen hebben stroom nodig om te functioneren.",
-    "PART_BATTERY_PIN_DESCRIPTION": "Deze pin geeft altijd een <hoog> signaal."
+    "PART_SWITCH_NAME": "Schakelaar",
+    "PART_SWITCH_DESCRIPTION": "Een schakelaar kan worden aangezet of uitgezet. Hij blijft net zo lang aan staan, tot je hem weer uitzet. Als een schakelaar aan staat, gaat het signaal van de ingang naar de uitgang toe. Als hij uit staat is de uitgang niet verbonden met de ingang.",
+    "PART_SWITCH_PIN_INPUT_DESCRIPTION": "Elk signaal kan aan de ingang pin worden verbonden.",
+    "PART_SWITCH_PIN_OUTPUT_DESCRIPTION": "Terwijl de schakelaar aan staat, is het signaal van de uitgang pin hetzelfde als het signaal van de ingang pin. Als de schakelaar uit staat, is het signaal <low>."
 }

@@ -18,7 +18,7 @@
       ],
       "sprites": {
         "internal": [
-          {"name": "partLedRed", "x": 0, "y": -1}
+          {"name": "partLedRedUp", "x": 0, "y": -1}
         ]
       }
     },
@@ -36,7 +36,7 @@
       ],
       "sprites": {
         "internal": [
-          {"name": "partLedRed", "x": 1, "y": 0}
+          {"name": "partLedRedRight", "x": 0, "y": 0}
         ]
       }
     },
@@ -54,7 +54,7 @@
       ],
       "sprites": {
         "internal": [
-          {"name": "partLedRed", "x": 0, "y": 1}
+          {"name": "partLedRedDown", "x": 0, "y": 0}
         ]
       }
     },
@@ -72,7 +72,7 @@
       ],
       "sprites": {
         "internal": [
-          {"name": "partLedRed", "x": -1, "y": 0}
+          {"name": "partLedRedLeft", "x": -1, "y": 0}
         ]
       }
     }

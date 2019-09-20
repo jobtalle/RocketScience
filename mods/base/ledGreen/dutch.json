@@ -1,5 +1,5 @@
 {
-    "PART_BATTERY_NAME": "Batterij",
-    "PART_BATTERY_DESCRIPTION": "Een batterij die altijd een hoog signaal geeft. Veel onderdelen hebben stroom nodig om te functioneren.",
-    "PART_BATTERY_PIN_DESCRIPTION": "Deze pin geeft altijd een <hoog> signaal."
+  "PART_LED_GREEN_NAME": "Groene Led",
+  "PART_LED_GREEN_DESCRIPTION": "Geeft licht wanneer een <high> signaal wordt gegeven.",
+  "PART_LED_GREEN_PIN_DESCRIPTION": "Wanneer je een <high> signaal geeft aan deze pin, dan geeft de LED licht."
 }

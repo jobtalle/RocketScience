@@ -3,7 +3,7 @@
  * @param {Object} context An object containing the game context, and references to some important utils.
  * @constructor
  */
-function Led(context) {
+function LedRed(context) {
     const SPRITE_INDEX_LIGHT = 0;
     const PIN_INDEX_POWER = 0;
 

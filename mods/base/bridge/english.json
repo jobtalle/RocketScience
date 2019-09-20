@@ -1,5 +1,6 @@
 {
-    "PART_BATTERY_NAME": "Battery",
-    "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a high signal. Many parts need to be powered to function.",
-    "PART_BATTERY_PIN_DESCRIPTION": "This pin will always output a <high> signal."
+    "PART_BRIDGE_NAME": "Bridge",
+    "PART_BRIDGE_DESCRIPTION": "A bridge can move over a occupied space.",
+    "PART_BRIDGE_PIN_INPUT_DESCRIPTION": "Any signal can be connected to this pin.",
+    "PART_BRIDGE_PIN_OUTPUT_DESCRIPTION": "The output signal will be the same as the input signal."
 }
