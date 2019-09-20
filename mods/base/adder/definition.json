@@ -2,7 +2,6 @@
   "label": "PART_ADDER_NAME",
   "description": "PART_ADDER_DESCRIPTION",
   "category": "CATEGORY_LOGIC",
-  "icon": "part-adder",
   "object": "Adder",
   "configurations": [
     {
@@ -24,7 +23,80 @@
       ],
       "sprites": {
         "internal": [
-          {"name": "partAdder", "x": 0, "y": 0}
+          {"name": "chip4PinsVertical", "x": 0, "y": 0},
+          {"name": "addSignVertical", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 0},
+          {"x": 1, "y": 1},
+          {"x": 2, "y": 0},
+          {"x": 2, "y": 1}
+        ]
+      },
+      "io": [
+        {"x": 2, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 2, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_ADDER_PIN_1_DESCRIPTION"},
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_1_NAME", "description": "PART_ADDER_PIN_2_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "in", "name": "PIN_INPUT_2_NAME", "description": "PART_ADDER_PIN_3_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "chip4PinsHorizontal", "x": 0, "y": 0},
+          {"name": "addSignHorizontal", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1},
+          {"x": 0, "y": 2},
+          {"x": 1, "y": 2}
+        ]
+      },
+      "io": [
+        {"x": 1, "y": 2, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_ADDER_PIN_1_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "in", "name": "PIN_INPUT_1_NAME", "description": "PART_ADDER_PIN_2_DESCRIPTION"},
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_2_NAME", "description": "PART_ADDER_PIN_3_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "chip4PinsVertical", "x": 0, "y": 0},
+          {"name": "addSignVertical", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 0},
+          {"x": 1, "y": 1},
+          {"x": 2, "y": 0},
+          {"x": 2, "y": 1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 1, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 0, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_ADDER_PIN_1_DESCRIPTION"},
+        {"x": 2, "y": 1, "type": "in", "name": "PIN_INPUT_1_NAME", "description": "PART_ADDER_PIN_2_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "in", "name": "PIN_INPUT_2_NAME", "description": "PART_ADDER_PIN_3_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "chip4PinsHorizontal", "x": 0, "y": 0},
+          {"name": "addSignHorizontal", "x": 0, "y": 0}
         ]
       }
     }
