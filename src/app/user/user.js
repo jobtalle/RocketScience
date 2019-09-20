@@ -150,7 +150,7 @@ export function User() {
      * @returns {String} The language file.
      */
     this.getLanguage = () => {
-        return Languages.ENGLISH;
+        return Languages.DUTCH;
     };
 
     /**
