@@ -36,6 +36,11 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
                     (x + 0.5) * Scale.METERS_PER_POINT,
                     (y + 0.5) * Scale.METERS_PER_POINT));
 
+        for (const air of pcb.getAirPoints())
+            points.push(new Myr.Vector(
+                (air.x + 0.5) * Scale.METERS_PER_POINT,
+                (air.y + 0.5) * Scale.METERS_PER_POINT));
+
         return physics.createBody(
             polygons,
             points,

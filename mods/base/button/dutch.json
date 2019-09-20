@@ -1,0 +1,6 @@
+{
+  "PART_BUTTON_NAME": "Knop",
+  "PART_BUTTON_DESCRIPTION": "Een knop waar je op kan drukken. Terwijl de knop ingedrukt is, gaat er een signaal van de ingang naar de uitgang. Als je de knop niet indrukt, dan komt er geen signaal doorheen.",
+  "PART_BUTTON_PIN_INPUT_DESCRIPTION": "Elk signaal kan aan de ingang pin worden verbonden.",
+  "PART_BUTTON_PIN_OUTPUT_DESCRIPTION": "Als de knop wordt ingedrukt, is het signaal van de uitgang pin hetzelfde als het signaal van de ingang pin. Als je er niet op drukt, is het signaal <low>."
+}

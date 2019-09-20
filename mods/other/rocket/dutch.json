@@ -1,0 +1,5 @@
+{
+  "PART_ROCKET_NAME": "Raket motor",
+  "PART_ROCKET_DESCRIPTION": "Deze raketmotor kan gebruikt worden om robots snel door de lucht voor te stuwen.",
+  "PART_ROCKET_PIN_DESCRIPTION": "Een waarde tussen <low> en <high> bepaalt het vermogen van de motor."
+}

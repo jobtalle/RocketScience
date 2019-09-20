@@ -1,10 +1,6 @@
 {
-  "CATEGORY_OUTPUT": "Output",
-  "CATEGORY_CONTROL": "Besturing",
-
-  "PART_LED_NAME": "Led",
-  "PART_LED_DESCRIPTION": "Geeft licht wanneer er stroom door loopt.",
-
-  "PART_BUTTON_NAME": "Knop",
-  "PART_BUTTON_DESCRIPTION": "Laat stroom door terwijl hij wordt ingedrukt."
+    "CATEGORY_POWER": "Stroom",
+    "CATEGORY_INPUT": "Invoer",
+    "CATEGORY_LOGIC": "Logica",
+    "CATEGORY_OUTPUT": "Uitvoer"
 }

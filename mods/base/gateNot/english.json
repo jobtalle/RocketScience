@@ -1,0 +1,6 @@
+{
+    "PART_GATE_NOT_NAME": "NOT gate",
+    "PART_GATE_NOT_DESCRIPTION": "A NOT gate. Its output will be on when its input is off.",
+    "PART_GATE_NOT_PIN_1_DESCRIPTION": "When this part is active, this pin will output a <high> signal when the input is <low> and a <low> signal otherwise.",
+    "PART_GATE_NOT_PIN_2_DESCRIPTION": "The input signal."
+}

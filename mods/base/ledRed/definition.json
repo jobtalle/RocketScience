@@ -1,0 +1,80 @@
+{
+  "label": "PART_LED_RED_NAME",
+  "description": "PART_LED_RED_DESCRIPTION",
+  "category": "CATEGORY_OUTPUT",
+  "object": "LedRed",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
+        ],
+        "space": [
+          {"x": 0, "y": -1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PART_LED_RED_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partLedRedUp", "x": 0, "y": -1}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
+        ],
+        "space": [
+          {"x": 1, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PART_LED_RED_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partLedRedRight", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
+        ],
+        "space": [
+          {"x": 0, "y": 1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PART_LED_RED_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partLedRedDown", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0}
+        ],
+        "space": [
+          {"x": -1, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PART_LED_RED_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partLedRedLeft", "x": -1, "y": 0}
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "PART_LED_BLUE_NAME": "Blue Led",
+  "PART_LED_BLUE_DESCRIPTION": "Emits light when a signal is supplied to it.",
+  "PART_LED_BLUE_PIN_DESCRIPTION": "If a signal is supplied to this pin, the LED will light up."
+}

@@ -1,0 +1,6 @@
+{
+    "PART_GATE_NOT_NAME": "NIET-poort",
+    "PART_GATE_NOT_DESCRIPTION": "Een NIET-poort. Het signaal van de uitgang is <high> als het signaal aan de ingang <low> is. Als het signaal aan de ingang <high> is, is het signaal bij de uitgang <low>.",
+    "PART_GATE_NOT_PIN_1_DESCRIPTION": "Deze pin is <high> als het signaal bij de ingang <low> is. Het signaal is <low> als de het ingang signaal <high> is.",
+    "PART_GATE_NOT_PIN_2_DESCRIPTION": "Het ingang signaal."
+}

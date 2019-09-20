@@ -1,7 +1,7 @@
 ﻿{
   "TITLE": "Rocket Science",
 
-  "MENU_ROOT_CREATE": "Maak nieuwe missie",
+  "MENU_ROOT_CREATE": "Maak",
   "MENU_ROOT_MISSIONS": "Missies",
 
   "CHECKLIST_FINISHED": "Beëindig",
@@ -15,7 +15,7 @@
   "OBJECTIVE_NEW": "Voeg doel toe",
   "OBJECTIVE_DEFAULT_TITLE": "Nieuw doel",
 
-  "GOAL_CREATE": "Voeg een sub-doel toe:",
+  "GOAL_CREATE": "Voeg een sub-doel: ",
   "GOAL_DELETE": "Verwijder",
 
   "BUDGET_TYPE_NONE": "Oneindig budget",

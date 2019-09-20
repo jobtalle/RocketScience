@@ -50,6 +50,7 @@ export function World(renderContext, missionProgress) {
             0));
 
     let _camera = null;
+    let _selected = null;
     let _terrainRenderer = null;
     let _surface = new (renderContext.getMyr().Surface)(renderContext.getWidth(), renderContext.getHeight());
     let _tickCounter = 0;
@@ -67,11 +68,17 @@ export function World(renderContext, missionProgress) {
             if (point) {
                 _controllerState.onClick(object.getBody(), point);
 
-                this.setCamera(CameraSmooth, object);
+                if (_selected !== object) {
+                    _selected = object;
+
+                    this.setCamera(CameraSmooth, object);
+                }
 
                 return true;
             }
         }
+
+        _selected = null;
 
         this.setCamera(null);
 
@@ -183,19 +190,13 @@ export function World(renderContext, missionProgress) {
 
                 break;
             case MouseEvent.EVENT_PRESS_LMB:
+            case MouseEvent.EVENT_PRESS_RMB:
                 if (!clickObject(event.x, event.y)) {
                     if (_camera)
                         _camera.onMousePress();
                     else
                         _view.onMousePress();
                 }
-
-                break;
-            case MouseEvent.EVENT_PRESS_RMB:
-                if (_camera)
-                    _camera.onMousePress();
-                else
-                    _view.onMousePress();
 
                 break;
         }

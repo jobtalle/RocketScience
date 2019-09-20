@@ -13,17 +13,31 @@ export function registerSprites(myr, spriteFiles) {
     const sprites = {};
 
     for (const sprite of spriteFiles) {
+        let paletteChunk = {};
+
         sprites[sprite.name] = new Array(sprite.frames.length).fill(null);
 
-        for (let frame = 0; frame < sprite.frames.length; ++frame)
+        if (sprite.frames.length > 0)
+            for (const chunk of sprite.frames[0].chunks) if (chunk.type === 0x2019)
+                paletteChunk = chunk;
+
+        for (let frame = 0; frame < sprite.frames.length; ++frame) {
+            let celChunk = {};
+
+            for (const chunk of sprite.frames[frame].chunks) if (chunk.type === 0x2005)
+                celChunk = chunk;
+
             images.push({
                 width: sprite.header.width,
                 height: sprite.header.height,
-                chunks: sprite.frames[frame].chunks,
+                celChunk: celChunk,
+                paletteChunk: paletteChunk,
                 name: sprite.name,
                 frame: frame,
                 duration: sprite.frames[frame].frameHeader.frameDuration,
+                colorDepth: sprite.header.colorDepth
             });
+        }
     }
 
     const atlas = createAtlas(images);
@@ -32,7 +46,7 @@ export function registerSprites(myr, spriteFiles) {
     const pixels = new Uint8Array(width * height << 2);
 
     for (const entry of atlas.coords)
-        copyChunkPixels(pixels, entry.img.chunks, entry.x, entry.y, width);
+        copyChunkPixels(pixels, entry.img.celChunk, entry.img.paletteChunk, entry.x, entry.y, width, entry.img.colorDepth);
 
     // TODO: The sprite sheet is never freed
     const surface = new myr.Surface(width, height, pixels);
