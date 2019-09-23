@@ -1,0 +1,10 @@
+{
+    "PART_WHEEL_NAME": "Wiel",
+    "PART_WHEEL_DESCRIPTION": "Een wiel. Je kan het wiel aansturen door een <high> signaal te sturen naar verschillende pins.",
+    "PART_WHEEL_PIN_0_NAME": "Links",
+    "PART_WHEEL_PIN_0_DESCRIPTION": "Als je een signaal tussen <high> en <low> geeft, draait het wiel naar links.",
+    "PART_WHEEL_PIN_2_NAME": "Rechts",
+    "PART_WHEEL_PIN_2_DESCRIPTION": "Als je een signaal tussen <high> en <low> geeft, draait het wiel naar rechts.",
+    "PART_WHEEL_PIN_BRAKES_NAME": "Rem",
+    "PART_WHEEL_PIN_BRAKES_DESCRIPTION": "Als je een <high> signaal geeft aan deze pin, stopt het wiel met draaien."
+  }

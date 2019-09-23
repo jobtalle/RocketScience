@@ -26,6 +26,11 @@
 
 }
 
+#menu .content .stories {
+    max-height: 800px;
+    overflow: scroll;
+}
+
 #menu .content .stories .story {
     padding: 30px;
 }

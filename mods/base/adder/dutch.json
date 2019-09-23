@@ -1,7 +1,7 @@
 {
-  "PART_ADDER_NAME": "Adder",
-  "PART_ADDER_DESCRIPTION": "An adder. The two input signals are summed and sent to the output pin. The output cannot be higher than a <high> signal.",
-  "PART_ADDER_PIN_1_DESCRIPTION": "Both input signals summed together. The output cannot be higher than a <high> signal. If no power is supplied, this pin will output a <low> signal.",
-  "PART_ADDER_PIN_2_DESCRIPTION": "The first input signal, which must be a value between <low> and <high>.",
-  "PART_ADDER_PIN_3_DESCRIPTION": "The second input signal, which must be a value between <low> and <high>."
+  "PART_ADDER_NAME": "Opteller",
+  "PART_ADDER_DESCRIPTION": "Een opteller. Beide ingang signalen worden opgeteld. Het opgetelde signaal komt uit de uitgang. Het signaal kan niet hoger zijn dan een <high> signaal.",
+  "PART_ADDER_PIN_1_DESCRIPTION": "Beide ingang signalen bij elkaar opgeteld. Het signaal aan de uitgang kan niet hoger zijn dan een <high> signaal.",
+  "PART_ADDER_PIN_2_DESCRIPTION": "Het eerste ingang signaal. Het moet een signaal zijn tussen <low> en <high>.",
+  "PART_ADDER_PIN_3_DESCRIPTION": "Het tweede ingang signaal. Het moet een signaal zijn tussen <low> en <high>."
 }
