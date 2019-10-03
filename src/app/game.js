@@ -229,7 +229,7 @@ export function Game(renderContext, input, user) {
 }
 
 Game.KEY_TOGGLE_EDIT = " ";
-Game.IS_MISSION_EDITOR_MODE = true;
+Game.IS_MISSION_EDITOR_MODE = false;
 Game.MODE_MENU = 0;
 Game.MODE_EDIT = 1;
 Game.MODE_GAME = 2;
