@@ -1,0 +1,57 @@
+{
+  "label": "PART_SENSOR_SONAR_NAME",
+  "description": "PART_SENSOR_SONAR_DESCRIPTION",
+  "category": "CATEGORY_INPUT",
+  "icon": "part-sensor-sonar",
+  "object": "SensorSonar",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 0, "y": 1}
+        ],
+        "air": [
+          {"x": 1, "y": 0},
+          {"x": 1, "y": 1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_SENSOR_SONAR_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partSensorSonarRight", "x": 0, "y": 0}
+        ],
+        "external": [
+          {"name": "partSensorSonarExternalRight", "x": 1, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 0, "y": 1}
+        ],
+        "air": [
+          {"x": -1, "y": 0},
+          {"x": -1, "y": 1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_SENSOR_SONAR_PIN_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partSensorSonarLeft", "x": 0, "y": 0}
+        ],
+        "external": [
+          {"name": "partSensorSonarExternalLeft", "x": -1, "y": 0}
+        ]
+      }
+    }
+  ]
+}

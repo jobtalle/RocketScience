@@ -22,8 +22,8 @@
         {"x": 0, "y": 0, "type": "in", "name": "PART_WHEEL_PIN_0_NAME", "description": "PART_WHEEL_PIN_0_DESCRIPTION"},
         {"x": 1, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
         {"x": 2, "y": 0, "type": "in", "name": "PART_WHEEL_PIN_2_NAME", "description": "PART_WHEEL_PIN_2_DESCRIPTION"},
-        {"x": 0, "y": 1, "type": "in", "name": "PART_WHEEL_PIN_BRAKES_NAME", "description": "PART_WHEEL_PIN_BRAKES_DESCRIPTION"},
-        {"x": 2, "y": 1, "type": "in", "name": "PART_WHEEL_PIN_BRAKES_NAME", "description": "PART_WHEEL_PIN_BRAKES_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "structural"},
+        {"x": 2, "y": 1, "type": "structural"},
         {"x": 0, "y": 2, "type": "structural"},
         {"x": 1, "y": 2, "type": "structural"},
         {"x": 2, "y": 2, "type": "structural"}

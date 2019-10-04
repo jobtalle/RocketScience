@@ -11,10 +11,7 @@ function Wheel(context) {
     const PIN_INDEX_LEFT = 0;
     const PIN_INDEX_POWER = 1;
     const PIN_INDEX_RIGHT = 2;
-    const PIN_INDEX_BRAKES_1 = 3;
-    const PIN_INDEX_BRAKES_2 = 4;
     const STATE_RELEASED = 0;
-    const STATE_BRAKES = 1;
     const STATE_MOTOR_RIGHT = 2;
     const STATE_MOTOR_LEFT = 3;
 
@@ -25,9 +22,6 @@ function Wheel(context) {
         switch (state) {
             case STATE_RELEASED:
                 joint.release();
-                break;
-            case STATE_BRAKES:
-                joint.brakes();
                 break;
             case STATE_MOTOR_RIGHT:
                 joint.powerRight(intensity);
@@ -59,9 +53,7 @@ function Wheel(context) {
         let intensity = 0;
 
         if (state[context.pins[PIN_INDEX_POWER]] === 1) {
-            if (state[context.pins[PIN_INDEX_BRAKES_1]] === 1 || state[context.pins[PIN_INDEX_BRAKES_2]] === 1)
-                newState = STATE_BRAKES;
-            else if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
+            if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
                 newState = STATE_MOTOR_LEFT;
                 intensity = state[context.pins[PIN_INDEX_LEFT]];
             }

@@ -16,14 +16,16 @@ const refs = {
  * @param {PartRenderer} renderer The part renderer.
  * @param {Number} x The X location on the board.
  * @param {Number} y The Y location on the board.
+ * @param {Number} config The configuration of the part.
  * @returns {Object} The context object.
  */
-export const makeContext = (pins, renderer, x, y) => {
+export const makeContext = (pins, renderer, x, y, config) => {
     return {
         pins: pins,
         renderer: renderer,
         x: x,
         y: y,
-        refs: refs
+        refs: refs,
+        config: config
     }
 };

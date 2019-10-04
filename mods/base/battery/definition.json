@@ -19,9 +19,7 @@
           {"x": 3, "y": 0},
           {"x": 3, "y": 1},
           {"x": 3, "y": 2},
-          {"x": 4, "y": 0},
-          {"x": 4, "y": 1},
-          {"x": 4, "y": 2}
+          {"x": 4, "y": 1}
         ]
       },
       "io": [
@@ -44,7 +42,6 @@
           {"x": 0, "y": 1},
           {"x": 0, "y": 2},
           {"x": 0, "y": 3},
-          {"x": 0, "y": 4},
           {"x": 1, "y": 0},
           {"x": 1, "y": 1},
           {"x": 1, "y": 2},
@@ -53,8 +50,7 @@
           {"x": 2, "y": 0},
           {"x": 2, "y": 1},
           {"x": 2, "y": 2},
-          {"x": 2, "y": 3},
-          {"x": 2, "y": 4}
+          {"x": 2, "y": 3}
         ]
       },
       "io": [
@@ -73,9 +69,7 @@
     {
       "footprint": {
         "points": [
-          {"x": 0, "y": 0},
           {"x": 0, "y": 1},
-          {"x": 0, "y": 2},
           {"x": 1, "y": 0},
           {"x": 1, "y": 1},
           {"x": 1, "y": 2},
@@ -92,10 +86,10 @@
       },
       "io": [
         {"x": 0, "y": 1, "type": "out", "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"x": 1, "y": 0, "type": "structural"},
-        {"x": 1, "y": 2, "type": "structural"},
         {"x": 2, "y": 0, "type": "structural"},
-        {"x": 2, "y": 2, "type": "structural"}
+        {"x": 2, "y": 2, "type": "structural"},
+        {"x": 3, "y": 0, "type": "structural"},
+        {"x": 3, "y": 2, "type": "structural"}
       ],
       "sprites": {
         "internal": [
@@ -106,7 +100,6 @@
     {
       "footprint": {
         "points": [
-          {"x": 0, "y": 0},
           {"x": 0, "y": 1},
           {"x": 0, "y": 2},
           {"x": 0, "y": 3},
@@ -116,7 +109,6 @@
           {"x": 1, "y": 2},
           {"x": 1, "y": 3},
           {"x": 1, "y": 4},
-          {"x": 2, "y": 0},
           {"x": 2, "y": 1},
           {"x": 2, "y": 2},
           {"x": 2, "y": 3},
@@ -125,10 +117,10 @@
       },
       "io": [
         {"type": "out", "x": 1, "y": 0, "name": "PIN_POWER_NAME", "description": "PART_BATTERY_PIN_DESCRIPTION"},
-        {"type": "structural", "x": 0, "y": 1},
         {"type": "structural", "x": 0, "y": 2},
-        {"type": "structural", "x": 2, "y": 1},
-        {"type": "structural", "x": 2, "y": 2}
+        {"type": "structural", "x": 0, "y": 3},
+        {"type": "structural", "x": 2, "y": 2},
+        {"type": "structural", "x": 2, "y": 3}
       ],
       "sprites": {
         "internal": [

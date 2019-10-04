@@ -83,7 +83,8 @@ const PartEntry = function(fixture) {
             _pointers,
             renderer.getPartRenderer(fixture),
             fixture.x,
-            fixture.y));
+            fixture.y,
+            fixture.part.getConfigurationIndex()));
 };
 
 /**
