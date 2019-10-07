@@ -1,5 +1,5 @@
 {
-  "PART_CONTROLLER_DOWN_NAME": "Pijl naar Beneden Controller",
+  "PART_CONTROLLER_DOWN_NAME": "Omlaag Controller",
   "PART_CONTROLLER_DOWN_DESCRIPTION": "Dit is een chip die luistert naar je toetsenbord. De pin van deze chip geeft een <high> signaal af, als je op de pijl naar beneden drukt.",
   "PART_CONTROLLER_DOWN_PIN_OUTPUT_DESCRIPTION": "Deze pin geeft een <high> signaal, wanneer je op het pijltje naar beneden op je toestenbord drukt. Als je er niet op drukt is het signaal <low>."
 }

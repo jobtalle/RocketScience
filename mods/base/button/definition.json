@@ -2,7 +2,6 @@
   "label": "PART_BUTTON_NAME",
   "description": "PART_BUTTON_DESCRIPTION",
   "category": "CATEGORY_INPUT",
-  "icon": "part-button",
   "object": "Button",
   "configurations": [
     {
@@ -19,8 +18,8 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 1, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_BUTTON_PIN_INPUT_DESCRIPTION"},
-        {"x": 1, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_BUTTON_PIN_OUTPUT_DESCRIPTION"}
+        {"x": 1, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_BUTTON_PIN_OUTPUT_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "structural"}
       ],
       "sprites": {
         "internal": [

@@ -6,8 +6,7 @@
 function Altimeter(context) {
     const SPRITE_INDEX_DIAL = 1;
     const MAX_ALTITUDE = 30;
-    const PIN_INDEX_POWER = 0;
-    const PIN_INDEX_OUTPUT = 1;
+    const PIN_INDEX_OUTPUT = 0;
 
     let _spring = new context.refs.SpringApproach(0, 0, 0, Math.PI);
     let _body = null;
@@ -17,18 +16,11 @@ function Altimeter(context) {
     };
 
     this.tick = state => {
-        if (state[context.pins[PIN_INDEX_POWER]] === 1) {
-            const value = Math.max(0, Math.min(1, -_body.getPosition().y / MAX_ALTITUDE));
+        const value = Math.max(0, Math.min(1, -_body.getPosition().y / MAX_ALTITUDE));
 
-            state[context.pins[PIN_INDEX_OUTPUT]] = value;
+        state[context.pins[PIN_INDEX_OUTPUT]] = value;
 
-            _spring.setTarget(value * Math.PI);
-        }
-        else {
-            state[context.pins[PIN_INDEX_OUTPUT]] = 0;
-
-            _spring.setTarget(0);
-        }
+        _spring.setTarget(value * Math.PI);
     };
 
     this.update = timeStep => {

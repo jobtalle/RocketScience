@@ -1,5 +1,0 @@
-{
-    "PART_BATTERY_NAME": "Battery",
-    "PART_BATTERY_DESCRIPTION": "A battery which constantly outputs a high signal. Many parts need to be powered to function.",
-    "PART_BATTERY_PIN_DESCRIPTION": "This pin will always output a <high> signal."
-}

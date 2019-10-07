@@ -9,8 +9,7 @@ function Wheel(context) {
     const ANCHOR_X = 1.5;
     const ANCHOR_Y = 1.5;
     const PIN_INDEX_LEFT = 0;
-    const PIN_INDEX_POWER = 1;
-    const PIN_INDEX_RIGHT = 2;
+    const PIN_INDEX_RIGHT = 1;
     const STATE_RELEASED = 0;
     const STATE_MOTOR_RIGHT = 2;
     const STATE_MOTOR_LEFT = 3;
@@ -52,21 +51,17 @@ function Wheel(context) {
         let newState;
         let intensity = 0;
 
-        if (state[context.pins[PIN_INDEX_POWER]] === 1) {
-            if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
-                newState = STATE_MOTOR_LEFT;
-                intensity = state[context.pins[PIN_INDEX_LEFT]];
-            }
-            else if (state[context.pins[PIN_INDEX_RIGHT]] !== 0) {
-                newState = STATE_MOTOR_RIGHT;
-                intensity = state[context.pins[PIN_INDEX_RIGHT]];
-            }
-            else
-                newState = STATE_RELEASED;
+        if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
+            newState = STATE_MOTOR_LEFT;
+            intensity = state[context.pins[PIN_INDEX_LEFT]];
         }
-        else {
+        else if (state[context.pins[PIN_INDEX_RIGHT]] !== 0) {
+            newState = STATE_MOTOR_RIGHT;
+            intensity = state[context.pins[PIN_INDEX_RIGHT]];
+        }
+        else
             newState = STATE_RELEASED;
-        }
+
 
         if (newState !== currentState) {
             currentState = newState;

@@ -4,8 +4,7 @@
  * @constructor
  */
 function SensorSonar(context) {
-    const PIN_INDEX_POWER = 0;
-    const PIN_INDEX_OUTPUT = 1;
+    const PIN_INDEX_OUTPUT = 0;
     const CONFIGURATION_RIGHT = 0;
     const CONFIGURATION_LEFT = 1;
     const SONAR_RANGE = 5;
@@ -35,9 +34,6 @@ function SensorSonar(context) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[context.pins[PIN_INDEX_POWER]] === 1)
-            state[context.pins[PIN_INDEX_OUTPUT]] = 1 - _ray.getLength();
-        else
-            state[context.pins[PIN_INDEX_OUTPUT]] = 0;
+        state[context.pins[PIN_INDEX_OUTPUT]] = 1 - _ray.getLength();
     };
 }

@@ -1,0 +1,5 @@
+{
+  "PART_METER_NAME": "Signal meter",
+  "PART_METER_DESCRIPTION": "If a signal is provided, the meters dial will show its current value.",
+  "PART_METER_PIN_INPUT_DESCRIPTION": "Any signal provided to this pin will be measured."
+}

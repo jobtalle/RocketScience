@@ -12,8 +12,7 @@ function Button(context) {
     const SPRITE_INDEX_BUTTON = 1;
     const SPRITE_FRAME_RELEASED = 0;
     const SPRITE_FRAME_PRESSED = 1;
-    const PIN_INDEX_IN = 0;
-    const PIN_INDEX_OUT = 1;
+    const PIN_INDEX_OUT = 0;
 
     let _body = null;
     let _controllerState = null;
@@ -47,7 +46,7 @@ function Button(context) {
         }
 
         if (_pressed > 0) {
-            state[context.pins[PIN_INDEX_OUT]] = state[context.pins[PIN_INDEX_IN]];
+            state[context.pins[PIN_INDEX_OUT]] = 1;
 
             if (--_pressed === 0)
                 context.renderer.getSprites()[SPRITE_INDEX_BUTTON].setFrame(SPRITE_FRAME_RELEASED);

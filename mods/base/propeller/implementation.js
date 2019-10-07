@@ -4,8 +4,7 @@
  * @constructor
  */
 function Propeller(context) {
-    const PIN_INDEX_POWER = 0;
-    const PIN_INDEX_INPUT = 1;
+    const PIN_INDEX_INPUT = 0;
     const SPRITE_INDEX_PROPELLER = 1;
     const MAX_FORCE = -450;
 
@@ -27,7 +26,7 @@ function Propeller(context) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[context.pins[PIN_INDEX_POWER]] === 1 && state[context.pins[PIN_INDEX_INPUT]] !== 0) {
+        if (state[context.pins[PIN_INDEX_INPUT]] !== 0) {
             mover.setForce(new context.refs.Myr.Vector(0, MAX_FORCE * state[context.pins[PIN_INDEX_INPUT]]));
 
             moving = true;

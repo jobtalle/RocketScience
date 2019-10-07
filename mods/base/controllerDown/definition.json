@@ -17,8 +17,8 @@
         "space": []
       },
       "io": [
-        {"x": 0, "y": 2, "type": "structural"},
-        {"x": 1, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_CONTROLLER_DOWN_PIN_OUTPUT_DESCRIPTION"}
+        {"x": 1, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_CONTROLLER_DOWN_PIN_OUTPUT_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "structural"}
       ],
       "sprites": {
         "internal": [

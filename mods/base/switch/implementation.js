@@ -9,8 +9,7 @@ function Switch(context) {
     const WIDTH = 2;
     const HEIGHT = 2;
     const SPRITE_INDEX_BUTTON = 1;
-    const PIN_INDEX_IN = 0;
-    const PIN_INDEX_OUT = 1;
+    const PIN_INDEX_OUT = 0;
 
     let _body = null;
     let _controllerState = null;
@@ -44,7 +43,7 @@ function Switch(context) {
         }
 
         if (_toggled === 1)
-            state[context.pins[PIN_INDEX_OUT]] = state[context.pins[PIN_INDEX_IN]];
+            state[context.pins[PIN_INDEX_OUT]] = 1;
         else
             state[context.pins[PIN_INDEX_OUT]] = 0;
     };

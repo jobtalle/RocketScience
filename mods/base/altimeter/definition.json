@@ -19,8 +19,8 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 1, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
-        {"x": 1, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION"}
+        {"x": 1, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "structural"}
       ],
       "sprites": {
         "internal": [

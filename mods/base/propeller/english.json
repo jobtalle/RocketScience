@@ -1,0 +1,5 @@
+{
+  "PART_PROPELLER_NAME": "Propeller",
+  "PART_PROPELLER_DESCRIPTION": "A propeller.",
+  "PART_PROPELLER_PIN_DESCRIPTION": "When a <high> signal is provided, the propeller will rotate and try to propel the craft towards the propeller direction."
+}

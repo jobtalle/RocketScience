@@ -1,0 +1,5 @@
+{
+  "PART_TILT_NAME": "Tilt sensor",
+  "PART_TILT_DESCRIPTION": "This sensor detects the degree of tilt the robot experiences",
+  "PART_TILT_PIN_OUTPUT_DESCRIPTION": "When this part is powered, this pin will output the degree of tilt. If the robot is not tilted, the output will be halfway between <low> and <high>. When the robot is rotated 90 degrees to the left, the output will be <low>. When the robot is rotated 90 degrees to the right, the output will be <high>. When the part is not powered, the output will be <low>."
+}

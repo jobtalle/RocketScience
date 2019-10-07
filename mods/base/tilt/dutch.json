@@ -1,0 +1,5 @@
+{
+  "PART_TILT_NAME": "Kantel sensor",
+  "PART_TILT_DESCRIPTION": "Deze sensor meet hoveel de printplaat kantelt. Als hij recht staat, geeft het een signaal wat precies tussen <low> en <high> in zit. Als hij naar rechts helt is het hoger, en als hij naar links helt is het lager.",
+  "PART_TILT_PIN_OUTPUT_DESCRIPTION": "Als de sensor recht staat, geeft deze pin een signaal wat precies tussen <low> en <high> in zit. Als hij naar rechts helt is het hoger, en als hij naar links helt is het lager."
+}

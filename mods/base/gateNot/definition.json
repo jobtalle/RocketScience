@@ -16,9 +16,9 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
         {"x": 1, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_NOT_PIN_1_DESCRIPTION"},
-        {"x": 1, "y": 2, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"}
+        {"x": 1, "y": 2, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"},
+        {"x": 0, "y": 0, "type": "structural"}
       ],
       "sprites": {
         "internal": [
@@ -38,9 +38,9 @@
         ]
       },
       "io": [
-        {"x": 2, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
         {"x": 2, "y": 1, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_NOT_PIN_1_DESCRIPTION"},
-        {"x": 0, "y": 1, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"}
+        {"x": 0, "y": 1, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "structural"}
       ],
       "sprites": {
         "internal": [
@@ -60,9 +60,9 @@
         ]
       },
       "io": [
-        {"x": 1, "y": 2, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
         {"x": 0, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_NOT_PIN_1_DESCRIPTION"},
-        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"}
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "structural"}
       ],
       "sprites": {
         "internal": [
@@ -82,9 +82,9 @@
         ]
       },
       "io": [
-        {"x": 0, "y": 1, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
         {"x": 0, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_NOT_PIN_1_DESCRIPTION"},
-        {"x": 2, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"}
+        {"x": 2, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "structural"}
       ],
       "sprites": {
         "internal": [

@@ -1,5 +1,5 @@
 {
-  "PART_COMPARATOR_NAME": "Comparator",
+  "PART_COMPARATOR_NAME": "Vergelijker",
   "PART_COMPARATOR_DESCRIPTION": "Vergelijk twee signalen met elkaar, en produceer een <high> signaal als het tweede signaal groter is dan het eerste signaal.",
   "PART_COMPARATOR_PIN_1_DESCRIPTION": "Deze pin produceert een <high> signaal als de waarde van de tweede ingangspin hoger is dan de waarde van de eerste ingangspin. Als dit onderdeel geen stroom krijgt, produceert deze pin een <low> signaal.",
   "PART_COMPARATOR_PIN_2_DESCRIPTION": "Het eerste ingangssignaal.",

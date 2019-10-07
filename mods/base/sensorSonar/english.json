@@ -1,0 +1,5 @@
+{
+  "PART_SENSOR_SONAR_NAME": "Sonar",
+  "PART_SENSOR_SONAR_DESCRIPTION": "If an object is within the range of the sonar, this sensor will output a signal depending on the distance to that object.",
+  "PART_SENSOR_SONAR_PIN_DESCRIPTION": "If an object is within range, this pin will output a signal ranging from <high> when it is directly in front of the sensor and <low> when it is at its maximum distance. When no object is within range, the output will be <low>."
+}

@@ -1,5 +1,5 @@
 {
-  "PART_CONTROLLER_LEFT_NAME": "Linker Pijl Controller",
+  "PART_CONTROLLER_LEFT_NAME": "Links Controller",
   "PART_CONTROLLER_LEFT_DESCRIPTION": "Dit is een chip die luistert naar je toetsenbord. De pin van deze chip geeft een <high> signaal af, als je op de linker pijl knop drukt.",
   "PART_CONTROLLER_LEFT_PIN_OUTPUT_DESCRIPTION": "Deze pin geeft een <high> signaal, wanneer je op het linker pijltje op je toestenbord drukt. Als je er niet op drukt is het signaal <low>."
 }

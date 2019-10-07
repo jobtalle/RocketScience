@@ -4,9 +4,8 @@
  * @constructor
  */
 function GateNot(context) {
-    const PIN_INDEX_POWER = 0;
-    const PIN_INDEX_OUTPUT = 1;
-    const PIN_INDEX_IN = 2;
+    const PIN_INDEX_OUTPUT = 0;
+    const PIN_INDEX_IN = 1;
     /**
      * Initialize the state.
      * @param {Physics} body A physics body to apply state to.
@@ -20,8 +19,7 @@ function GateNot(context) {
      * @param {Array} state A state array to read from and/or write to.
      */
     this.tick = state => {
-        if (state[context.pins[PIN_INDEX_POWER]] === 1 &&
-            state[context.pins[PIN_INDEX_IN]] === 0) {
+        if (state[context.pins[PIN_INDEX_IN]] === 0) {
             state[context.pins[PIN_INDEX_OUTPUT]] = 1;
         }
         else

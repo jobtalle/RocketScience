@@ -5,8 +5,7 @@
  */
 function Tilt(context) {
     const DEFAULT = 0.5;
-    const PIN_INDEX_POWER = 0;
-    const PIN_INDEX_OUTPUT = 1;
+    const PIN_INDEX_OUTPUT = 0;
     const SPRITE_INDEX_SLIDER = 1;
     const SLIDER_EXTENSION = 3;
 
@@ -18,10 +17,7 @@ function Tilt(context) {
     };
 
     this.tick = state => {
-        if (state[context.pins[PIN_INDEX_POWER]] === 1)
-            state[context.pins[PIN_INDEX_OUTPUT]] = _tilt;
-        else
-            state[context.pins[PIN_INDEX_OUTPUT]] = DEFAULT;
+        state[context.pins[PIN_INDEX_OUTPUT]] = _tilt;
     };
 
     this.update = () => {

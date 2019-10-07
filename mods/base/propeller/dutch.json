@@ -1,0 +1,5 @@
+{
+  "PART_PROPELLER_NAME": "Propeller",
+  "PART_PROPELLER_DESCRIPTION": "Een propeller. Je kan hiermee vliegen.",
+  "PART_PROPELLER_PIN_DESCRIPTION": "Als je een signaal aan deze pin geeft gaat de propeller aan. De propeller staat uit als je een <low> signaal geeft. Hij gaat steeds harder draaien als je een hoger signaal geeft. Bij een <high> signaal, draait hij op zijn hardst."
+}

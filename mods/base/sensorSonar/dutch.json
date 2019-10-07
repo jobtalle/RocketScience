@@ -1,0 +1,5 @@
+{
+    "PART_SENSOR_SONAR_NAME": "Sonar",
+    "PART_SENSOR_SONAR_DESCRIPTION": "De sonar kan objecten waarnemen met geluidsgolven. Dit doet een onderzeeër of vleermuis ook. Dit apparaat geeft een variabel signaal af, tussen <high> en <low>. Als het niks waarneemt is het signaal <low>.",
+    "PART_SENSOR_SONAR_PIN_DESCRIPTION": "De uitgang geeft een signaal tussen <high> en <low>. Als het niks waarneemt is het signaal <low>."
+  }
