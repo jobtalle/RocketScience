@@ -10,6 +10,7 @@ export function NumberField(number, onChange) {
     const make = () => {
         _element.type = "number";
         _element.value = number.toString();
+        _element.onkeydown = _element.onkeyup = event => event.stopPropagation();
 
         _element.onchange = () => onChange(_element.value);
     };
