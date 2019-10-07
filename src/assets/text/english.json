@@ -26,6 +26,11 @@
   "GOAL_PIN_STATE_PART": "Part",
   "GOAL_PIN_STATE_PIN": "Pin",
   "GOAL_PIN_STATE_VALUE": "Value",
+  "GOAL_POSITION_TITLE": "Position",
+  "GOAL_POSITION_DESCRIPTION": "Check if a bot has reached a certain position in the world.",
+  "GOAL_POSITION_X": "X position",
+  "GOAL_POSITION_Y": "Y position",
+  "GOAL_POSITION_RADIUS": "Radius",
 
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
