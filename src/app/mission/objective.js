@@ -1,5 +1,6 @@
 import {GoalPinState} from "./goal/goalPinState";
 import {Goal} from "./goal/goal";
+import {GoalPosition} from "./goal/goalPosition";
 
 /**
  * An objective made up of a number of goals.
@@ -37,6 +38,7 @@ export function Objective(goals, title) {
      */
     this.addGoal = goal => {
         goals.push(goal);
+
         _isEdited = true;
     };
 
@@ -107,6 +109,10 @@ Objective.deserialize = buffer => {
         switch (buffer.readByte()) {
             case Goal.TYPE_PIN_STATE:
                 goals.push(GoalPinState.deserialize(buffer));
+
+                break;
+            case Goal.TYPE_POSITION:
+                goals.push(GoalPosition.deserialize(buffer));
 
                 break;
         }

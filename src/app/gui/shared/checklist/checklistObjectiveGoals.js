@@ -3,6 +3,8 @@ import {ChecklistObjectiveGoalPinState} from "./goals/checklistObjectiveGoalPinS
 import {ChecklistObjectiveGoalNew} from "./checklistObjectiveGoalNew";
 import {getPartFromName, getPartNames} from "../../../part/objects";
 import {GoalPinState} from "../../../mission/goal/goalPinState";
+import {GoalPosition} from "../../../mission/goal/goalPosition";
+import {ChecklistObjectiveGoalPosition} from "./goals/checklistObjectiveGoalPosition";
 
 /**
  * A list of editable objective goals.
@@ -24,13 +26,16 @@ export function ChecklistObjectiveGoals(objective) {
                     goal = new GoalPinState(getPartFromName(getPartNames()[0]).object, 0, 0);
 
                     break;
+                case Goal.TYPE_POSITION:
+                    goal = new GoalPosition(0, 0, 1);
+
+                    break;
             }
 
             objective.addGoal(goal);
 
             if (goal)
                 add(goal);
-
         });
 
         const add = goal => {
@@ -45,6 +50,10 @@ export function ChecklistObjectiveGoals(objective) {
             switch (goal.getType()) {
                 case Goal.TYPE_PIN_STATE:
                     element = new ChecklistObjectiveGoalPinState(goal, onDelete);
+
+                    break;
+                case Goal.TYPE_POSITION:
+                    element = new ChecklistObjectiveGoalPosition(goal, onDelete);
 
                     break;
             }

@@ -26,6 +26,11 @@
   "GOAL_PIN_STATE_PART": "Onderdeel",
   "GOAL_PIN_STATE_PIN": "Pin",
   "GOAL_PIN_STATE_VALUE": "Waarde",
+  "GOAL_POSITION_TITLE": "Positie",
+  "GOAL_POSITION_DESCRIPTION": "Verifieer of een robot een positie heeft bereikt.",
+  "GOAL_POSITION_X": "X positie",
+  "GOAL_POSITION_Y": "Y positie",
+  "GOAL_POSITION_RADIUS": "Radius",
 
   "TOOLBAR_EXTEND": "Verander de vorm van de printplaat",
   "TOOLBAR_SELECT": "Selecteer en beweeg onderdelen op de printplaat",
