@@ -1,0 +1,6 @@
+{
+  "PART_RESISTOR_NAME": "Resistor",
+  "PART_RESISTOR_DESCRIPTION": "Een resistor verzwakt het signaal met 50%. Dus als je een <high> signaal aan de ingang geeft, komt er een signaal uit wat precies tussen een <low> en <high> signaal in zit.",
+  "PART_RESISTOR_PIN_INPUT_DESCRIPTION": "Het signaal wat gegeven wordt aan deze pin, zal worden verzwakt.",
+  "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION": "Het signaal uit de uitgang is de helft van het signaal van de ingang."
+}
