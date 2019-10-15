@@ -47,6 +47,14 @@ PcbPoint.prototype.connectStructural = function() {
 };
 
 /**
+ * Check if a structural pin is connected to this point.
+ * @return {Boolean} A boolean which is true when this point is connected to a structural pin.
+ */
+PcbPoint.prototype.isStructural = function() {
+    return (this.paths & PcbPoint.CONNECTION_BIT_STRUCTURAL) === PcbPoint.CONNECTION_BIT_STRUCTURAL;
+};
+
+/**
  * Check if an input pin is connected to this point.
  * @returns {Boolean} A boolean which is true when this point is connected to an input pin.
  */

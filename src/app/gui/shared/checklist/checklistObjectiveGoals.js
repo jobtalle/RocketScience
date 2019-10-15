@@ -5,6 +5,8 @@ import {getPartFromName, getPartNames} from "../../../part/objects";
 import {GoalPinState} from "../../../mission/goal/goalPinState";
 import {GoalPosition} from "../../../mission/goal/goalPosition";
 import {ChecklistObjectiveGoalPosition} from "./goals/checklistObjectiveGoalPosition";
+import {GoalPinStateThreshold} from "../../../mission/goal/goalPinStateThreshold";
+import {ChecklistObjectiveGoalPinStateThreshold} from "./goals/checklistObjectiveGoalPinStateThreshold";
 
 /**
  * A list of editable objective goals.
@@ -28,6 +30,10 @@ export function ChecklistObjectiveGoals(objective) {
                     break;
                 case Goal.TYPE_POSITION:
                     goal = new GoalPosition(0, 0, 1);
+
+                    break;
+                case Goal.TYPE_PIN_STATE_THRESHOLD:
+                    goal = new GoalPinStateThreshold(getPartFromName(getPartNames()[0]).object, 0, 0, 0);
 
                     break;
             }
@@ -54,6 +60,10 @@ export function ChecklistObjectiveGoals(objective) {
                     break;
                 case Goal.TYPE_POSITION:
                     element = new ChecklistObjectiveGoalPosition(goal, onDelete);
+
+                    break;
+                case Goal.TYPE_PIN_STATE_THRESHOLD:
+                    element = new ChecklistObjectiveGoalPinStateThreshold(goal, onDelete);
 
                     break;
             }

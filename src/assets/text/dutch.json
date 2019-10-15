@@ -31,6 +31,14 @@
   "GOAL_POSITION_X": "X positie",
   "GOAL_POSITION_Y": "Y positie",
   "GOAL_POSITION_RADIUS": "Radius",
+  "THRESHOLD_TYPE_PICKER_GREATER_THAN": "Groter dan",
+  "THRESHOLD_TYPE_PICKER_SMALLER_THAN": "Kleiner dan",
+  "GOAL_PIN_STATE_THRESHOLD_TITLE": "Pin drempel",
+  "GOAL_PIN_STATE_THRESHOLD_DESCRIPTION": "Verifieer of een onderdeel bestaat, welke een waarde hoger of lager dan de drempel waarde heeft.",
+  "GOAL_PIN_STATE_THRESHOLD_PART": "Onderdeel",
+  "GOAL_PIN_STATE_THRESHOLD_PIN": "Pin",
+  "GOAL_PIN_STATE_THRESHOLD_TYPE": "Drempel soort",
+  "GOAL_PIN_STATE_THRESHOLD_VALUE": "Waarde",
 
   "TOOLBAR_EXTEND": "Verander de vorm van de printplaat",
   "TOOLBAR_SELECT": "Selecteer en beweeg onderdelen op de printplaat",
@@ -45,6 +53,7 @@
   "TOOLBAR_ADD_REGION": "Voeg een nieuwe printplaat toe",
   "TOOLBAR_COPY_REGION": "Voeg een kopie toe van de printplaat",
   "TOOLBAR_REMOVE_REGION": "Verwijder de geselecteerde printplaat",
+  "TEXT_SAVE_MISSION": "Download the huidige missie",
 
   "TERRAIN_MODE_ELEVATE": "Verhoog het terrein",
   "TERRAIN_MODE_SMOOTH": "Effen het terrein",

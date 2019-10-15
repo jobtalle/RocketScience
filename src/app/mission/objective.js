@@ -1,6 +1,7 @@
 import {GoalPinState} from "./goal/goalPinState";
 import {Goal} from "./goal/goal";
 import {GoalPosition} from "./goal/goalPosition";
+import {GoalPinStateThreshold} from "./goal/goalPinStateThreshold";
 
 /**
  * An objective made up of a number of goals.
@@ -113,6 +114,10 @@ Objective.deserialize = buffer => {
                 break;
             case Goal.TYPE_POSITION:
                 goals.push(GoalPosition.deserialize(buffer));
+
+                break;
+            case Goal.TYPE_PIN_STATE_THRESHOLD:
+                goals.push(GoalPinStateThreshold.deserialize(buffer));
 
                 break;
         }

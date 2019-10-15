@@ -31,6 +31,14 @@
   "GOAL_POSITION_X": "X position",
   "GOAL_POSITION_Y": "Y position",
   "GOAL_POSITION_RADIUS": "Radius",
+  "THRESHOLD_TYPE_PICKER_GREATER_THAN": "Greater Than",
+  "THRESHOLD_TYPE_PICKER_SMALLER_THAN": "Smaller Than",
+  "GOAL_PIN_STATE_THRESHOLD_TITLE": "Pin Threshold",
+  "GOAL_PIN_STATE_THRESHOLD_DESCRIPTION": "Check if a part exists with a value higher or smaller than the threshold given",
+  "GOAL_PIN_STATE_THRESHOLD_PART": "Part",
+  "GOAL_PIN_STATE_THRESHOLD_PIN": "Pin",
+  "GOAL_PIN_STATE_THRESHOLD_TYPE": "Threshold Type",
+  "GOAL_PIN_STATE_THRESHOLD_VALUE": "Value",
 
   "TOOLBAR_EXTEND": "Reshape the PCB",
   "TOOLBAR_SELECT": "Select and move parts on the PCB",
@@ -45,6 +53,7 @@
   "TOOLBAR_ADD_REGION": "Add a new PCB region",
   "TOOLBAR_COPY_REGION": "Add a copy of current PCB region",
   "TOOLBAR_REMOVE_REGION": "Remove current PCB region",
+  "TEXT_SAVE_MISSION": "Save the current mission locally",
 
   "TERRAIN_MODE_ELEVATE": "Elevate the terrain",
   "TERRAIN_MODE_SMOOTH": "Smooth the terrain",

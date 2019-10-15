@@ -51,7 +51,19 @@ function Wheel(context) {
         let newState;
         let intensity = 0;
 
-        if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
+        if (state[context.pins[PIN_INDEX_LEFT]] !== 0 &&
+            state[context.pins[PIN_INDEX_RIGHT]] !== 0) {
+                // Both pins are not low
+                if (state[context.pins[PIN_INDEX_RIGHT]] > state[context.pins[PIN_INDEX_LEFT]]){
+                    newState = STATE_MOTOR_RIGHT;
+                    intensity = state[context.pins[PIN_INDEX_RIGHT]];
+                }
+                else {
+                    newState = STATE_MOTOR_LEFT;
+                    intensity = state[context.pins[PIN_INDEX_LEFT]];
+                }
+            }
+        else if (state[context.pins[PIN_INDEX_LEFT]] !== 0) {
             newState = STATE_MOTOR_LEFT;
             intensity = state[context.pins[PIN_INDEX_LEFT]];
         }
