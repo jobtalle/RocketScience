@@ -45,17 +45,11 @@ export function User() {
         _webStorage.saveMissionProgress(name, data.toString())
     };
 
-    const getMissionProgression = (missionName) => {
-        if (_webStorage.isMissionCompleted(missionName))
-            return MissionProgress.PROGRESS_COMPLETE;
-
-        return MissionProgress.PROGRESS_INCOMPLETE;
-    };
-
     const loadMissionProgress = (filePath, onLoad, onError) => {
         if (hasSavedMission(filePath)) {
             onLoad(new MissionProgress(getSavedMission(filePath),
-                getMissionProgression(filePath),
+                _webStorage.isMissionCompleted(filePath),
+                true,
                 filePath));
 
         } else { // Load mission from binary file
@@ -65,8 +59,8 @@ export function User() {
 
                     data.setBlob(result, () => onLoad(new MissionProgress(
                         Mission.deserialize(data.getBuffer()),
-                        _webStorage.isMissionCompleted(filePath) ? MissionProgress.PROGRESS_COMPLETE :
-                            MissionProgress.PROGRESS_UNBEGUN,
+                        _webStorage.isMissionCompleted(filePath),
+                        false,
                         filePath)));
                 },
                 () => onError("could not parse mission " + filePath)
@@ -170,21 +164,23 @@ export function User() {
      * @param {Function} onError Callback function, called when a story returns an error.
      */
     this.loadStories = (onLoad, onComplete, onError) => {
-        let index = 0;
+        let loaded = 0;
 
         const checkIfComplete = () => {
-            if (index === missions.stories.length)
+            if (loaded === missions.stories.length)
                 onComplete();
         };
 
         for (const story of missions.stories) {
             this.loadStory(story,
                 (result) => {
-                    onLoad(result, index++);
+                    onLoad(result, missions.stories.indexOf(story));
+                    ++loaded;
                     checkIfComplete();
                 },
                 (error) => {
-                    onError(error, index++);
+                    onError(error, missions.stories.indexOf(story));
+                    ++loaded;
                     checkIfComplete();
                 });
         }
@@ -198,13 +194,18 @@ export function User() {
     this.saveMissionProgress = (missionProgress, onComplete) => {
         setSavedMission(missionProgress.getFileName(), missionProgress.getMission());
 
-        if (missionProgress.getProgress() === MissionProgress.PROGRESS_COMPLETE ||
-            _webStorage.isMissionCompleted(missionProgress.getFileName()))
+        if (missionProgress.isCompleted())
             _webStorage.setMissionCompleted(missionProgress.getFileName());
-        else
-            _webStorage.setMissionIncomplete(missionProgress.getFileName());
 
         onComplete(true);
+    };
+
+    /**
+     * Just set a mission to completed.
+     * @param {MissionProgress} missionProgress The mission progress.
+     */
+    this.saveMissionCompleted = (missionProgress) => {
+        _webStorage.setMissionCompleted(missionProgress.getFileName());
     };
 
     loadUserFromCookie();

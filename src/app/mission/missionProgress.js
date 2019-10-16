@@ -1,11 +1,12 @@
 /**
  * A wrapper for Mission, which also stores the progress and a unique hash for the mission.
  * @param {Mission} mission A mission.
- * @param {Number} progress An int variable which states the progression of the mission.
+ * @param {Boolean} isCompleted A boolean to state if the mission has been completed.
+ * @param {Boolean} hasSavedState A boolean tp state is there is a saved state for this mission.
  * @param {String} fileName The fileName of the mission.
  * @constructor
  */
-export function MissionProgress(mission, progress, fileName) {
+export function MissionProgress(mission, isCompleted, hasSavedState, fileName) {
     /**
      * Obtain the mission object.
      * @return {Mission} The mission.
@@ -13,10 +14,16 @@ export function MissionProgress(mission, progress, fileName) {
     this.getMission = () => mission;
 
     /**
-     * Obtain the mission progress.
-     * @return {Number} A number which indicates the progress, 0 for none, 1 for incomplete, 2 for completed.
+     * Check if the mission has been completed.
+     * @return {Boolean} True is the mission has been completed at some time.
      */
-    this.getProgress = () => progress;
+    this.isCompleted = () => isCompleted;
+
+    /**
+     * Check if the mission has some saved state.
+     * @return {Boolean} True if the mission has saved state.
+     */
+    this.hasSavedState = () => hasSavedState;
 
     /**
      * Get the filename
@@ -24,7 +31,3 @@ export function MissionProgress(mission, progress, fileName) {
      */
     this.getFileName = () => fileName;
 }
-
-MissionProgress.PROGRESS_UNBEGUN = 0;
-MissionProgress.PROGRESS_INCOMPLETE = 1;
-MissionProgress.PROGRESS_COMPLETE = 2;

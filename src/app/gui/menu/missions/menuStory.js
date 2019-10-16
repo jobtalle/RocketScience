@@ -21,6 +21,12 @@ export function MenuStory(story, menu, user, onUpdate) {
     };
 
     /**
+     * Get the name of the Story.
+     * @return {String} The name of the story.
+     */
+    this.getName = () => story.label;
+
+    /**
      * Get the HTML element of this menu.
      * @returns {HTMLElement}
      */
