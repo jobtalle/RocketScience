@@ -3,7 +3,6 @@ import {MenuTitle} from "./title";
 import {MenuRoot} from "./root/menuRoot";
 import {UserIcon} from "./user/userIcon";
 import {User} from "../../user/user";
-import {MenuStories} from "./missions/menuStories";
 
 /**
  * The menu object creates an HTML menu which changes Game state.
@@ -92,7 +91,7 @@ export function Menu(game, parent, user) {
 
     build();
 
-    _contentObject = MenuStories;
+    _contentObject = MenuRoot;
     _divContent.appendChild(new _contentObject(this, user).getElement());
 }
 

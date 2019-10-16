@@ -175,10 +175,10 @@ ControllerState.FLAG_ACTION_1 = 0x10;
 ControllerState.FLAG_ACTION_2 = 0x20;
 ControllerState.FLAG_ACTION_3 = 0x40;
 
-ControllerState.KEY_LEFT = "a";
-ControllerState.KEY_UP = "w";
-ControllerState.KEY_RIGHT = "d";
-ControllerState.KEY_DOWN = "s";
+ControllerState.KEY_LEFT = "ArrowLeft";
+ControllerState.KEY_UP = "ArrowUp";
+ControllerState.KEY_RIGHT = "ArrowRight";
+ControllerState.KEY_DOWN = "ArrowDown";
 ControllerState.KEY_ACTION_1 = "e";
 ControllerState.KEY_ACTION_2 = "f";
 ControllerState.KEY_ACTION_3 = "g";

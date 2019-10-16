@@ -1,0 +1,7 @@
+{
+  "PART_ADDER_NAME": "Opteller",
+  "PART_ADDER_DESCRIPTION": "Een opteller. Beide ingang signalen worden opgeteld. Het opgetelde signaal komt uit de uitgang. Het signaal kan niet hoger zijn dan een <high> signaal.",
+  "PART_ADDER_PIN_1_DESCRIPTION": "Beide ingang signalen bij elkaar opgeteld. Het signaal aan de uitgang kan niet hoger zijn dan een <high> signaal.",
+  "PART_ADDER_PIN_2_DESCRIPTION": "Het eerste ingang signaal. Het moet een signaal zijn tussen <low> en <high>.",
+  "PART_ADDER_PIN_3_DESCRIPTION": "Het tweede ingang signaal. Het moet een signaal zijn tussen <low> en <high>."
+}

@@ -1,0 +1,7 @@
+{
+    "PART_GATE_AND_NAME": "EN poort",
+    "PART_GATE_AND_DESCRIPTION": "Een EN-poort. De uitgang staat alleen aan als beide ingang signalen <high> zijn.",
+    "PART_GATE_AND_PIN_1_DESCRIPTION": "Als beide ingang signalen <high> zijn, geeft deze pin ook een <high> signaal.",
+    "PART_GATE_AND_PIN_2_DESCRIPTION": "Het eerste ingang signaal.",
+    "PART_GATE_AND_PIN_3_DESCRIPTION": "Het tweede ingang signaal."
+}

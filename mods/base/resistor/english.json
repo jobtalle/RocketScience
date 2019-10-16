@@ -1,0 +1,6 @@
+{
+  "PART_RESISTOR_NAME": "Resistor",
+  "PART_RESISTOR_DESCRIPTION": "A resistor reduces a signals value by 50%.",
+  "PART_RESISTOR_PIN_INPUT_DESCRIPTION": "Any signal connected to this resistor will be transformed.",
+  "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION": "The output signal will be half the input signal."
+}

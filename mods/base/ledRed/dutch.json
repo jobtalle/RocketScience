@@ -1,0 +1,5 @@
+{
+  "PART_LED_RED_NAME": "Rode Led",
+  "PART_LED_RED_DESCRIPTION": "Geeft licht wanneer een <high> signaal wordt gegeven.",
+  "PART_LED_RED_PIN_DESCRIPTION": "Wanneer je een <high> signaal geeft aan deze pin, dan geeft de LED licht."
+}

@@ -1,0 +1,5 @@
+{
+  "PART_CONTROLLER_UP_NAME": "Omhoog Controller",
+  "PART_CONTROLLER_UP_DESCRIPTION": "Dit is een chip die luistert naar je toetsenbord. De pin van deze chip geeft een <high> signaal af, als je op het pijltje omhoog drukt.",
+  "PART_CONTROLLER_UP_PIN_OUTPUT_DESCRIPTION": "Deze pin geeft een <high> signaal, wanneer je op het pijltje omhoog op je toestenbord drukt. Als je er niet op drukt is het signaal <low>."
+}

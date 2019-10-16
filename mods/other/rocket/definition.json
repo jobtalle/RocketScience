@@ -1,0 +1,48 @@
+{
+  "label": "PART_ROCKET_NAME",
+  "description": "PART_ROCKET_DESCRIPTION",
+  "category": "CATEGORY_OUTPUT",
+  "object": "Rocket",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1},
+          {"x": 2, "y": 1},
+          {"x": 0, "y": 2},
+          {"x": 1, "y": 2},
+          {"x": 2, "y": 2}
+        ],
+        "air": [
+          {"x": 0, "y": 3},
+          {"x": 1, "y": 3},
+          {"x": 2, "y": 3},
+          {"x": 0, "y": 4},
+          {"x": 1, "y": 4},
+          {"x": 2, "y": 4},
+          {"x": 0, "y": 5},
+          {"x": 1, "y": 5},
+          {"x": 2, "y": 5}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "in", "name": "PIN_OUTPUT_NAME", "description": "PART_ROCKET_PIN_DESCRIPTION"},
+        {"x": 0, "y": 1, "type": "structural"},
+        {"x": 2, "y": 1, "type": "structural"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "rocketEngineDown", "x": 0, "y": 0}
+        ],
+        "external": [
+          {"name": "rocketConeDown", "x": 0, "y": 3}
+        ]
+      }
+    }
+  ]
+}

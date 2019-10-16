@@ -1,0 +1,7 @@
+{
+    "PART_GATE_OR_NAME": "OF-poort",
+    "PART_GATE_OR_DESCRIPTION": "Een OF-poort. Het uitgang signaal is <high> als ten minste een van beide ingang signalen <high> is.",
+    "PART_GATE_OR_PIN_1_DESCRIPTION": "Als op zijn minst een van beide ingang signalen <high> is, geeft deze pin ook een <high> signaal.",
+    "PART_GATE_OR_PIN_2_DESCRIPTION": "Het eerste ingang signaal.",
+    "PART_GATE_OR_PIN_3_DESCRIPTION": "Het tweede ingang signaal."
+}

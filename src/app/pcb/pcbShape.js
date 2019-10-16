@@ -27,26 +27,30 @@ export function PcbShape(pcb) {
     const _parts = [];
     let _center = null;
 
+    const getPoint = (x, y) => {
+        return pcb.getPoint(x, y) !== null || !pcb.isAir(x, y);
+    };
+
     const makeHull = () => {
         const points = [];
         const at = new Myr.Vector(0, 0);
         const direction = new Myr.Vector(1, 0);
 
-        while (pcb.getPoint(at.x, at.y) === null)
+        while (!getPoint(at.x, at.y))
             ++at.y;
 
         const origin = at.copy();
         let turned = true;
 
         while (!at.equals(origin) || points.length === 0) {
-            const right = pcb.getPoint(
+            const right = getPoint(
                 at.x + Math.min(0, direction.x) + Math.min(0, -direction.y),
                 at.y + Math.min(0, direction.y) + Math.min(0, direction.x));
-            const left = pcb.getPoint(
+            const left = getPoint(
                 at.x + Math.min(0, direction.x) + Math.min(0, direction.y),
                 at.y + Math.min(0, direction.y) + Math.min(0, -direction.x));
 
-            if (left === null && right !== null)  {
+            if (!left && right)  {
                 if (turned) {
                     points.push(at.copy());
 
@@ -55,7 +59,7 @@ export function PcbShape(pcb) {
 
                 at.add(direction);
             }
-            else if(left === null) {
+            else if(!left) {
                 const lastX = direction.x;
 
                 direction.x= -direction.y;

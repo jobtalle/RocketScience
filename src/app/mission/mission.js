@@ -1,17 +1,21 @@
 import {Objective} from "./objective";
 import {Editable} from "./editable/editable";
 import {PhysicsConfiguration} from "../world/physics/physicsConfiguration";
+import {Terrain} from "../terrain/terrain";
+import * as Myr from "myr.js";
+import {Profiles} from "../terrain/profiles";
 
 /**
  * A mission consists of one or multiple objectives.
  * @param {Array} objectives All objectives required to complete this mission.
  * @param {Array} editables An array of editables. The first editable will be the default pcb.
+ * @param {Terrain} terrain A terrain, or null if no terrain exists.
  * @param {PhysicsConfiguration} physicsConfiguration The physics configuration.
  * @param {String} title A title for this mission.
  * @param {String} description A description of this mission.
  * @constructor
  */
-export function Mission(objectives, editables, physicsConfiguration, title, description) {
+export function Mission(objectives, editables, terrain, physicsConfiguration, title, description) {
     let _checking = null;
     let _finished = null;
     let _checkMarks = null;
@@ -34,6 +38,12 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
      * @param {Function} onChange A function to call when a change in passed objectives occurs.
      */
     this.setOnChange = onChange => _onChange = onChange;
+
+    /**
+     * Get this missions terrain.
+     * @returns {Terrain} A terrain, or null if no terrain exists for this mission.
+     */
+    this.getTerrain = () => terrain;
 
     /**
      * Get the physics configuration.
@@ -183,12 +193,12 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
             if (objective.isEdited())
                 return true;
 
-        return _isEdited || physicsConfiguration.isEdited();
+        return terrain.isEdited() || _isEdited || physicsConfiguration.isEdited();
     };
 
     /**
      * Serialize this mission.
-     * @param {Object} buffer A byte buffer.
+     * @param {ByteBuffer} buffer A byte buffer.
      */
     this.serialize = buffer => {
         buffer.writeByte(objectives.length);
@@ -201,6 +211,7 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
         for (const editable of editables)
             editable.serialize(buffer);
 
+        terrain.serialize(buffer);
         physicsConfiguration.serialize(buffer);
 
         buffer.writeString(title);
@@ -212,24 +223,53 @@ export function Mission(objectives, editables, physicsConfiguration, title, desc
 
 /**
  * Deserialize a mission.
- * @param {Object} buffer A byte buffer.
+ * @param {ByteBuffer} buffer A byte buffer.
  * @returns {Mission} The deserialized mission.
  */
 Mission.deserialize = buffer => {
-    let objectives = [];
-    let objectiveLength = buffer.readByte();
-    for (let idx = 0; idx < objectiveLength; ++idx)
+    const objectives = [];
+    const objectivesLength = buffer.readByte();
+
+    for (let idx = 0; idx < objectivesLength; ++idx)
         objectives.push(Objective.deserialize(buffer));
 
-    let editables = [];
-    let editableLength = buffer.readByte();
-    for (let idx = 0; idx < editableLength; ++idx)
+    const editables = [];
+    const editablesLength = buffer.readByte();
+
+    for (let idx = 0; idx < editablesLength; ++idx)
         editables.push(Editable.deserialize(buffer));
 
-    let physics = PhysicsConfiguration.deserialize(buffer);
+    const terrain = Terrain.deserialize(buffer);
+    const physicsConfiguration = PhysicsConfiguration.deserialize(buffer);
+    const title = buffer.readString();
+    const description = buffer.readString();
 
-    let title = buffer.readString();
-    let descr = buffer.readString();
+    return new Mission(
+        objectives,
+        editables,
+        terrain,
+        physicsConfiguration,
+        title,
+        description);
+};
 
-    return new Mission(objectives, editables, physics, title, descr);
+/**
+ * Create an empty mission.
+ * @returns {Mission} An empty mission.
+ */
+Mission.emptyMission = () => {
+    const heights = new Array(200).fill(0);
+
+    return new Mission(
+        [],
+        [
+            Editable.defaultEditable(new Myr.Vector(50, -10))
+        ],
+        new Terrain(
+            heights,
+            Profiles.ID_FIELDS
+        ),
+        new PhysicsConfiguration(1, 14),
+        "New Mission",
+        "Create your own mission!");
 };

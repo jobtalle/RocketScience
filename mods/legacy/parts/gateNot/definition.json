@@ -1,0 +1,30 @@
+{
+  "label": "PART_GATE_NOT_NAME",
+  "description": "PART_GATE_NOT_DESCRIPTION",
+  "category": "CATEGORY_LOGIC",
+  "icon": "part-gate-not",
+  "object": "GateNot",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1},
+          {"x": 1, "y": 2}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_POWER_NAME", "description": "PIN_POWER_DESCRIPTION"},
+        {"x": 1, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_GATE_NOT_PIN_1_DESCRIPTION"},
+        {"x": 1, "y": 2, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_GATE_NOT_PIN_2_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partGateNot", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}

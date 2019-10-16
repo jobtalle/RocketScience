@@ -9,8 +9,8 @@ from os import walk
 from shutil import copyfile
 from pack_gui import pack_gui
 from pack_sprites import pack_sprites
-from pack_parts import pack_parts
 from pack_missions import pack_missions
+from pack_mods import pack_mods
 
 def copy_langfiles():
     print("Copying language files:")
@@ -33,6 +33,6 @@ def copy_langfiles():
 
 pack_sprites()
 pack_gui()
-pack_parts()
 copy_langfiles()
 pack_missions()
+pack_mods()

@@ -52,16 +52,29 @@
     position: relative;
 }
 
-#library #contents .category .part-list .part .sprite:hover {
+#library #contents .category .part-list .part .icon {
+    height: var(--part-grid-cell-size);
+}
+
+#library #contents .category .part-list .part .icon img {
+    image-rendering:pixelated;
+    image-rendering:crisp-edges;
+    image-rendering:-moz-crisp-edges;
+
+    width: 100%;
+    height: auto;
+}
+
+#library #contents .category .part-list .part .icon:hover {
     background-color: var(--library-color-part-background-hover);
 }
 
-#library #contents .category .part-list .part.not-available .sprite {
+#library #contents .category .part-list .part.not-available .icon {
     background-color: var(--library-color-part-background-unavailable);
     pointer-events: none;
 }
 
-#library #contents .category .part-list .part.not-available .sprite:hover {
+#library #contents .category .part-list .part.not-available .icon:hover {
     background-color: inherit;
 }
 
@@ -70,6 +83,7 @@
 }
 
 #library #contents .category .part-list .part .count {
+    font-family: sans-serif;
     min-width: var(--part-grid-count-size);
     height:  var(--part-grid-count-size);
     font-size: var(--part-grid-count-size);

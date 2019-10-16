@@ -1,8 +1,12 @@
 import {Goal} from "../../../mission/goal/goal";
 import {ChecklistObjectiveGoalPinState} from "./goals/checklistObjectiveGoalPinState";
 import {ChecklistObjectiveGoalNew} from "./checklistObjectiveGoalNew";
-import {getPartFromId} from "../../../part/objects";
+import {getPartFromName, getPartNames} from "../../../part/objects";
 import {GoalPinState} from "../../../mission/goal/goalPinState";
+import {GoalPosition} from "../../../mission/goal/goalPosition";
+import {ChecklistObjectiveGoalPosition} from "./goals/checklistObjectiveGoalPosition";
+import {GoalPinStateThreshold} from "../../../mission/goal/goalPinStateThreshold";
+import {ChecklistObjectiveGoalPinStateThreshold} from "./goals/checklistObjectiveGoalPinStateThreshold";
 
 /**
  * A list of editable objective goals.
@@ -21,7 +25,15 @@ export function ChecklistObjectiveGoals(objective) {
 
             switch (type) {
                 case Goal.TYPE_PIN_STATE:
-                    goal = new GoalPinState(getPartFromId(0).object, 0, 0);
+                    goal = new GoalPinState(getPartFromName(getPartNames()[0]).object, 0, 0);
+
+                    break;
+                case Goal.TYPE_POSITION:
+                    goal = new GoalPosition(0, 0, 1);
+
+                    break;
+                case Goal.TYPE_PIN_STATE_THRESHOLD:
+                    goal = new GoalPinStateThreshold(getPartFromName(getPartNames()[0]).object, 0, 0, 0);
 
                     break;
             }
@@ -30,7 +42,6 @@ export function ChecklistObjectiveGoals(objective) {
 
             if (goal)
                 add(goal);
-
         });
 
         const add = goal => {
@@ -45,6 +56,14 @@ export function ChecklistObjectiveGoals(objective) {
             switch (goal.getType()) {
                 case Goal.TYPE_PIN_STATE:
                     element = new ChecklistObjectiveGoalPinState(goal, onDelete);
+
+                    break;
+                case Goal.TYPE_POSITION:
+                    element = new ChecklistObjectiveGoalPosition(goal, onDelete);
+
+                    break;
+                case Goal.TYPE_PIN_STATE_THRESHOLD:
+                    element = new ChecklistObjectiveGoalPinStateThreshold(goal, onDelete);
 
                     break;
             }

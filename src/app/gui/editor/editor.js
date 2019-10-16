@@ -12,19 +12,19 @@ import {Scale} from "../../world/scale";
 import {Editables} from "./editables";
 import {Checklist} from "../shared/checklist/checklist";
 import Myr from "myr.js"
-import {Data} from "../../file/data";
-import {DownloadBinary} from "../../utils/downloadBinary";
 import {Tabbar} from "./tabbar/tabbar";
+import {EditOptions} from "./editoptions/editOptions";
 
 /**
  * Provides am editor for editing PCB's.
  * @param {RenderContext} renderContext A render context.
  * @param {World} world A world instance to interact with.
  * @param {Game} game A game.
+ * @param {User} user The user.
  * @param {Boolean} isMissionEditor Shows whether the editor should show functionality for editing missions.
  * @constructor
  */
-export function Editor(renderContext, world, game, isMissionEditor) {
+export function Editor(renderContext, world, game, user, isMissionEditor) {
     const _overlay = new Overlay(renderContext.getViewport().getElement(), renderContext.getViewport().getSplitX());
     const _info = new Info(_overlay);
     const _view = new View(
@@ -37,8 +37,10 @@ export function Editor(renderContext, world, game, isMissionEditor) {
             Editor.ZOOM_MIN,
             Editor.ZOOM_MAX),
         new ShiftProfile(1));
+    const _editOptions = new EditOptions(renderContext.getOverlay());
     const _pcbEditor = new PcbEditor(
         renderContext,
+        _editOptions,
         world,
         _view,
         renderContext.getWidth() - renderContext.getViewport().getSplitX(),
@@ -52,7 +54,9 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         _editables,
         renderContext.getViewport().getElement(),
         renderContext.getViewport().getSplitX(),
+        world,
         game,
+        user,
         isMissionEditor);
     const _library = new Library(
         _pcbEditor,
@@ -72,6 +76,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
 
     const _pcbScreenPosition = new Myr.Vector(0, 0);
     let _editable = null;
+    let _showZone = false;
 
     const onViewChanged = () => {
         _pcbScreenPosition.x = 0;
@@ -95,6 +100,12 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      * @returns {Overlay} The Overlay object.
      */
     this.getOverlay = () => _overlay;
+
+    /**
+     * Tell the editor to show the editableRegion zone.
+     * @param {Boolean} val
+     */
+    this.setShowZone = val => _showZone = val;
 
     /**
      * The PCB has changed.
@@ -147,6 +158,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
      */
     this.hide = () => {
         _toolbar.hide();
+        _editOptions.hide();
         _library.hide();
         _pcbEditor.hide();
         _overlay.hide();
@@ -161,6 +173,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.show = () => {
         _pcbEditor.show();
         _library.show();
+        _editOptions.show();
         _toolbar.show();
         _overlay.show();
         _tabbar.show();
@@ -195,7 +208,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
         renderContext.getMyr().push();
         renderContext.getMyr().transform(world.getView().getTransform());
 
-        _editables.draw();
+        _editables.draw(_showZone);
 
         renderContext.getMyr().pop();
 
@@ -213,7 +226,7 @@ export function Editor(renderContext, world, game, isMissionEditor) {
                 const pressedEditable = _editables.getEditableAt(event.x, event.y);
                 const isCam = event.type === Editor.MOUSE_BUTTON_PRESS_VIEW;
 
-                if (isCam || !pressedEditable || pressedEditable === _editable)
+                if (isCam || !pressedEditable || pressedEditable === _editable || !_pcbEditor.maySwitchEditable())
                     _pcbEditor.onMousePress(
                         event.x - renderContext.getViewport().getSplitX(),
                         event.y,
@@ -262,18 +275,6 @@ export function Editor(renderContext, world, game, isMissionEditor) {
     this.onKeyEvent = event => {
         _toolbar.onKeyEvent(event);
         _pcbEditor.onKeyEvent(event);
-
-        // TODO: REMOVE THIS
-        if (event.down) switch(event.key) {
-            case Editor.KEY_MISSION_DOWNLOAD:
-                const missionData = new Data();
-
-                world.getMission().serialize(missionData.getBuffer());
-
-                DownloadBinary(missionData.getBlob(), world.getMission().getTitle().replace(/[\\/:\*\?"<>\|\s+]/g, '').toLowerCase() + ".bin");
-
-                return;
-        }
     };
 
     /**

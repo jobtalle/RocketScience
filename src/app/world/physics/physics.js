@@ -7,9 +7,10 @@ import Myr from "myr.js"
 /**
  * An interface for the used physics engine.
  * @param {PhysicsConfiguration} configuration The physics configuration.
+ * @param {Water} water A water plane.
  * @constructor
  */
-export function Physics(configuration) {
+export function Physics(configuration, water) {
     const _world = new box2d.b2World(getb2Vec2(0, configuration.getGravity()), true);
     const _bodies = [];
 
@@ -64,15 +65,18 @@ export function Physics(configuration) {
         _world.Step(timeStep, Physics.VELOCITY_ITERATIONS, Physics.POSITION_ITERATIONS);
 
         for (const body of _bodies)
-            body.update(timeStep);
+            body.update(timeStep, water);
     };
 
     /**
-     * Set the terrain
-     * @param {Object} heights An array containing all terrain height points.
+     * Set the terrain.
+     * @param {Array} heights An array containing all terrain height points.
      * @param {Number} spacing The spacing between each height point in meters.
      */
     this.setTerrain = (heights, spacing) => {
+        if (_terrainBody)
+            _world.DestroyBody(_terrainBody);
+
         const bodyDef = new box2d.b2BodyDef();
         const points = [];
 
@@ -98,6 +102,8 @@ export function Physics(configuration) {
     /**
      * Create a new physics body.
      * @param {Array} polygons An array of polygon arrays, where each polygon point has an x and y coordinate.
+     * @param {Array} points An array of points to sample for buoyancy.
+     * @param {Number} density The body density factor.
      * @param {Number} x Horizontal position.
      * @param {Number} y Vertical position.
      * @param {Number} xOrigin The X origin.
@@ -105,7 +111,7 @@ export function Physics(configuration) {
      * @param {Myr.Transform} transform A transformation to write the physics location to.
      * @return {Object} The created physics body.
      */
-    this.createBody = (polygons, x, y, xOrigin, yOrigin, transform) => {
+    this.createBody = (polygons, points, density, x, y, xOrigin, yOrigin, transform) => {
         const shapes = [];
 
         for (const polygon of polygons)
@@ -115,6 +121,8 @@ export function Physics(configuration) {
             this,
             _world,
             shapes,
+            points,
+            density,
             x + xOrigin,
             y + yOrigin,
             xOrigin,
@@ -135,6 +143,12 @@ export function Physics(configuration) {
 
         body.free();
     };
+
+    /**
+     * Get the physics configuration.
+     * @returns {PhysicsConfiguration} The physics configuration.
+     */
+    this.getConfiguration = () => configuration;
 
     /**
      * Free the physics object.

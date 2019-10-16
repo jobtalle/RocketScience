@@ -1,0 +1,6 @@
+{
+  "PART_SWITCH_NAME": "Switch",
+  "PART_SWITCH_DESCRIPTION": "A switch that can be toggled. While toggled on, a signal will flow from its input to its output. When the switch is off, there is no connection between its pins.",
+  "PART_SWITCH_PIN_INPUT_DESCRIPTION": "Any kind of signal can be connected to the input pin.",
+  "PART_SWITCH_PIN_OUTPUT_DESCRIPTION": "While the switch is on, this pin will output the input signal. If the switch is off, the output is <low>"
+}

@@ -2,6 +2,7 @@ import {getPartObject} from "../part/objects";
 import {PcbPath} from "./point/pcbPath";
 import {Pin} from "../part/pin";
 import Myr from "myr.js"
+import {makeContext} from "./context";
 
 const findOutput = (paths, x, y) => {
     for (const path of paths) if (path.contains(x, y))
@@ -78,10 +79,12 @@ const PartEntry = function(fixture) {
     };
 
     this.makeState = (pcb, renderer) => new (getPartObject(fixture.part.getDefinition().object))(
-        _pointers,
-        renderer.getPartRenderer(fixture),
-        fixture.x,
-        fixture.y);
+        makeContext(
+            _pointers,
+            renderer.getPartRenderer(fixture),
+            fixture.x,
+            fixture.y,
+            fixture.part.getConfigurationIndex()));
 };
 
 /**

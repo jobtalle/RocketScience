@@ -12,11 +12,13 @@ import {Scale} from "../../../world/scale";
 import {UndoStack} from "./undoStack";
 import {Data} from "../../../file/data";
 import {Pcb} from "../../../pcb/pcb";
-import Myr from "myr.js"
+import {PcbEditorTerrain} from "./pcbEditorTerrain";
+import Myr from "myr.js";
 
 /**
  * The interactive PCB editor which takes care of editing a Pcb.
  * @param {RenderContext} renderContext A render context.
+ * @param {EditOptions} editOptions An edit options block to add additional edit options.
  * @param {World} world A world instance to interact with.
  * @param {View} view A View instance.
  * @param {Number} width The editor width.
@@ -26,9 +28,8 @@ import Myr from "myr.js"
  * @param {Boolean} isMissionEditor A boolean indicating whether the editor is in mission editor mode.
  * @constructor
  */
-export function PcbEditor(renderContext, world, view, width, height, x, editor, isMissionEditor) {
+export function PcbEditor(renderContext, editOptions, world, view, width, height, x, editor, isMissionEditor) {
     const _cursor = new Myr.Vector(-1, -1);
-    const _rawCursor = _cursor.copy();
 
     let _editable = null;
     let _renderer = null;
@@ -52,14 +53,8 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
 
         view.getInverse().apply(_cursor);
 
-        _rawCursor.x = _cursor.x / Scale.PIXELS_PER_POINT;
-        _rawCursor.y = _cursor.y / Scale.PIXELS_PER_POINT;
-
         _cursor.x = Math.floor(_cursor.x / Scale.PIXELS_PER_POINT);
         _cursor.y = Math.floor(_cursor.y / Scale.PIXELS_PER_POINT);
-
-        _rawCursor.x = _cursor.x;
-        _rawCursor.y = _cursor.y;
 
         return _cursor.x !== oldX || _cursor.y !== oldY;
     };
@@ -258,10 +253,13 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     this.setEditMode = mode => {
         editor.getInfo().setPinouts(null);
         editor.getOverlay().clearRulers();
+        editor.setShowZone(false);
 
         switch (mode) {
             case PcbEditor.EDIT_MODE_RESHAPE:
                 this.setEditor(new PcbEditorReshape(renderContext, _editable.getPcb(), _cursor, this));
+
+                editOptions.set(null);
 
                 break;
             case PcbEditor.EDIT_MODE_SELECT:
@@ -273,13 +271,29 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
                     new Selection(renderContext),
                     _editable.getBudget()));
 
+                editOptions.set(null);
+
                 break;
             case PcbEditor.EDIT_MODE_ETCH:
                 this.setEditor(new PcbEditorEtch(renderContext, _editable.getPcb(), _cursor, this));
 
+                editOptions.set(null);
+
                 break;
             case PcbEditor.EDIT_MODE_MOVE:
-                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, _rawCursor, this, view, isMissionEditor));
+                this.setEditor(new PcbEditorMove(renderContext, _editable.getPcb(), _cursor, this, view, isMissionEditor));
+
+                editOptions.set(null);
+
+                editor.setShowZone(true);
+
+                break;
+            case PcbEditor.EDIT_MODE_TERRAIN:
+                const terrainEditor = new PcbEditorTerrain(renderContext, this, world);
+
+                this.setEditor(terrainEditor);
+
+                editOptions.set(terrainEditor.getOptions().getElement());
 
                 break;
         }
@@ -398,10 +412,11 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
      * @param {Boolean} isCam A boolean indicating whether this is a camera press.
      */
     this.onMousePress = (x, y, isCam) => {
-        if (isCam || !mouseDown(x, y)) {
+        if (isCam) {
             view.onMouseMove(x, y);
             view.onMousePress();
-        }
+        } else
+            mouseDown(x, y);
     };
 
     /**
@@ -520,6 +535,14 @@ export function PcbEditor(renderContext, world, view, width, height, x, editor, 
     };
 
     /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return _editor.maySwitchEditable();
+    };
+
+    /**
      * A key event has been fired.
      * @param {KeyEvent} event A key event.
      */
@@ -567,7 +590,6 @@ PcbEditor.EDIT_MODE_SELECT = 0;
 PcbEditor.EDIT_MODE_RESHAPE = 1;
 PcbEditor.EDIT_MODE_ETCH = 2;
 PcbEditor.EDIT_MODE_MOVE = 3;
-PcbEditor.EDIT_MODE_MOVE_REGION = 4;
-PcbEditor.EDIT_MODE_RESIZE_REGION = 5;
+PcbEditor.EDIT_MODE_TERRAIN = 4;
 PcbEditor.KEY_SAVE = "q";
 PcbEditor.KEY_LOAD = "l";

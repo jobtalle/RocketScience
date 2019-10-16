@@ -3,6 +3,7 @@ import {Editor} from "./gui/editor/editor";
 import {World} from "./world/world";
 import {Hud} from "./gui/hud/hud";
 import {MissionProgress} from "./mission/missionProgress";
+import {Mission} from "./mission/mission";
 
 /**
  * This class contains the game views.
@@ -21,12 +22,12 @@ export function Game(renderContext, input, user) {
     const update = timeStep => {
         switch (_mode) {
             case Game.MODE_EDIT:
-                _world.update(timeStep);
-                _editor.update(timeStep);
+                _world.update(1 / 60);
+                _editor.update(1 / 60);
 
                 break;
             case Game.MODE_GAME:
-                _world.update(timeStep);
+                _world.update(1 / 60);
 
                 break;
         }
@@ -174,7 +175,16 @@ export function Game(renderContext, input, user) {
      * Start free create mode.
      */
     this.startCreate = () => {
+        stopMission();
 
+        _world = new World(renderContext, new MissionProgress(Mission.emptyMission(), MissionProgress.PROGRESS_UNBEGUN, "newmission.bin"));
+        _hud = new Hud(renderContext, _world, this);
+        _editor = new Editor(renderContext, _world, this, user, true);
+
+        _editor.edit(_world.getMission().getEditables()[0]);
+        _editor.show();
+
+        this.setMode(Game.MODE_EDIT);
     };
 
     /**
@@ -186,7 +196,7 @@ export function Game(renderContext, input, user) {
 
         _world = new World(renderContext, missionProgress);
         _hud = new Hud(renderContext, _world, this);
-        _editor = new Editor(renderContext, _world, this, Game.IS_MISSION_EDITOR_MODE);
+        _editor = new Editor(renderContext, _world, this, user, Game.IS_MISSION_EDITOR_MODE);
 
         _editor.edit(_world.getMission().getEditables()[0]);
         _editor.show();
@@ -207,21 +217,21 @@ export function Game(renderContext, input, user) {
             _editor.resize(width, height);
     };
 
+    input.getKeyboard().addListener(onKeyEvent);
+    input.getMouse().addListener(onMouseEvent);
+
+    this.setMode(Game.MODE_MENU);
+
     renderContext.getMyr().utils.loop(function(timeStep) {
         update(timeStep);
         render();
 
         return true;
     });
-
-    input.getKeyboard().addListener(onKeyEvent);
-    input.getMouse().addListener(onMouseEvent);
-
-    this.setMode(Game.MODE_MENU);
 }
 
 Game.KEY_TOGGLE_EDIT = " ";
-Game.IS_MISSION_EDITOR_MODE = true;
+Game.IS_MISSION_EDITOR_MODE = false;
 Game.MODE_MENU = 0;
 Game.MODE_EDIT = 1;
 Game.MODE_GAME = 2;

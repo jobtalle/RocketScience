@@ -1,0 +1,5 @@
+{
+  "PART_METER_NAME": "Signaal meter",
+  "PART_METER_DESCRIPTION": "Deze meter geeft aan hoe hoog een gegeven signaal is. Als je geen signaal geeft, staat de meter op 0.",
+  "PART_METER_PIN_INPUT_DESCRIPTION": "Elk signaal kan je geven aan deze pin."
+}

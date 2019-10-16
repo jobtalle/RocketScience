@@ -90,4 +90,6 @@
     --game-color-pcb-edit-place-unsuitable: #ff000080;
 
     --game-color-pcb-editables-border: #FF0000;
+    --edit-options-padding-left: 16px;
+    --edit-options-padding-top: 64px;
 }

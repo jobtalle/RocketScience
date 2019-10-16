@@ -19,7 +19,7 @@ export const StyleUtils = {
      * @param {String} name The variable name.
      * @return {Myr.Color} The color of the variable.
      */
-    getColorHex: function (name) {
+    getColor: function (name) {
         let color = StyleUtils.getVariable(name).toUpperCase();
 
         color = color.replace("#", "");

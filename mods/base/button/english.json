@@ -1,0 +1,6 @@
+{
+  "PART_BUTTON_NAME": "Button",
+  "PART_BUTTON_DESCRIPTION": "A button that can be pressed. While pressed, a signal will flow from its input to its output. When the button is not pressed, there is no connection between its pins.",
+  "PART_BUTTON_PIN_INPUT_DESCRIPTION": "Any kind of signal can be connected to the input pin.",
+  "PART_BUTTON_PIN_OUTPUT_DESCRIPTION": "While the button is pressed, this pin will output the input signal. If the button is not pressed, the output is <low>"
+}

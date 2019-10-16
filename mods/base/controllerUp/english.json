@@ -1,0 +1,5 @@
+{
+  "PART_CONTROLLER_UP_NAME": "Up Arrow Controller",
+  "PART_CONTROLLER_UP_DESCRIPTION": "A chip that listens to the input of your keyboard. This chip will give a <high> signal when the up arrow is pressed.",
+  "PART_CONTROLLER_UP_PIN_OUTPUT_DESCRIPTION": "The output of this pin will be <high> when the up arrow is pressed."
+}

@@ -1,0 +1,28 @@
+{
+  "label": "PART_TILT_NAME",
+  "description": "PART_TILT_DESCRIPTION",
+  "category": "CATEGORY_INPUT",
+  "icon": "part-tilt",
+  "object": "Tilt",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 2, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_TILT_PIN_OUTPUT_DESCRIPTION"},
+        {"x": 0, "y": 0, "type": "structural"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partTiltBackground", "x": 0, "y": 0},
+          {"name": "partTiltSlider", "x": 1, "y": 0}
+        ]
+      }
+    }
+  ]
+}

@@ -22,14 +22,34 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
     let _state = null;
     let _body = null;
 
-    const generatePhysicsBody = () => {
+    const createPhysicsBody = () => {
         const shape = new PcbShape(pcb);
         const polygons = [];
+        const points = [];
 
         for (const part of shape.getParts())
             polygons.push(part.getPoints());
 
-        return physics.createBody(polygons, x, y, shape.getCenter().x, shape.getCenter().y, _transform);
+        for (let y = 0; y < pcb.getHeight(); ++y) for (let x = 0; x < pcb.getWidth(); ++x)
+            if (pcb.getPoint(x, y))
+                points.push(new Myr.Vector(
+                    (x + 0.5) * Scale.METERS_PER_POINT,
+                    (y + 0.5) * Scale.METERS_PER_POINT));
+
+        for (const air of pcb.getAirPoints())
+            points.push(new Myr.Vector(
+                (air.x + 0.5) * Scale.METERS_PER_POINT,
+                (air.y + 0.5) * Scale.METERS_PER_POINT));
+
+        return physics.createBody(
+            polygons,
+            points,
+            1,
+            x,
+            y,
+            shape.getCenter().x,
+            shape.getCenter().y,
+            _transform);
     };
 
     /**
@@ -116,7 +136,7 @@ export function WorldObject(renderContext, physics, controllerState, pcb, x, y) 
      */
     this.getState = () => _state;
 
-    _body = generatePhysicsBody();
+    _body = createPhysicsBody();
     _state = new PcbState(pcb, _renderer, _body, controllerState);
     _renderer.setLevel(PcbRenderer.LEVEL_HULL);
 }

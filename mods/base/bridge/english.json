@@ -1,0 +1,6 @@
+{
+    "PART_BRIDGE_NAME": "Bridge",
+    "PART_BRIDGE_DESCRIPTION": "A bridge can move over a occupied space.",
+    "PART_BRIDGE_PIN_INPUT_DESCRIPTION": "Any signal can be connected to this pin.",
+    "PART_BRIDGE_PIN_OUTPUT_DESCRIPTION": "The output signal will be the same as the input signal."
+}

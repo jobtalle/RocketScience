@@ -10,11 +10,13 @@ import {StyleUtils} from "../../utils/styleUtils";
  */
 export function PcbPointRenderer(renderContext, isPlan, color) {
     let SPRITE_JUNCTION;
+    let SPRITE_JUNCTION_STRUCTURAL;
     let SPRITE_NODE;
     let SPRITES_PATHS;
 
     if (isPlan) {
         SPRITE_JUNCTION = renderContext.getSprites().getSprite("pcbPathPlanJunction");
+        SPRITE_JUNCTION_STRUCTURAL = SPRITE_JUNCTION;
         SPRITE_NODE = renderContext.getSprites().getSprite("pcbPathPlan");
         SPRITES_PATHS = [
             renderContext.getSprites().getSprite("pcbPathPlanR"),
@@ -27,6 +29,7 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
             renderContext.getSprites().getSprite("pcbPathPlanRB")];
     } else {
         SPRITE_JUNCTION = renderContext.getSprites().getSprite("pcbPathJunction");
+        SPRITE_JUNCTION_STRUCTURAL = renderContext.getSprites().getSprite("pcbPathJunctionStructural");
         SPRITE_NODE = renderContext.getSprites().getSprite("pcbPath");
         SPRITES_PATHS = [
             renderContext.getSprites().getSprite("pcbPathR"),
@@ -64,13 +67,15 @@ export function PcbPointRenderer(renderContext, isPlan, color) {
         for (let direction = 0; direction < 8; ++direction) if (point.hasDirection(direction))
             SPRITES_PATHS[direction].draw(x - 1, y - 1);
 
-        if (point.isJunction())
+        if (point.isStructural())
+            SPRITE_JUNCTION_STRUCTURAL.draw(x, y);
+        else if (point.isJunction())
             SPRITE_JUNCTION.draw(x, y);
         else
             SPRITE_NODE.draw(x, y);
     };
 }
 
-PcbPointRenderer.COLOR_SELECT = StyleUtils.getColorHex("--game-color-pcb-point-renderer-selected");
-PcbPointRenderer.COLOR_DELETE = StyleUtils.getColorHex("--game-color-pcb-point-renderer-delete");
-PcbPointRenderer.COLOR_INVALID = StyleUtils.getColorHex("--game-color-pcb-point-renderer-invalid");
+PcbPointRenderer.COLOR_SELECT = StyleUtils.getColor("--game-color-pcb-point-renderer-selected");
+PcbPointRenderer.COLOR_DELETE = StyleUtils.getColor("--game-color-pcb-point-renderer-delete");
+PcbPointRenderer.COLOR_INVALID = StyleUtils.getColor("--game-color-pcb-point-renderer-invalid");

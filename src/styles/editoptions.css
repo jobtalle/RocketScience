@@ -1,0 +1,17 @@
+#edit-options {
+    position: absolute;
+    left: calc(var(--edit-options-padding-left) + var(--library-width));
+    top: var(--edit-options-padding-top);
+}
+
+#edit-options .container {
+    background-color: var(--menu-color-background);
+}
+
+#edit-options .toolbar * {
+    float: left;
+}
+
+#edit-options .toolbar .button {
+    cursor: pointer;
+}

@@ -1,0 +1,5 @@
+{
+  "PART_ALTIMETER_NAME": "Hoogtemeter",
+  "PART_ALTIMETER_DESCRIPTION": "Een hoogtemeter meet hoe hoog je bent. Als je bij de grond bent, geeft hij een <low> signaal, als je bij de wolken bent geeft hij een <high> signaal. Als je tussen de wolken en de grond in zit, geeft het een signaal tussen <low> en <high>.",
+  "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION": "Deze uitgang geeft een variabel signaal. Dit zit tussen <low> en <high>."
+}

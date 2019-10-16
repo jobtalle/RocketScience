@@ -1,0 +1,10 @@
+{
+  "PART_WHEEL_NAME": "Wheel",
+  "PART_WHEEL_DESCRIPTION": "A wheel",
+  "PART_WHEEL_PIN_0_NAME": "Left",
+  "PART_WHEEL_PIN_0_DESCRIPTION": "When a signal between <low> and <high> is provided, the motor will rotate counter clockwise with the intensity of that signal.",
+  "PART_WHEEL_PIN_2_NAME": "Right",
+  "PART_WHEEL_PIN_2_DESCRIPTION": "When a signal between <low> and <high> is provided, the motor will rotate clockwise with the intensity of that signal.",
+  "PART_WHEEL_PIN_BRAKES_NAME": "Brake",
+  "PART_WHEEL_PIN_BRAKES_DESCRIPTION": "When a <high> signal is provided, the brakes will be active regardless of motor signals."
+}

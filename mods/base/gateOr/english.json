@@ -1,0 +1,7 @@
+{
+    "PART_GATE_OR_NAME": "OR gate",
+    "PART_GATE_OR_DESCRIPTION": "An OR gate. Its output will be on when at least one of its two inputs is on.",
+    "PART_GATE_OR_PIN_1_DESCRIPTION": "When this part is active, this pin will output a <high> signal when at least one input receives a <high> signal.",
+    "PART_GATE_OR_PIN_2_DESCRIPTION": "The first input signal.",
+    "PART_GATE_OR_PIN_3_DESCRIPTION": "The second input signal."
+}

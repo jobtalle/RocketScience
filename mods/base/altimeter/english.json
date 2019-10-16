@@ -1,0 +1,5 @@
+{
+  "PART_ALTIMETER_NAME": "Altimeter",
+  "PART_ALTIMETER_DESCRIPTION": "When powered, the output value of this sensor will relate to the height of this robot. At sea level, the output will be <low>. At 30 meters or more, the output will be <high>.",
+  "PART_ALTIMETER_PIN_OUTPUT_DESCRIPTION": "The output will be <low> at sea level, <high> at 30 meters or higher, and increase linearly if the altitude is between these values. If the part is not powered, the output will be <low>."
+}

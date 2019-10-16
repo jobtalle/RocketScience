@@ -29,9 +29,10 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
+    "apl-image-packer": "^1.1.0",
+    "jszip": "^3.2.1",
     "md5": "^2.2.1",
-    "myr.js": "^1.1.2",
-    "noisejs": "^2.1.0",
+    "myr.js": "^1.1.6",
     "npm": "^6.9.0",
     "pako": "^1.0.10",
     "poly-decomp": "^0.3.0"

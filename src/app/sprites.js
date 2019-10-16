@@ -10,6 +10,7 @@ export function Sprites(myr) {
 
     const getFrame = (name, index) => {
         const frameName = name + '_' + index;
+
         return atlas.frames[frameName];
     };
 

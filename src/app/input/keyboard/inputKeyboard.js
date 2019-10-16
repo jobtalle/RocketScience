@@ -28,9 +28,15 @@ export function InputKeyboard(window) {
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
                 _control = true;
+
+                fireEvent(null, true);
+
                 break;
             case InputKeyboard.KEY_SHIFT:
                 _shift = true;
+
+                fireEvent(null, true);
+
                 break;
             default:
                 fireEvent(event.key, true);
@@ -42,10 +48,16 @@ export function InputKeyboard(window) {
 
         switch (event.key) {
             case InputKeyboard.KEY_CONTROL:
+                fireEvent(null, false);
+
                 _control = false;
+
                 break;
             case InputKeyboard.KEY_SHIFT:
+                fireEvent(null, false);
+
                 _shift = false;
+
                 break;
             default:
                 fireEvent(event.key, false);

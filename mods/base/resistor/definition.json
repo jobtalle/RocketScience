@@ -1,0 +1,45 @@
+{
+  "label": "PART_RESISTOR_NAME",
+  "description": "PART_RESISTOR_DESCRIPTION",
+  "category": "CATEGORY_LOGIC",
+  "icon": "part-resistor",
+  "object": "Resistor",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 2, "y": 0}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
+        {"x": 2, "y": 0, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partResistor1", "x": 0, "y": 0}
+        ]
+      }
+    },
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 0, "y": 2}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 0, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_RESISTOR_PIN_INPUT_DESCRIPTION"},
+        {"x": 0, "y": 2, "type": "out", "name": "PIN_OUTPUT_NAME", "description": "PART_RESISTOR_PIN_OUTPUT_DESCRIPTION"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partResistor2", "x": 0, "y": 0}
+        ]
+      }
+    }
+  ]
+}

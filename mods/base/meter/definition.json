@@ -1,0 +1,35 @@
+{
+  "label": "PART_METER_NAME",
+  "description": "PART_METER_DESCRIPTION",
+  "category": "CATEGORY_OUTPUT",
+  "icon": "part-meter",
+  "object": "Meter",
+  "configurations": [
+    {
+      "footprint": {
+        "points": [
+          {"x": 0, "y": 0},
+          {"x": 1, "y": 0},
+          {"x": 0, "y": 1},
+          {"x": 1, "y": 1}
+        ],
+        "space": [
+          {"x": 0, "y": -1},
+          {"x": 1, "y": -1}
+        ]
+      },
+      "io": [
+        {"x": 0, "y": 1, "type": "in", "name": "PIN_INPUT_NAME", "description": "PART_METER_PIN_INPUT_DESCRIPTION"},
+        {"x": 1, "y": 1, "type": "structural"}
+      ],
+      "sprites": {
+        "internal": [
+          {"name": "partMeterBase", "x": 0, "y": -1}
+        ],
+        "external": [
+          {"name": "partMeterDial", "x": 0, "y": -0.5}
+        ]
+      }
+    }
+  ]
+}

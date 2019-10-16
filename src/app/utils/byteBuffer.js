@@ -37,8 +37,8 @@ export function ByteBuffer(source) {
      * @param {Number} short An unsigned integer in the range [0, 65535].
      */
     this.writeShort = short => {
-        _bytes.push((short >> 8) & 0xFF);
         _bytes.push(short & 0xFF);
+        _bytes.push((short >> 8) & 0xFF);
     };
 
     /**
@@ -47,14 +47,14 @@ export function ByteBuffer(source) {
      */
     this.writeShortSigned = short => {
         if (short >= 0) {
-            _bytes.push((short >> 8) & 0x7F);
             _bytes.push(short & 0xFF);
+            _bytes.push((short >> 8) & 0x7F);
         }
         else {
             short += 32768;
 
-            _bytes.push(((short >> 8) & 0x7F) | 0x80);
             _bytes.push(short & 0xFF);
+            _bytes.push(((short >> 8) & 0x7F) | 0x80);
         }
     };
 
@@ -63,10 +63,10 @@ export function ByteBuffer(source) {
      * @param {Number} int An unsigned integer in the range [0, 4294967295].
      */
     this.writeInt = int => {
-        _bytes.push((int >> 24) & 0xFF);
-        _bytes.push((int >> 16) & 0xFF);
-        _bytes.push((int >> 8) & 0xFF);
         _bytes.push(int & 0xFF);
+        _bytes.push((int >> 8) & 0xFF);
+        _bytes.push((int >> 16) & 0xFF);
+        _bytes.push((int >> 24) & 0xFF);
     };
 
     /**
@@ -105,12 +105,12 @@ export function ByteBuffer(source) {
      * @returns {Number} A signed integer in the range [-128, 127].
      */
     this.readByteSigned = () => {
-        const x = _bytes[_at++];
+        const x = this.readByte();
 
-        if (x < 128)
+        if (x < 0x80)
             return x;
 
-        return -128 + (x & 0x7F);
+        return -0x80 + (x & 0x7F);
     };
 
     /**
@@ -118,20 +118,20 @@ export function ByteBuffer(source) {
      * @returns {Number} An unsigned integer in the range [0, 65535].
      */
     this.readShort = () => {
-        return (_bytes[_at++] << 8) | _bytes[_at++];
+        return  _bytes[_at++] | (_bytes[_at++] << 8);
     };
 
     /**
-     * Read 16 signed bits from the buffer.
-     * @returns {Number} An unsigned integer in the range [-32768, 32767].
+     * Read 16 bits from the buffer.
+     * @returns {Number} A signed integer in the range [-32768, 32767].
      */
     this.readShortSigned = () => {
-        const x = (_bytes[_at++] << 8) | _bytes[_at++];
+        const x = this.readShort();
 
-        if (x < 32768)
+        if (x < 0x8000)
             return x;
 
-        return -32768 + (x & 0x7FFF);
+        return -0x8000 + (x & 0x7FFF);
     };
 
     /**
@@ -139,7 +139,20 @@ export function ByteBuffer(source) {
      * @returns {Number} An unsigned integer in the range [0, 4294967295].
      */
     this.readInt = () => {
-        return (_bytes[_at++] << 24) | (_bytes[_at++] << 16) | (_bytes[_at++] << 8) | _bytes[_at++];
+        return _bytes[_at++] | (_bytes[_at++] << 8) | (_bytes[_at++] << 16) | (_bytes[_at++] << 24);
+    };
+
+    /**
+     * Read 32 bits from the buffer.
+     * @returns {Number} A signed integer in the range [-2147483648, 2147483647].
+     */
+    this.readIntSigned = () => {
+        const x = this.readInt();
+
+        if (x < 0x80000000)
+            return x;
+
+        return -(0x80000000) + (x & 0x7FFFFFFF);
     };
 
     /**
@@ -156,16 +169,39 @@ export function ByteBuffer(source) {
     };
 
     /**
-     * Read a string with unknown length from the buffer.
-     * @returns {String} A UTF-16 string.
+     * Read a string from the buffer.
+     * @returns {String} A string.
      */
     this.readString = () => {
         let string = "";
         const length = this.readShort();
+
         for (let idx = 0; idx < length; ++idx)
             string += String.fromCharCode(this.readShort());
 
         return string;
+    };
+
+    /**
+     * Read a string from the buffer, where each character is a byte.
+     * @returns {String} A string.
+     */
+    this.readStringBytes = () => {
+        let string = "";
+        const length = this.readShort();
+
+        for (let idx = 0; idx < length; ++idx)
+            string += String.fromCharCode(this.readByte());
+
+        return string;
+    };
+
+    /**
+     * Skip a number of bytes in the buffer.
+     * @param {Number} count The number of bytes to skip.
+     */
+    this.skipBytes = count => {
+        _at += count;
     };
 
     if (source)

@@ -5,7 +5,7 @@ import "../../../part/objects"
 import {Selection} from "./selection";
 import {PcbEditorSelect} from "./pcbEditorSelect";
 import {Scale} from "../../../world/scale";
-import Myr from "myr.js"
+import Myr from "myr.js";
 import {StyleUtils} from "../../../utils/styleUtils";
 
 /**
@@ -256,6 +256,14 @@ export function PcbEditorPlace(renderContext, pcb, cursor, editor, fixtures, sel
     };
 
     /**
+     * Returns true if the editable may be switched. Some pcbEditor types should not allow this (in certain situations).
+     * @returns {Boolean}
+     */
+    this.maySwitchEditable = () => {
+        return true;
+    };
+
+    /**
      * Draw this editor.
      */
     this.draw = () => {
@@ -304,4 +312,4 @@ PcbEditorPlace.Fixture.prototype.isInstance = function() {
     return this.part.configurations === undefined;
 };
 
-PcbEditorPlace.COLOR_UNSUITABLE = StyleUtils.getColorHex("--game-color-pcb-edit-place-unsuitable");
+PcbEditorPlace.COLOR_UNSUITABLE = StyleUtils.getColor("--game-color-pcb-edit-place-unsuitable");

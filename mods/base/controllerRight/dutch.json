@@ -1,0 +1,5 @@
+{
+  "PART_CONTROLLER_RIGHT_NAME": "Rechts Controller",
+  "PART_CONTROLLER_RIGHT_DESCRIPTION": "Dit is een chip die luistert naar je toetsenbord. De pin van deze chip geeft een <high> signaal af, als je op de rechter pijl knop drukt.",
+  "PART_CONTROLLER_RIGHT_PIN_OUTPUT_DESCRIPTION": "Deze pin geeft een <high> signaal, wanneer je op het rechter pijltje op je toestenbord drukt. Als je er niet op drukt is het signaal <low>."
+}
