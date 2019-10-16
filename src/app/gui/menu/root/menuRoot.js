@@ -1,6 +1,7 @@
 import {getString} from "../../../text/language";
 import {MenuButtonCentered} from "../shared/menuButtonCentered";
 import {MenuStories} from "../missions/menuStories";
+import {InputButtonCentered} from "../shared/inputButtonCentered";
 
 /**
  * Content for the Menu root, containing buttons that allow access to other menu's.
@@ -13,6 +14,13 @@ export function MenuRoot(menu, user) {
 
     const make = () => {
         _element.className = MenuRoot.CLASS;
+
+        _element.appendChild(new InputButtonCentered(
+            getString(MenuRoot.TEXT_LOAD),
+            (file) => {
+                menu.getGame().loadMission(file);
+            }
+        ).getElement());
 
         _element.appendChild(new MenuButtonCentered(
             getString(MenuRoot.TEXT_CREATE),

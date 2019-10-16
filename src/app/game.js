@@ -4,6 +4,8 @@ import {World} from "./world/world";
 import {Hud} from "./gui/hud/hud";
 import {MissionProgress} from "./mission/missionProgress";
 import {Mission} from "./mission/mission";
+import {requestBinary} from "./utils/requestBinary";
+import {Data} from "./file/data";
 
 /**
  * This class contains the game views.
@@ -185,6 +187,33 @@ export function Game(renderContext, input, user) {
         _editor.show();
 
         this.setMode(Game.MODE_EDIT);
+    };
+
+    /**
+     * Load a mission from the drive and edit it.
+     * @param {File} file A mission file.
+     */
+    this.loadMission = file => {
+        const onLoad = missionProgress => {
+            _world = new World(renderContext, missionProgress);
+            _hud = new Hud(renderContext, _world, this);
+            _editor = new Editor(renderContext, _world, this, user, true);
+
+            _editor.edit(_world.getMission().getEditables()[0]);
+            _editor.show();
+
+            this.setMode(Game.MODE_EDIT);
+        };
+
+        stopMission();
+
+        const data = new Data();
+
+        data.setBlob(file, () => onLoad(new MissionProgress(
+            Mission.deserialize(data.getBuffer()),
+            false,
+            false,
+            file.name)));
     };
 
     /**
