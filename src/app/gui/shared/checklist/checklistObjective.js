@@ -13,7 +13,7 @@ export function ChecklistObjective(objective, editor, open, timer, onDelete) {
     const _element = document.createElement("div");
 
     const createTimeStamp = () => {
-        return " " + timer.getTime().toFixed(2);
+        return " <span class=" + ChecklistObjective.CLASS_TIMESTAMP + ">" + timer.getTime().toFixed(2) + "s</span>";
     };
 
     const makeField = () => {
@@ -95,7 +95,7 @@ export function ChecklistObjective(objective, editor, open, timer, onDelete) {
     this.check = () => {
         if (!_element.classList.contains(ChecklistObjective.CLASS_CHECKED)) {
             _element.classList.add(ChecklistObjective.CLASS_CHECKED);
-            _element.innerText += createTimeStamp();
+            _element.innerHTML += createTimeStamp();
         }
     };
 
@@ -105,6 +105,7 @@ export function ChecklistObjective(objective, editor, open, timer, onDelete) {
 ChecklistObjective.CLASS = "objective";
 ChecklistObjective.CLASS_CHECKED = "checked";
 ChecklistObjective.CLASS_INPUT = "field";
+ChecklistObjective.CLASS_TIMESTAMP = "timestamp";
 ChecklistObjective.TEXT_EXPAND = String.fromCharCode(9660);
 ChecklistObjective.TEXT_COLLAPSE = String.fromCharCode(9650);
 ChecklistObjective.TEXT_DELETE = String.fromCharCode(10006);

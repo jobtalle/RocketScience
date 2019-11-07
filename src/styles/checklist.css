@@ -50,6 +50,10 @@
     margin: 10px 0;
 }
 
+#checklist .objective .timestamp {
+    font-weight: bold;
+}
+
 #checklist .objective .field {
     display: flex;
 }
