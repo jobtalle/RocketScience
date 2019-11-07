@@ -52,6 +52,8 @@
 
 #checklist .objective .timestamp {
     font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
 }
 
 #checklist .objective .field {
