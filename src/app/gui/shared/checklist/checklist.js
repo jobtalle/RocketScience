@@ -5,6 +5,7 @@ import {ChecklistFinished} from "./checklistFinished";
 import {ChecklistObjectiveNew} from "./checklistObjectiveNew";
 import {getString} from "../../../text/language";
 import {Objective} from "../../../mission/objective";
+import {ChecklistTimer} from "./checklistTimer";
 
 /**
  * A checklist displaying all mission objectives.
@@ -14,6 +15,7 @@ import {Objective} from "../../../mission/objective";
  * @constructor
  */
 export function Checklist(mission, game, editor) {
+    const _timer = new ChecklistTimer();
     const _container = document.createElement("div");
     const _objectives = [];
 
@@ -49,6 +51,7 @@ export function Checklist(mission, game, editor) {
                 objective,
                 editor,
                 open,
+                _timer,
                 () => removeObjective(objective, checklistObjective));
 
             _objectives.push(checklistObjective);
@@ -97,6 +100,8 @@ export function Checklist(mission, game, editor) {
         mission.setOnChange(update);
 
     build();
+
+    _timer.start();
 }
 
 Checklist.ID = "checklist";

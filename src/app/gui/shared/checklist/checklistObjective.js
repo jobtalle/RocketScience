@@ -5,11 +5,16 @@ import {ChecklistObjectiveGoals} from "./checklistObjectiveGoals";
  * @param {Objective} objective An objective.
  * @param {Boolean} editor A boolean indicating whether this objective is an editor.
  * @param {Boolean} open A boolean indicating whether this objective should be expanded initially.
+ * @param {ChecklistTimer} timer A checklist timer.
  * @param {Function} onDelete A function to call when this objective wants to delete itself.
  * @constructor
  */
-export function ChecklistObjective(objective, editor, open, onDelete) {
+export function ChecklistObjective(objective, editor, open, timer, onDelete) {
     const _element = document.createElement("div");
+
+    const createTimeStamp = () => {
+        return " " + timer.getTime().toFixed(2);
+    };
 
     const makeField = () => {
         const element = document.createElement("input");
@@ -88,7 +93,10 @@ export function ChecklistObjective(objective, editor, open, onDelete) {
      * Mark this objective as finished.
      */
     this.check = () => {
-        _element.classList.add(ChecklistObjective.CLASS_CHECKED);
+        if (!_element.classList.contains(ChecklistObjective.CLASS_CHECKED)) {
+            _element.classList.add(ChecklistObjective.CLASS_CHECKED);
+            _element.innerText += createTimeStamp();
+        }
     };
 
     build();
