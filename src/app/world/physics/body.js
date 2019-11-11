@@ -32,6 +32,9 @@ export function Body(physics, world, shapes, points, density, x, y, xOrigin, yOr
 
         _position.x = _body.GetPosition().get_x();
         _position.y = _body.GetPosition().get_y();
+
+        console.log(_position.x, _position.y);
+
         _angle = -_body.GetAngle();
 
         transform.identity();

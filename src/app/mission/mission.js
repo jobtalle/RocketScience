@@ -269,7 +269,7 @@ Mission.emptyMission = () => {
             heights,
             Profiles.ID_FIELDS
         ),
-        new PhysicsConfiguration(1, 14),
+        new PhysicsConfiguration(1, 20),
         "New Mission",
         "Create your own mission!");
 };
