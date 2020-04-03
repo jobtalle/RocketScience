@@ -32,4 +32,6 @@ Accidental compatibility with another browser is considered a happy accident.
 
 ## Authors
 Job Talle,
-Luc van den Brand.
+Luc van den Brand,
+Daniel Haitink,
+Jochem Baas.
